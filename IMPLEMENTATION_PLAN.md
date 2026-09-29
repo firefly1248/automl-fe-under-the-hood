@@ -55,8 +55,9 @@ Generators in `autogluon.features.generators`:
 - `ArithmeticFeatureGenerator` (`arithmetic/preprocessor.py`): `selection_method="random"`,
   `max_order=3`, `max_base_feats=150`, `max_new_feats=2000`, `interaction_types=["/","*","-","+"]`,
   `corr_threshold=0.95`, `min_cardinality=3`, `nan_threshold=0.95`, `mode_imbalance_threshold=0.9`,
-  `cat_as_num=False`, `subsample=100000` (marked TODO in source, not implemented). No model-based
-  selection: random choice of base features plus a correlation filter.
+  `cat_as_num=False`, `subsample=100000` (row subsample; implemented despite a TODO comment). No
+  model-based selection and, with the default `selection_method="random"`, no correlation filter:
+  `corr_threshold` is used only by `selection_method="spearman"` (corrected at A1 from exp01).
 - `CategoricalInteractionFeatureGenerator` (`cat_int.py`): `max_order=3`, `max_new_feats=100`, `min_count=2`.
 - `OOFTargetEncodingFeatureGenerator` (`oof_target_encoder.py`): `n_splits=5`, `alpha=10`,
   `keep_original=False`. Out-of-fold values come only from `fit_transform`; `transform` on the
@@ -206,9 +207,10 @@ mean, or a category interaction; also returns the oracle feature.
   columns; if not, replace the highest-id datasets without categoricals by the next candidates with
   categoricals (log every swap).
 - Typed extra set (resolve by name through the API, keep only if target and size match):
-  `adult`, `bank-marketing`, `credit-g`, `Amazon_employee_access` (plus a variant with its
-  nominal columns cast to int, so the int-coded case really happens), `diamonds`,
-  `Bike_Sharing_Demand` (check what date-like columns it really has; if none, say so).
+  `adult` (pinned to CC18 did 1590; the name resolves to did 179, a binned version), `bank-marketing`,
+  `credit-g`, `Amazon_employee_access` (plus a variant with its nominal columns cast to int, so the
+  int-coded case really happens), `diamonds`, `house_sales` (did 42092, real date string; replaced
+  `Bike_Sharing_Demand` at A1, which has no date-typed column).
 - For exp01 step 4 and exp03 step 3 (Phase 1, before the registry is final) use `adult` and
   `diamonds`.
 - Checksums: store the md5 of the file as downloaded from OpenML and
@@ -327,7 +329,7 @@ Downstream trains on the fit rows, early-stops on inner, is scored on test. No r
 - CatBoost: `iterations=5000, learning_rate=0.05`, early stopping 200 rounds; other params default.
 - Early-stopping metric: log loss (classification), RMSE (regression).
 Why two models: the tools select features with different models (OpenFE: LightGBM; MLJAR: depth-3
-tree; autofeat: L1 linear; AutoGluon Arithmetic: random + correlation filter). Two downstream
+tree; autofeat: L1 linear; AutoGluon Arithmetic: random choice, no filter). Two downstream
 families show whether gains carry over.
 
 ### 7.4 Metrics

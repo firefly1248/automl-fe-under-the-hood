@@ -1,6 +1,6 @@
 # Progress
 
-## 2026-09-29: Phases 0 and 1 done -> waiting for A1
+## 2026-09-29: Phases 0 and 1 done, A1 approved
 
 **What ran** (locked envs, this laptop): `make env env-check data exp01 exp03`. All six envs import
 (`results/ENVIRONMENT.md`). `h2o` env deferred (no Java; exp06 is optional).
@@ -11,8 +11,8 @@
   (`_lazywhere` removed) and with pandas 3 (`deprecate_kwarg` signature).
 
 **Datasets** (`results/datasets.md`): 35 frames. Suites: 12 binary, 6 multiclass, 12 regression; 14 with categoricals
-(no swaps needed). Typed: adult, Amazon_employee_access (+ `_int`), diamonds, Bike_Sharing_Demand; bank-marketing and
-credit-g were already selected from CC18.
+(no swaps needed). Typed: adult (did 1590), Amazon_employee_access (+ `_int`), diamonds, house_sales (did 42092);
+bank-marketing and credit-g were already selected from CC18.
 
 **For A1: corrections to plan section 1 and decisions**
 1. 1.2 is wrong on selection: with default `selection_method="random"`, `ArithmeticFeatureGenerator` does not apply
@@ -30,13 +30,16 @@ credit-g were already selected from CC18.
 5. 1.5 answered (`exp03_config.yaml`): all GBM algos (lgb, lgb_tuned, cb, cb_tuned) get `LGBAdvancedPipeline`;
    `linear_l2` gets `LinearFeatures`; selection mode 1 (LightGBM gain importance on `LGBSimpleFeatures`, cutoff 0);
    reader `drop_score_co` 0.0 (class default 0.01); `use_groupby` off.
-6. exp03 roles (`exp03_roles.csv`): numeric -> category for `city_code`, Amazon ids, Bike `month,hour`,
+6. exp03 roles (`exp03_roles.csv`): numeric -> category for `city_code`, Amazon ids, adult `age,fnlwgt,capital-gain,capital-loss`,
    bank-marketing `V1,V10,V14`, credit-g `residence_since`. LAMA keeps `dup_num` and `uid` (as ordinal category);
    `near_const` (99.9%) dropped by the constant-rate check; `text_long` becomes a category (no text role without
    a manual role).
-7. Decision: typed `adult` resolves by name to did 179 (v1), a discretized version (age, capitalgain, hoursperweek
-   are binned categories). Proposal: use the CC18 version did 1590.
-8. Bike_Sharing_Demand has no date-typed column; only integer year/month/hour/weekday fields.
+7. Typed `adult` resolved by name to did 179 (v1), a binned version. A1 decision: pin CC18 did 1590.
+8. Bike_Sharing_Demand has no date-typed column (only integer year/month/hour/weekday). A1 decision: replace it with
+   `house_sales` did 42092 (date string `20141013T000000`, int-coded zipcode). LAMA reads its `date` as Datetime and
+   turns `zipcode`, `yr_built`, `long` into categories.
 
-**Open questions**
-- Private git remote: where should it live?
+**A1 decisions applied**: items 7 and 8; plan sections 1.2, 4.2 and 7.3 corrected. exp01 and exp03 rerun.
+Remote: private repo `firefly1248/automl-fe-under-the-hood`; commits authored as firefly1248@gmail.com (repo-local config).
+
+**Next**: Phase 2 (splits, run store, worker, limits, contract tests, kill-and-resume test).

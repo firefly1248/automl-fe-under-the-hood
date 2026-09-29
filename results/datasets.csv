@@ -29,8 +29,8 @@ naval_propulsion_plant,44969,7,naval_propulsion_plant,regression,361247.0,gt_com
 white_wine,44971,7,white_wine,regression,361249.0,quality,CTR23,4898,11,0,,,eeaca690506cbc84554174a490f8e960,pq,0,10563570576793314036
 red_wine,44972,11,red_wine,regression,361250.0,quality,CTR23,1599,11,0,,,6fcbadfab0d0c458766f03c0c36290c8,pq,0,1224293810254024155
 grid_stability,44973,7,grid_stability,regression,361251.0,stab,CTR23,10000,12,0,,,168ac43d6de3a51525bb1ff52f396b44,pq,0,6738102959384363058
-adult,179,1,adult,binary,,class,typed,48842,14,12,,hoursperweek,d276d0ff033e368efde075231ec6a8c3,pq,12,15735633790414420759
+adult,1590,2,adult,binary,,class,typed,48842,14,8,,hours-per-week,6f9af14fb61d70198b494ed54b7cf7b6,pq,8,11220653127075058909
 Amazon_employee_access,4135,1,Amazon_employee_access,binary,,target,typed,32769,9,9,,,4b6066938515dc50b36eeeab3be13765,pq,9,16508201442281791848
 Amazon_employee_access_int,4135,1,Amazon_employee_access,binary,,target,typed,32769,9,9,,,4b6066938515dc50b36eeeab3be13765,pq,0,508317086095130713
 diamonds,42225,1,diamonds,regression,,price,typed,53940,9,3,,,658eaf4009d25553284aaa211f88ccb7,pq,3,12400245448291971708
-Bike_Sharing_Demand,42712,2,Bike_Sharing_Demand,regression,,count,typed,17379,12,4,,"season,year,month,hour,holiday,weekday,workingday",cdc8f0664db12649644e64f8e1727c98,pq,2,4932771588567043067
+house_sales,42092,2,house_sales,regression,,price,typed,21613,19,2,,date,f9cdc8443cf2b57e0cb2903d895de2be,pq,2,2454219016414863087

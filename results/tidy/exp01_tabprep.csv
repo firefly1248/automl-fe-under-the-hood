@@ -1,7 +1,7 @@
 dataset,arm,rows,n_in,n_out,n_new,n_originals_kept,n_category_out,arith_base_cols,arith_candidates,arith_selection_method,fit_transform_s,new_examples,max_abs_rho_with_a_over_b,recovers_a_over_b,best_match
-hard_columns,arithmetic,5000,525,894,894,0,0,6,894,random,0.025,ts_unix/a; city_code/date_int; city_code/a; num/a; num/date_int; num/city_code; num/b; ts_unix/b; num/ts_unix; date_int/ts_unix,1.0,True,a/b
-hard_columns,r13_group,5000,525,1293,772,521,0,6,894,random,0.266,ts_unix/a; city_code/date_int; city_code/a; num/a; num/date_int; num/city_code; num/b; ts_unix/b; num/ts_unix; date_int/ts_unix,1.0,True,a/b
-adult,arithmetic,48842,14,5,5,0,0,2,5,random,0.007,fnlwgt/education-num; fnlwgt*education-num; fnlwgt-education-num; fnlwgt+education-num; education-num/fnlwgt,,,
-adult,r13_group,48842,14,119,116,3,0,2,5,random,0.93,fnlwgt/education-num; fnlwgt*education-num; fnlwgt-education-num; fnlwgt+education-num; education-num/fnlwgt; age__te; workclass__te; education__te; marital-status__te; occupation__te,,,
-diamonds,arithmetic,53940,9,934,934,0,0,6,934,random,0.11,x/y; depth/table; depth/y; carat/y; carat/table; carat/depth; carat/z; x/z; carat/x; table/x,,,
-diamonds,r13_group,53940,9,946,940,6,0,6,934,random,0.293,x/y; depth/table; depth/y; carat/y; carat/table; carat/depth; carat/z; x/z; carat/x; table/x,,,
+hard_columns,arithmetic,5000,525,894,894,0,0,6,894,random,0.029,ts_unix/a; city_code/date_int; city_code/a; num/a; num/date_int; num/city_code; num/b; ts_unix/b; num/ts_unix; date_int/ts_unix,1.0,True,a/b
+hard_columns,r13_group,5000,525,1293,772,521,0,6,894,random,0.843,ts_unix/a; city_code/date_int; city_code/a; num/a; num/date_int; num/city_code; num/b; ts_unix/b; num/ts_unix; date_int/ts_unix,1.0,True,a/b
+adult,arithmetic,48842,14,201,201,0,0,4,201,random,0.038,age/hours-per-week; age/education-num; fnlwgt/education-num; fnlwgt/hours-per-week; education-num/hours-per-week; age/fnlwgt; age*hours-per-week; age*education-num; fnlwgt*education-num; fnlwgt*hours-per-week,,,
+adult,r13_group,48842,14,264,257,7,0,4,201,random,0.785,age/hours-per-week; age/education-num; fnlwgt/education-num; fnlwgt/hours-per-week; education-num/hours-per-week; age/fnlwgt; age*hours-per-week; age*education-num; fnlwgt*education-num; fnlwgt*hours-per-week,,,
+diamonds,arithmetic,53940,9,934,934,0,0,6,934,random,0.17,x/y; depth/table; depth/y; carat/y; carat/table; carat/depth; carat/z; x/z; carat/x; table/x,,,
+diamonds,r13_group,53940,9,946,940,6,0,6,934,random,0.957,x/y; depth/table; depth/y; carat/y; carat/table; carat/depth; carat/z; x/z; carat/x; table/x,,,

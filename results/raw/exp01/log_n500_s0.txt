@@ -1,5 +1,5 @@
 autogluon.features.generators.abstract: Fitting AutoMLPipelineFeatureGenerator...
-autogluon.features.generators.abstract: 	Available Memory:                    6236.66 MB
+autogluon.features.generators.abstract: 	Available Memory:                    4097.07 MB
 autogluon.features.generators.abstract: 	Train Data (Original)  Memory Usage: 0.35 MB (0.0% of available memory)
 autogluon.features.generators.abstract: 	Inferring data type of each feature based on column values. Set feature_metadata_in to manually specify special dtypes of the features.
 autogluon.features.generators.abstract: 	Stage 1 Generators:

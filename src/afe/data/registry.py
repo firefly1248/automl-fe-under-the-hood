@@ -23,14 +23,16 @@ QUOTAS = {"binary": 12, "multiclass": 6, "regression": 12}
 MIN_WITH_CATEGORICALS = 8
 IMAGE_NAMES = {"mnist_784", "Fashion-MNIST", "CIFAR_10", "Devnagari-Script"}
 PIXEL = re.compile(r"pixel|^p\d+$")
-# name -> (expected default target, task kind)
+# name -> (expected default target, task kind, pinned did or None = resolve by name). Decided at A1:
+# adult pinned to CC18 did 1590 (name lookup gives did 179, v1, with binned numeric columns); house_sales replaces
+# Bike_Sharing_Demand (no date-typed column, only integer year/month/hour fields).
 TYPED = {
-    "adult": ("class", "classification"),
-    "bank-marketing": ("Class", "classification"),
-    "credit-g": ("class", "classification"),
-    "Amazon_employee_access": ("target", "classification"),
-    "diamonds": ("price", "regression"),
-    "Bike_Sharing_Demand": ("count", "regression"),
+    "adult": ("class", "classification", 1590),
+    "bank-marketing": ("Class", "classification", None),
+    "credit-g": ("class", "classification", None),
+    "Amazon_employee_access": ("target", "classification", None),
+    "diamonds": ("price", "regression", None),
+    "house_sales": ("price", "regression", 42092),
 }
 DATE_LIKE = re.compile(r"date|time|year|month|day|hour|season|weekday|holiday", re.I)
 
@@ -129,8 +131,8 @@ def select(cands: list[dict]) -> list[dict]:
 def typed(chosen: list[dict]) -> list[dict]:
     have = {_dedupe_key(c) for c in chosen}
     out = []
-    for name, (target, kind) in TYPED.items():
-        ds = openml.datasets.get_dataset(name, download_data=False, download_qualities=False)
+    for name, (target, kind, did) in TYPED.items():
+        ds = openml.datasets.get_dataset(did or name, download_data=False, download_qualities=False)
         if ds.default_target_attribute != target:
             log.append(f"typed {name}: default target {ds.default_target_attribute!r} != {target!r}, skipped")
             continue

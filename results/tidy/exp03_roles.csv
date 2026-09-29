@@ -17,8 +17,8 @@ hard_columns,num_as_str,object,947,Numeric,Numeric,,numeric rules fired: rule_7
 hard_columns,mixed,object,1264,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
 hard_columns,a,float64,5000,Numeric,Numeric,,"numeric rules fired: rule_0,rule_3"
 hard_columns,b,float64,5000,Numeric,Numeric,,"numeric rules fired: rule_0,rule_3"
-adult,age,category,5,Numeric,Category(encoding_type=int),Numeric -> Category,no numeric rule fired -> category
-adult,workclass,category,8,Category(encoding_type=auto),Category(encoding_type=freq),,category rules fired: freq_rule_1
+adult,age,uint8,74,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
+adult,workclass,category,8,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
 adult,fnlwgt,float64,28523,Numeric,"Category(encoding_type=freq, ordinal=True)",Numeric -> Category,no numeric rule fired -> category
 adult,education,category,16,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
 adult,education-num,uint8,16,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
@@ -27,9 +27,9 @@ adult,occupation,category,14,Category(encoding_type=auto),Category(encoding_type
 adult,relationship,category,6,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
 adult,race,category,5,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
 adult,sex,category,2,Category(encoding_type=auto),Category(encoding_type=freq),,category rules fired: freq_rule_1
-adult,capitalgain,category,5,Numeric,Category(encoding_type=int),Numeric -> Category,no numeric rule fired -> category
-adult,capitalloss,category,5,Numeric,Numeric,,numeric rules fired: rule_7
-adult,hoursperweek,category,5,Numeric,Numeric,,numeric rules fired: rule_4
+adult,capital-gain,float64,123,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
+adult,capital-loss,float64,99,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
+adult,hours-per-week,uint8,96,Numeric,Numeric,,"numeric rules fired: rule_4,rule_6"
 adult,native-country,category,41,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
 bank-marketing,V1,uint8,77,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
 bank-marketing,V2,category,12,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
@@ -94,15 +94,22 @@ diamonds,table,float64,127,Numeric,Numeric,,"numeric rules fired: rule_4,rule_7"
 diamonds,x,float64,554,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
 diamonds,y,float64,552,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
 diamonds,z,float64,375,Numeric,Numeric,,"numeric rules fired: rule_4,rule_6"
-Bike_Sharing_Demand,season,category,4,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
-Bike_Sharing_Demand,year,uint8,2,Numeric,Numeric,,"numeric rules fired: rule_2,rule_4,rule_6"
-Bike_Sharing_Demand,month,uint8,12,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
-Bike_Sharing_Demand,hour,uint8,24,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
-Bike_Sharing_Demand,holiday,bool,2,Numeric,Numeric,,"numeric rules fired: rule_2,rule_6,rule_7"
-Bike_Sharing_Demand,weekday,uint8,7,Numeric,Numeric,,"numeric rules fired: rule_0,rule_7"
-Bike_Sharing_Demand,workingday,bool,2,Numeric,Numeric,,"numeric rules fired: rule_2,rule_6,rule_7"
-Bike_Sharing_Demand,weather,category,4,Category(encoding_type=auto),Category(encoding_type=freq),,category rules fired: freq_rule_1
-Bike_Sharing_Demand,temp,float64,50,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
-Bike_Sharing_Demand,feel_temp,float64,65,Numeric,Numeric,,"numeric rules fired: rule_4,rule_6"
-Bike_Sharing_Demand,humidity,float64,89,Numeric,Numeric,,"numeric rules fired: rule_4,rule_6"
-Bike_Sharing_Demand,windspeed,float64,30,Numeric,Numeric,,"numeric rules fired: rule_1,rule_4,rule_6,rule_7"
+house_sales,date,object,372,Datetime,Datetime,,simple guess kept
+house_sales,bedrooms,uint8,13,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
+house_sales,bathrooms,float64,30,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
+house_sales,sqft_living,int64,1038,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
+house_sales,sqft_lot,int64,9782,Numeric,Numeric,,"numeric rules fired: rule_1,rule_5"
+house_sales,floors,float64,6,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
+house_sales,waterfront,uint8,2,Numeric,Numeric,,"numeric rules fired: rule_2,rule_7"
+house_sales,view,uint8,5,Numeric,Numeric,,"numeric rules fired: rule_4,rule_6"
+house_sales,condition,uint8,5,Numeric,Numeric,,numeric rules fired: rule_7
+house_sales,grade,uint8,12,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
+house_sales,sqft_above,int64,946,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
+house_sales,sqft_basement,int64,306,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
+house_sales,yr_built,int64,116,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
+house_sales,yr_renovated,int64,70,Numeric,Numeric,,numeric rules fired: rule_7
+house_sales,zipcode,category,70,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
+house_sales,lat,float64,5034,Numeric,Numeric,,numeric rules fired: rule_1
+house_sales,long,float64,752,Numeric,"Category(encoding_type=auto, ordinal=True)",Numeric -> Category,no numeric rule fired -> category
+house_sales,sqft_living15,int64,777,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
+house_sales,sqft_lot15,int64,8689,Numeric,Numeric,,"numeric rules fired: rule_1,rule_5"

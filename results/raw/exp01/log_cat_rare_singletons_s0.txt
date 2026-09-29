@@ -1,5 +1,5 @@
 autogluon.features.generators.abstract: Fitting AutoMLPipelineFeatureGenerator...
-autogluon.features.generators.abstract: 	Available Memory:                    6102.83 MB
+autogluon.features.generators.abstract: 	Available Memory:                    4326.63 MB
 autogluon.features.generators.abstract: 	Train Data (Original)  Memory Usage: 3.53 MB (0.1% of available memory)
 autogluon.features.generators.abstract: 	Inferring data type of each feature based on column values. Set feature_metadata_in to manually specify special dtypes of the features.
 autogluon.features.generators.abstract: 	Stage 1 Generators:
@@ -139,7 +139,7 @@ autogluon.features.generators.abstract: 			Types of features in processed data (
 autogluon.common.features.feature_metadata: 				('uint16', 'int') : 501 | ['__nlp__.aawd', '__nlp__.abmb', '__nlp__.accf', '__nlp__.acgosmry', '__nlp__.adzuglr', ...]
 autogluon.features.generators.abstract: 			Types of features in processed data (raw dtype, special dtypes):
 autogluon.common.features.feature_metadata: 				('int', ['text_ngram']) : 501 | ['__nlp__.aawd', '__nlp__.abmb', '__nlp__.accf', '__nlp__.acgosmry', '__nlp__.adzuglr', ...]
-autogluon.features.generators.abstract: 			0.4s = Fit runtime
+autogluon.features.generators.abstract: 			0.6s = Fit runtime
 autogluon.features.generators.abstract: 			1 features in original data used to generate 501 features in processed data.
 autogluon.features.generators.abstract: 		Skipping IdentityFeatureGenerator: No input feature with required dtypes.
 autogluon.features.generators.abstract: 		Skipping IsNanFeatureGenerator: No input feature with required dtypes.
@@ -168,7 +168,7 @@ autogluon.common.features.feature_metadata: 				('int', ['binned', 'text_special
 autogluon.common.features.feature_metadata: 				('int', ['bool'])                   :   2 | ['near_const', 'cat_binary']
 autogluon.common.features.feature_metadata: 				('int', ['datetime_as_int'])        :   6 | ['date_str', 'date_str.year', 'date_str.month', 'date_str.day', 'date_str.dayofweek', ...]
 autogluon.common.features.feature_metadata: 				('int', ['text_ngram'])             : 501 | ['__nlp__.aawd', '__nlp__.abmb', '__nlp__.accf', '__nlp__.acgosmry', '__nlp__.adzuglr', ...]
-autogluon.features.generators.abstract: 			0.0s = Fit runtime
+autogluon.features.generators.abstract: 			0.1s = Fit runtime
 autogluon.features.generators.abstract: 			522 features in original data used to generate 522 features in processed data.
 autogluon.features.generators.abstract: 	Stage 5 Generators:
 autogluon.features.generators.abstract: 		Fitting DropDuplicatesFeatureGenerator...
@@ -233,6 +233,6 @@ autogluon.common.features.feature_metadata: 		('int', ['binned', 'text_special']
 autogluon.common.features.feature_metadata: 		('int', ['bool'])                   :   2 | ['near_const', 'cat_binary']
 autogluon.common.features.feature_metadata: 		('int', ['datetime_as_int'])        :   6 | ['date_str', 'date_str.year', 'date_str.month', 'date_str.day', 'date_str.dayofweek', ...]
 autogluon.common.features.feature_metadata: 		('int', ['text_ngram'])             : 500 | ['__nlp__.aawd', '__nlp__.abmb', '__nlp__.accf', '__nlp__.acgosmry', '__nlp__.adzuglr', ...]
-autogluon.features.generators.abstract: 	0.7s = Fit runtime
+autogluon.features.generators.abstract: 	1.2s = Fit runtime
 autogluon.features.generators.abstract: 	14 features in original data used to generate 520 features in processed data.
 autogluon.features.generators.abstract: 	Train Data (Processed) Memory Usage: 5.27 MB (0.1% of available memory)
