@@ -3,4 +3,4 @@ n: 5000
 seed: 0
 cpu_limit: 1
 timeout: 600
-typed_datasets: [adult, bank-marketing, credit-g, Amazon_employee_access, Amazon_employee_access_int, diamonds, house_sales]
+typed_datasets: [adult, bank-marketing, credit-g, Amazon_employee_access, Amazon_employee_access_int, diamonds, house_sales_42092]

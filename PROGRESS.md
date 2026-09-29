@@ -1,5 +1,23 @@
 # Progress
 
+## 2026-09-29: plan v3 after a second review (all 14 findings accepted)
+
+Plan changes (A4-level, approved by Ilia): pool extended with OpenML suites 271, 269 (AMLB), 334, 335
+(tabular benchmark, categorical); filters for duplicate rows (> 5%), optdigits as image, electricity excluded
+(temporal); one dataset per family in the primary aggregate; quotas 20/10/20 with >= 10-level categoricals first;
+1 repeat x 5 folds; AUC raw difference instead of gap closed; descriptive per-dataset tests without Holm;
+both failure rules with equal weight; timing from a separate jobs=1 pass; jobs = min(cores - 2, 10) with a
+free-RAM launch gate; generator cap 3,600 s in smoke/pilot, full cap from pilot p95; CatBoost lr 0.1 / 3,000
+iterations; `core_lock_hash` in the fit unit; arm `ag_tabprep_keepcat` added, `ag_tabprep_groupby` dropped,
+`cheap_manual` renamed `manual_baseline`; exp05 check 1 restated, OpenFE equivalence test added; figures get
+claims entries; improvement vs n new features figure; exp02 600 s caveat; untuned downstream stated as a design choice.
+
+New registry run (`results/datasets.md`): 50 primary datasets (20 binary, 10 multiclass, 20 regression) + 2 case
+studies (`Amazon_employee_access_int`, `house_sales_42092` with the date string; exp03 now uses the latter).
+23 candidates rejected for > 5% duplicate rows (all NASA MDP, spambase, wine sets, PhishingWebsites, ...).
+Only 17 primary datasets (34%) have a categorical column with >= 10 levels: every such candidate in the six suites
+is already selected, so the 50% target is not reachable with this pool. Open decision for Ilia.
+
 ## 2026-09-29: Phases 0 and 1 done, A1 approved
 
 **What ran** (locked envs, this laptop): `make env env-check data exp01 exp03`. All six envs import

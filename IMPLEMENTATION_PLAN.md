@@ -1,4 +1,4 @@
-# Implementation plan: `automl-fe-under-the-hood` companion repo (v2, after review)
+# Implementation plan: `automl-fe-under-the-hood` companion repo (v3, after A1 and the second review)
 
 Owner: Ilia (firefly1248). Implementer: coding agent on a laptop.
 Purpose: one repo that holds every experiment and every number used in the LinkedIn series
@@ -133,7 +133,7 @@ automl-fe-under-the-hood/
   src/afe/
     data/{registry.py, loaders.py, synthetic.py, splits.py}
     generators/{base.py, identity.py, ag_default.py, ag_tabprep.py, lama_pipeline.py,
-                openfe_gen.py, autofeat_gen.py, mljar_golden.py, cheap_manual.py}
+                openfe_gen.py, autofeat_gen.py, mljar_golden.py, manual_baseline.py}
     models/downstream.py
     run/{unit.py, store.py, worker.py, limits.py, cli.py}
     analysis/{aggregate.py, stats.py, figures.py, claims.py}
@@ -158,7 +158,7 @@ Raw JSON records, tidy parquet, splits and figures are committed. Dataset downlo
 
 - `uv`, one project per folder in `envs/`, Python 3.11 everywhere. `src/afe` installed editable in
   each env. `base.py`, `data/`, `run/unit.py` import only numpy/pandas/stdlib.
-- `core`: orchestrator, analysis, downstream LightGBM and CatBoost (pinned), `cheap_manual`, `base`.
+- `core`: orchestrator, analysis, downstream LightGBM and CatBoost (pinned), `manual_baseline`, `base`.
   Downstream always runs in `core` so every arm is scored with identical model versions.
 - Arm envs: `autogluon` (`autogluon.tabular==1.6.3`), `lama` (`lightautoml==0.4.2`),
   `openfe` (`openfe==0.0.12`, pin pandas/lightgbm that it works with), `autofeat`
@@ -196,16 +196,25 @@ Store the formula in metadata.
 mean, or a category interaction; also returns the oracle feature.
 
 ### 4.2 Open benchmark datasets (`data/registry.py`)
-- Pool: `openml.study.get_suite(99).data` (OpenML-CC18) and `get_suite(353).data` (OpenML-CTR23).
-  Take the target from the suite's task, not from the dataset default.
+- Pool (changed after the plan review): OpenML suites 99 (OpenML-CC18), 353 (OpenML-CTR23),
+  271 (AutoML Benchmark classification), 269 (AutoML Benchmark regression), 334 and 335 (tabular
+  benchmark, categorical classification and regression, Grinsztajn et al. 2022). Take the target from
+  the suite's task, not from the dataset default. Note: suites 334/335 had high-cardinality
+  categoricals removed by their authors; they add datasets with categoricals, not high cardinality.
 - Filters: 1,000 <= rows <= 100,000; 4 <= columns <= 100; classification with <= 20 classes; no
-  image/pixel data (name list: mnist_784, Fashion-MNIST, CIFAR_10, Devnagari-Script, plus any
-  dataset where > 90% of columns match `pixel|^p\d+$`).
+  image/pixel data (name list: mnist_784, Fashion-MNIST, CIFAR_10, Devnagari-Script, optdigits, plus
+  any dataset where > 90% of columns match `pixel|^p\d+$`); exact duplicate rows <= 5%; manual
+  exclusions with a reason (electricity: temporal order, random CV over-rewards date features).
 - Dedupe on (normalized name, n_rows, n_features, target name).
-- Deterministic fill: sort remaining candidates by OpenML data id; fill quotas in that order:
-  12 binary, 6 multiclass, 12 regression, then check that >= 8 of the selected have categorical
-  columns; if not, replace the highest-id datasets without categoricals by the next candidates with
-  categoricals (log every swap).
+- Families: datasets that are views or versions of the same data share a `family` (mfeat-*; NASA
+  MDP pc/kc/jm/mc/mw; Amazon and its int variant; house_sales and kings_county; satimage and
+  Satellite; otherwise the normalized name). Same name, different dataset: key `<name>_<did>`. One dataset per
+  family goes into the primary aggregate (one with a >= 10-level categorical first, then lowest id);
+  the others are logged. Typed extras of an already present family are case studies, not primary.
+- Deterministic fill of quotas: 20 binary, 10 multiclass, 20 regression. Within a task, datasets with
+  a categorical column of >= 10 levels come first, then the rest, each in OpenML data id order.
+  Target: >= 50% of the primary set has such a column; the log says if it is not reached.
+- Per-task-type breakdowns are reported only for task types with >= 8 primary datasets.
 - Typed extra set (resolve by name through the API, keep only if target and size match):
   `adult` (pinned to CC18 did 1590; the name resolves to did 179, a binned version), `bank-marketing`,
   `credit-g`, `Amazon_employee_access` (plus a variant with its nominal columns cast to int, so the
@@ -217,7 +226,8 @@ mean, or a category interaction; also returns the oracle feature.
   `pd.util.hash_pandas_object(df, index=True).sum()` of the loaded frame.
 - Folds: generated once by `splits.py`, saved to `results/splits/<dataset>.parquet`
   (columns: row id, repeat, outer fold, inner flag), committed.
-- `results/datasets.md`: id, version, name, task, rows, cols, n categorical, checksums. Part of A1.
+- `results/datasets.md`: id, version, name, family, primary flag, task, rows, cols, n categorical,
+  max categorical levels, duplicate-row share, checksums. Part of A1.
 
 ---
 
@@ -229,7 +239,8 @@ Two stages, so a generator runs once per fold and is reused by both downstream m
   `protocol_hash` (hash of the exp `config.yaml`), `data_hash`, `splits_hash`, `env_lock_hash`
   (hash of the arm's `uv.lock`). `gen_hash = sha1(json.dumps(unit, sort_keys=True))[:16]`.
   Output: cached parquet + record.
-- Fit unit: `(gen_hash, downstream_model, model_params, seed)` -> `fit_hash`.
+- Fit unit: `(gen_hash, downstream_model, model_params, seed, core_lock_hash)` -> `fit_hash`
+  (`core_lock_hash`: hash of `envs/core/uv.lock`, so a LightGBM/CatBoost bump invalidates fits).
 - Skip a unit if its record exists with status in `{ok, failed, timeout, oom}`; `--retry-failed`
   reruns non-ok. If a cache parquet is missing but the gen record is ok, regenerate it.
 - Atomic writes: `*.tmp`, fsync, rename.
@@ -237,14 +248,18 @@ Two stages, so a generator runs once per fold and is reused by both downstream m
   n infinite values replaced, fit time, transform time (train, inner, test), peak RSS, arm env
   versions, git sha, machine info (rule 7), timestamps.
 - Fit record: test metrics, inner-validation metric, best iteration, fit time, peak RSS.
-- Limits (`run/limits.py`): generator wall clock 900 s; downstream wall clock 1,800 s; memory cap
+- Limits (`run/limits.py`): generator wall clock 3,600 s in smoke and pilot; the full-run cap is set
+  at A3 from the pilot's measured p95 per arm, so expensive tools are not starved into timeouts;
+  downstream wall clock 1,800 s; memory cap
   6 GB enforced by a psutil RSS watchdog that kills the child process tree (Linux and macOS; do not
   use `RLIMIT_AS`, it kills torch/numba/LightGBM early). On Linux `systemd-run --user --scope -p
   MemoryMax=6G` is an allowed alternative.
 - Threads: in every worker set `OMP_NUM_THREADS=MKL_NUM_THREADS=OPENBLAS_NUM_THREADS=NUMBA_NUM_THREADS=1`,
   `torch.set_num_threads(1)`, LightGBM `num_threads=1`, CatBoost `thread_count=1`, and `n_jobs=1`
   in every tool (OpenFE, GoldenFeaturesTransformer, autofeat, LAMA `cpu_limit=1`).
-- Parallelism: `jobs = min(physical_cores - 1, floor((RAM_GB - 4) / 6))`, overridable by `--jobs`.
+- Parallelism: `jobs = min(physical_cores - 2, 10)`, overridable by `--jobs`. Memory is guarded at
+  launch instead of in the formula: a unit starts only if free RAM >= 6 GB; the per-unit 6 GB
+  watchdog stays. (The old formula gave 3 jobs on a 24 GB laptop.)
 - Per-unit temp dir (OpenFE `tmp_save_path`, MLJAR `results_path`, LAMA/AG output paths), deleted
   after the unit.
 - `make commit-results`: aggregate, git add raw + tidy + figures, commit with exp, stage, coverage.
@@ -282,19 +297,22 @@ dataset for every arm):
 4. Row locality: shuffling test rows and transforming gives the same per-row features.
 5. Unseen categories in test do not crash and map to NaN (or the tool's documented default).
 6. For arms with target encoding: fit-rows output differs from `transform(fit rows)` (proves OOF is used).
+7. `openfe` only: the reimplemented column-wide operators reproduce OpenFE's own values from
+   `transform(X_fit, X_fit, features)` on the fit rows (equivalence test, per operator). Without it
+   the inductive arm can be dismissed as "not OpenFE".
 
 Arms, main ranking (all inductive):
 | arm | env | what |
 |---|---|---|
 | `base` | core | `base_view` only |
 | `ag_default` | autogluon | `AutoMLPipelineFeatureGenerator` output; `replaces_input=True` |
-| `ag_tabprep` | autogluon | the exact `_r13` `ag.prep_params` group, built as AutoGluon builds it (section 1.2), applied after `AutoMLPipelineFeatureGenerator`. Output rule: **as AutoGluon does it** (categoricals replaced by TE), `replaces_input=True`. Record this in the README; it is the one arm that does not keep native categoricals |
-| `ag_tabprep_groupby` | autogluon | same plus `GroupByFeatureGenerator`; only if it runs standalone. Cite the TabPrep paper (arXiv 2606.02384) as the source of this variant |
+| `ag_tabprep` | autogluon | the exact `_r13` `ag.prep_params` group, built as AutoGluon builds it (section 1.2), applied after `AutoMLPipelineFeatureGenerator`. Output rule: **as AutoGluon does it** (categoricals replaced by TE), `replaces_input=True`. Record this in the README; it is the one arm that does not keep native categoricals. In posts call it "the `_r13` configuration", not "TabPrep", and say that most of its features are random, unfiltered arithmetic (exp01: 894 of 894 on `hard_columns`, 934 on diamonds) that the portfolio's own tuned LightGBM config, not a default LightGBM, was built to absorb |
+| `ag_tabprep_keepcat` | autogluon (fit stage only) | `base_view(original)` + the `ag_tabprep` group's new columns, native categoricals kept. Reuses the cached `ag_tabprep` generator output (no extra generator run); separates "new features" from "losing native categoricals", which matters most for CatBoost |
 | `lama_adv` | lama | LAMA reader + advanced LGB feature pipeline extracted as a transformer (exp03.4); dropped if not reliable |
 | `openfe` | openfe | inductive wrapper (below) |
 | `autofeat` | autofeat | `feateng_steps=2`, `categorical_cols` passed, `max_gb` set, NaN imputed by the wrapper with train medians (recorded); originals stripped, names mapped back |
 | `mljar_golden` | mljar | `GoldenFeaturesTransformer`, fresh `results_path` per unit, `n_jobs=1` |
-| `cheap_manual` | core | exact rules below |
+| `manual_baseline` | core | exact rules below |
 
 Separate arm: `openfe_transductive` (library default `transform(train, test)`), only in exp05.
 
@@ -303,7 +321,7 @@ OpenFE inductive wrapper: reimplement the column-wide operators (`freq`, `Combin
 (unseen keys -> NaN); row-wise operators are applied as is. If reimplementation is not done in
 reasonable time, restrict the inductive arm to row-wise operators and say so in the README.
 
-`cheap_manual` rules (all statistics on fit rows only):
+`manual_baseline` rules (all statistics on fit rows only):
 - frequency encoding of every categorical column (share of rows);
 - top-5 numeric columns by mutual information with y (`mutual_info_*`, `random_state=seed`);
   for each pair: `a/b` and `b/a` with denominator `|b| < 1e-12` -> NaN, and `a*b`;
@@ -316,8 +334,10 @@ reasonable time, restrict the inductive arm to row-wise operators and say so in 
 ## 7. Benchmark protocol (exp04; confirmed at A2)
 
 ### 7.1 Folds
-5-fold outer CV (stratified for classification, plain KFold for regression), 2 repeats. Seed of a
-repeat r: `1000 + r`; tool seed for (repeat r, fold k): `1000 + 10*r + k`.
+5-fold outer CV (stratified for classification, plain KFold for regression), 1 repeat (r = 0).
+Across-dataset power grows with the number of datasets, not repeats, so the budget goes to ~50
+datasets instead (section 4.2). Seed of a repeat r: `1000 + r`; tool seed for (repeat r, fold k):
+`1000 + 10*r + k`.
 
 ### 7.2 Who sees what
 Inside each outer train, split off 15% as inner validation first (stratified for classification).
@@ -326,11 +346,15 @@ Downstream trains on the fit rows, early-stops on inner, is scored on test. No r
 
 ### 7.3 Downstream models (both always)
 - LightGBM: `n_estimators=5000, learning_rate=0.05`, early stopping 200 rounds; other params default.
-- CatBoost: `iterations=5000, learning_rate=0.05`, early stopping 200 rounds; other params default.
+- CatBoost: `iterations=3000, learning_rate=0.1`, early stopping 200 rounds; other params default.
 - Early-stopping metric: log loss (classification), RMSE (regression).
 Why two models: the tools select features with different models (OpenFE: LightGBM; MLJAR: depth-3
 tree; autofeat: L1 linear; AutoGluon Arithmetic: random choice, no filter). Two downstream
 families show whether gains carry over.
+Design choice, stated up front in every report and post: downstream models are untuned defaults and
+the same for every arm. The question is "plug the tool's features into a standard GBM, no retune".
+Default LightGBM (`feature_fraction=1`, `min_child_samples=20`) with ~1,000 random features on small
+data can overfit; that is part of what is measured, not a rigged baseline.
 
 ### 7.4 Metrics
 - Binary: ROC AUC and log loss (both co-primary).
@@ -339,38 +363,43 @@ families show whether gains carry over.
 - Also: n new features, generator time, total time.
 
 ### 7.5 Comparison to `base` (same model, same folds)
-Per dataset, per arm and model, on the 10 folds:
-- relative improvement for losses on per-dataset means: `(base - arm) / base`;
-- AUC: gap closed on per-dataset means `(arm - base) / (1 - base)`; datasets with base AUC >= 0.995
-  are excluded from this ratio and listed;
-- paired test: corrected repeated k-fold t-test (Nadeau-Bengio, Bouckaert-Frank form: J = 10,
-  correction n_test/n_train with n_train = outer train size, df = 9). If all fold differences are 0
-  (for example the arm created no features), record a tie with p = 1;
-- win / tie / loss at alpha 0.05 with Holm across arms within the dataset. This is low-power by
-  design; say so in every report.
-Across datasets:
-- median relative improvement with bootstrap 95% CI over datasets (10,000 resamples);
+Per dataset, per arm and model, on the 5 folds:
+- AUC: paired raw difference of per-dataset means `arm - base` (AUC is already unit-free; the
+  gap-closed ratio is dropped because it explodes near AUC 1);
+- losses (log loss, RMSE): relative improvement on per-dataset means `(base - arm) / base`; for log
+  loss also the raw difference, since datasets with log loss near 0 dominate relative numbers;
+- descriptive win / tie / loss: corrected k-fold t-test (Nadeau-Bengio, J = 5, correction
+  n_test/n_train with n_train = outer train size, df = 4) at alpha 0.05, no multiplicity correction
+  within a dataset. If all fold differences are 0 (e.g. the arm created no features), record a tie
+  with p = 1. Per-dataset tests are near-powerless; they are descriptive only, say so.
+Across datasets (primary conclusions; primary set = one dataset per family, section 4.2):
+- median effect (AUC difference or relative improvement) with bootstrap 95% CI over datasets
+  (10,000 resamples);
 - Wilcoxon signed-rank on per-dataset means, Holm-corrected across arms;
-- share of datasets with a significant win and with a significant loss.
-Raw metric differences are reported per dataset only (units differ across datasets).
-Primary conclusions are the across-dataset numbers. Report by task type and for datasets with categoricals.
+- share of datasets with a descriptive win and with a descriptive loss.
+Raw metric differences other than AUC and log loss are reported per dataset only (units differ).
+Breakdowns: by task type only where >= 8 primary datasets exist; with vs without a categorical
+column of >= 10 levels. Case-study datasets (not primary) are reported separately.
 
 ### 7.6 Failures in aggregates
-- Primary: a failed or timed-out unit takes the `base` score for that fold (what a user gets with no
-  new features).
-- Secondary: complete cases only.
-- Coverage (ok / planned) shown next to both, per arm.
+Two rules, reported side by side with equal weight:
+- base fallback: a failed or timed-out unit takes the `base` score for that fold ("what a user gets");
+- complete cases only ("what the tool does when it runs").
+Coverage (ok / planned) is shown next to both, per arm. A claim that holds under one rule only says so.
 
 ### 7.7 Cost
 Median and p90 of generator time, and of `(generator + downstream) / base downstream` time.
-Timing only from runs on the same machine, idle, laptop on power.
+Timing claims come from a separate timing pass with `jobs=1` on ~6 primary datasets x 1 fold (all
+arms), machine idle and on power; the main run is parallel and never idle, so its times are for
+budgeting only.
 
 ### 7.8 Runtime and fallbacks (decided at A3)
-Rough full-run cost: about 36 datasets x 10 folds x 8 arms, generator stage cached. Estimated
-300-500 CPU-hours (CatBoost single-threaded and OpenFE/autofeat near the cap dominate), i.e. about
-2-4 days of wall time at 4-7 jobs; worst case about a week. The pilot prints a measured estimate.
-Fallbacks to propose at A3 if needed, in this order: CatBoost `learning_rate=0.1`; row cap 50,000
-(stratified subsample, recorded); 1 repeat for OpenFE and autofeat; drop `ag_tabprep_groupby`.
+Rough full-run cost: about 50 datasets x 5 folds x 9 arms (7 generator arms, generator stage
+cached) x 2 models. Estimated 200-400 CPU-hours (OpenFE/autofeat generators and CatBoost on wide
+outputs dominate), i.e. about 1-2 days of wall time at 10 jobs. The pilot prints a measured estimate.
+Fallbacks to propose at A3 if needed, in this order: row cap 50,000 (stratified subsample,
+recorded); full-run generator cap from the pilot p95 (never below the time the tool needs on the
+median dataset); drop the slowest arm on datasets it cannot finish, reported as coverage.
 Keep the laptop awake (`caffeinate -i` on macOS, `systemd-inhibit` on Linux).
 
 ---
@@ -401,6 +430,9 @@ Keep the laptop awake (`caffeinate -i` on macOS, `systemd-inhibit` on Linux).
 Contrasts: B - A (features), D - A (models + ensembling), D - D0 (stacking), E - D0 (new portfolio).
 For C, D, D0, E use a fixed `time_limit=600` and record the trained model list, fit time and the
 machine; state that these arms depend on CPU speed. Record resolved hyperparameters from the predictor.
+Caveat for the README and post: with `time_limit=600` on this laptop, D and E will not finish their
+portfolios on the larger datasets; D - A and D - D0 measure "what fits in 600 s on 14 cores", not the
+full presets. The per-fold trained-model list shows how much of each portfolio ran.
 
 ### exp03_lama_probe (post 3) — env lama
 1. Default config of `TabularAutoML` for 0.4.2: feature pipeline per model, `auto_unique_co`,
@@ -415,18 +447,20 @@ machine; state that these arms depend on CPU speed. Record resolved hyperparamet
 
 ### exp04_open_benchmark (posts 4 and 5)
 Stages: `smoke` (3 datasets, 1 fold, all arms, both models, contract checks) -> A2 -> `pilot`
-(8 datasets, 10 folds, time estimate) -> A3 -> `full`.
+(8 primary datasets, 5 folds, time estimate) -> A3 -> `full`; plus the `jobs=1` timing pass (7.7).
 Outputs: `results/tidy/exp04.parquet`, tables by task type, figures, README with findings and caveats.
 
 ### exp05_leakage_checks (posts 4 and 5) — after the pilot, before or alongside full
-1. Permuted labels (6 datasets): permute y on fit rows. Check that the downstream inner-validation
-   metric and the train-rows metric stay at chance level for every arm; a generator that lifts the
-   fit-rows metric under permuted labels encodes y in-sample.
+1. Permuted labels (6 datasets): permute y on fit rows. The downstream inner-validation and test
+   metrics must stay at chance level for every arm (the train-rows metric of a GBM is above chance
+   even without leakage, so it is not the check). In-sample target encoding is detected by check 2.
 2. TE delivery check: for arms with target encoding, AUC (or |corr| for regression) of each TE
    column with y on fit rows as delivered vs on test rows. Large gap = in-sample encoding.
 3. `openfe` vs `openfe_transductive` on the same folds.
 4. Planted signals (`planted()` x 4 kinds x 3 seeds): does each arm reach the oracle's metric, and is
    the true feature (or an equivalent) among the created ones.
+5. OpenFE operator equivalence (contract test 7) reported per operator: max abs difference between
+   the inductive wrapper and OpenFE's own values on fit rows.
 
 ### exp06_automl_end_to_end (post 6, optional, A4)
 AutoGluon `best_quality` vs LightAutoML `TabularAutoML` vs H2O AutoML with and without
@@ -439,8 +473,10 @@ AutoGluon `best_quality` vs LightAutoML `TabularAutoML` vs H2O AutoML with and w
 - `make aggregate` builds tidy parquet with coverage columns.
 - Figures (matplotlib, SVG + PNG, fixed colour per arm across all figures, legible at 1200x1500
   and 1200x628): exp01 type-mapping table; exp02 contrasts with CIs; exp03 role changes; exp04
-  median relative improvement with CI by task type and model, win/tie/loss bars, improvement vs
-  generator time (log x); exp05 permuted-label results and planted-signal grid.
+  median effect with CI by model (and by task type where >= 8 primary datasets), win/tie/loss bars,
+  improvement vs generator time (log x), improvement vs n new features (log x; do gains just come
+  from more columns?); exp05 permuted-label results and planted-signal grid. In figures and posts
+  the manual arm is labelled `manual_baseline`.
 - `results/claims.yaml`:
   ```yaml
   - id: p4_openfe_reg_median_lgbm
@@ -459,6 +495,9 @@ AutoGluon `best_quality` vs LightAutoML `TabularAutoML` vs H2O AutoML with and w
   ```
   `make claims` recomputes values and fails if any value differs from `approved_value` by more than
   `tolerance`. The agent never writes `approved_*` fields.
+- Figures are claims too: every figure used in a post has an entry with `kind: figure`, `source`,
+  `script`, the output path, a hash of the rendered data table and `approved_git_sha`; `make claims`
+  fails if the recomputed data hash differs from the approved one. Number entries have `kind: number`.
 
 ---
 
@@ -500,6 +539,8 @@ coverage, surprises, open questions). This file is how Ilia and later sessions r
 - OOF-TE with many classes: one column per class; the 20-class filter keeps this bounded.
 - `ag_tabprep` can add up to ~2,000 columns; the downstream cap (1,800 s) turns slow fits into
   timeout records. Always show n features next to cost.
+- Generator timeouts on large datasets would bias results against expensive tools: pilot cap
+  3,600 s, full-run cap from measured p95 (section 5), and both failure rules reported (7.6).
 - Laptop timing noise: idle machine, on power, medians only, one machine.
 
 ---

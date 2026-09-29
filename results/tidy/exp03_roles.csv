@@ -94,22 +94,22 @@ diamonds,table,float64,127,Numeric,Numeric,,"numeric rules fired: rule_4,rule_7"
 diamonds,x,float64,554,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
 diamonds,y,float64,552,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
 diamonds,z,float64,375,Numeric,Numeric,,"numeric rules fired: rule_4,rule_6"
-house_sales,date,object,372,Datetime,Datetime,,simple guess kept
-house_sales,bedrooms,uint8,13,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
-house_sales,bathrooms,float64,30,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
-house_sales,sqft_living,int64,1038,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
-house_sales,sqft_lot,int64,9782,Numeric,Numeric,,"numeric rules fired: rule_1,rule_5"
-house_sales,floors,float64,6,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
-house_sales,waterfront,uint8,2,Numeric,Numeric,,"numeric rules fired: rule_2,rule_7"
-house_sales,view,uint8,5,Numeric,Numeric,,"numeric rules fired: rule_4,rule_6"
-house_sales,condition,uint8,5,Numeric,Numeric,,numeric rules fired: rule_7
-house_sales,grade,uint8,12,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
-house_sales,sqft_above,int64,946,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
-house_sales,sqft_basement,int64,306,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
-house_sales,yr_built,int64,116,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
-house_sales,yr_renovated,int64,70,Numeric,Numeric,,numeric rules fired: rule_7
-house_sales,zipcode,category,70,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
-house_sales,lat,float64,5034,Numeric,Numeric,,numeric rules fired: rule_1
-house_sales,long,float64,752,Numeric,"Category(encoding_type=auto, ordinal=True)",Numeric -> Category,no numeric rule fired -> category
-house_sales,sqft_living15,int64,777,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
-house_sales,sqft_lot15,int64,8689,Numeric,Numeric,,"numeric rules fired: rule_1,rule_5"
+house_sales_42092,date,object,372,Datetime,Datetime,,simple guess kept
+house_sales_42092,bedrooms,uint8,13,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
+house_sales_42092,bathrooms,float64,30,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
+house_sales_42092,sqft_living,int64,1038,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
+house_sales_42092,sqft_lot,int64,9782,Numeric,Numeric,,"numeric rules fired: rule_1,rule_5"
+house_sales_42092,floors,float64,6,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
+house_sales_42092,waterfront,uint8,2,Numeric,Numeric,,"numeric rules fired: rule_2,rule_7"
+house_sales_42092,view,uint8,5,Numeric,Numeric,,"numeric rules fired: rule_4,rule_6"
+house_sales_42092,condition,uint8,5,Numeric,Numeric,,numeric rules fired: rule_7
+house_sales_42092,grade,uint8,12,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
+house_sales_42092,sqft_above,int64,946,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
+house_sales_42092,sqft_basement,int64,306,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
+house_sales_42092,yr_built,int64,116,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
+house_sales_42092,yr_renovated,int64,70,Numeric,Numeric,,numeric rules fired: rule_7
+house_sales_42092,zipcode,category,70,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
+house_sales_42092,lat,float64,5034,Numeric,Numeric,,numeric rules fired: rule_1
+house_sales_42092,long,float64,752,Numeric,"Category(encoding_type=auto, ordinal=True)",Numeric -> Category,no numeric rule fired -> category
+house_sales_42092,sqft_living15,int64,777,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
+house_sales_42092,sqft_lot15,int64,8689,Numeric,Numeric,,"numeric rules fired: rule_1,rule_5"
