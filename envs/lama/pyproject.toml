@@ -1,0 +1,24 @@
+[project]
+name = "afe-env-lama"
+version = "0"
+requires-python = "==3.11.*"
+dependencies = [
+    "afe",
+    "lightautoml==0.4.2",
+    "torch",
+    "numpy<2",  # statsmodels<=0.14.0 (lightautoml dep) is built for numpy 1
+    "pandas<3",  # statsmodels 0.14.0 uses the pre-3.0 pandas deprecate_kwarg signature
+    "scipy<1.16",  # statsmodels 0.14.0 imports scipy._lib._util._lazywhere, removed in scipy 1.16
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+afe = { path = "../..", editable = true }
+torch = { index = "pytorch-cpu", marker = "sys_platform == 'linux'" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true

@@ -1,0 +1,42 @@
+preset,resolves_to,is_alias,hyperparameters,has_GBM_PREP,n_GBM_PREP_configs,model_keys,auto_stack,num_stack_levels,dynamic_stacking,callbacks,time_limit,other_keys
+extreme_quality,extreme_quality,False,commercial_2026_08_05,False,0,"CAT,GBM,NORI,REALMLP,TABDPT-TURBO,TABICL",,0.0,False,"[[""EarlyStoppingCountCallback"", {""patience"": [[400, 1], [401, 2], [2000, 2], null]}]]",3600.0,"aux_kwargs,num_bag_folds,num_bag_sets"
+best_quality,best_quality,False,zeroshot,False,0,"CAT,FASTAI,GBM,NN_TORCH,RF,XGB,XT",True,,auto,,3600.0,
+best_quality_v150,best_quality_v150,False,zeroshot_2025_12_18_cpu,True,14,"CAT,FASTAI,GBM,GBM_PREP,NN_TORCH",True,0.0,auto,"[[""EarlyStoppingCountCallback"", {""patience"": [[100, 4], [500, 8], [2500, 15], [10000, 40], [100000, 100], null]}]]",3600.0,
+high_quality,high_quality,False,zeroshot,False,0,"CAT,FASTAI,GBM,NN_TORCH,RF,XGB,XT",True,,auto,,3600.0,"refit_full,save_bag_folds,set_best_to_refit_full"
+high_quality_v150,high_quality_v150,False,zeroshot_2025_12_18_cpu,True,14,"CAT,FASTAI,GBM,GBM_PREP,NN_TORCH",True,0.0,auto,"[[""EarlyStoppingCountCallback"", {""patience"": [[100, 4], [500, 8], [2500, 15], [10000, 40], [100000, 100], null]}]]",3600.0,"refit_full,save_bag_folds,set_best_to_refit_full"
+good_quality,good_quality,False,light,False,0,"CAT,FASTAI,GBM,NN_TORCH,RF,XGB,XT",True,,auto,,3600.0,"refit_full,save_bag_folds,set_best_to_refit_full"
+medium_quality,medium_quality,False,default,False,0,"CAT,FASTAI,GBM,NN_TORCH,RF,XGB,XT",False,,,,,
+optimize_for_deployment,optimize_for_deployment,False,default,False,0,"CAT,FASTAI,GBM,NN_TORCH,RF,XGB,XT",,,,,,"keep_only_best,save_space"
+ignore_text,ignore_text,False,default,False,0,"CAT,FASTAI,GBM,NN_TORCH,RF,XGB,XT",,,,,,_feature_generator_kwargs
+ignore_text_ngrams,ignore_text_ngrams,False,default,False,0,"CAT,FASTAI,GBM,NN_TORCH,RF,XGB,XT",,,,,,_feature_generator_kwargs
+interpretable,interpretable,False,interpretable,False,0,"IM_FIGS,IM_RULEFIT",False,,,,,"calibrate,feature_generator,fit_weighted_ensemble"
+best_quality_v082,best_quality_v082,False,default,False,0,"CAT,FASTAI,GBM,NN_TORCH,RF,XGB,XT",True,,,,,
+high_quality_v082,high_quality_v082,False,default,False,0,"CAT,FASTAI,GBM,NN_TORCH,RF,XGB,XT",True,,,,,"refit_full,save_bag_folds,set_best_to_refit_full"
+good_quality_v082,good_quality_v082,False,light,False,0,"CAT,FASTAI,GBM,NN_TORCH,RF,XGB,XT",True,,,,,"refit_full,save_bag_folds,set_best_to_refit_full"
+extreme_quality_v150,extreme_quality_v150,False,zeroshot_2025_12_18_gpu,True,5,"CAT,GBM,GBM_PREP,MITRA,REALTABPFN-V2,TABDPT,TABICL,TABM",True,0.0,auto,"[[""EarlyStoppingCountCallback"", {""patience"": [[100, 4], [500, 8], [2500, 15], [10000, 40], [100000, 100], null]}]]",3600.0,
+noncommercial,noncommercial,False,noncommercial_2026_08_05,False,0,"CAT,GBM,NORI,REALMLP,TABDPT-TURBO,TABICL,TABPFN-3",,0.0,False,"[[""EarlyStoppingCountCallback"", {""patience"": [[400, 1], [401, 3], [2000, 3], null]}]]",3600.0,"aux_kwargs,num_bag_folds,num_bag_sets"
+extreme_quality_v140,extreme_quality_v140,False,,False,0,,True,,auto,,3600.0,"_experimental_dynamic_hyperparameters,num_bag_sets"
+tabarena,tabarena,False,zeroshot_2025_tabfm,False,0,"CAT,GBM,MITRA,REALTABPFN-V2,TABICL,TABM,XGB",True,0.0,auto,,3600.0,num_bag_sets
+experimental_quality_v120,experimental_quality_v120,False,experimental,False,0,"CAT,FASTAI,GBM,NN_TORCH,RF,TABPFNMIX,XGB,XT",True,,auto,,3600.0,"fit_strategy,num_bag_sets,num_gpus"
+extreme,extreme_quality,True,commercial_2026_08_05,False,0,"CAT,GBM,NORI,REALMLP,TABDPT-TURBO,TABICL",,0.0,False,"[[""EarlyStoppingCountCallback"", {""patience"": [[400, 1], [401, 2], [2000, 2], null]}]]",3600.0,"aux_kwargs,num_bag_folds,num_bag_sets"
+best,best_quality,True,zeroshot,False,0,"CAT,FASTAI,GBM,NN_TORCH,RF,XGB,XT",True,,auto,,3600.0,
+high,high_quality,True,zeroshot,False,0,"CAT,FASTAI,GBM,NN_TORCH,RF,XGB,XT",True,,auto,,3600.0,"refit_full,save_bag_folds,set_best_to_refit_full"
+high_quality_fast_inference_only_refit,high_quality,True,zeroshot,False,0,"CAT,FASTAI,GBM,NN_TORCH,RF,XGB,XT",True,,auto,,3600.0,"refit_full,save_bag_folds,set_best_to_refit_full"
+good,good_quality,True,light,False,0,"CAT,FASTAI,GBM,NN_TORCH,RF,XGB,XT",True,,auto,,3600.0,"refit_full,save_bag_folds,set_best_to_refit_full"
+good_quality_faster_inference_only_refit,good_quality,True,light,False,0,"CAT,FASTAI,GBM,NN_TORCH,RF,XGB,XT",True,,auto,,3600.0,"refit_full,save_bag_folds,set_best_to_refit_full"
+medium,medium_quality,True,default,False,0,"CAT,FASTAI,GBM,NN_TORCH,RF,XGB,XT",False,,,,,
+medium_quality_faster_train,medium_quality,True,default,False,0,"CAT,FASTAI,GBM,NN_TORCH,RF,XGB,XT",False,,,,,
+eq,extreme_quality,True,commercial_2026_08_05,False,0,"CAT,GBM,NORI,REALMLP,TABDPT-TURBO,TABICL",,0.0,False,"[[""EarlyStoppingCountCallback"", {""patience"": [[400, 1], [401, 2], [2000, 2], null]}]]",3600.0,"aux_kwargs,num_bag_folds,num_bag_sets"
+bq,best_quality,True,zeroshot,False,0,"CAT,FASTAI,GBM,NN_TORCH,RF,XGB,XT",True,,auto,,3600.0,
+hq,high_quality,True,zeroshot,False,0,"CAT,FASTAI,GBM,NN_TORCH,RF,XGB,XT",True,,auto,,3600.0,"refit_full,save_bag_folds,set_best_to_refit_full"
+gq,good_quality,True,light,False,0,"CAT,FASTAI,GBM,NN_TORCH,RF,XGB,XT",True,,auto,,3600.0,"refit_full,save_bag_folds,set_best_to_refit_full"
+mq,medium_quality,True,default,False,0,"CAT,FASTAI,GBM,NN_TORCH,RF,XGB,XT",False,,,,,
+experimental_quality_v140,extreme_quality_v140,True,,False,0,,True,,auto,,3600.0,"_experimental_dynamic_hyperparameters,num_bag_sets"
+best_v140,best_quality,True,zeroshot,False,0,"CAT,FASTAI,GBM,NN_TORCH,RF,XGB,XT",True,,auto,,3600.0,
+best_v150,best_quality_v150,True,zeroshot_2025_12_18_cpu,True,14,"CAT,FASTAI,GBM,GBM_PREP,NN_TORCH",True,0.0,auto,"[[""EarlyStoppingCountCallback"", {""patience"": [[100, 4], [500, 8], [2500, 15], [10000, 40], [100000, 100], null]}]]",3600.0,
+best_quality_v140,best_quality,True,zeroshot,False,0,"CAT,FASTAI,GBM,NN_TORCH,RF,XGB,XT",True,,auto,,3600.0,
+high_v150,high_quality_v150,True,zeroshot_2025_12_18_cpu,True,14,"CAT,FASTAI,GBM,GBM_PREP,NN_TORCH",True,0.0,auto,"[[""EarlyStoppingCountCallback"", {""patience"": [[100, 4], [500, 8], [2500, 15], [10000, 40], [100000, 100], null]}]]",3600.0,"refit_full,save_bag_folds,set_best_to_refit_full"
+extreme_v140,extreme_quality_v140,True,,False,0,,True,,auto,,3600.0,"_experimental_dynamic_hyperparameters,num_bag_sets"
+extreme_v150,extreme_quality_v150,True,zeroshot_2025_12_18_gpu,True,5,"CAT,GBM,GBM_PREP,MITRA,REALTABPFN-V2,TABDPT,TABICL,TABM",True,0.0,auto,"[[""EarlyStoppingCountCallback"", {""patience"": [[100, 4], [500, 8], [2500, 15], [10000, 40], [100000, 100], null]}]]",3600.0,
+extreme_v160,extreme_quality,True,commercial_2026_08_05,False,0,"CAT,GBM,NORI,REALMLP,TABDPT-TURBO,TABICL",,0.0,False,"[[""EarlyStoppingCountCallback"", {""patience"": [[400, 1], [401, 2], [2000, 2], null]}]]",3600.0,"aux_kwargs,num_bag_folds,num_bag_sets"
+noncommercial_v160,noncommercial,True,noncommercial_2026_08_05,False,0,"CAT,GBM,NORI,REALMLP,TABDPT-TURBO,TABICL,TABPFN-3",,0.0,False,"[[""EarlyStoppingCountCallback"", {""patience"": [[400, 1], [401, 3], [2000, 3], null]}]]",3600.0,"aux_kwargs,num_bag_folds,num_bag_sets"

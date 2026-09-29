@@ -1,0 +1,9 @@
+# exp01: AutoGluon default preprocessing and TabPrep generators (plan section 8)
+n: 5000
+seeds: [0, 1, 2]
+variants:            # step 2, seed 0 only
+  cat_rare_singletons: {n: 5000, cat_rare_mode: singletons}
+  n500: {n: 500}
+step4_datasets: [adult, diamonds]
+step4_seed: 0
+recover_threshold: 0.999   # |Spearman rho| with the planted a/b that counts as recovered

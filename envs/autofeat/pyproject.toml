@@ -1,0 +1,16 @@
+[project]
+name = "afe-env-autofeat"
+version = "0"
+requires-python = "==3.11.*"
+dependencies = [
+    "afe",
+    "autofeat==2.1.3",
+    "numpy<2",
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+afe = { path = "../..", editable = true }
+

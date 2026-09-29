@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+results/cache/
+*.tmp
+.DS_Store
+openfe_tmp_data.feather
+AutogluonModels/

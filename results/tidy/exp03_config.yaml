@@ -1,0 +1,150 @@
+lightautoml_version: 0.4.2
+tasks:
+  binary:
+    use_algos:
+    - [lgb, lgb_tuned, linear_l2, cb, cb_tuned]
+    feature_pipeline_per_algo: {lgb: LGBAdvancedPipeline, lgb_tuned: LGBAdvancedPipeline,
+      linear_l2: LinearFeatures, cb: LGBAdvancedPipeline, cb_tuned: LGBAdvancedPipeline}
+    selection_params:
+      mode: 1
+      importance_type: gain
+      fit_on_holdout: true
+      cutoff: 0
+      feature_group_size: 1
+      max_features_cnt_in_result: null
+      select_algos: [gbm]
+    selection_mode_meaning: 'ImportanceCutoffSelector: LGBSimpleFeatures + LightGBM,
+      gain importance, drop importance <= cutoff'
+    gbm_pipeline_params:
+      top_intersections: 4
+      max_intersection_depth: 3
+      subsample: 100000
+      auto_unique_co: 10
+      multiclass_te_co: 3
+      output_categories: false
+      use_groupby: false
+      groupby_types: [delta_median, delta_mean, min, max, std, mode, is_mode]
+      groupby_top_based_on: cardinality
+      groupby_top_categorical: 3
+      groupby_top_numerical: 3
+      groupby_triplets: []
+    linear_pipeline_params:
+      top_intersections: 4
+      max_intersection_depth: 3
+      subsample: 100000
+      auto_unique_co: 50
+      multiclass_te_co: 3
+      use_groupby: false
+      groupby_types: [delta_median, delta_mean, min, max, std, mode, is_mode]
+      groupby_top_based_on: cardinality
+      groupby_top_categorical: 3
+      groupby_top_numerical: 3
+      groupby_triplets: []
+    reader_params: {samples: 100000, max_nan_rate: 0.999, max_constant_rate: 0.999,
+      cv: 5, random_state: 42, roles_params: null, n_jobs: 1, advanced_roles: true,
+      numeric_unique_rate: 0.999, max_to_3rd_rate: 1.1, binning_enc_rate: 2, raw_decr_rate: 1.1,
+      max_score_rate: 0.2, abs_score_val: 0.04, drop_score_co: 0.0}
+  multiclass:
+    use_algos:
+    - [lgb, lgb_tuned, linear_l2, cb, cb_tuned]
+    feature_pipeline_per_algo: {lgb: LGBAdvancedPipeline, lgb_tuned: LGBAdvancedPipeline,
+      linear_l2: LinearFeatures, cb: LGBAdvancedPipeline, cb_tuned: LGBAdvancedPipeline}
+    selection_params:
+      mode: 1
+      importance_type: gain
+      fit_on_holdout: true
+      cutoff: 0
+      feature_group_size: 1
+      max_features_cnt_in_result: null
+      select_algos: [gbm]
+    selection_mode_meaning: 'ImportanceCutoffSelector: LGBSimpleFeatures + LightGBM,
+      gain importance, drop importance <= cutoff'
+    gbm_pipeline_params:
+      top_intersections: 4
+      max_intersection_depth: 3
+      subsample: 100000
+      auto_unique_co: 10
+      multiclass_te_co: 3
+      output_categories: false
+      use_groupby: false
+      groupby_types: [delta_median, delta_mean, min, max, std, mode, is_mode]
+      groupby_top_based_on: cardinality
+      groupby_top_categorical: 3
+      groupby_top_numerical: 3
+      groupby_triplets: []
+    linear_pipeline_params:
+      top_intersections: 4
+      max_intersection_depth: 3
+      subsample: 100000
+      auto_unique_co: 50
+      multiclass_te_co: 3
+      use_groupby: false
+      groupby_types: [delta_median, delta_mean, min, max, std, mode, is_mode]
+      groupby_top_based_on: cardinality
+      groupby_top_categorical: 3
+      groupby_top_numerical: 3
+      groupby_triplets: []
+    reader_params: {samples: 100000, max_nan_rate: 0.999, max_constant_rate: 0.999,
+      cv: 5, random_state: 42, roles_params: null, n_jobs: 1, advanced_roles: true,
+      numeric_unique_rate: 0.999, max_to_3rd_rate: 1.1, binning_enc_rate: 2, raw_decr_rate: 1.1,
+      max_score_rate: 0.2, abs_score_val: 0.04, drop_score_co: 0.0}
+  regression:
+    use_algos:
+    - [lgb, lgb_tuned, linear_l2, cb, cb_tuned]
+    feature_pipeline_per_algo: {lgb: LGBAdvancedPipeline, lgb_tuned: LGBAdvancedPipeline,
+      linear_l2: LinearFeatures, cb: LGBAdvancedPipeline, cb_tuned: LGBAdvancedPipeline}
+    selection_params:
+      mode: 1
+      importance_type: gain
+      fit_on_holdout: true
+      cutoff: 0
+      feature_group_size: 1
+      max_features_cnt_in_result: null
+      select_algos: [gbm]
+    selection_mode_meaning: 'ImportanceCutoffSelector: LGBSimpleFeatures + LightGBM,
+      gain importance, drop importance <= cutoff'
+    gbm_pipeline_params:
+      top_intersections: 4
+      max_intersection_depth: 3
+      subsample: 100000
+      auto_unique_co: 10
+      multiclass_te_co: 3
+      output_categories: false
+      use_groupby: false
+      groupby_types: [delta_median, delta_mean, min, max, std, mode, is_mode]
+      groupby_top_based_on: cardinality
+      groupby_top_categorical: 3
+      groupby_top_numerical: 3
+      groupby_triplets: []
+    linear_pipeline_params:
+      top_intersections: 4
+      max_intersection_depth: 3
+      subsample: 100000
+      auto_unique_co: 50
+      multiclass_te_co: 3
+      use_groupby: false
+      groupby_types: [delta_median, delta_mean, min, max, std, mode, is_mode]
+      groupby_top_based_on: cardinality
+      groupby_top_categorical: 3
+      groupby_top_numerical: 3
+      groupby_triplets: []
+    reader_params: {samples: 100000, max_nan_rate: 0.999, max_constant_rate: 0.999,
+      cv: 5, random_state: 42, roles_params: null, n_jobs: 1, advanced_roles: true,
+      numeric_unique_rate: 0.999, max_to_3rd_rate: 1.1, binning_enc_rate: 2, raw_decr_rate: 1.1,
+      max_score_rate: 0.2, abs_score_val: 0.04, drop_score_co: 0.0}
+pipeline_defaults:
+  LGBSimpleFeatures: {}
+  LGBAdvancedPipeline: {feats_imp: None, top_intersections: '5', max_intersection_depth: '3',
+    subsample: None, multiclass_te_co: '3', auto_unique_co: '10', output_categories: 'False',
+    fill_na: 'False', ascending_by_cardinality: 'False', use_groupby: 'False', groupby_types: '[''delta_median'',
+      ''delta_mean'', ''min'', ''max'', ''std'', ''mode'', ''is_mode'']', groupby_triplets: '[]',
+    groupby_top_based_on: '''cardinality''', groupby_top_categorical: '3', groupby_top_numerical: '3'}
+  LinearFeatures: {feats_imp: None, top_intersections: '5', max_bin_count: '10', max_intersection_depth: '3',
+    subsample: None, sparse_ohe: '''auto''', auto_unique_co: '50', output_categories: 'True',
+    multiclass_te_co: '3', use_groupby: 'False', groupby_types: '[''delta_median'',
+      ''delta_mean'', ''min'', ''max'', ''std'', ''mode'', ''is_mode'']', groupby_triplets: '[]',
+    groupby_top_based_on: '''cardinality''', groupby_top_categorical: '3', groupby_top_numerical: '3'}
+reader_class_defaults: {samples: '100000', max_nan_rate: '0.999', max_constant_rate: '0.999',
+  cv: '5', random_state: '42', roles_params: None, n_jobs: '4', advanced_roles: 'True',
+  numeric_unique_rate: '0.999', max_to_3rd_rate: '1.1', binning_enc_rate: '2', raw_decr_rate: '1.1',
+  max_score_rate: '0.2', abs_score_val: '0.04', drop_score_co: '0.01'}

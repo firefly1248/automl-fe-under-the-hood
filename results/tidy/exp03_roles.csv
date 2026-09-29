@@ -1,0 +1,108 @@
+dataset,column,dtype,nunique,simple_role,lama_role,change,reason
+hard_columns,num,float64,5000,Numeric,Numeric,,"numeric rules fired: rule_3,rule_7"
+hard_columns,dup_num,float64,5000,Numeric,Numeric,,"numeric rules fired: rule_3,rule_7"
+hard_columns,const,float64,1,Drop,Drop,,simple check: nan rate or constant rate >= reader limit
+hard_columns,near_const,float64,2,Drop,Drop,,simple check: nan rate or constant rate >= reader limit
+hard_columns,city_code,int64,40,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
+hard_columns,date_int,int64,1706,Numeric,Numeric,,"numeric rules fired: rule_0,rule_7"
+hard_columns,date_str,object,1701,Datetime,Datetime,,simple guess kept
+hard_columns,ts_unix,int64,5000,Numeric,Numeric,,"numeric rules fired: rule_0,rule_7"
+hard_columns,cat_low,object,3,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
+hard_columns,cat_rare,object,303,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
+hard_columns,cat_binary,object,2,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
+hard_columns,uid,object,5000,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
+hard_columns,text_short,object,4,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
+hard_columns,text_long,object,5000,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
+hard_columns,num_as_str,object,947,Numeric,Numeric,,numeric rules fired: rule_7
+hard_columns,mixed,object,1264,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
+hard_columns,a,float64,5000,Numeric,Numeric,,"numeric rules fired: rule_0,rule_3"
+hard_columns,b,float64,5000,Numeric,Numeric,,"numeric rules fired: rule_0,rule_3"
+adult,age,category,5,Numeric,Category(encoding_type=int),Numeric -> Category,no numeric rule fired -> category
+adult,workclass,category,8,Category(encoding_type=auto),Category(encoding_type=freq),,category rules fired: freq_rule_1
+adult,fnlwgt,float64,28523,Numeric,"Category(encoding_type=freq, ordinal=True)",Numeric -> Category,no numeric rule fired -> category
+adult,education,category,16,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
+adult,education-num,uint8,16,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
+adult,marital-status,category,7,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
+adult,occupation,category,14,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
+adult,relationship,category,6,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
+adult,race,category,5,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
+adult,sex,category,2,Category(encoding_type=auto),Category(encoding_type=freq),,category rules fired: freq_rule_1
+adult,capitalgain,category,5,Numeric,Category(encoding_type=int),Numeric -> Category,no numeric rule fired -> category
+adult,capitalloss,category,5,Numeric,Numeric,,numeric rules fired: rule_7
+adult,hoursperweek,category,5,Numeric,Numeric,,numeric rules fired: rule_4
+adult,native-country,category,41,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
+bank-marketing,V1,uint8,77,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
+bank-marketing,V2,category,12,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
+bank-marketing,V3,category,3,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
+bank-marketing,V4,category,4,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
+bank-marketing,V5,category,2,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
+bank-marketing,V6,float64,7168,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
+bank-marketing,V7,category,2,Category(encoding_type=auto),Category(encoding_type=freq),,category rules fired: freq_rule_1
+bank-marketing,V8,category,2,Category(encoding_type=auto),Category(encoding_type=freq),,category rules fired: freq_rule_1
+bank-marketing,V9,category,3,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
+bank-marketing,V10,uint8,31,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
+bank-marketing,V11,category,12,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
+bank-marketing,V12,float64,1573,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
+bank-marketing,V13,uint8,48,Numeric,Numeric,,"numeric rules fired: rule_4,rule_6"
+bank-marketing,V14,float64,559,Numeric,"Category(encoding_type=auto, ordinal=True)",Numeric -> Category,no numeric rule fired -> category
+bank-marketing,V15,float64,41,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
+bank-marketing,V16,category,4,Category(encoding_type=auto),Category(encoding_type=freq),,category rules fired: freq_rule_1
+credit-g,checking_status,category,4,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
+credit-g,duration,uint8,33,Numeric,Numeric,,numeric rules fired: rule_0
+credit-g,credit_history,category,5,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
+credit-g,purpose,category,10,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
+credit-g,credit_amount,float64,921,Numeric,Numeric,,numeric rules fired: rule_0
+credit-g,savings_status,category,5,Category(encoding_type=auto),Category(encoding_type=freq),,category rules fired: freq_rule_1
+credit-g,employment,category,5,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
+credit-g,installment_commitment,uint8,4,Numeric,Numeric,,numeric rules fired: rule_0
+credit-g,personal_status,category,4,Category(encoding_type=auto),Category(encoding_type=freq),,category rules fired: freq_rule_1
+credit-g,other_parties,category,3,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
+credit-g,residence_since,uint8,4,Numeric,Category(encoding_type=int),Numeric -> Category,no numeric rule fired -> category
+credit-g,property_magnitude,category,4,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
+credit-g,age,uint8,53,Numeric,Numeric,,numeric rules fired: rule_0
+credit-g,other_payment_plans,category,3,Category(encoding_type=auto),Category(encoding_type=freq),,category rules fired: freq_rule_1
+credit-g,housing,category,3,Category(encoding_type=auto),Category(encoding_type=freq),,category rules fired: freq_rule_1
+credit-g,existing_credits,uint8,4,Numeric,Numeric,,numeric rules fired: rule_0
+credit-g,job,category,4,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
+credit-g,num_dependents,uint8,2,Numeric,Numeric(discretization=True),,numeric rules fired: rule_2
+credit-g,own_telephone,category,2,Category(encoding_type=auto),Category(encoding_type=freq),,category rules fired: freq_rule_1
+credit-g,foreign_worker,category,2,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
+Amazon_employee_access,RESOURCE,category,7518,Numeric,"Category(encoding_type=auto, ordinal=True)",Numeric -> Category,no numeric rule fired -> category
+Amazon_employee_access,MGR_ID,category,4243,Numeric,"Category(encoding_type=auto, ordinal=True)",Numeric -> Category,no numeric rule fired -> category
+Amazon_employee_access,ROLE_ROLLUP_1,category,128,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
+Amazon_employee_access,ROLE_ROLLUP_2,category,177,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
+Amazon_employee_access,ROLE_DEPTNAME,category,449,Numeric,"Category(encoding_type=auto, ordinal=True)",Numeric -> Category,no numeric rule fired -> category
+Amazon_employee_access,ROLE_TITLE,category,343,Numeric,"Category(encoding_type=auto, ordinal=True)",Numeric -> Category,no numeric rule fired -> category
+Amazon_employee_access,ROLE_FAMILY_DESC,category,2358,Numeric,"Category(encoding_type=auto, ordinal=True)",Numeric -> Category,no numeric rule fired -> category
+Amazon_employee_access,ROLE_FAMILY,category,67,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
+Amazon_employee_access,ROLE_CODE,category,343,Numeric,"Category(encoding_type=auto, ordinal=True)",Numeric -> Category,no numeric rule fired -> category
+Amazon_employee_access_int,RESOURCE,int64,7518,Numeric,"Category(encoding_type=auto, ordinal=True)",Numeric -> Category,no numeric rule fired -> category
+Amazon_employee_access_int,MGR_ID,int64,4243,Numeric,"Category(encoding_type=auto, ordinal=True)",Numeric -> Category,no numeric rule fired -> category
+Amazon_employee_access_int,ROLE_ROLLUP_1,int64,128,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
+Amazon_employee_access_int,ROLE_ROLLUP_2,int64,177,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
+Amazon_employee_access_int,ROLE_DEPTNAME,int64,449,Numeric,"Category(encoding_type=auto, ordinal=True)",Numeric -> Category,no numeric rule fired -> category
+Amazon_employee_access_int,ROLE_TITLE,int64,343,Numeric,"Category(encoding_type=auto, ordinal=True)",Numeric -> Category,no numeric rule fired -> category
+Amazon_employee_access_int,ROLE_FAMILY_DESC,int64,2358,Numeric,"Category(encoding_type=auto, ordinal=True)",Numeric -> Category,no numeric rule fired -> category
+Amazon_employee_access_int,ROLE_FAMILY,int64,67,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
+Amazon_employee_access_int,ROLE_CODE,int64,343,Numeric,"Category(encoding_type=auto, ordinal=True)",Numeric -> Category,no numeric rule fired -> category
+diamonds,carat,float64,273,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
+diamonds,cut,category,5,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
+diamonds,color,category,7,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
+diamonds,clarity,category,8,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
+diamonds,depth,float64,184,Numeric,Numeric,,numeric rules fired: rule_7
+diamonds,table,float64,127,Numeric,Numeric,,"numeric rules fired: rule_4,rule_7"
+diamonds,x,float64,554,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
+diamonds,y,float64,552,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
+diamonds,z,float64,375,Numeric,Numeric,,"numeric rules fired: rule_4,rule_6"
+Bike_Sharing_Demand,season,category,4,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
+Bike_Sharing_Demand,year,uint8,2,Numeric,Numeric,,"numeric rules fired: rule_2,rule_4,rule_6"
+Bike_Sharing_Demand,month,uint8,12,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
+Bike_Sharing_Demand,hour,uint8,24,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
+Bike_Sharing_Demand,holiday,bool,2,Numeric,Numeric,,"numeric rules fired: rule_2,rule_6,rule_7"
+Bike_Sharing_Demand,weekday,uint8,7,Numeric,Numeric,,"numeric rules fired: rule_0,rule_7"
+Bike_Sharing_Demand,workingday,bool,2,Numeric,Numeric,,"numeric rules fired: rule_2,rule_6,rule_7"
+Bike_Sharing_Demand,weather,category,4,Category(encoding_type=auto),Category(encoding_type=freq),,category rules fired: freq_rule_1
+Bike_Sharing_Demand,temp,float64,50,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
+Bike_Sharing_Demand,feel_temp,float64,65,Numeric,Numeric,,"numeric rules fired: rule_4,rule_6"
+Bike_Sharing_Demand,humidity,float64,89,Numeric,Numeric,,"numeric rules fired: rule_4,rule_6"
+Bike_Sharing_Demand,windspeed,float64,30,Numeric,Numeric,,"numeric rules fired: rule_1,rule_4,rule_6,rule_7"

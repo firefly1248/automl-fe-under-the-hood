@@ -1,0 +1,6 @@
+# exp03: LightAutoML 0.4.2 default config and reader roles (plan section 8). Steps 1-2 only so far.
+n: 5000
+seed: 0
+cpu_limit: 1
+timeout: 600
+typed_datasets: [adult, bank-marketing, credit-g, Amazon_employee_access, Amazon_employee_access_int, diamonds, Bike_Sharing_Demand]

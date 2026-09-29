@@ -1,0 +1,16 @@
+[project]
+name = "afe-env-openfe"
+version = "0"
+requires-python = "==3.11.*"
+dependencies = [
+    "afe",
+    "openfe==0.0.12",
+    "matplotlib",  # imported by openfe, not declared
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+afe = { path = "../..", editable = true }
+

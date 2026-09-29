@@ -1,0 +1,22 @@
+[project]
+name = "afe-env-core"
+version = "0"
+requires-python = "==3.11.*"
+dependencies = [
+    "afe",
+    "lightgbm==4.7.0",
+    "catboost==1.2.10",
+    "openml==0.15.1",
+    "scikit-learn",
+    "scipy",
+    "matplotlib",
+    "pytest",
+    "tabulate",
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+afe = { path = "../..", editable = true }
+

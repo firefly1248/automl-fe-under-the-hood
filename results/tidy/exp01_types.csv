@@ -1,0 +1,91 @@
+variant,seed,input_col,input_dtype,ag_raw_in,ag_special_in,action,ag_drop_reason,note,n_outputs,output_cols,output_dtypes,ag_special_out
+base,0,num,float64,float,,kept,,,1,num,float64,
+base,0,dup_num,float64,,,dropped,unused,exact duplicate of num,0,,,
+base,0,const,float64,,,dropped,useless,,0,,,
+base,0,near_const,float64,float,,retyped,,,1,near_const,int8,bool
+base,0,city_code,int64,int,,kept,,,1,city_code,int64,
+base,0,date_int,int64,int,,kept,,,1,date_int,int64,
+base,0,date_str,object,object,datetime_as_object,expanded,,,5,date_str.dayofweek; date_str.month; date_str.day; date_str.year; date_str,int64,datetime_as_int
+base,0,ts_unix,int64,int,,kept,,,1,ts_unix,int64,
+base,0,cat_low,object,object,,retyped,,,1,cat_low,category,
+base,0,cat_rare,object,object,,retyped,,,1,cat_rare,category,
+base,0,cat_binary,object,object,,retyped,,,1,cat_binary,int8,bool
+base,0,uid,object,,,dropped,unused,all values unique,0,,,
+base,0,text_short,object,object,,retyped,,,1,text_short,category,
+base,0,text_long,object,object,text,expanded,,,503,__nlp__.fffbif; __nlp__.fby; __nlp__.afmyg; __nlp__.ealvhuq; __nlp__.ergd; __nlp__.hmf; __nlp__.lfuhb; __nlp__.dlpm; __nlp__.edl; __nlp__.dauk; __nlp__.fittxp; __nlp__.lvhetcwe; __nlp__.kod; __nlp__.helyyf; __nlp__._total_; __nlp__.kvv; __nlp__.eraopjp; __nlp__.cftods; __nlp__.lsasqm; __nlp__.frmtgbcd ...,uint16; uint8,"binned,text_special; text_ngram"
+base,0,num_as_str,object,object,,retyped,,,1,num_as_str,category,
+base,0,mixed,object,object,datetime_as_object,expanded,,,5,mixed.dayofweek; mixed.month; mixed.day; mixed.year; mixed,int64,datetime_as_int
+base,0,a,float64,float,,kept,,,1,a,float64,
+base,0,b,float64,float,,kept,,,1,b,float64,
+base,1,num,float64,float,,kept,,,1,num,float64,
+base,1,dup_num,float64,,,dropped,unused,exact duplicate of num,0,,,
+base,1,const,float64,,,dropped,useless,,0,,,
+base,1,near_const,float64,float,,retyped,,,1,near_const,int8,bool
+base,1,city_code,int64,int,,kept,,,1,city_code,int64,
+base,1,date_int,int64,int,,kept,,,1,date_int,int64,
+base,1,date_str,object,object,datetime_as_object,expanded,,,5,date_str.dayofweek; date_str.year; date_str.month; date_str.day; date_str,int64,datetime_as_int
+base,1,ts_unix,int64,int,,kept,,,1,ts_unix,int64,
+base,1,cat_low,object,object,,retyped,,,1,cat_low,category,
+base,1,cat_rare,object,object,,retyped,,,1,cat_rare,category,
+base,1,cat_binary,object,object,,retyped,,,1,cat_binary,int8,bool
+base,1,uid,object,,,dropped,unused,all values unique,0,,,
+base,1,text_short,object,object,,retyped,,,1,text_short,category,
+base,1,text_long,object,object,text,expanded,,,503,__nlp__.erogrl; __nlp__.kgj; __nlp__.hozk; __nlp__.gpa; __nlp__.lkvir; __nlp__.iqnyrv; __nlp__.arbuzvf; __nlp__.ncdqj; __nlp__.jqvni; __nlp__.bbz; __nlp__.eaxgml; __nlp__._total_; __nlp__.inx; __nlp__.htldru; __nlp__.lcnxdbe; __nlp__.hpg; __nlp__.kaulck; __nlp__.imbaonnu; __nlp__.brn; __nlp__.gbrt ...,uint16; uint8,"binned,text_special; text_ngram"
+base,1,num_as_str,object,object,,retyped,,,1,num_as_str,category,
+base,1,mixed,object,object,datetime_as_object,retyped,,,1,mixed,int64,datetime_as_int
+base,1,a,float64,float,,kept,,,1,a,float64,
+base,1,b,float64,float,,kept,,,1,b,float64,
+base,2,num,float64,float,,kept,,,1,num,float64,
+base,2,dup_num,float64,,,dropped,unused,exact duplicate of num,0,,,
+base,2,const,float64,,,dropped,useless,,0,,,
+base,2,near_const,float64,float,,retyped,,,1,near_const,int8,bool
+base,2,city_code,int64,int,,kept,,,1,city_code,int64,
+base,2,date_int,int64,int,,kept,,,1,date_int,int64,
+base,2,date_str,object,object,datetime_as_object,expanded,,,5,date_str.dayofweek; date_str.year; date_str.month; date_str.day; date_str,int64,datetime_as_int
+base,2,ts_unix,int64,int,,kept,,,1,ts_unix,int64,
+base,2,cat_low,object,object,,retyped,,,1,cat_low,category,
+base,2,cat_rare,object,object,,retyped,,,1,cat_rare,category,
+base,2,cat_binary,object,object,,retyped,,,1,cat_binary,int8,bool
+base,2,uid,object,,,dropped,unused,all values unique,0,,,
+base,2,text_short,object,object,,retyped,,,1,text_short,category,
+base,2,text_long,object,object,text,expanded,,,503,__nlp__.hgv; __nlp__.jhja; __nlp__.knfklh; __nlp__.htli; __nlp__.lmhm; __nlp__.kcrfyyib; __nlp__.irnrwitw; __nlp__.hwfoyp; __nlp__.fzi; __nlp__.huod; __nlp__.mlciqv; __nlp__.lygyjux; __nlp__.biaxqrhz; __nlp__.kusc; __nlp__.gdnfpuyb; __nlp__._total_; __nlp__.jmm; __nlp__.fkijfzmw; __nlp__.guxch; __nlp__.lqccc ...,uint16; uint8,"binned,text_special; text_ngram"
+base,2,num_as_str,object,object,,retyped,,,1,num_as_str,category,
+base,2,mixed,object,object,datetime_as_object,retyped,,,1,mixed,int64,datetime_as_int
+base,2,a,float64,float,,kept,,,1,a,float64,
+base,2,b,float64,float,,kept,,,1,b,float64,
+cat_rare_singletons,0,num,float64,float,,kept,,,1,num,float64,
+cat_rare_singletons,0,dup_num,float64,,,dropped,unused,exact duplicate of num,0,,,
+cat_rare_singletons,0,const,float64,,,dropped,useless,,0,,,
+cat_rare_singletons,0,near_const,float64,float,,retyped,,,1,near_const,int8,bool
+cat_rare_singletons,0,city_code,int64,int,,kept,,,1,city_code,int64,
+cat_rare_singletons,0,date_int,int64,int,,kept,,,1,date_int,int64,
+cat_rare_singletons,0,date_str,object,object,datetime_as_object,expanded,,,5,date_str.dayofweek; date_str.year; date_str.month; date_str.day; date_str,int64,datetime_as_int
+cat_rare_singletons,0,ts_unix,int64,int,,kept,,,1,ts_unix,int64,
+cat_rare_singletons,0,cat_low,object,object,,retyped,,,1,cat_low,category,
+cat_rare_singletons,0,cat_rare,object,,,dropped,unused,all values unique,0,,,
+cat_rare_singletons,0,cat_binary,object,object,,retyped,,,1,cat_binary,int8,bool
+cat_rare_singletons,0,uid,object,,,dropped,unused,all values unique,0,,,
+cat_rare_singletons,0,text_short,object,object,,retyped,,,1,text_short,category,
+cat_rare_singletons,0,text_long,object,object,text,expanded,,,503,__nlp__.bcgisn; __nlp__.kbryr; __nlp__.ban; __nlp__.berjm; __nlp__.kuzfh; __nlp__.gvzru; __nlp__.bosvexto; __nlp__.lzzlpyc; __nlp__.dauk; __nlp__.ivi; __nlp__.ilw; __nlp__.jmqy; __nlp__.aunfksf; __nlp__.kvv; __nlp__._total_; __nlp__.cxdx; __nlp__.alzorsb; __nlp__.fff; __nlp__.irgzzhtm; __nlp__.kgvjbmt ...,uint16; uint8,"binned,text_special; text_ngram"
+cat_rare_singletons,0,num_as_str,object,object,,retyped,,,1,num_as_str,category,
+cat_rare_singletons,0,mixed,object,object,datetime_as_object,retyped,,,1,mixed,int64,datetime_as_int
+cat_rare_singletons,0,a,float64,float,,kept,,,1,a,float64,
+cat_rare_singletons,0,b,float64,float,,kept,,,1,b,float64,
+n500,0,num,float64,float,,kept,,,1,num,float64,
+n500,0,dup_num,float64,,,dropped,unused,exact duplicate of num,0,,,
+n500,0,const,float64,,,dropped,useless,,0,,,
+n500,0,near_const,float64,,,dropped,useless,,0,,,
+n500,0,city_code,int64,int,,kept,,,1,city_code,int64,
+n500,0,date_int,int64,int,,kept,,,1,date_int,int64,
+n500,0,date_str,object,object,datetime_as_object,expanded,,,5,date_str.dayofweek; date_str.year; date_str.month; date_str.day; date_str,int64,datetime_as_int
+n500,0,ts_unix,int64,int,,kept,,,1,ts_unix,int64,
+n500,0,cat_low,object,object,,retyped,,,1,cat_low,category,
+n500,0,cat_rare,object,object,,retyped,,,1,cat_rare,category,
+n500,0,cat_binary,object,object,,retyped,,,1,cat_binary,int8,bool
+n500,0,uid,object,,,dropped,unused,all values unique,0,,,
+n500,0,text_short,object,object,,retyped,,,1,text_short,category,
+n500,0,text_long,object,object,text,expanded,,,12,text_long.word_count; __nlp__.azomop; __nlp__.mnovcko; __nlp__.hedvfg; __nlp__.gdkagr; text_long.symbol_ratio. ; __nlp__.fqu; __nlp__.fuezdhap; __nlp__.irulu; __nlp__.kgvxzevu; text_long.char_count; __nlp__._total_,uint16; uint8,"binned,text_special; text_ngram"
+n500,0,num_as_str,object,object,,retyped,,,1,num_as_str,category,
+n500,0,mixed,object,object,datetime_as_object,retyped,,,1,mixed,int64,datetime_as_int
+n500,0,a,float64,float,,kept,,,1,a,float64,
+n500,0,b,float64,float,,kept,,,1,b,float64,
