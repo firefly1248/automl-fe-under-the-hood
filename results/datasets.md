@@ -196,7 +196,7 @@ Primary: 50 datasets, by task {'binary': 20, 'multiclass': 10, 'regression': 20}
 - family abalone: drop 44956 abalone (kept 42726)
 - family abalone: drop 45042 abalone (kept 42726)
 - family spacega: drop 45402 space_ga (kept 507)
-- share with a >= 10-level categorical is 34%, below 50%
+- with a >= 10-level categorical: 17 selected, 0 left over
 - typed adult: already selected as 1590
 - typed bank-marketing: already selected as 1461
 - typed credit-g: already selected as 31

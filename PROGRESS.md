@@ -16,7 +16,8 @@ New registry run (`results/datasets.md`): 50 primary datasets (20 binary, 10 mul
 studies (`Amazon_employee_access_int`, `house_sales_42092` with the date string; exp03 now uses the latter).
 23 candidates rejected for > 5% duplicate rows (all NASA MDP, spambase, wine sets, PhishingWebsites, ...).
 Only 17 primary datasets (34%) have a categorical column with >= 10 levels: every such candidate in the six suites
-is already selected, so the 50% target is not reachable with this pool. Open decision for Ilia.
+is already selected, so the 50% target is not reachable with this pool. Decision (Ilia): keep 50 datasets; claims
+about categoricals use the 17-dataset subgroup.
 
 ## 2026-09-29: Phases 0 and 1 done, A1 approved
 

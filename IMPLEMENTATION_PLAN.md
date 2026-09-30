@@ -213,7 +213,9 @@ mean, or a category interaction; also returns the oracle feature.
   the others are logged. Typed extras of an already present family are case studies, not primary.
 - Deterministic fill of quotas: 20 binary, 10 multiclass, 20 regression. Within a task, datasets with
   a categorical column of >= 10 levels come first, then the rest, each in OpenML data id order.
-  Target: >= 50% of the primary set has such a column; the log says if it is not reached.
+  With this pool every candidate with such a column is selected: 17 of 50 (34%). Decided after the
+  plan review: keep 50 datasets rather than shrink the set to reach 50%; claims about categoricals
+  are made on that subgroup (17 vs 33).
 - Per-task-type breakdowns are reported only for task types with >= 8 primary datasets.
 - Typed extra set (resolve by name through the API, keep only if target and size match):
   `adult` (pinned to CC18 did 1590; the name resolves to did 179, a binned version), `bank-marketing`,

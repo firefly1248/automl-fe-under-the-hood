@@ -23,7 +23,6 @@ MAX_CLASSES = 20
 MAX_DUP_FRAC = 0.05
 HICARD_LEVELS = 10
 QUOTAS = {"binary": 20, "multiclass": 10, "regression": 20}
-MIN_HICARD_SHARE = 0.5
 IMAGE_NAMES = {"mnist_784", "Fashion-MNIST", "CIFAR_10", "Devnagari-Script", "optdigits"}
 PIXEL = re.compile(r"pixel|^p\d+$")
 EXCLUDE = {"electricity": "temporal order; random CV over-rewards date features"}
@@ -162,9 +161,8 @@ def select(cands: list[dict]) -> list[dict]:
         chosen += of_task[:quota]
         if len(of_task) < quota:
             log.append(f"quota {task}: only {len(of_task)} of {quota} available")
-    share = sum(c["hicard"] for c in chosen) / len(chosen)
-    if share < MIN_HICARD_SHARE:
-        log.append(f"share with a >= {HICARD_LEVELS}-level categorical is {share:.0%}, below {MIN_HICARD_SHARE:.0%}")
+    left = sum(c["hicard"] for c in cands if c not in chosen)
+    log.append(f"with a >= {HICARD_LEVELS}-level categorical: {sum(c['hicard'] for c in chosen)} selected, {left} left over")
     return sorted(chosen, key=lambda c: c["did"])
 
 
