@@ -14,7 +14,7 @@ from pathlib import Path
 import openml
 import pandas as pd
 
-from afe.data.loaders import CACHE, ROOT
+from afe.paths import CACHE, RESULTS
 
 SUITES = {99: "CC18", 353: "CTR23", 271: "AMLB-clf", 269: "AMLB-reg", 334: "TB-cat-clf", 335: "TB-cat-reg"}
 MIN_ROWS, MAX_ROWS = 1_000, 100_000
@@ -220,7 +220,7 @@ def main() -> None:
         keys.add(r["key"])
         records += list(save(r))
     df = pd.DataFrame(records)
-    df.to_csv(ROOT / "results" / "datasets.csv", index=False)
+    df.to_csv(RESULTS / "datasets.csv", index=False)
     prim = df[df.primary]
     cols = ["key", "did", "version", "family", "task", "rows", "cols", "n_categorical", "max_cat_levels", "dup_frac",
             "primary", "source", "md5_file", "frame_hash", "date_typed_cols", "date_like_names"]
@@ -246,7 +246,7 @@ def main() -> None:
         *[f"- {line}" for line in log],
         "",
     ]
-    (ROOT / "results" / "datasets.md").write_text("\n".join(md))
+    (RESULTS / "datasets.md").write_text("\n".join(md))
 
 
 if __name__ == "__main__":

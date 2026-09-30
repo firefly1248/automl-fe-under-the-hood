@@ -1,5 +1,31 @@
 # Progress
 
+## 2026-09-30: Phase 2 done (splits, run store, worker, limits, tests)
+
+**What was built**
+- `make splits`: `results/splits/<key>.parquet` for all 52 frames (one row per row and repeat: `outer_fold`,
+  `inner_mask` bit per fold). Stratified per-class round-robin folds, 15% inner per class; numpy only.
+- `afe.run`: `unit.py` (hashes), `store.py` (atomic JSON/parquet, skip rules), `limits.py` (tree-RSS watchdog,
+  wall clock, free-RAM launch gate), `worker.py` (gen stage in the arm env, fit stage in core), `cli.py`
+  (`make exp04-smoke ARGS="--jobs N --retry-failed"`).
+- `afe.generators.base` (interface, `BaseView`, `finalize`, `combine`), arm registry, `base` arm;
+  `afe.models.downstream` (LightGBM, CatBoost; early stop on inner; metrics of 7.4).
+- `experiments/exp04_open_benchmark/config.yaml` (protocol, limits, stages; only `base` so far).
+- Tests (`make test`): splits, base view, limits (ok/failed/timeout/oom), downstream (3 tasks x 2 models, missing
+  class), contract tests per env, kill-and-resume (orchestrator killed mid-run; rerun skips finished units, 15 of 15
+  records, no duplicates). All green.
+
+**Smoke with `base`** (credit-g, cmc, Moneyball, fold 0): 9/9 ok; generator 0.7 s, LightGBM ~2 s, CatBoost ~7 s per unit.
+
+**Deviations and surprises**
+- `protocol_hash` hashes the `protocol:` section of the exp config, not the whole file, so editing stage lists or
+  limits does not invalidate finished units. Limits are stored in every record instead.
+- Free-RAM launch gate is `min_free_gb: 2` in the config: with other apps open only ~7 GB of 24 GB is free, and a
+  6 GB gate stalled the smoke run for 9 minutes. The full run needs the laptop mostly free.
+- LightGBM 4.7 deprecates `eval_set`; the code uses `eval_X` / `eval_y`.
+
+**Next**: Phase 3 (arm wrappers, exp04 smoke with all arms) -> A2.
+
 ## 2026-09-29: plan v3 after a second review (all 14 findings accepted)
 
 Plan changes (A4-level, approved by Ilia): pool extended with OpenML suites 271, 269 (AMLB), 334, 335

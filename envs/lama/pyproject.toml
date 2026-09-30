@@ -4,6 +4,7 @@ version = "0"
 requires-python = "==3.11.*"
 dependencies = [
     "afe",
+    "pytest",
     "lightautoml==0.4.2",
     "torch",
     "numpy<2",  # statsmodels<=0.14.0 (lightautoml dep) is built for numpy 1

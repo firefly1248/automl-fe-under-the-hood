@@ -1,13 +1,10 @@
 """Load datasets cached by `make data`. Pandas only, so every env can use it."""
 
 import json
-import os
-from pathlib import Path
 
 import pandas as pd
 
-ROOT = Path(__file__).resolve().parents[3]
-CACHE = Path(os.environ.get("AFE_CACHE", "~/.cache/afe")).expanduser()
+from afe.paths import CACHE, RESULTS, ROOT  # noqa: F401  (re-exported)
 
 
 def load(key: str) -> tuple[pd.DataFrame, pd.Series, dict]:
@@ -15,3 +12,10 @@ def load(key: str) -> tuple[pd.DataFrame, pd.Series, dict]:
     X = pd.read_parquet(CACHE / "data" / f"{key}.parquet")
     y = X.pop(meta["target"])
     return X, y, meta
+
+
+def encode_y(y: pd.Series, task: str) -> pd.Series:
+    """Classification: integer codes of the sorted labels; regression: float."""
+    if task == "regression":
+        return y.astype(float)
+    return pd.Series(pd.factorize(y, sort=True)[0], index=y.index)

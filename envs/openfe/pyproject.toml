@@ -4,6 +4,7 @@ version = "0"
 requires-python = "==3.11.*"
 dependencies = [
     "afe",
+    "pytest",
     "openfe==0.0.12",
     "matplotlib",  # imported by openfe, not declared
 ]

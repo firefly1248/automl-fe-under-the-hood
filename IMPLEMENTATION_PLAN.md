@@ -260,8 +260,9 @@ Two stages, so a generator runs once per fold and is reused by both downstream m
   `torch.set_num_threads(1)`, LightGBM `num_threads=1`, CatBoost `thread_count=1`, and `n_jobs=1`
   in every tool (OpenFE, GoldenFeaturesTransformer, autofeat, LAMA `cpu_limit=1`).
 - Parallelism: `jobs = min(physical_cores - 2, 10)`, overridable by `--jobs`. Memory is guarded at
-  launch instead of in the formula: a unit starts only if free RAM >= 6 GB; the per-unit 6 GB
-  watchdog stays. (The old formula gave 3 jobs on a 24 GB laptop.)
+  launch instead of in the formula: a unit starts only if free RAM >= `min_free_gb` (2 GB; a 6 GB
+  gate stalled the queue on this laptop, where other apps leave ~7 GB free); the per-unit 6 GB
+  watchdog stays. Close other apps for the full run. (The old formula gave 3 jobs on a 24 GB laptop.)
 - Per-unit temp dir (OpenFE `tmp_save_path`, MLJAR `results_path`, LAMA/AG output paths), deleted
   after the unit.
 - `make commit-results`: aggregate, git add raw + tidy + figures, commit with exp, stage, coverage.

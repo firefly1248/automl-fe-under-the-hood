@@ -1,0 +1,14 @@
+# exp04: open benchmark of feature generators (plan sections 6-7). Arms are added in Phase 3.
+name: exp04_open_benchmark
+protocol:            # hashed into every generator unit; limits and stage lists are not
+  n_folds: 5
+  repeats: 1
+  models:
+    lgbm: {n_estimators: 5000, learning_rate: 0.05, early_stopping: 200}
+    catboost: {iterations: 3000, learning_rate: 0.1, early_stopping: 200}
+# min_free_gb: launch gate on free RAM; mem_gb: per-unit cap on the child tree RSS
+limits: {gen_timeout_s: 3600, fit_timeout_s: 1800, mem_gb: 6, min_free_gb: 2}
+arms: [base]
+stages:
+  smoke: {datasets: [credit-g, cmc, Moneyball], folds: [0]}
+  full: {datasets: primary}

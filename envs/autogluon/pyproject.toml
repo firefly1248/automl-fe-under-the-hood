@@ -4,6 +4,7 @@ version = "0"
 requires-python = "==3.11.*"
 dependencies = [
     "afe",
+    "pytest",
     "autogluon.tabular[all]==1.6.3",
 ]
 
