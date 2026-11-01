@@ -17,7 +17,7 @@ splits:
 
 test:
 	$(call RUN,core) pytest -q tests
-	for e in $(filter-out core,$(ENVS)); do AFE_ENV=$$e uv run --frozen --project envs/$$e pytest -q tests/test_generators_contract.py || exit 1; done
+	for e in $(filter-out core,$(ENVS)); do AFE_ENV=$$e uv run --frozen --project envs/$$e pytest -q tests/test_generators_contract.py tests/test_openfe_equivalence.py || exit 1; done
 
 # exp01 step 4 and exp03 step 2 need `make data` first
 exp01:

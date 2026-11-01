@@ -67,7 +67,7 @@ Written by `make env-check`.
 - numba: 0.67.0
 - numpy: 1.26.4
 - pandas: 2.3.3
-- scikit-learn: 1.9.1
+- scikit-learn: 1.7.2
 
 ### mljar
 

@@ -8,7 +8,8 @@ import pandas as pd
 
 from afe.paths import RESULTS
 
-DONE = {"ok", "failed", "timeout", "oom"}
+DONE = {"ok", "failed", "timeout", "oom", "not_applicable"}
+RETRY_FAILED = {"failed", "timeout", "oom"}
 SPLITS = ("train", "inner", "test")  # train = fit rows
 
 
@@ -42,8 +43,9 @@ def read(path: Path) -> dict | None:
     return json.loads(path.read_text()) if path.exists() else None
 
 
-def is_done(rec: dict | None, retry_failed: bool) -> bool:
-    return rec is not None and rec["status"] in DONE and (rec["status"] == "ok" or not retry_failed)
+def is_done(rec: dict | None, retry: set[str]) -> bool:
+    """Finished, unless its status is one the caller asked to rerun."""
+    return rec is not None and rec["status"] in DONE and rec["status"] not in retry
 
 
 def cache_complete(exp: str, gen_hash: str) -> bool:

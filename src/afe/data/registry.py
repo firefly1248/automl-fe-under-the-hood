@@ -98,18 +98,20 @@ def _dedupe_key(r: dict) -> tuple:
     return (_norm(r["name"]), r["rows"], r["cols"], r["target"])
 
 
+def _cat_stats(X: pd.DataFrame) -> dict:
+    cat = [c for c in X.columns if not pd.api.types.is_numeric_dtype(X[c])]
+    levels = int(max((X[c].nunique() for c in cat), default=0))
+    return {"n_categorical": len(cat), "max_cat_levels": levels, "hicard": levels >= HICARD_LEVELS}
+
+
 def _frame(r: dict) -> pd.DataFrame:
     """Download the frame and add the data-level stats to the record."""
     ds = openml.datasets.get_dataset(r["did"], download_data=True, download_qualities=False)
     df, *_ = ds.get_data()
     file = Path(ds.parquet_file or ds.data_file)
-    X = df.drop(columns=r["target"])
-    cat = [c for c in X.columns if not pd.api.types.is_numeric_dtype(X[c])]
     r["md5_file"], r["file_format"] = hashlib.md5(file.read_bytes()).hexdigest(), file.suffix.lstrip(".")
     r["dup_frac"] = round(float(df.duplicated().mean()), 4)
-    r["n_categorical"] = len(cat)
-    r["max_cat_levels"] = int(max((X[c].nunique() for c in cat), default=0))
-    r["hicard"] = r["max_cat_levels"] >= HICARD_LEVELS
+    r.update(_cat_stats(df.drop(columns=r["target"])))
     return df
 
 
@@ -199,8 +201,7 @@ def save(r: dict):
     for key, frame in frames.items():
         # the _int variant is a case study of the same data, never in the primary aggregate
         rec = {**r, "key": key, "primary": r["primary"] and key == r["key"]}
-        X = frame.drop(columns=r["target"])
-        rec["n_categorical"] = int(sum(not pd.api.types.is_numeric_dtype(X[c]) for c in X.columns))
+        rec.update(_cat_stats(frame.drop(columns=r["target"])))  # a variant has its own column types
         rec["frame_hash"] = str(int(pd.util.hash_pandas_object(frame, index=True).sum()))
         frame.to_parquet(CACHE / "data" / f"{key}.parquet")
         (CACHE / "data" / f"{key}.json").write_text(json.dumps(rec, indent=1))

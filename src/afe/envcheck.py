@@ -29,10 +29,27 @@ ENVS = {
 }
 
 
+def _autofeat_fit() -> None:
+    """autofeat 2.1.3 breaks only when called (scikit-learn >= 1.8 dropped `force_all_finite`)."""
+    from afe.data.synthetic import hard_columns
+    from afe.generators import make
+
+    X, y, _ = hard_columns(n=600, seed=0)
+    X = X[["num", "a", "b", "city_code"]]
+    g = make("autofeat")
+    g.fit_transform(X, y, "binary", 0)
+    g.transform(X)
+
+
+CHECKS = {"autofeat": _autofeat_fit}  # beyond imports
+
+
 def probe(env: str) -> None:
     modules, dists = ENVS[env]
     for m in modules:
         importlib.import_module(m)
+    if env in CHECKS:
+        CHECKS[env]()
     print(json.dumps(versions(dists + COMMON)))
 
 

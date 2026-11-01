@@ -1,5 +1,41 @@
 # Progress
 
+## 2026-11-01: Phase 3 done (arm wrappers, exp04 smoke) -> A2
+
+**What was built**
+- Plan v4 run-store changes: `code_hash` in gen and fit units, `arm` and `view` in fit units, `not_applicable`
+  status (`applicable()`), `--retry-status`, RAM-budgeted jobs (3 on this laptop), stdout into the error log,
+  first traceback kept in error text, SIGKILL outside the watchdog = `oom`, missing `out.json` = `failed`.
+- Arms: `ag_default`, `ag_tabprep` (+ fit-only `ag_tabprep_keepcat`, new columns by provenance), `lama_adv`
+  (exp03 step 4), `openfe` (inductive evaluator), `autofeat`, `mljar_golden`, `manual_baseline`.
+- Contract tests rewritten to plan section 6 (synthetic frame + credit-g); test 7 in `test_openfe_equivalence.py`.
+- `registry.save` recomputes categorical stats per variant; `make data` rerun: only the
+  `Amazon_employee_access_int` row changed (`max_cat_levels` 7518 -> 0, `hicard` -> False).
+- `smoke_report.py` -> `results/tidy/exp04_smoke.md`.
+
+**Tests**: core 35 passed; autogluon 22; mljar 10; autofeat 10; openfe 12 (incl. test 7); lama 11 of 12
+(test 6 fails on credit-g, see below). `make env-check` green.
+
+**Smoke** (credit-g, cmc, Moneyball, fold 0, 9 arms, 2 models): 78 of 78 units ok. Slowest generator: autofeat
+on credit-g, 72 s; slowest fit: CatBoost on the 1,981 `ag_tabprep` columns of Moneyball, 83 s, 0.84 GB.
+
+**Deviations and surprises**
+- `openfe` env pins `scikit-learn<1.6`: OpenFE 0.0.12 calls `mean_squared_error(squared=False)`, so every
+  regression unit failed in the first smoke run. The contract frames are binary only, so tests did not catch it.
+- `autofeat` env pins `scikit-learn<1.8` (`force_all_finite`). The wrapper drops constant columns: autofeat
+  standardizes every column and a zero std turns its selection input into NaN.
+- LightAutoML 0.4.2 bug under pandas 2: `OrdinalEncoder.fit` reads the `count` column of
+  `value_counts().reset_index()` instead of the values (`transformers/categorical.py:1053`), so every string
+  categorical is NaN in `LGBSimpleFeatures` and selection drops them all. `lama_adv` on credit-g keeps 4
+  features; test AUC 0.66 vs 0.79 for `base`. A plain `TabularAutoML` run shows the same selection. The same
+  encoder feeds the reader's role scores, so `exp03_roles.csv` was computed with the bug.
+- `ag_default`: unseen values of a two-valued column map to 0, not NaN (AutoGluon's bool mapping).
+- `manual_baseline`: the key rule (categorical with the highest MI) picks near-unique columns, because
+  discrete MI grows with the number of levels (`uid` on the synthetic frame; credit-g picks `checking_status`).
+
+**Open for A2**: the LAMA bug (pin `pandas<2`, patch in the arm, or keep as shipped); the `manual_baseline`
+key rule; a regression frame in the contract tests; the 9 Phase 2 `base` records in the old unit format.
+
 ## 2026-09-30: Phase 2 done (splits, run store, worker, limits, tests)
 
 **What was built**

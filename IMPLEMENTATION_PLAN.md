@@ -185,7 +185,8 @@ Raw JSON records, tidy parquet, splits and figures are committed. Dataset downlo
   Pins in use: `lama` needs `numpy<2`, `pandas<3`, `scipy<1.16` (PROGRESS.md). `autofeat` passes
   `force_all_finite` to scikit-learn, which 1.9.1 no longer accepts: pin `scikit-learn<1.8` in the
   `autofeat` env, and make `env-check` fit and transform on `hard_columns` to confirm it.
-  Other extra pins only as fallbacks if the resolver or imports fail.
+  `openfe` needs `scikit-learn<1.6` (it calls `mean_squared_error(squared=False)`; found in the
+  Phase 3 smoke, regression only). Other extra pins only as fallbacks if the resolver or imports fail.
   Note: a plain `pip install lightautoml` was OOM-killed on an 8 GB machine; CPU torch avoids that.
 - macOS: `brew install libomp` for LightGBM.
 - `make env-check` imports each tool in its env, writes versions, CPU, RAM, OS to `ENVIRONMENT.md`.

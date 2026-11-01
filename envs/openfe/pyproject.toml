@@ -7,6 +7,7 @@ dependencies = [
     "pytest",
     "openfe==0.0.12",
     "matplotlib",  # imported by openfe, not declared
+    "scikit-learn<1.6",  # openfe 0.0.12 calls mean_squared_error(squared=False), removed in 1.6
 ]
 
 [tool.uv]

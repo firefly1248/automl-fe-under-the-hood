@@ -32,6 +32,8 @@ def gen(task: dict) -> dict:
     unit = task["unit"]
     X, y, meta, idx = _data(unit)
     g = make(unit["arm"], **unit["arm_params"])
+    if not g.applicable(X.iloc[idx["train"]]):
+        return {"not_applicable": True, "describe": g.describe()}
     seed = S.tool_seed(unit["repeat"], unit["fold"])
     times, n_inf, outs = {}, 0, {}
     t0 = time.perf_counter()
@@ -65,7 +67,9 @@ def fit(task: dict) -> dict:
     parts = {}
     for s, rows in idx.items():
         new = pd.read_parquet(Path(task["cache"]) / f"{s}.parquet")
-        if g["replaces_input"]:
+        if unit["view"] == "keepcat":  # base view + only the columns the source arm's generators created
+            new = new[g["describe"]["new_columns"]]
+        if g["replaces_input"] and unit["view"] != "keepcat":
             Xs = new
         else:
             new.index = X.index[rows]

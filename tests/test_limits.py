@@ -13,6 +13,12 @@ def test_ok_and_failed():
     assert r.status == "failed" and "boom" in r.error
 
 
+def test_first_traceback_kept():
+    log = "Traceback (most recent call last):\nroot cause\n" + "x" * 20000 + "\nfinal error"
+    text = limits.error_text(log)
+    assert "root cause" in text and text.endswith("final error") and len(text) <= limits.ERROR_BYTES + 10
+
+
 def test_timeout():
     r = _run("import time; time.sleep(30)", timeout_s=1)
     assert r.status == "timeout" and r.wall_s < 10

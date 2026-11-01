@@ -22,4 +22,16 @@ numeric -> category and the reverse, `reason` names the rules that fired.
   house_sales `zipcode, yr_built, long`. LAMA keeps `dup_num` and `uid` (as ordinal category), drops
   `near_const` by the constant-rate check, and reads `text_long` as a category (no text role without a
   manual role). house_sales `date` is read as Datetime.
-- Steps 3 (end-to-end runs) and 4 (`lama_adv` extraction) are not run yet.
+- Step 4 (`lama_adv`, `src/afe/generators/lama_pipeline.py`): the arm wires LAMA's own classes as
+  `TabularAutoML` does for its GBMs: `PandasToPandasReader` with the preset reader params, a `FoldsIterator`
+  over the reader's folds, `ImportanceCutoffSelector(LGBSimpleFeatures, BoostLGBM, ModelBasedImportanceEstimator)`
+  (selection mode 1, cutoff 0, fit on the first fold as holdout), then `LGBAdvancedPipeline` with the preset
+  GBM params and the selector as `feats_imp`. Selection is included. Folds: the reader's 5-fold split
+  (stratified for classification) with `random_state` = the unit seed (LAMA default 42); fit rows get the
+  pipeline's `fit_transform` output, so target encodings are out-of-fold over those folds; other rows get
+  `transform`. Selector LightGBM: `num_threads=1`, seed = unit seed. Caveat: LAMA 0.4.2's `OrdinalEncoder`
+  reads the counts column of `value_counts().reset_index()` under pandas >= 2 (the env has 2.3.3), so every
+  string categorical is NaN in `LGBSimpleFeatures`; selection then drops all of them (credit-g: 5 numeric
+  columns kept), and `ord__` columns of string categoricals are NaN. A `TabularAutoML` run on credit-g in
+  this env shows the same selection, so this is LAMA's behaviour here, not the extraction's.
+- Step 3 (end-to-end runs) is not run yet.

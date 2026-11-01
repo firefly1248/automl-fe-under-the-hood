@@ -9,6 +9,12 @@ class FeatureGenerator:
     env: str
     transductive: bool = False
     replaces_input: bool = False  # True: downstream uses only this output (e.g. ag_default)
+    target_encoding: bool = False  # True: contract test 6 checks that fit-row encodings are out-of-fold
+    unseen_default: str | None = None  # documented non-NaN output for unseen categories; None: NaN
+
+    def applicable(self, X: pd.DataFrame) -> bool:
+        """False if the tool cannot run on this input; the unit is recorded as `not_applicable`."""
+        return True
 
     def fit_transform(self, X_fit: pd.DataFrame, y_fit: pd.Series, task: str, seed: int) -> pd.DataFrame:
         """The ONLY source of features for the rows it was fitted on. Supervised encodings are out-of-fold."""

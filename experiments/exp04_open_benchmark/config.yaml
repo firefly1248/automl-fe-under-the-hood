@@ -1,4 +1,4 @@
-# exp04: open benchmark of feature generators (plan sections 6-7). Arms are added in Phase 3.
+# exp04: open benchmark of feature generators (plan sections 6-7).
 name: exp04_open_benchmark
 protocol:            # hashed into every generator unit; limits and stage lists are not
   n_folds: 5
@@ -6,9 +6,10 @@ protocol:            # hashed into every generator unit; limits and stage lists 
   models:
     lgbm: {n_estimators: 5000, learning_rate: 0.05, early_stopping: 200}
     catboost: {iterations: 3000, learning_rate: 0.1, early_stopping: 200}
-# min_free_gb: launch gate on free RAM; mem_gb: per-unit cap on the child tree RSS
+# min_free_gb: launch gate on free RAM; mem_gb: per-unit cap on the child tree RSS (also sets jobs)
 limits: {gen_timeout_s: 3600, fit_timeout_s: 1800, mem_gb: 6, min_free_gb: 2}
-arms: [base]
+# ag_tabprep_keepcat is fit-only: it reuses the ag_tabprep generator output with its own view
+arms: [base, ag_default, ag_tabprep, ag_tabprep_keepcat, lama_adv, openfe, autofeat, mljar_golden, manual_baseline]
 stages:
   smoke: {datasets: [credit-g, cmc, Moneyball], folds: [0]}
   full: {datasets: primary}
