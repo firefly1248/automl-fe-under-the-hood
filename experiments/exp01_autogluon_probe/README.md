@@ -14,8 +14,19 @@ group (built by AutoGluon's own `get_preprocessor_tabprep`) on `hard_columns()`,
 **How to read.** `exp01_types.csv`: one row per input column: action (`kept`, `retyped`, `expanded`,
 `dropped`) and the stage that dropped it.
 
-**Findings.** Pending (not yet run).
+**Findings.**
+- Default preprocessing builds no new features; it retypes and drops (`exp01_types.csv`). `const` is
+  dropped as useless, `dup_num` and `uid` as unused. Int-coded `city_code` and `date_int` stay int64;
+  `date_str` becomes int64 plus year/month/day/dayofweek. Two-valued columns become int8 (`bool` special
+  type); `text_short` and `num_as_str` become category. `mixed` (numbers with "n/a") is typed as a
+  datetime on every seed. `text_long` gives n-gram columns only at the larger n; `cat_rare` with
+  singletons only is dropped.
+- Only `GBM_PREP` reaches the TabPrep generators: 14 cpu configs (7 both branches, 3 Arithmetic only,
+  3 CatInteraction + TE only, `_r21` empty), reached only by the `*_v150` presets
+  (`exp01_prep_configs.csv`, `exp01_presets.csv`).
+- `ArithmeticFeatureGenerator` with the default `selection_method="random"` applies no correlation
+  filter; it recovers the planted `a/b` on `hard_columns()`. The `_r13` group leaves no `category`
+  columns: TE replaces them (`exp01_tabprep.csv`).
 
-**Caveats.** Source-reading notes (to confirm by the run): with the default `selection_method="random"`,
-`ArithmeticFeatureGenerator` does not apply `corr_threshold` (only the `spearman` path does,
-`arithmetic/preprocessor.py`); row `subsample` is implemented despite its TODO comment.
+**Caveats.** Feature counts depend on the input width after `AutoMLPipelineFeatureGenerator` (n-grams
+count as inputs). Row `subsample` is implemented despite its TODO comment.
