@@ -1,0 +1,17 @@
+# exp05 check 3 (plan section 8): openfe_transductive on the folds of the exp04 pilot, paired with exp04 openfe.
+name: exp05_transductive
+protocol:            # same as exp04, so fit seeds match
+  n_folds: 5
+  repeats: 1
+  models:
+    lgbm: {n_estimators: 5000, learning_rate: 0.05, early_stopping: 200}
+    catboost: {iterations: 3000, learning_rate: 0.1, early_stopping: 200}
+limits: {gen_timeout_s: 3600, fit_timeout_s: 3600, mem_gb: 6, min_free_gb: 2}
+exclude:  # as in exp04
+  - {dataset: connect-4, model: catboost, reason: "base CatBoost timed out at 1800 s on 5 of 5 pilot folds"}
+arms: [openfe_transductive]
+stages:
+  # the 5 folds of the pilot datasets: one OpenFE search per unit (repeated, not reused from exp04)
+  run:
+    datasets: [credit-g, numerai28.6, cmc, connect-4, concrete_compressive_strength, diamonds, kick, albert,
+               house_prices_nominal, mfeat-fourier]

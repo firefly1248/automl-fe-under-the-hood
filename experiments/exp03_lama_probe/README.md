@@ -29,9 +29,17 @@ numeric -> category and the reverse, `reason` names the rules that fired.
   GBM params and the selector as `feats_imp`. Selection is included. Folds: the reader's 5-fold split
   (stratified for classification) with `random_state` = the unit seed (LAMA default 42); fit rows get the
   pipeline's `fit_transform` output, so target encodings are out-of-fold over those folds; other rows get
-  `transform`. Selector LightGBM: `num_threads=1`, seed = unit seed. Caveat: LAMA 0.4.2's `OrdinalEncoder`
-  reads the counts column of `value_counts().reset_index()` under pandas >= 2 (the env has 2.3.3), so every
-  string categorical is NaN in `LGBSimpleFeatures`; selection then drops all of them (credit-g: 5 numeric
-  columns kept), and `ord__` columns of string categoricals are NaN. A `TabularAutoML` run on credit-g in
-  this env shows the same selection, so this is LAMA's behaviour here, not the extraction's.
+  `transform`. Selector LightGBM: `num_threads=1`, seed = unit seed.
+- LAMA 0.4.2 bug under pandas >= 2: `OrdinalEncoder.fit` reads the counts column of
+  `value_counts().reset_index()` instead of the values (`transformers/categorical.py:1053`), so every string
+  categorical is NaN in `LGBSimpleFeatures` and selection drops all of them (credit-g under pandas 2.3.3:
+  4 features left, `TabularAutoML` itself selects the same). The env pins `pandas<2` (1.5.3), where LAMA's
+  own code path is correct; credit-g then keeps 16 selected features with OOF target encodings of category
+  intersections. The bug also feeds the reader's role scores: under pandas 1.5.3 the encoding subtype
+  (auto, freq, ordinal) of 10 categorical columns changed in `exp03_roles.csv`; the numeric -> category
+  changes and the dropped columns above did not.
+  Minimal reproduction, `pandas2_bug.py`: 1,000 rows, a five-level string column that sets the target, run
+  through `PandasToPandasReader` and `LGBSimpleFeatures`. Share of NaN in the encoded column: 0.00 under
+  pandas 1.5.3 (`envs/lama`), 1.00 under pandas 2.3.3 (same LAMA 0.4.2, numpy 1.26.4, scipy 1.15.3,
+  statsmodels 0.14.0, torch 2.14.0, LightGBM 4.7.0).
 - Step 3 (end-to-end runs) is not run yet.

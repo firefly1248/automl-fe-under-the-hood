@@ -14,7 +14,7 @@ import pandas as pd
 from afe.paths import RESULTS
 
 N_FOLDS = 5
-REPEATS = 1
+REPEATS = 2
 INNER_SHARE = 0.15
 
 
@@ -78,12 +78,13 @@ def splits_hash(splits: pd.DataFrame) -> str:
 
 
 def main() -> None:
-    """Write splits for every dataset in results/datasets.csv that has none yet."""
+    """Write splits for every dataset in results/datasets.csv that has none yet or fewer repeats. Each repeat
+    has its own seeds, so adding a repeat leaves the earlier ones unchanged."""
     from afe.data.loaders import encode_y, load as load_data
 
     (RESULTS / "splits").mkdir(parents=True, exist_ok=True)
     for key in pd.read_csv(RESULTS / "datasets.csv").key:
-        if path(key).exists():
+        if path(key).exists() and load(key).repeat.nunique() == REPEATS:
             continue
         _, y, meta = load_data(key)
         make(encode_y(y, meta["task"]), meta["task"]).to_parquet(path(key), index=False)

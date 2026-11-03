@@ -1,5 +1,63 @@
 # Progress
 
+## 2026-11-03: exp04 pilot, exp05 leakage checks, full-run estimate -> A3
+
+**A3 decisions (Ilia), applied**
+- `autofeat`: limits not raised, arm kept; failures are results (section 7.6: base fallback main, complete
+  cases secondary, coverage alongside).
+- connect-4: base CatBoost timed out at 1800 s on 5 of 5 pilot folds, so connect-4 x CatBoost is in the config
+  `exclude` list (not run, not compared). Fit limit 3600 s for all datasets.
+- The `not_applicable` bug fixed (a skipped generator wrote no `describe()`); status `not_applicable`, counted as
+  base in aggregates, its own coverage row.
+- `code_hash` per arm: the arm module + shared code that affects results (`generators/base.py`,
+  `run/worker.py`, `data/loaders.py`, `data/splits.py`; fit units add `models/`). Before migration 25 of 25
+  random pilot units rerun from scratch matched bitwise (metrics and generator parquet); records moved to the
+  new hashes, stale ones removed.
+- OpenFE deviations accepted; `openfe_transductive` built as a separate exp05 arm, its time not published.
+- LAMA pandas 2 bug: minimal reproduction in `experiments/exp03_lama_probe/pandas2_bug.py` and its README.
+
+**Found on the way**
+- `autofeat` output depended on the per-process str/set hash seed: 3 of 3 rerun units differed (14 vs 28
+  features on one concrete fold). Contract test 2 runs both fits in one process, so it missed this. Every
+  child now gets `PYTHONHASHSEED` = the unit's tool seed; repeat runs are bitwise identical. `autofeat`
+  records were not migrated and were rerun.
+- `lama_adv` on Moneyball: digit-valued categoricals read as Numeric by LAMA's reader; the arm coerces them.
+
+**Pilot** (10 datasets x 5 folds): 370 of 400 generator units ok. `autofeat`: timeout on albert, kick,
+mfeat-fourier (15), oom on numerai28.6 (5), not applicable on connect-4 (5); `mljar_golden` not applicable on
+connect-4 (5). All 805 fit units ok, including the two mfeat-fourier CatBoost fits that needed more than 1800 s.
+
+**exp05** (`results/tidy/exp05_report.md`)
+1. Permuted labels (6 datasets x 5 folds): every arm x model x task has a 95% bootstrap CI containing 0 or
+   below it.
+2. TE delivery: median gap fit - test about 0 for `ag_tabprep` and `lama_adv`; flags sit on the four datasets
+   under 1,500 rows, where raw columns flag at a similar rate, and none on the large ones (kick, 1,063 levels:
+   max gap 0.048). Only `lama_adv` on credit-g is above the raw-column level (median gap +0.024).
+3. Transductive OpenFE (fold 0): the same columns as inductive on 10 of 10 datasets; differences from the
+   transform only, up to +0.045 AUC (kick, LightGBM) and +0.046 R2 (house_prices, CatBoost); 0 on mfeat-fourier
+   (row-wise operators). One fold: 5 splits needed before any claim.
+4. Planted signals (4 kinds x 3 seeds x 5 folds, oracle R2 0.76-0.80). The true feature is created on ratio
+   and product by every arm except `ag_default` and `lama_adv`; on cat_interaction by `ag_tabprep`, `lama_adv`
+   and `openfe` (2 of 3 units); on group_dev by `openfe` always and `manual_baseline` in 47%. Base CatBoost
+   reaches the oracle R2 (within 1%) on ratio in 73% of folds, so reaching it is a weak signal there; on
+   group_dev almost no unit reaches it, even with the feature created.
+5. OpenFE operators: 23 of 23 equal to the reference on fit rows.
+
+**Estimate** (`results/tidy/exp04_estimate.md`): per-dataset interpolation of pilot times in rows x columns;
+about 20 unit-hours per fold, 3 jobs: 34 h for 5 splits, 68 h for 10 (24 h / 59 h left after the pilot).
+`autofeat` is a third of it and the least certain part.
+
+**After A3 (Ilia)**
+- 5 x 2 restored (plan v3 had cut it to 1 repeat; section 7.1): `full_r0`, commit, `full_r1`, commit;
+  per-dataset test back to J = 10. Splits regenerated: repeat 0 identical in 64 of 64 files. Protocol and
+  splits hashes changed, unit results did not; records moved to the new hashes by unit key, statuses per
+  stage unchanged; 10 of 10 random moved units rerun from scratch matched bitwise.
+- `openfe_transductive` extended to the 5 folds of repeat 0, run alongside `full_r0`.
+- Removed records are kept in `results/stale/` (git-ignored) until the full run ends. A cleanup script
+  had first moved live record directories as well; they were moved back, and every exp05 output and the
+  estimate recomputed from them match the pre-incident files byte for byte; all record hashes match.
+- `experiments/exp05_leakage_checks/README.md` defines "found" and "reach" for check 4.
+
 ## 2026-11-01: Phase 3 done (arm wrappers, exp04 smoke) -> A2
 
 **What was built**
@@ -33,8 +91,14 @@ on credit-g, 72 s; slowest fit: CatBoost on the 1,981 `ag_tabprep` columns of Mo
 - `manual_baseline`: the key rule (categorical with the highest MI) picks near-unique columns, because
   discrete MI grows with the number of levels (`uid` on the synthetic frame; credit-g picks `checking_status`).
 
-**Open for A2**: the LAMA bug (pin `pandas<2`, patch in the arm, or keep as shipped); the `manual_baseline`
-key rule; a regression frame in the contract tests; the 9 Phase 2 `base` records in the old unit format.
+**A2 decisions (Ilia), applied after commit bfbedb1**
+1. `lama` env pins `pandas<2` (1.5.3), where LAMA's own code path is correct. `lama_adv` passes 12 of 12
+   contract tests; credit-g keeps 16 selected features with OOF encodings of category intersections. exp03
+   rerun: the encoding subtype of 10 categorical columns changed in `exp03_roles.csv`; the numeric ->
+   category changes and dropped columns did not. The bug itself is a finding for post 3.
+2. `manual_baseline` key candidates: categoricals with at most 50% unique values on fit rows.
+3. Contract tests also run on Moneyball (regression).
+4. The 9 Phase 2 `base` records in the old unit format were removed in bfbedb1.
 
 ## 2026-09-30: Phase 2 done (splits, run store, worker, limits, tests)
 

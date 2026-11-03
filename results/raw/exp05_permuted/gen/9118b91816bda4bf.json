@@ -1,0 +1,77 @@
+{
+ "hash": "9118b91816bda4bf",
+ "stage": "gen",
+ "unit": {
+  "exp": "exp05_permuted",
+  "dataset": "Moneyball",
+  "repeat": 0,
+  "fold": 4,
+  "arm": "openfe",
+  "arm_params": {},
+  "protocol_hash": "e52e530f8e60c2a9",
+  "data_hash": "18371239449379540741",
+  "splits_hash": "3d7b90363461d95d",
+  "env_lock_hash": "57bc55f61c0489c0",
+  "code_hash": "b639a0deae5b5f39"
+ },
+ "status": "ok",
+ "error": "",
+ "wall_s": 8.0,
+ "peak_rss_mb": 494.6,
+ "limits": {
+  "gen_timeout_s": 3600,
+  "fit_timeout_s": 1800,
+  "mem_gb": 6,
+  "min_free_gb": 2
+ },
+ "started": "2026-11-02T11:07:11.732007+00:00",
+ "finished": "2026-11-02T11:07:19.729164+00:00",
+ "result": {
+  "n_features_in": 14,
+  "n_features_out": 14,
+  "replaces_input": false,
+  "n_inf_replaced": 0,
+  "fit_s": 6.528,
+  "transform_inner_s": 0.01,
+  "transform_test_s": 0.01,
+  "describe": {
+   "stage1_survivors": 158,
+   "kept": 14,
+   "cap_fired": false,
+   "gains": {
+    "GroupByThenMean(OOBP,BA)": 136049.0,
+    "GroupByThenMax(RA,OOBP)": 84232.5,
+    "GroupByThenNUnique(G,OOBP)": 76217.8984375,
+    "GroupByThenMedian(OBP,OOBP)": 76105.703125,
+    "(OBP+OOBP)": 74298.6015625,
+    "GroupByThenMax(OSLG,Team)": 71539.0,
+    "GroupByThenMax(BA,Team)": 70269.796875,
+    "GroupByThenRank(OBP,BA)": 67565.8984375,
+    "(SLG/W)": 63495.30078125,
+    "GroupByThenRank(OSLG,G)": 61190.69921875,
+    "GroupByThenStd(W,BA)": 61033.30078125,
+    "GroupByThenRank(W,Year)": 59689.6015625,
+    "(RA*OBP)": 58437.6015625,
+    "CombineThenFreq(League,OBP)": 52219.80078125
+   }
+  },
+  "versions": {
+   "python": "3.11.14",
+   "openfe": "0.0.12",
+   "lightgbm": "4.7.0",
+   "numpy": "2.4.6",
+   "pandas": "3.0.6",
+   "scikit-learn": "1.5.2"
+  }
+ },
+ "git_sha": "bfbedb1103a0f11b5a27595822b347b354783a94-dirty",
+ "machine": {
+  "cpu": "Apple M4 Pro",
+  "physical_cores": 14,
+  "logical_cores": 14,
+  "ram_gb": 24.0,
+  "os": "Darwin 25.6.0 arm64"
+ },
+ "jobs": 3,
+ "rekeyed_from": "bdb9c27042698009"
+}

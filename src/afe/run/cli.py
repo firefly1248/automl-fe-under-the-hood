@@ -20,15 +20,17 @@ import psutil
 import yaml
 
 from afe.data import splits as S
-from afe.generators import FIT_ONLY, env_of
+from afe.generators import ARMS, FIT_ONLY, env_of
 from afe.machine import machine_info
 from afe.paths import CACHE, RESULTS, ROOT
 from afe.run import limits, store
 from afe.run.unit import code_hash, digest, file_hash, fit_unit, gen_unit
 
 SRC = ROOT / "src" / "afe"
-GEN_CODE = (SRC / "generators", SRC / "run" / "worker.py")
-FIT_CODE = (*GEN_CODE, SRC / "models")
+# shared code that affects results (plan section 5); orchestration, limits and logging are not hashed
+SHARED_CODE = (SRC / "generators" / "base.py", SRC / "run" / "worker.py", SRC / "data" / "loaders.py",
+               SRC / "data" / "splits.py")
+FIT_CODE = (*SHARED_CODE, SRC / "models")
 RESERVED_GB = 4  # left for the system and other apps (plan section 5)
 
 
@@ -45,6 +47,12 @@ def git_sha() -> str:
     return sha + ("-dirty" if dirty else "")
 
 
+def arm_code(arm: str) -> str:
+    """The arm's own module and registry entry plus the shared code: a fix to one wrapper reruns only that arm."""
+    module = ROOT / "src" / Path(*ARMS[arm][0].split(".")).with_suffix(".py")
+    return digest([code_hash(module, *SHARED_CODE), ARMS[arm]])
+
+
 def exp_key(cfg: dict, stage: str) -> str:
     """A stage may run under its own experiment key (e.g. the timing pass) so it never reuses main-run records."""
     return cfg["stages"][stage].get("exp", cfg["name"])
@@ -56,25 +64,26 @@ def plan(cfg: dict, stage: str) -> list[tuple[dict, list[dict]]]:
     proto, st = cfg["protocol"], cfg["stages"][stage]
     protocol_hash = digest(proto)
     core_lock = file_hash(ROOT / "envs" / "core" / "uv.lock")
-    gen_code, fit_code = code_hash(*GEN_CODE), code_hash(*FIT_CODE)
+    fit_code = code_hash(*FIT_CODE)
     datasets = st["datasets"]
     if datasets == "primary":
         d = pd.read_csv(RESULTS / "datasets.csv")
         datasets = d[d.primary].key.tolist()
     arms = st.get("arms", cfg["arms"])
+    excluded = {(e["dataset"], e["model"]) for e in cfg.get("exclude", [])}  # (dataset, model) pairs not run
     chains = []
     for key in datasets:
         data_hash = json.loads((CACHE / "data" / f"{key}.json").read_text())["frame_hash"]
         splits_hash = S.splits_hash(S.load(key))
         for arm in (a for a in arms if a not in FIT_ONLY):
-            lock = file_hash(ROOT / "envs" / env_of(arm) / "uv.lock")
+            lock, gen_code = file_hash(ROOT / "envs" / env_of(arm) / "uv.lock"), arm_code(arm)
             views = [(arm, "default")] + [(a, "keepcat") for a in arms if FIT_ONLY.get(a) == arm]
-            for r in range(proto["repeats"]):
+            for r in st.get("repeats", range(proto["repeats"])):
                 for k in st.get("folds", range(proto["n_folds"])):
                     g = gen_unit(exp_key(cfg, stage), key, r, k, arm, cfg.get("arm_params", {}).get(arm, {}),
                                  protocol_hash, data_hash, splits_hash, lock, gen_code)
                     fits = [fit_unit(digest(g), a, v, m, p, S.tool_seed(r, k), core_lock, fit_code)
-                            for a, v in views for m, p in proto["models"].items()]
+                            for a, v in views for m, p in proto["models"].items() if (key, m) not in excluded]
                     chains.append((g, fits))
     return chains
 
@@ -83,6 +92,7 @@ class Runner:
     def __init__(self, cfg: dict, exp: str, retry: set[str], jobs: int):
         self.cfg, self.exp, self.retry, self.jobs = cfg, exp, retry, jobs
         self.lim = cfg["limits"]
+        self.permute_y = cfg["protocol"].get("permute_y", False)  # in protocol_hash, so in every unit hash
         self.base = {"git_sha": git_sha(), "machine": machine_info(), "jobs": jobs}
         self.lock = threading.Lock()
         self.counts: dict[str, int] = {}
@@ -90,11 +100,14 @@ class Runner:
     def _launch(self, env: str, task: dict, timeout_s: float) -> tuple[limits.Result, dict]:
         with tempfile.TemporaryDirectory() as tmp:  # per-unit temp dir, also the child's cwd
             out_path = Path(tmp) / "out.json"
-            task["out"] = str(out_path)
+            task["out"], task["permute_y"] = str(out_path), self.permute_y
             (Path(tmp) / "task.json").write_text(json.dumps(task))
             cmd = ["uv", "run", "--frozen", "--project", str(ROOT / "envs" / env), "python", "-m", "afe.run.worker",
                    str(Path(tmp) / "task.json")]
-            env_vars = {k: v for k, v in os.environ.items() if k != "VIRTUAL_ENV"}
+            # str/set hash order is per process; autofeat's selection depends on it (A3), so it is fixed per unit
+            u = task["unit"]
+            seed = u["seed"] if task["stage"] == "fit" else S.tool_seed(u["repeat"], u["fold"])
+            env_vars = {k: v for k, v in os.environ.items() if k != "VIRTUAL_ENV"} | {"PYTHONHASHSEED": str(seed)}
             limits.wait_for_memory(self.lim["min_free_gb"])
             started = datetime.now(timezone.utc).isoformat()
             res = limits.run(cmd, timeout_s, self.lim["mem_gb"], tmp, env_vars)

@@ -8,7 +8,7 @@ dependencies = [
     "lightautoml==0.4.2",
     "torch",
     "numpy<2",  # statsmodels<=0.14.0 (lightautoml dep) is built for numpy 1
-    "pandas<3",  # statsmodels 0.14.0 uses the pre-3.0 pandas deprecate_kwarg signature
+    "pandas<2",  # LAMA 0.4.2 OrdinalEncoder reads the wrong value_counts column under pandas 2 (categorical.py:1053)
     "scipy<1.16",  # statsmodels 0.14.0 imports scipy._lib._util._lazywhere, removed in scipy 1.16
 ]
 

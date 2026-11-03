@@ -7,3 +7,4 @@ results/cache/
 .DS_Store
 openfe_tmp_data.feather
 AutogluonModels/
+results/stale/

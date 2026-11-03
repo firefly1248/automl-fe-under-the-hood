@@ -1,0 +1,177 @@
+{
+ "hash": "ebd285788c666940",
+ "stage": "gen",
+ "unit": {
+  "exp": "exp04_open_benchmark",
+  "dataset": "concrete_compressive_strength",
+  "repeat": 0,
+  "fold": 4,
+  "arm": "lama_adv",
+  "arm_params": {},
+  "protocol_hash": "2e52bb4ba1f5bed1",
+  "data_hash": "3757496306289002596",
+  "splits_hash": "4d0ca49ffa9df7ca",
+  "env_lock_hash": "a66ef9b5f624f5ca",
+  "code_hash": "9126e6e212c054d2"
+ },
+ "status": "ok",
+ "error": "",
+ "wall_s": 2.62,
+ "peak_rss_mb": 489.4,
+ "limits": {
+  "gen_timeout_s": 3600,
+  "fit_timeout_s": 1800,
+  "mem_gb": 6,
+  "min_free_gb": 2
+ },
+ "started": "2026-11-02T01:44:12.567401+00:00",
+ "finished": "2026-11-02T01:44:15.188910+00:00",
+ "result": {
+  "n_features_in": 8,
+  "n_features_out": 15,
+  "replaces_input": true,
+  "n_inf_replaced": 0,
+  "fit_s": 0.402,
+  "transform_inner_s": 0.004,
+  "transform_test_s": 0.004,
+  "describe": {
+   "roles": {
+    "cement": "Numeric",
+    "blast_furnace_slag": "Category(encoding_type=auto, ordinal=True)",
+    "fly_ash": "Numeric",
+    "water": "Numeric",
+    "superplasticizer": "Numeric",
+    "coarse_aggregate": "Category(encoding_type=auto, ordinal=True)",
+    "fine_aggregate": "Category(encoding_type=auto, ordinal=True)",
+    "age": "Numeric"
+   },
+   "reader_dropped": [],
+   "selector_importance": {
+    "age": 2631084.270845473,
+    "cement": 1778814.6820384264,
+    "water": 868839.6722547114,
+    "superplasticizer": 836453.2190104425,
+    "blast_furnace_slag": 517660.87554740906,
+    "fine_aggregate": 313831.74591341615,
+    "fly_ash": 179666.59728386998,
+    "coarse_aggregate": 145288.45073279738
+   },
+   "selected": [
+    "age",
+    "blast_furnace_slag",
+    "cement",
+    "coarse_aggregate",
+    "fine_aggregate",
+    "fly_ash",
+    "superplasticizer",
+    "water"
+   ],
+   "selector_dropped": [],
+   "output_features": [
+    "oof__le__blast_furnace_slag",
+    "oof__le__coarse_aggregate",
+    "oof__le__fine_aggregate",
+    "oof__inter__(blast_furnace_slag__coarse_aggregate)",
+    "oof__inter__(blast_furnace_slag__fine_aggregate)",
+    "oof__inter__(coarse_aggregate__fine_aggregate)",
+    "oof__inter__(blast_furnace_slag__coarse_aggregate__fine_aggregate)",
+    "age",
+    "cement",
+    "fly_ash",
+    "superplasticizer",
+    "water",
+    "ord__blast_furnace_slag",
+    "ord__coarse_aggregate",
+    "ord__fine_aggregate"
+   ],
+   "target_encoded": [
+    "oof__le__blast_furnace_slag",
+    "oof__le__coarse_aggregate",
+    "oof__le__fine_aggregate",
+    "oof__inter__(blast_furnace_slag__coarse_aggregate)",
+    "oof__inter__(blast_furnace_slag__fine_aggregate)",
+    "oof__inter__(coarse_aggregate__fine_aggregate)",
+    "oof__inter__(blast_furnace_slag__coarse_aggregate__fine_aggregate)"
+   ],
+   "n_folds": 5,
+   "settings": {
+    "reader": {
+     "samples": 100000,
+     "max_nan_rate": 0.999,
+     "max_constant_rate": 0.999,
+     "cv": 5,
+     "random_state": 1004,
+     "roles_params": null,
+     "n_jobs": 1,
+     "advanced_roles": true,
+     "numeric_unique_rate": 0.999,
+     "max_to_3rd_rate": 1.1,
+     "binning_enc_rate": 2,
+     "raw_decr_rate": 1.1,
+     "max_score_rate": 0.2,
+     "abs_score_val": 0.04,
+     "drop_score_co": 0.0
+    },
+    "selection": {
+     "mode": 1,
+     "importance_type": "gain",
+     "fit_on_holdout": true,
+     "cutoff": 0,
+     "feature_group_size": 1,
+     "max_features_cnt_in_result": null,
+     "select_algos": [
+      "gbm"
+     ]
+    },
+    "selector_lgb": {
+     "num_threads": 1,
+     "feature_fraction": 1,
+     "random_state": 1004
+    },
+    "gbm_pipeline": {
+     "top_intersections": 4,
+     "max_intersection_depth": 3,
+     "subsample": 100000,
+     "auto_unique_co": 10,
+     "multiclass_te_co": 3,
+     "output_categories": false,
+     "use_groupby": false,
+     "groupby_types": [
+      "delta_median",
+      "delta_mean",
+      "min",
+      "max",
+      "std",
+      "mode",
+      "is_mode"
+     ],
+     "groupby_top_based_on": "cardinality",
+     "groupby_top_categorical": 3,
+     "groupby_top_numerical": 3,
+     "groupby_triplets": []
+    }
+   }
+  },
+  "versions": {
+   "python": "3.11.14",
+   "lightautoml": "0.4.2",
+   "torch": "2.14.0",
+   "lightgbm": "4.7.0",
+   "catboost": "1.2.10",
+   "statsmodels": "0.14.0",
+   "numpy": "1.26.4",
+   "pandas": "1.5.3",
+   "scikit-learn": "1.9.1"
+  }
+ },
+ "git_sha": "bfbedb1103a0f11b5a27595822b347b354783a94-dirty",
+ "machine": {
+  "cpu": "Apple M4 Pro",
+  "physical_cores": 14,
+  "logical_cores": 14,
+  "ram_gb": 24.0,
+  "os": "Darwin 25.6.0 arm64"
+ },
+ "jobs": 3,
+ "rekeyed_from": "02f1d7937cf39463"
+}

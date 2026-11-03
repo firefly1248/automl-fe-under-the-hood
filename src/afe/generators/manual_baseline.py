@@ -2,8 +2,9 @@
 
 - frequency encoding (share of fit rows) of every categorical column; NaN is its own level;
 - top-5 numeric columns by mutual information with y: a/b and b/a (|b| < 1e-12 -> NaN) and a*b per pair;
-- key = categorical column with the highest mutual information with y (none: decile bins of the top-MI
-  numeric column); per top-5 numeric column: group mean and x - group mean (unseen key -> global mean).
+- key = categorical column with the highest mutual information with y among those with at most 50% unique
+  values on fit rows (none: decile bins of the top-MI numeric column); per top-5 numeric column: group
+  mean and x - group mean (unseen key -> global mean).
 """
 
 from itertools import combinations
@@ -16,6 +17,7 @@ from afe.generators.base import FeatureGenerator
 
 TOP = 5
 EPS = 1e-12
+NEAR_UNIQUE = 0.5  # share of fit rows: a categorical with more levels than this is not a key candidate
 NAN_KEY = "__nan__"
 
 
@@ -40,9 +42,11 @@ class ManualBaseline(FeatureGenerator):
         num_mi = pd.Series(mi(X_fit[num].fillna(self.medians), y_fit, random_state=seed), index=num) if num else pd.Series(dtype=float)
         self.top = num_mi.sort_values(ascending=False, kind="stable").index[:TOP].tolist()
         self.freq = {c: _key(X_fit[c]).value_counts(normalize=True) for c in cat}
-        if cat:
-            codes = np.column_stack([pd.factorize(_key(X_fit[c]))[0] for c in cat])
-            cat_mi = pd.Series(mi(codes, y_fit, discrete_features=True, random_state=seed), index=cat)
+        # near-unique columns are not keys: discrete MI grows with the number of levels (decided at A2)
+        keys = [c for c in cat if X_fit[c].nunique() <= NEAR_UNIQUE * len(X_fit)]
+        if keys:
+            codes = np.column_stack([pd.factorize(_key(X_fit[c]))[0] for c in keys])
+            cat_mi = pd.Series(mi(codes, y_fit, discrete_features=True, random_state=seed), index=keys)
             self.key_col, self.bins = cat_mi.sort_values(ascending=False, kind="stable").index[0], None
         elif self.top:
             self.key_col = self.top[0]

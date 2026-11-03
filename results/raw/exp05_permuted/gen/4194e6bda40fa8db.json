@@ -1,0 +1,86 @@
+{
+ "hash": "4194e6bda40fa8db",
+ "stage": "gen",
+ "unit": {
+  "exp": "exp05_permuted",
+  "dataset": "bank-marketing",
+  "repeat": 0,
+  "fold": 3,
+  "arm": "openfe",
+  "arm_params": {},
+  "protocol_hash": "e52e530f8e60c2a9",
+  "data_hash": "2484976918774064709",
+  "splits_hash": "e61210d8f1655fa0",
+  "env_lock_hash": "57bc55f61c0489c0",
+  "code_hash": "b639a0deae5b5f39"
+ },
+ "status": "ok",
+ "error": "",
+ "wall_s": 44.97,
+ "peak_rss_mb": 877.6,
+ "limits": {
+  "gen_timeout_s": 3600,
+  "fit_timeout_s": 1800,
+  "mem_gb": 6,
+  "min_free_gb": 2
+ },
+ "started": "2026-11-02T11:15:33.744911+00:00",
+ "finished": "2026-11-02T11:16:18.717749+00:00",
+ "result": {
+  "n_features_in": 16,
+  "n_features_out": 23,
+  "replaces_input": false,
+  "n_inf_replaced": 0,
+  "fit_s": 43.529,
+  "transform_inner_s": 0.029,
+  "transform_test_s": 0.039,
+  "describe": {
+   "stage1_survivors": 224,
+   "kept": 23,
+   "cap_fired": false,
+   "gains": {
+    "(V1/V10)": 40.73040008544922,
+    "(V12/V1)": 32.99849987030029,
+    "CombineThenFreq(V2,V1)": 24.644399642944336,
+    "(V6/V13)": 23.17349910736084,
+    "Combine(V4,V13)": 22.814210891723633,
+    "max(V6,V12)": 17.8125,
+    "Combine(V3,V7)": 17.54990005493164,
+    "CombineThenFreq(V11,V16)": 16.967199325561523,
+    "CombineThenFreq(V4,V1)": 16.379499435424805,
+    "(V12/V10)": 15.316699981689453,
+    "GroupByThenRank(V1,V11)": 14.495499610900879,
+    "Combine(V11,V1)": 13.350600242614746,
+    "GroupByThenStd(V12,V1)": 13.2076997756958,
+    "CombineThenFreq(V3,V4)": 13.1451997756958,
+    "Combine(V4,V11)": 12.803299903869629,
+    "GroupByThenRank(V6,V2)": 12.266500473022461,
+    "GroupByThenRank(V15,V10)": 11.998800277709961,
+    "(V6*V13)": 11.739999771118164,
+    "(V10/V15)": 10.51259994506836,
+    "Combine(V13,V15)": 10.481499671936035,
+    "CombineThenFreq(V11,V1)": 10.199799537658691,
+    "CombineThenFreq(V4,V8)": 10.052399635314941,
+    "Combine(V7,V9)": 10.006699562072754
+   }
+  },
+  "versions": {
+   "python": "3.11.14",
+   "openfe": "0.0.12",
+   "lightgbm": "4.7.0",
+   "numpy": "2.4.6",
+   "pandas": "3.0.6",
+   "scikit-learn": "1.5.2"
+  }
+ },
+ "git_sha": "bfbedb1103a0f11b5a27595822b347b354783a94-dirty",
+ "machine": {
+  "cpu": "Apple M4 Pro",
+  "physical_cores": 14,
+  "logical_cores": 14,
+  "ram_gb": 24.0,
+  "os": "Darwin 25.6.0 arm64"
+ },
+ "jobs": 3,
+ "rekeyed_from": "cdedee649b57e7e8"
+}

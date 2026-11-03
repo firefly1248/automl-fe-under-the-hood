@@ -2,14 +2,32 @@
 name: exp04_open_benchmark
 protocol:            # hashed into every generator unit; limits and stage lists are not
   n_folds: 5
-  repeats: 1
+  repeats: 2
   models:
     lgbm: {n_estimators: 5000, learning_rate: 0.05, early_stopping: 200}
     catboost: {iterations: 3000, learning_rate: 0.1, early_stopping: 200}
 # min_free_gb: launch gate on free RAM; mem_gb: per-unit cap on the child tree RSS (also sets jobs)
-limits: {gen_timeout_s: 3600, fit_timeout_s: 1800, mem_gb: 6, min_free_gb: 2}
+limits: {gen_timeout_s: 3600, fit_timeout_s: 3600, mem_gb: 6, min_free_gb: 2}
+# (dataset, model) pairs not run and left out of every comparison on that model (decided at the A3 review)
+exclude:
+  - {dataset: connect-4, model: catboost, reason: "base CatBoost timed out at 1800 s on 5 of 5 pilot folds"}
 # ag_tabprep_keepcat is fit-only: it reuses the ag_tabprep generator output with its own view
 arms: [base, ag_default, ag_tabprep, ag_tabprep_keepcat, lama_adv, openfe, autofeat, mljar_golden, manual_baseline]
+# repeats / folds in a stage: a subset of the protocol's (default: all)
 stages:
-  smoke: {datasets: [credit-g, cmc, Moneyball], folds: [0]}
-  full: {datasets: primary}
+  smoke: {datasets: [credit-g, cmc, Moneyball], repeats: [0], folds: [0]}
+  # plan section 8: per task type the smallest and largest by rows; then the two largest with a categorical
+  # of >= 10 levels (kick, albert) and the two widest (house_prices_nominal, mfeat-fourier), not already chosen
+  pilot:
+    datasets: [credit-g, numerai28.6, cmc, connect-4, concrete_compressive_strength, diamonds, kick, albert,
+               house_prices_nominal, mfeat-fourier]
+    repeats: [0]
+  # plan section 7.7: run with --jobs 1 on an idle machine
+  timing:
+    exp: exp04_timing
+    datasets: [credit-g, numerai28.6, cmc, connect-4, concrete_compressive_strength, diamonds]
+    repeats: [0]
+    folds: [0]
+  # run as two stages with a commit after each (decided at A3)
+  full_r0: {datasets: primary, repeats: [0]}
+  full_r1: {datasets: primary, repeats: [1]}

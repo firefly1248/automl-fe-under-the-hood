@@ -34,7 +34,7 @@ class LamaAdv(FeatureGenerator):
     env = "lama"
     replaces_input = True
     target_encoding = True
-    unseen_default = "LAMA encoders: frequency 1, label code 0, target encoding of the rare/unseen bucket; ordinal NaN"
+    unseen_default = "LAMA encoders: frequency 1, label code 0, target encoding of the rare/unseen bucket; ordinal NaN; categorical read as numeric NaN"
 
     def fit_transform(self, X_fit, y_fit, task, seed) -> pd.DataFrame:
         lama_task = Task(LAMA_TASK[task])
@@ -48,6 +48,10 @@ class LamaAdv(FeatureGenerator):
         }
         self.reader = PandasToPandasReader(lama_task, **self.settings["reader"])
         data = self.reader.fit_read(X_fit.assign(**{TARGET: y_fit.to_numpy()}), roles={"target": TARGET})
+        # categoricals with digit values read as Numeric: the reader casts them with astype(float) and a
+        # non-numeric unseen value would raise, so transform coerces it to NaN
+        self.to_num = [c for c, r in self.reader.roles.items()
+                       if r.name == "Numeric" and not pd.api.types.is_numeric_dtype(X_fit[c])]
         train_valid = create_validation_iterator(data, None, n_folds=None)  # FoldsIterator over the reader's cv folds
         sel = self.settings["selection"]
         lgb = BoostLGBM(default_params=self.settings["selector_lgb"], freeze_defaults=preset.lgb_params["freeze_defaults"])
@@ -61,6 +65,7 @@ class LamaAdv(FeatureGenerator):
         return out
 
     def transform(self, X) -> pd.DataFrame:
+        X = X.assign(**{c: pd.to_numeric(X[c].astype(object), errors="coerce") for c in self.to_num})
         return self._frame(self.pipe.transform(self.selector.select(self.reader.read(X))), X.index)
 
     @staticmethod

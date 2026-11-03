@@ -1,0 +1,82 @@
+{
+ "hash": "a40aacacabef38cc",
+ "stage": "gen",
+ "unit": {
+  "exp": "exp05_planted",
+  "dataset": "planted_cat_interaction_s0",
+  "repeat": 0,
+  "fold": 3,
+  "arm": "openfe",
+  "arm_params": {},
+  "protocol_hash": "9326a6e4cc218d6d",
+  "data_hash": "16544428506501659419",
+  "splits_hash": "9118fde7d4b3623f",
+  "env_lock_hash": "57bc55f61c0489c0",
+  "code_hash": "b639a0deae5b5f39"
+ },
+ "status": "ok",
+ "error": "",
+ "wall_s": 6.01,
+ "peak_rss_mb": 490.8,
+ "limits": {
+  "gen_timeout_s": 3600,
+  "fit_timeout_s": 3600,
+  "mem_gb": 6,
+  "min_free_gb": 2
+ },
+ "started": "2026-11-03T04:49:17.969760+00:00",
+ "finished": "2026-11-03T04:49:23.983498+00:00",
+ "result": {
+  "n_features_in": 6,
+  "n_features_out": 19,
+  "replaces_input": false,
+  "n_inf_replaced": 0,
+  "fit_s": 4.556,
+  "transform_inner_s": 0.006,
+  "transform_test_s": 0.005,
+  "describe": {
+   "stage1_survivors": 22,
+   "kept": 19,
+   "cap_fired": false,
+   "gains": {
+    "CombineThenFreq(c1,c2)": 4352.72804671526,
+    "GroupByThenMin(noise2,c2)": 2437.3329014778137,
+    "freq(c1)": 1824.9130642414093,
+    "GroupByThenMin(noise2,c1)": 1556.555973649025,
+    "log(noise1)": 28.26859962940216,
+    "(noise0-noise2)": 26.163540363311768,
+    "GroupByThenMedian(noise0,noise_cat)": 18.400749802589417,
+    "GroupByThenRank(noise2,c2)": 14.600910186767578,
+    "(noise1*noise2)": 13.426550149917603,
+    "sqrt(noise2)": 11.842080116271973,
+    "(noise0+noise2)": 11.247720003128052,
+    "(noise1+noise2)": 10.663659811019897,
+    "(noise1-noise2)": 9.257080078125,
+    "residual(noise2)": 8.822795987129211,
+    "GroupByThenRank(noise1,c2)": 8.555099964141846,
+    "sigmoid(noise1)": 7.514150261878967,
+    "GroupByThenRank(noise1,c1)": 5.576680064201355,
+    "GroupByThenRank(noise2,noise_cat)": 5.045419931411743,
+    "freq(noise_cat)": 3.761299967765808
+   }
+  },
+  "versions": {
+   "python": "3.11.14",
+   "openfe": "0.0.12",
+   "lightgbm": "4.7.0",
+   "numpy": "2.4.6",
+   "pandas": "3.0.6",
+   "scikit-learn": "1.5.2"
+  }
+ },
+ "git_sha": "bfbedb1103a0f11b5a27595822b347b354783a94-dirty",
+ "machine": {
+  "cpu": "Apple M4 Pro",
+  "physical_cores": 14,
+  "logical_cores": 14,
+  "ram_gb": 24.0,
+  "os": "Darwin 25.6.0 arm64"
+ },
+ "jobs": 3,
+ "rekeyed_from": "68388ca3c1fb3acb"
+}

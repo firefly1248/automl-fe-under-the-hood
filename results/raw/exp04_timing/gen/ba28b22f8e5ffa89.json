@@ -1,0 +1,129 @@
+{
+ "hash": "ba28b22f8e5ffa89",
+ "stage": "gen",
+ "unit": {
+  "exp": "exp04_timing",
+  "dataset": "diamonds",
+  "repeat": 0,
+  "fold": 0,
+  "arm": "mljar_golden",
+  "arm_params": {},
+  "protocol_hash": "2e52bb4ba1f5bed1",
+  "data_hash": "12400245448291971708",
+  "splits_hash": "f523248f9af8f42f",
+  "env_lock_hash": "406257d46bea0f70",
+  "code_hash": "0bef64e7b02517d2"
+ },
+ "status": "ok",
+ "error": "",
+ "wall_s": 2.59,
+ "peak_rss_mb": 357.2,
+ "limits": {
+  "gen_timeout_s": 3600,
+  "fit_timeout_s": 3600,
+  "mem_gb": 6,
+  "min_free_gb": 2
+ },
+ "started": "2026-11-02T18:20:32.467561+00:00",
+ "finished": "2026-11-02T18:20:35.060910+00:00",
+ "result": {
+  "n_features_in": 9,
+  "n_features_out": 10,
+  "replaces_input": false,
+  "n_inf_replaced": 0,
+  "fit_s": 0.089,
+  "transform_inner_s": 0.002,
+  "transform_test_s": 0.002,
+  "describe": {
+   "numeric_inputs": [
+    "carat",
+    "depth",
+    "table",
+    "x",
+    "y",
+    "z"
+   ],
+   "new_features": [
+    {
+     "feature1": "y",
+     "feature2": "carat",
+     "operation": "sum",
+     "score": 2199572.62880465
+    },
+    {
+     "feature1": "y",
+     "feature2": "carat",
+     "operation": "multiply",
+     "score": 2210595.851638471
+    },
+    {
+     "feature1": "x",
+     "feature2": "carat",
+     "operation": "multiply",
+     "score": 2229726.495152329
+    },
+    {
+     "feature1": "x",
+     "feature2": "carat",
+     "operation": "sum",
+     "score": 2252785.4875959023
+    },
+    {
+     "feature1": "carat",
+     "feature2": "depth",
+     "operation": "ratio",
+     "score": 2260688.5374870184
+    },
+    {
+     "feature1": "depth",
+     "feature2": "carat",
+     "operation": "ratio",
+     "score": 2260688.5374870184
+    },
+    {
+     "feature1": "y",
+     "feature2": "x",
+     "operation": "multiply",
+     "score": 2285602.3986144285
+    },
+    {
+     "feature1": "y",
+     "feature2": "x",
+     "operation": "sum",
+     "score": 2294726.4187594624
+    },
+    {
+     "feature1": "carat",
+     "feature2": "table",
+     "operation": "ratio",
+     "score": 2296732.622855764
+    },
+    {
+     "feature1": "table",
+     "feature2": "carat",
+     "operation": "ratio",
+     "score": 2296732.622855764
+    }
+   ]
+  },
+  "versions": {
+   "python": "3.11.14",
+   "mljar-supervised": "1.3.2",
+   "lightgbm": "4.7.0",
+   "xgboost": "3.2.0",
+   "numpy": "2.4.6",
+   "pandas": "3.0.6",
+   "scikit-learn": "1.9.1"
+  }
+ },
+ "git_sha": "bfbedb1103a0f11b5a27595822b347b354783a94-dirty",
+ "machine": {
+  "cpu": "Apple M4 Pro",
+  "physical_cores": 14,
+  "logical_cores": 14,
+  "ram_gb": 24.0,
+  "os": "Darwin 25.6.0 arm64"
+ },
+ "jobs": 1,
+ "rekeyed_from": "406f84f4536e8613"
+}

@@ -1,0 +1,85 @@
+{
+ "hash": "27f8bfe1355a1b53",
+ "stage": "gen",
+ "unit": {
+  "exp": "exp05_permuted",
+  "dataset": "credit-g",
+  "repeat": 0,
+  "fold": 1,
+  "arm": "manual_baseline",
+  "arm_params": {},
+  "protocol_hash": "e52e530f8e60c2a9",
+  "data_hash": "7606122327431373292",
+  "splits_hash": "c1daa9e20d73a3ea",
+  "env_lock_hash": "e7221c35dc6c19a5",
+  "code_hash": "c75755dc6d3f9759"
+ },
+ "status": "ok",
+ "error": "",
+ "wall_s": 1.08,
+ "peak_rss_mb": 212.2,
+ "limits": {
+  "gen_timeout_s": 3600,
+  "fit_timeout_s": 1800,
+  "mem_gb": 6,
+  "min_free_gb": 2
+ },
+ "started": "2026-11-02T11:01:53.686689+00:00",
+ "finished": "2026-11-02T11:01:54.762833+00:00",
+ "result": {
+  "n_features_in": 20,
+  "n_features_out": 53,
+  "replaces_input": false,
+  "n_inf_replaced": 0,
+  "fit_s": 0.037,
+  "transform_inner_s": 0.006,
+  "transform_test_s": 0.006,
+  "describe": {
+   "top_numeric": [
+    "age",
+    "duration",
+    "credit_amount",
+    "installment_commitment",
+    "residence_since"
+   ],
+   "key": "purpose",
+   "key_binned": false,
+   "frequency_encoded": [
+    "checking_status",
+    "credit_history",
+    "purpose",
+    "savings_status",
+    "employment",
+    "personal_status",
+    "other_parties",
+    "property_magnitude",
+    "other_payment_plans",
+    "housing",
+    "job",
+    "own_telephone",
+    "foreign_worker"
+   ]
+  },
+  "versions": {
+   "python": "3.11.14",
+   "lightgbm": "4.7.0",
+   "catboost": "1.2.10",
+   "openml": "0.15.1",
+   "scipy": "1.17.1",
+   "matplotlib": "3.11.2",
+   "numpy": "2.4.6",
+   "pandas": "3.0.6",
+   "scikit-learn": "1.9.1"
+  }
+ },
+ "git_sha": "bfbedb1103a0f11b5a27595822b347b354783a94-dirty",
+ "machine": {
+  "cpu": "Apple M4 Pro",
+  "physical_cores": 14,
+  "logical_cores": 14,
+  "ram_gb": 24.0,
+  "os": "Darwin 25.6.0 arm64"
+ },
+ "jobs": 3,
+ "rekeyed_from": "7f70affa23cca274"
+}

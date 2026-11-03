@@ -1,7 +1,7 @@
 ENVS := core autogluon lama openfe autofeat mljar
 RUN = uv run --frozen --project envs/$(1)
 
-.PHONY: env env-check data splits test exp01 exp03 exp04-smoke exp04-full
+.PHONY: env env-check data planted splits test exp01 exp03 exp04-smoke exp04-pilot exp04-timing exp05 exp04-full-r0 exp04-full-r1
 
 env:
 	for e in $(ENVS); do uv sync --frozen --project envs/$$e || exit 1; done
@@ -11,6 +11,10 @@ env-check:
 
 data:
 	$(call RUN,core) python -m afe.data.registry
+
+# planted frames of exp05 only, without the OpenML calls of `make data` (which also writes them)
+planted:
+	$(call RUN,core) python -m afe.data.registry planted
 
 splits:
 	$(call RUN,core) python -m afe.data.splits
@@ -32,5 +36,19 @@ EXP04 = experiments/exp04_open_benchmark/config.yaml
 exp04-smoke:
 	$(call RUN,core) python -m afe.run.cli $(EXP04) smoke $(ARGS)
 
-exp04-full:
-	$(call RUN,core) python -m afe.run.cli $(EXP04) full $(ARGS)
+exp04-pilot:
+	$(call RUN,core) python -m afe.run.cli $(EXP04) pilot $(ARGS)
+
+exp04-timing:
+	$(call RUN,core) python -m afe.run.cli $(EXP04) timing --jobs 1 $(ARGS)
+
+exp05:
+	$(call RUN,core) python -m afe.run.cli experiments/exp05_leakage_checks/permuted.yaml run $(ARGS)
+	$(call RUN,core) python -m afe.run.cli experiments/exp05_leakage_checks/transductive.yaml run $(ARGS)
+	$(call RUN,core) python -m afe.run.cli experiments/exp05_leakage_checks/planted.yaml run $(ARGS)
+
+exp04-full-r0:
+	$(call RUN,core) python -m afe.run.cli $(EXP04) full_r0 $(ARGS)
+
+exp04-full-r1:
+	$(call RUN,core) python -m afe.run.cli $(EXP04) full_r1 $(ARGS)

@@ -1,0 +1,90 @@
+{
+ "hash": "b000d0c6e6e33442",
+ "stage": "gen",
+ "unit": {
+  "exp": "exp04_open_benchmark",
+  "dataset": "kick",
+  "repeat": 0,
+  "fold": 0,
+  "arm": "manual_baseline",
+  "arm_params": {},
+  "protocol_hash": "2e52bb4ba1f5bed1",
+  "data_hash": "7669173070657304193",
+  "splits_hash": "6b8b2070100ec98f",
+  "env_lock_hash": "e7221c35dc6c19a5",
+  "code_hash": "c75755dc6d3f9759"
+ },
+ "status": "ok",
+ "error": "",
+ "wall_s": 2.37,
+ "peak_rss_mb": 338.5,
+ "limits": {
+  "gen_timeout_s": 3600,
+  "fit_timeout_s": 1800,
+  "mem_gb": 6,
+  "min_free_gb": 2
+ },
+ "started": "2026-11-02T03:56:15.164459+00:00",
+ "finished": "2026-11-02T03:56:17.537521+00:00",
+ "result": {
+  "n_features_in": 32,
+  "n_features_out": 58,
+  "replaces_input": false,
+  "n_inf_replaced": 0,
+  "fit_s": 1.233,
+  "transform_inner_s": 0.019,
+  "transform_test_s": 0.027,
+  "describe": {
+   "top_numeric": [
+    "VehicleAge",
+    "MMRCurrentRetailAveragePrice",
+    "VehYear",
+    "MMRCurrentAuctionAveragePrice",
+    "MMRCurrentAuctionCleanPrice"
+   ],
+   "key": "WheelTypeID",
+   "key_binned": false,
+   "frequency_encoded": [
+    "Auction",
+    "Make",
+    "Model",
+    "Trim",
+    "SubModel",
+    "Color",
+    "Transmission",
+    "WheelTypeID",
+    "WheelType",
+    "Nationality",
+    "Size",
+    "TopThreeAmericanName",
+    "PRIMEUNIT",
+    "AUCGUART",
+    "BYRNO",
+    "VNZIP1",
+    "VNST",
+    "IsOnlineSale"
+   ]
+  },
+  "versions": {
+   "python": "3.11.14",
+   "lightgbm": "4.7.0",
+   "catboost": "1.2.10",
+   "openml": "0.15.1",
+   "scipy": "1.17.1",
+   "matplotlib": "3.11.2",
+   "numpy": "2.4.6",
+   "pandas": "3.0.6",
+   "scikit-learn": "1.9.1"
+  }
+ },
+ "git_sha": "bfbedb1103a0f11b5a27595822b347b354783a94-dirty",
+ "machine": {
+  "cpu": "Apple M4 Pro",
+  "physical_cores": 14,
+  "logical_cores": 14,
+  "ram_gb": 24.0,
+  "os": "Darwin 25.6.0 arm64"
+ },
+ "jobs": 3,
+ "rekeyed_from": "acd6014b7062b6d4"
+}

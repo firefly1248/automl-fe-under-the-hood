@@ -1,0 +1,70 @@
+{
+ "hash": "3f4a43d777680d6c",
+ "stage": "gen",
+ "unit": {
+  "exp": "exp05_permuted",
+  "dataset": "socmob",
+  "repeat": 0,
+  "fold": 0,
+  "arm": "ag_default",
+  "arm_params": {},
+  "protocol_hash": "e52e530f8e60c2a9",
+  "data_hash": "14581229078174021808",
+  "splits_hash": "a12f81835aca80a7",
+  "env_lock_hash": "d1b316cfbe1d2e5d",
+  "code_hash": "3c685024829851b0"
+ },
+ "status": "ok",
+ "error": "",
+ "wall_s": 1.52,
+ "peak_rss_mb": 227.9,
+ "limits": {
+  "gen_timeout_s": 3600,
+  "fit_timeout_s": 1800,
+  "mem_gb": 6,
+  "min_free_gb": 2
+ },
+ "started": "2026-11-02T11:08:19.989496+00:00",
+ "finished": "2026-11-02T11:08:21.506212+00:00",
+ "result": {
+  "n_features_in": 5,
+  "n_features_out": 5,
+  "replaces_input": true,
+  "n_inf_replaced": 0,
+  "fit_s": 0.01,
+  "transform_inner_s": 0.001,
+  "transform_test_s": 0.001,
+  "describe": {
+   "type_map_raw_out": {
+    "family_structure": "int",
+    "race": "int",
+    "counts_for_sons_first_occupation": "float",
+    "fathers_occupation": "category",
+    "sons_occupation": "category"
+   }
+  },
+  "versions": {
+   "python": "3.11.14",
+   "autogluon.tabular": "1.6.3",
+   "autogluon.features": "1.6.3",
+   "autogluon.core": "1.6.3",
+   "lightgbm": "4.7.0",
+   "catboost": "1.2.10",
+   "xgboost": "3.2.0",
+   "torch": "2.10.0",
+   "numpy": "2.4.6",
+   "pandas": "2.3.3",
+   "scikit-learn": "1.9.1"
+  }
+ },
+ "git_sha": "bfbedb1103a0f11b5a27595822b347b354783a94-dirty",
+ "machine": {
+  "cpu": "Apple M4 Pro",
+  "physical_cores": 14,
+  "logical_cores": 14,
+  "ram_gb": 24.0,
+  "os": "Darwin 25.6.0 arm64"
+ },
+ "jobs": 3,
+ "rekeyed_from": "aa3b15b2d51a4055"
+}

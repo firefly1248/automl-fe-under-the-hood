@@ -2,7 +2,8 @@
 
     AFE_ENV=autogluon uv run --project envs/autogluon pytest tests/test_generators_contract.py
 
-Runs on the synthetic frame and on one small real dataset (credit-g, if `make data` has cached it).
+Runs on the synthetic frame and on two small real datasets, credit-g (binary) and Moneyball (regression),
+if `make data` has cached them.
 Test 7 (OpenFE operator equivalence) is in test_openfe_equivalence.py.
 """
 
@@ -18,20 +19,22 @@ from afe.generators import ARMS, make
 from afe.generators.base import finalize
 
 ENV = os.environ.get("AFE_ENV", "core")
-ENV_ARMS = [a for a, (_, _, env) in ARMS.items() if env == ENV]  # empty -> tests reported as skipped
-REAL = "credit-g"
+# empty -> tests reported as skipped; transductive arms (exp05 only) do not fit the inductive contract
+ENV_ARMS = [a for a, (_, _, env) in ARMS.items() if env == ENV and not make(a).transductive]
+REAL = {"real": "credit-g", "regression": "Moneyball"}  # small real datasets, binary and regression
 
 
 def _frames() -> dict:
     """name -> (X, y, task, categorical columns used for the unseen-category test)."""
     X, y, _ = hard_columns(n=800, seed=0)
     out = {"synthetic": (X, y, "binary", ["cat_low", "cat_rare", "cat_binary"])}
-    try:
-        Xr, yr, meta = load(REAL)
-    except FileNotFoundError:
-        return out
-    cats = [c for c in Xr.columns if not pd.api.types.is_numeric_dtype(Xr[c])]
-    out["real"] = (Xr, encode_y(yr, meta["task"]), meta["task"], cats)
+    for name, key in REAL.items():
+        try:
+            Xr, yr, meta = load(key)
+        except FileNotFoundError:
+            continue
+        cats = [c for c in Xr.columns if not pd.api.types.is_numeric_dtype(Xr[c])]
+        out[name] = (Xr, encode_y(yr, meta["task"]), meta["task"], cats)
     return out
 
 

@@ -1,53 +1,65 @@
-key,did,version,name,family,task,task_id,target,source,rows,cols,date_typed_cols,date_like_names,md5_file,file_format,dup_frac,n_categorical,max_cat_levels,hicard,primary,frame_hash
-kr-vs-kp,3,1,kr-vs-kp,krvskp,binary,3.0,class,CC18+AMLB-clf,3196,36,,,44a8cdccb27891b8014a3bdfb5f35813,pq,0.0,36,3,False,True,5846383090484319539
-mfeat-fourier,14,1,mfeat-fourier,mfeat,multiclass,14.0,class,CC18,2000,76,,,00e0dd8627b970dbe47146461f67829d,pq,0.003,0,0,False,True,10580013087150151890
-cmc,23,1,cmc,cmc,multiclass,23.0,Contraceptive_method_used,CC18+AMLB-clf,1473,9,,,1fe6aaf4995211a8e40bf2f910ddb758,pq,0.0326,7,4,False,True,4276284797694165826
-credit-g,31,1,credit-g,creditg,binary,31.0,class,CC18+AMLB-clf+typed,1000,20,,,f20f4f62ce92921ab932b78312ff68d1,pq,0.0,13,10,True,True,7606122327431373292
-pendigits,32,1,pendigits,pendigits,multiclass,32.0,class,CC18,10992,16,,,887d950c52887d387b92fbece35185dc,pq,0.0,0,0,False,True,11286597853309107680
-sick,38,1,sick,sick,binary,3021.0,Class,CC18,3772,29,,,edbbcb7bdee005d1d044a98e9e20e5b8,pq,0.0162,23,5,False,True,15039467398525504561
-yeast,181,1,yeast,yeast,multiclass,2073.0,class_protein_localization,AMLB-clf,1484,8,,,ccc7c17fa863094422411219f810e3fb,pq,0.0209,0,0,False,True,7056912554020308106
-satimage,182,1,satimage,satimage,multiclass,2074.0,class,CC18,6430,36,,,8953b6e4951f56af844637873ecd4b18,pq,0.0,0,0,False,True,12922424232236546568
-pol,201,1,pol,pol,regression,359946.0,foo,AMLB-reg,15000,48,,,c6882da7daef4781d938e04fefe5f76d,pq,0.0028,0,0,False,True,10275077228533597765
-elevators,216,1,elevators,elevators,regression,359936.0,Goal,AMLB-reg,16599,18,,"SaTime1,SaTime2,SaTime3,SaTime4,diffSaTime1,diffSaTime2,diffSaTime3,diffSaTime4",4cae794c87e84f2457037a7cc2ce6ba1,pq,0.0,0,0,False,True,9179919818536369724
-space_ga,507,1,space_ga,spacega,regression,359933.0,ln(VOTES/POP),AMLB-reg,3107,6,,,ff323cd77564eb01a9d15ddf6de6d145,pq,0.0,0,0,False,True,7552628635272816196
-socmob,541,1,socmob,socmob,regression,359932.0,counts_for_sons_current_occupation,AMLB-reg,1156,5,,,547fb2aa23f936b93beaeb5be53ce25d,pq,0.0,4,17,True,True,14581229078174021808
-house_16H,574,1,house_16H,house16h,regression,359952.0,price,AMLB-reg,22784,16,,,2bfe0315bb0670447a4b94fb7fcf8671,pq,0.0,0,0,False,True,9172293859343199803
-bank-marketing,1461,1,bank-marketing,bankmarketing,binary,14965.0,Class,CC18+AMLB-clf+typed,45211,16,,,874b8e0e5d38605db3190ef8534ac3d4,pq,0.0,9,12,True,True,2484976918774064709
-banknote-authentication,1462,1,banknote-authentication,banknoteauthentication,binary,10093.0,Class,CC18,1372,4,,,c01f837e3d57da29c67e0a998ce12e3e,pq,0.0175,0,0,False,True,6036520945535955541
-ozone-level-8hr,1487,1,ozone-level-8hr,ozonelevel8hr,binary,9978.0,Class,CC18+AMLB-clf,2534,72,,,cc9a86abd9bc68c7d324d66fd71f08f3,pq,0.0032,0,0,False,True,1407284738404859728
-phoneme,1489,1,phoneme,phoneme,binary,9952.0,Class,CC18+AMLB-clf,5404,5,,,962dad720372fbb130cd5227f175e73c,pq,0.0017,0,0,False,True,6946153924460944913
-qsar-biodeg,1494,1,qsar-biodeg,qsarbiodeg,binary,9957.0,Class,CC18+AMLB-clf,1055,41,,,45ad444487508919d1e01d658cab5815,pq,0.0028,0,0,False,True,6333269847869092554
-wall-robot-navigation,1497,1,wall-robot-navigation,wallrobotnavigation,multiclass,9960.0,Class,CC18,5456,24,,,f8013bfac137366c222c0850cb152cfc,pq,0.0,0,0,False,True,16312164251834682395
-adult,1590,2,adult,adult,binary,7592.0,class,CC18+AMLB-clf+typed,48842,14,,hours-per-week,6f9af14fb61d70198b494ed54b7cf7b6,pq,0.0011,8,41,True,True,11220653127075058909
-Amazon_employee_access,4135,1,Amazon_employee_access,amazon,binary,359979.0,target,AMLB-clf+typed,32769,9,,,4b6066938515dc50b36eeeab3be13765,pq,0.0,9,7518,True,True,16508201442281791848
-Amazon_employee_access_int,4135,1,Amazon_employee_access,amazon,binary,359979.0,target,AMLB-clf+typed,32769,9,,,4b6066938515dc50b36eeeab3be13765,pq,0.0,0,0,False,False,508317086095130713
-GesturePhaseSegmentationProcessed,4538,1,GesturePhaseSegmentationProcessed,gesturephasesegmentationprocessed,multiclass,14969.0,Phase,CC18+AMLB-clf,9873,32,,,98e5f72cebadb213089a35d5805431fa,pq,0.0,0,0,False,True,5203080199379285600
-numerai28.6,23517,2,numerai28.6,numerai286,binary,167120.0,attribute_21,CC18+AMLB-clf,96320,21,,,d6b6a846d786bcff9b874e376de5ec98,pq,0.0,0,0,False,True,6053378713234538099
-texture,40499,1,texture,texture,multiclass,125922.0,Class,CC18,5500,40,,,8fe7c051c1a88c6c0463e5a270281ab9,pq,0.0049,0,0,False,True,7559918417259855066
-connect-4,40668,2,connect-4,connect4,multiclass,146195.0,class,CC18+AMLB-clf,67557,42,,,2a5fda3446a380abc733242d66c60847,pq,0.0,42,3,False,True,4256675358754380921
-churn,40701,1,churn,churn,binary,167141.0,class,CC18+AMLB-clf,5000,20,,"total_day_minutes,total_day_calls,total_day_charge",6e9a1fe79a5004616530d60980d6146f,pq,0.0,4,10,True,True,1948560441185624034
-wilt,40983,2,wilt,wilt,binary,146820.0,class,CC18+AMLB-clf,4839,5,,,ebf4141d88a633fc9f6b54d4c86c8158,pq,0.0041,0,0,False,True,11513832925785059745
-Moneyball,41021,2,Moneyball,moneyball,regression,361616.0,RS,CTR23+AMLB-reg,1232,14,,"Year,RankSeason",f5d2ea0a7ca33cb17468d04620173868,pq,0.0,6,39,True,True,18371239449379540741
-sylvine,41146,1,sylvine,sylvine,binary,359972.0,class,AMLB-clf,5124,20,,,a7f8157aa73581b2bd60197713bbee3d,pq,0.0,0,0,False,True,2197574914309762447
-ada,41156,1,ada,ada,binary,190411.0,class,AMLB-clf,4147,48,,,073a57dc0e6027ebb198880b9886fecf,pq,0.0002,0,0,False,True,11993760166359642252
-kick,41162,1,kick,kick,binary,359991.0,IsBadBuy,AMLB-clf,72983,32,,"PurchDate,VehYear",9000c46c64ddfb3f32012b54e8d05e4a,pq,0.0,18,1063,True,True,7669173070657304193
-diamonds,42225,1,diamonds,diamonds,regression,233211.0,price,AMLB-reg+typed,53940,9,,,658eaf4009d25553284aaa211f88ccb7,pq,0.0027,3,8,False,True,12400245448291971708
-house_prices_nominal,42563,1,house_prices_nominal,housepricesnominal,regression,359951.0,SalePrice,AMLB-reg,1460,79,,"YearBuilt,YearRemodAdd",4a944fae729c327ad9b6058d6a7092a0,pq,0.0,43,25,True,True,15861061464722162601
-Brazilian_houses,42688,4,Brazilian_houses,brazilianhouses,regression,359938.0,total_(BRL),AMLB-reg,10692,12,,,6293fabe5f24101e7fbc97d517cbb78f,pq,0.0335,4,35,True,True,15626364672743687083
-OnlineNewsPopularity,42724,2,OnlineNewsPopularity,onlinenewspopularity,regression,359941.0,shares,AMLB-reg,39644,59,,"timedelta,weekday_is_monday,weekday_is_tuesday,weekday_is_wednesday,weekday_is_thursday,weekday_is_friday,weekday_is_saturday,weekday_is_sunday,global_sentiment_polarity,title_sentiment_polarity,abs_title_sentiment_polarity",40264bb20604b05927fdf463f080588d,pq,0.0,0,0,False,True,17147084186673794476
-abalone,42726,5,abalone,abalone,regression,359944.0,Class_number_of_rings,AMLB-reg,4177,8,,,767946787af525982285d72b3052177a,pq,0.0,1,3,False,True,18418919520324962107
-colleges,42727,14,colleges,colleges,regression,359942.0,percent_pell_grant,AMLB-reg,7063,44,,"percent_part_time,average_cost_academic_year,average_cost_program_year,percent_part_time_faculty,mean_earnings_6_years,median_earnings_6_years,mean_earnings_10_years,median_earnings_10_years",979583767394099838b282cb6d272830,pq,0.0,12,6039,True,True,17056424624515241249
-house_sales,42731,3,house_sales,housesales,regression,359949.0,price,AMLB-reg,21613,21,,"date_year,date_month,date_day",99bd987d3bc9554f8b3cd6db132d1f10,pq,0.0,1,70,True,True,7893314387633940950
-Click_prediction_small,42733,10,Click_prediction_small,clickpredictionsmall,binary,359992.0,click,AMLB-clf,39948,11,,,e1a4b2b75e96f4283b287edfe10e70b9,pq,0.0006,6,30114,True,True,11426656764212397405
-okcupid-stem,42734,3,okcupid-stem,okcupidstem,multiclass,359993.0,job,AMLB-clf,50789,19,,,1d2c8359db9599c1845eec22e823e3bd,pq,0.0001,17,7019,True,True,1165949438572898746
-visualizing_soil,44056,4,visualizing_soil,visualizingsoil,regression,361094.0,track,TB-cat-reg,8641,4,,,538514200019223797ba3d835f08a42c,pq,0.0,1,2,False,True,11530121194783056378
-Bike_Sharing_Demand,44063,7,Bike_Sharing_Demand,bikesharingdemand,regression,361099.0,count,TB-cat-reg,17379,11,,"season,year,month,hour,holiday,workingday",360e6f057b15d6c7d3cb8955e9b41416,pq,0.0003,5,4,False,True,203910454390705423
-eye_movements,44157,8,eye_movements,eyemovements,binary,361111.0,label,TB-cat-clf,7608,23,,timePrtctg,b175ed3a2249268cb16ad62a05e481bf,pq,0.0,3,2,False,True,13132955005870033920
-airfoil_self_noise,44957,8,airfoil_self_noise,airfoilselfnoise,regression,361235.0,sound_pressure,CTR23,1503,5,,,120eda8ce2be821c74df18af7288a9bf,pq,0.0,0,0,False,True,17945803456140043343
-auction_verification,44958,7,auction_verification,auctionverification,regression,361236.0,verification.time,CTR23,2043,7,,,ec666317ccd2287ba615f8a4a9db45bb,pq,0.0,2,6,False,True,4074807302068729782
-concrete_compressive_strength,44959,7,concrete_compressive_strength,concretecompressivestrength,regression,361237.0,strength,CTR23,1030,8,,,3b3035c476267e7929a179e2cc5286c8,pq,0.0243,0,0,False,True,3757496306289002596
-fps_benchmark,44992,2,fps_benchmark,fpsbenchmark,regression,361268.0,FPS,CTR23,24624,43,,,09256f68229687c6056337190067867d,pq,0.0,14,27,True,True,5376474954327924468
-fifa,45012,19,fifa,fifa,regression,361272.0,wage_eur,CTR23,19178,28,,,61ff6bb01511ded2e9abbd42387d969a,pq,0.0,1,163,True,True,16967463257491026436
-albert,45035,2,albert,albert,binary,361282.0,class,TB-cat-clf,58252,31,,,1e6e9b96e98255ae72fce4afb9efba75,pq,0.0,10,14,True,True,17430244892716848182
-default-of-credit-card-clients,45036,4,default-of-credit-card-clients,defaultofcreditcardclients,binary,361283.0,y,TB-cat-clf,13272,21,,,a51c4e1b409c1fb2e329413e4e6961d3,pq,0.0022,1,2,False,True,4521900904229719378
-house_sales_42092,42092,2,house_sales,housesales,regression,,price,typed,21613,19,,date,f9cdc8443cf2b57e0cb2903d895de2be,pq,0.0,2,372,True,False,2454219016414863087
+key,did,version,name,family,task,task_id,target,source,rows,cols,date_typed_cols,date_like_names,md5_file,file_format,dup_frac,n_categorical,max_cat_levels,hicard,primary,frame_hash,formula
+kr-vs-kp,3,1,kr-vs-kp,krvskp,binary,3.0,class,CC18+AMLB-clf,3196,36,,,44a8cdccb27891b8014a3bdfb5f35813,pq,0.0,36,3,False,True,5846383090484319539,
+mfeat-fourier,14,1,mfeat-fourier,mfeat,multiclass,14.0,class,CC18,2000,76,,,00e0dd8627b970dbe47146461f67829d,pq,0.003,0,0,False,True,10580013087150151890,
+cmc,23,1,cmc,cmc,multiclass,23.0,Contraceptive_method_used,CC18+AMLB-clf,1473,9,,,1fe6aaf4995211a8e40bf2f910ddb758,pq,0.0326,7,4,False,True,4276284797694165826,
+credit-g,31,1,credit-g,creditg,binary,31.0,class,CC18+AMLB-clf+typed,1000,20,,,f20f4f62ce92921ab932b78312ff68d1,pq,0.0,13,10,True,True,7606122327431373292,
+pendigits,32,1,pendigits,pendigits,multiclass,32.0,class,CC18,10992,16,,,887d950c52887d387b92fbece35185dc,pq,0.0,0,0,False,True,11286597853309107680,
+sick,38,1,sick,sick,binary,3021.0,Class,CC18,3772,29,,,edbbcb7bdee005d1d044a98e9e20e5b8,pq,0.0162,23,5,False,True,15039467398525504561,
+yeast,181,1,yeast,yeast,multiclass,2073.0,class_protein_localization,AMLB-clf,1484,8,,,ccc7c17fa863094422411219f810e3fb,pq,0.0209,0,0,False,True,7056912554020308106,
+satimage,182,1,satimage,satimage,multiclass,2074.0,class,CC18,6430,36,,,8953b6e4951f56af844637873ecd4b18,pq,0.0,0,0,False,True,12922424232236546568,
+pol,201,1,pol,pol,regression,359946.0,foo,AMLB-reg,15000,48,,,c6882da7daef4781d938e04fefe5f76d,pq,0.0028,0,0,False,True,10275077228533597765,
+elevators,216,1,elevators,elevators,regression,359936.0,Goal,AMLB-reg,16599,18,,"SaTime1,SaTime2,SaTime3,SaTime4,diffSaTime1,diffSaTime2,diffSaTime3,diffSaTime4",4cae794c87e84f2457037a7cc2ce6ba1,pq,0.0,0,0,False,True,9179919818536369724,
+space_ga,507,1,space_ga,spacega,regression,359933.0,ln(VOTES/POP),AMLB-reg,3107,6,,,ff323cd77564eb01a9d15ddf6de6d145,pq,0.0,0,0,False,True,7552628635272816196,
+socmob,541,1,socmob,socmob,regression,359932.0,counts_for_sons_current_occupation,AMLB-reg,1156,5,,,547fb2aa23f936b93beaeb5be53ce25d,pq,0.0,4,17,True,True,14581229078174021808,
+house_16H,574,1,house_16H,house16h,regression,359952.0,price,AMLB-reg,22784,16,,,2bfe0315bb0670447a4b94fb7fcf8671,pq,0.0,0,0,False,True,9172293859343199803,
+bank-marketing,1461,1,bank-marketing,bankmarketing,binary,14965.0,Class,CC18+AMLB-clf+typed,45211,16,,,874b8e0e5d38605db3190ef8534ac3d4,pq,0.0,9,12,True,True,2484976918774064709,
+banknote-authentication,1462,1,banknote-authentication,banknoteauthentication,binary,10093.0,Class,CC18,1372,4,,,c01f837e3d57da29c67e0a998ce12e3e,pq,0.0175,0,0,False,True,6036520945535955541,
+ozone-level-8hr,1487,1,ozone-level-8hr,ozonelevel8hr,binary,9978.0,Class,CC18+AMLB-clf,2534,72,,,cc9a86abd9bc68c7d324d66fd71f08f3,pq,0.0032,0,0,False,True,1407284738404859728,
+phoneme,1489,1,phoneme,phoneme,binary,9952.0,Class,CC18+AMLB-clf,5404,5,,,962dad720372fbb130cd5227f175e73c,pq,0.0017,0,0,False,True,6946153924460944913,
+qsar-biodeg,1494,1,qsar-biodeg,qsarbiodeg,binary,9957.0,Class,CC18+AMLB-clf,1055,41,,,45ad444487508919d1e01d658cab5815,pq,0.0028,0,0,False,True,6333269847869092554,
+wall-robot-navigation,1497,1,wall-robot-navigation,wallrobotnavigation,multiclass,9960.0,Class,CC18,5456,24,,,f8013bfac137366c222c0850cb152cfc,pq,0.0,0,0,False,True,16312164251834682395,
+adult,1590,2,adult,adult,binary,7592.0,class,CC18+AMLB-clf+typed,48842,14,,hours-per-week,6f9af14fb61d70198b494ed54b7cf7b6,pq,0.0011,8,41,True,True,11220653127075058909,
+Amazon_employee_access,4135,1,Amazon_employee_access,amazon,binary,359979.0,target,AMLB-clf+typed,32769,9,,,4b6066938515dc50b36eeeab3be13765,pq,0.0,9,7518,True,True,16508201442281791848,
+Amazon_employee_access_int,4135,1,Amazon_employee_access,amazon,binary,359979.0,target,AMLB-clf+typed,32769,9,,,4b6066938515dc50b36eeeab3be13765,pq,0.0,0,0,False,False,508317086095130713,
+GesturePhaseSegmentationProcessed,4538,1,GesturePhaseSegmentationProcessed,gesturephasesegmentationprocessed,multiclass,14969.0,Phase,CC18+AMLB-clf,9873,32,,,98e5f72cebadb213089a35d5805431fa,pq,0.0,0,0,False,True,5203080199379285600,
+numerai28.6,23517,2,numerai28.6,numerai286,binary,167120.0,attribute_21,CC18+AMLB-clf,96320,21,,,d6b6a846d786bcff9b874e376de5ec98,pq,0.0,0,0,False,True,6053378713234538099,
+texture,40499,1,texture,texture,multiclass,125922.0,Class,CC18,5500,40,,,8fe7c051c1a88c6c0463e5a270281ab9,pq,0.0049,0,0,False,True,7559918417259855066,
+connect-4,40668,2,connect-4,connect4,multiclass,146195.0,class,CC18+AMLB-clf,67557,42,,,2a5fda3446a380abc733242d66c60847,pq,0.0,42,3,False,True,4256675358754380921,
+churn,40701,1,churn,churn,binary,167141.0,class,CC18+AMLB-clf,5000,20,,"total_day_minutes,total_day_calls,total_day_charge",6e9a1fe79a5004616530d60980d6146f,pq,0.0,4,10,True,True,1948560441185624034,
+wilt,40983,2,wilt,wilt,binary,146820.0,class,CC18+AMLB-clf,4839,5,,,ebf4141d88a633fc9f6b54d4c86c8158,pq,0.0041,0,0,False,True,11513832925785059745,
+Moneyball,41021,2,Moneyball,moneyball,regression,361616.0,RS,CTR23+AMLB-reg,1232,14,,"Year,RankSeason",f5d2ea0a7ca33cb17468d04620173868,pq,0.0,6,39,True,True,18371239449379540741,
+sylvine,41146,1,sylvine,sylvine,binary,359972.0,class,AMLB-clf,5124,20,,,a7f8157aa73581b2bd60197713bbee3d,pq,0.0,0,0,False,True,2197574914309762447,
+ada,41156,1,ada,ada,binary,190411.0,class,AMLB-clf,4147,48,,,073a57dc0e6027ebb198880b9886fecf,pq,0.0002,0,0,False,True,11993760166359642252,
+kick,41162,1,kick,kick,binary,359991.0,IsBadBuy,AMLB-clf,72983,32,,"PurchDate,VehYear",9000c46c64ddfb3f32012b54e8d05e4a,pq,0.0,18,1063,True,True,7669173070657304193,
+diamonds,42225,1,diamonds,diamonds,regression,233211.0,price,AMLB-reg+typed,53940,9,,,658eaf4009d25553284aaa211f88ccb7,pq,0.0027,3,8,False,True,12400245448291971708,
+house_prices_nominal,42563,1,house_prices_nominal,housepricesnominal,regression,359951.0,SalePrice,AMLB-reg,1460,79,,"YearBuilt,YearRemodAdd",4a944fae729c327ad9b6058d6a7092a0,pq,0.0,43,25,True,True,15861061464722162601,
+Brazilian_houses,42688,4,Brazilian_houses,brazilianhouses,regression,359938.0,total_(BRL),AMLB-reg,10692,12,,,6293fabe5f24101e7fbc97d517cbb78f,pq,0.0335,4,35,True,True,15626364672743687083,
+OnlineNewsPopularity,42724,2,OnlineNewsPopularity,onlinenewspopularity,regression,359941.0,shares,AMLB-reg,39644,59,,"timedelta,weekday_is_monday,weekday_is_tuesday,weekday_is_wednesday,weekday_is_thursday,weekday_is_friday,weekday_is_saturday,weekday_is_sunday,global_sentiment_polarity,title_sentiment_polarity,abs_title_sentiment_polarity",40264bb20604b05927fdf463f080588d,pq,0.0,0,0,False,True,17147084186673794476,
+abalone,42726,5,abalone,abalone,regression,359944.0,Class_number_of_rings,AMLB-reg,4177,8,,,767946787af525982285d72b3052177a,pq,0.0,1,3,False,True,18418919520324962107,
+colleges,42727,14,colleges,colleges,regression,359942.0,percent_pell_grant,AMLB-reg,7063,44,,"percent_part_time,average_cost_academic_year,average_cost_program_year,percent_part_time_faculty,mean_earnings_6_years,median_earnings_6_years,mean_earnings_10_years,median_earnings_10_years",979583767394099838b282cb6d272830,pq,0.0,12,6039,True,True,17056424624515241249,
+house_sales,42731,3,house_sales,housesales,regression,359949.0,price,AMLB-reg,21613,21,,"date_year,date_month,date_day",99bd987d3bc9554f8b3cd6db132d1f10,pq,0.0,1,70,True,True,7893314387633940950,
+Click_prediction_small,42733,10,Click_prediction_small,clickpredictionsmall,binary,359992.0,click,AMLB-clf,39948,11,,,e1a4b2b75e96f4283b287edfe10e70b9,pq,0.0006,6,30114,True,True,11426656764212397405,
+okcupid-stem,42734,3,okcupid-stem,okcupidstem,multiclass,359993.0,job,AMLB-clf,50789,19,,,1d2c8359db9599c1845eec22e823e3bd,pq,0.0001,17,7019,True,True,1165949438572898746,
+visualizing_soil,44056,4,visualizing_soil,visualizingsoil,regression,361094.0,track,TB-cat-reg,8641,4,,,538514200019223797ba3d835f08a42c,pq,0.0,1,2,False,True,11530121194783056378,
+Bike_Sharing_Demand,44063,7,Bike_Sharing_Demand,bikesharingdemand,regression,361099.0,count,TB-cat-reg,17379,11,,"season,year,month,hour,holiday,workingday",360e6f057b15d6c7d3cb8955e9b41416,pq,0.0003,5,4,False,True,203910454390705423,
+eye_movements,44157,8,eye_movements,eyemovements,binary,361111.0,label,TB-cat-clf,7608,23,,timePrtctg,b175ed3a2249268cb16ad62a05e481bf,pq,0.0,3,2,False,True,13132955005870033920,
+airfoil_self_noise,44957,8,airfoil_self_noise,airfoilselfnoise,regression,361235.0,sound_pressure,CTR23,1503,5,,,120eda8ce2be821c74df18af7288a9bf,pq,0.0,0,0,False,True,17945803456140043343,
+auction_verification,44958,7,auction_verification,auctionverification,regression,361236.0,verification.time,CTR23,2043,7,,,ec666317ccd2287ba615f8a4a9db45bb,pq,0.0,2,6,False,True,4074807302068729782,
+concrete_compressive_strength,44959,7,concrete_compressive_strength,concretecompressivestrength,regression,361237.0,strength,CTR23,1030,8,,,3b3035c476267e7929a179e2cc5286c8,pq,0.0243,0,0,False,True,3757496306289002596,
+fps_benchmark,44992,2,fps_benchmark,fpsbenchmark,regression,361268.0,FPS,CTR23,24624,43,,,09256f68229687c6056337190067867d,pq,0.0,14,27,True,True,5376474954327924468,
+fifa,45012,19,fifa,fifa,regression,361272.0,wage_eur,CTR23,19178,28,,,61ff6bb01511ded2e9abbd42387d969a,pq,0.0,1,163,True,True,16967463257491026436,
+albert,45035,2,albert,albert,binary,361282.0,class,TB-cat-clf,58252,31,,,1e6e9b96e98255ae72fce4afb9efba75,pq,0.0,10,14,True,True,17430244892716848182,
+default-of-credit-card-clients,45036,4,default-of-credit-card-clients,defaultofcreditcardclients,binary,361283.0,y,TB-cat-clf,13272,21,,,a51c4e1b409c1fb2e329413e4e6961d3,pq,0.0022,1,2,False,True,4521900904229719378,
+house_sales_42092,42092,2,house_sales,housesales,regression,,price,typed,21613,19,,date,f9cdc8443cf2b57e0cb2903d895de2be,pq,0.0,2,372,True,False,2454219016414863087,
+planted_ratio_s0,,,planted_ratio_s0,planted,regression,,y,synthetic,5000,6,,,,,0.0,1,5,False,False,17606496609654308949,a / b
+planted_ratio_s1,,,planted_ratio_s1,planted,regression,,y,synthetic,5000,6,,,,,0.0,1,5,False,False,11320618234535012612,a / b
+planted_ratio_s2,,,planted_ratio_s2,planted,regression,,y,synthetic,5000,6,,,,,0.0,1,5,False,False,1309257509497434828,a / b
+planted_product_s0,,,planted_product_s0,planted,regression,,y,synthetic,5000,6,,,,,0.0,1,5,False,False,8462230966159310247,a * b
+planted_product_s1,,,planted_product_s1,planted,regression,,y,synthetic,5000,6,,,,,0.0,1,5,False,False,16484420887305845109,a * b
+planted_product_s2,,,planted_product_s2,planted,regression,,y,synthetic,5000,6,,,,,0.0,1,5,False,False,8985016884005058229,a * b
+planted_group_dev_s0,,,planted_group_dev_s0,planted,regression,,y,synthetic,5000,6,,,,,0.0,2,20,True,False,6081584556757885962,x - true mean of x in its group g (20 groups)
+planted_group_dev_s1,,,planted_group_dev_s1,planted,regression,,y,synthetic,5000,6,,,,,0.0,2,20,True,False,7906263121327715235,x - true mean of x in its group g (20 groups)
+planted_group_dev_s2,,,planted_group_dev_s2,planted,regression,,y,synthetic,5000,6,,,,,0.0,2,20,True,False,11812067167843690081,x - true mean of x in its group g (20 groups)
+planted_cat_interaction_s0,,,planted_cat_interaction_s0,planted,regression,,y,synthetic,5000,6,,,,,0.0,3,6,False,False,16544428506501659419,"interaction table of c1 x c2 (6 x 6 levels, zero main effects)"
+planted_cat_interaction_s1,,,planted_cat_interaction_s1,planted,regression,,y,synthetic,5000,6,,,,,0.0,3,6,False,False,5925679697050704121,"interaction table of c1 x c2 (6 x 6 levels, zero main effects)"
+planted_cat_interaction_s2,,,planted_cat_interaction_s2,planted,regression,,y,synthetic,5000,6,,,,,0.0,3,6,False,False,572474831459009500,"interaction table of c1 x c2 (6 x 6 levels, zero main effects)"

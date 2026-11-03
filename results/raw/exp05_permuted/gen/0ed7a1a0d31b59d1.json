@@ -1,0 +1,91 @@
+{
+ "hash": "0ed7a1a0d31b59d1",
+ "stage": "gen",
+ "unit": {
+  "exp": "exp05_permuted",
+  "dataset": "cmc",
+  "repeat": 0,
+  "fold": 2,
+  "arm": "openfe",
+  "arm_params": {},
+  "protocol_hash": "e52e530f8e60c2a9",
+  "data_hash": "4276284797694165826",
+  "splits_hash": "fc1be0de07293867",
+  "env_lock_hash": "57bc55f61c0489c0",
+  "code_hash": "b639a0deae5b5f39"
+ },
+ "status": "ok",
+ "error": "",
+ "wall_s": 6.91,
+ "peak_rss_mb": 491.5,
+ "limits": {
+  "gen_timeout_s": 3600,
+  "fit_timeout_s": 1800,
+  "mem_gb": 6,
+  "min_free_gb": 2
+ },
+ "started": "2026-11-02T11:02:49.290091+00:00",
+ "finished": "2026-11-02T11:02:56.203006+00:00",
+ "result": {
+  "n_features_in": 9,
+  "n_features_out": 28,
+  "replaces_input": false,
+  "n_inf_replaced": 0,
+  "fit_s": 5.49,
+  "transform_inner_s": 0.013,
+  "transform_test_s": 0.013,
+  "describe": {
+   "stage1_survivors": 101,
+   "kept": 28,
+   "cap_fired": false,
+   "gains": {
+    "(Wifes_age/Number_of_children_ever_born)": 25.806560039520264,
+    "CombineThenFreq(Wifes_education,Standard-of-living_index)": 16.92803955078125,
+    "CombineThenFreq(Standard-of-living_index,Number_of_children_ever_born)": 15.087630271911621,
+    "GroupByThenRank(Number_of_children_ever_born,Wifes_education)": 14.560979843139648,
+    "GroupByThenNUnique(Number_of_children_ever_born,Wifes_age)": 12.045069932937622,
+    "CombineThenFreq(Wifes_education,Wifes_age)": 10.348600387573242,
+    "GroupByThenRank(Wifes_age,Wifes_education)": 10.22491979598999,
+    "GroupByThenMean(Number_of_children_ever_born,Wifes_age)": 9.814260005950928,
+    "freq(Wifes_age)": 9.460880279541016,
+    "CombineThenFreq(Standard-of-living_index,Wifes_age)": 8.728730201721191,
+    "CombineThenFreq(Wifes_now_working%3F,Husbands_occupation)": 7.05564022064209,
+    "GroupByThenRank(Wifes_age,Number_of_children_ever_born)": 6.3496599197387695,
+    "CombineThenFreq(Husbands_occupation,Wifes_age)": 6.274019956588745,
+    "CombineThenFreq(Husbands_occupation,Media_exposure)": 5.961349964141846,
+    "CombineThenFreq(Wifes_education,Wifes_now_working%3F)": 5.8684401512146,
+    "CombineThenFreq(Wifes_age,Number_of_children_ever_born)": 5.7076802253723145,
+    "CombineThenFreq(Media_exposure,Wifes_age)": 5.538229942321777,
+    "GroupByThenRank(Number_of_children_ever_born,Wifes_age)": 5.437220096588135,
+    "CombineThenFreq(Husbands_education,Wifes_age)": 5.240960121154785,
+    "CombineThenFreq(Wifes_religion,Standard-of-living_index)": 5.210050106048584,
+    "CombineThenFreq(Wifes_religion,Media_exposure)": 4.686600208282471,
+    "CombineThenFreq(Wifes_education,Number_of_children_ever_born)": 4.475719928741455,
+    "GroupByThenMax(Number_of_children_ever_born,Wifes_education)": 4.237100124359131,
+    "CombineThenFreq(Husbands_occupation,Standard-of-living_index)": 4.121930122375488,
+    "CombineThenFreq(Wifes_now_working%3F,Number_of_children_ever_born)": 3.8126699924468994,
+    "CombineThenFreq(Wifes_education,Husbands_occupation)": 3.3716299533843994,
+    "GroupByThenRank(Number_of_children_ever_born,Wifes_religion)": 2.8970398902893066,
+    "(Wifes_age+Number_of_children_ever_born)": 2.5799200534820557
+   }
+  },
+  "versions": {
+   "python": "3.11.14",
+   "openfe": "0.0.12",
+   "lightgbm": "4.7.0",
+   "numpy": "2.4.6",
+   "pandas": "3.0.6",
+   "scikit-learn": "1.5.2"
+  }
+ },
+ "git_sha": "bfbedb1103a0f11b5a27595822b347b354783a94-dirty",
+ "machine": {
+  "cpu": "Apple M4 Pro",
+  "physical_cores": 14,
+  "logical_cores": 14,
+  "ram_gb": 24.0,
+  "os": "Darwin 25.6.0 arm64"
+ },
+ "jobs": 3,
+ "rekeyed_from": "b3c0076942f576dd"
+}

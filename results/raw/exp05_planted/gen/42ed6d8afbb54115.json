@@ -1,0 +1,90 @@
+{
+ "hash": "42ed6d8afbb54115",
+ "stage": "gen",
+ "unit": {
+  "exp": "exp05_planted",
+  "dataset": "planted_cat_interaction_s1",
+  "repeat": 0,
+  "fold": 4,
+  "arm": "openfe",
+  "arm_params": {},
+  "protocol_hash": "9326a6e4cc218d6d",
+  "data_hash": "5925679697050704121",
+  "splits_hash": "9118fde7d4b3623f",
+  "env_lock_hash": "57bc55f61c0489c0",
+  "code_hash": "b639a0deae5b5f39"
+ },
+ "status": "ok",
+ "error": "",
+ "wall_s": 5.92,
+ "peak_rss_mb": 491.2,
+ "limits": {
+  "gen_timeout_s": 3600,
+  "fit_timeout_s": 3600,
+  "mem_gb": 6,
+  "min_free_gb": 2
+ },
+ "started": "2026-11-03T04:50:46.183498+00:00",
+ "finished": "2026-11-03T04:50:52.101551+00:00",
+ "result": {
+  "n_features_in": 6,
+  "n_features_out": 27,
+  "replaces_input": false,
+  "n_inf_replaced": 0,
+  "fit_s": 4.41,
+  "transform_inner_s": 0.006,
+  "transform_test_s": 0.007,
+  "describe": {
+   "stage1_survivors": 31,
+   "kept": 27,
+   "cap_fired": false,
+   "gains": {
+    "CombineThenFreq(c1,c2)": 8495.941244602203,
+    "Combine(noise_cat,c1)": 71.30094075202942,
+    "residual(noise0)": 30.684590101242065,
+    "residual(noise1)": 30.423590064048767,
+    "CombineThenFreq(noise_cat,c2)": 25.98037028312683,
+    "(noise0*noise2)": 25.78522026538849,
+    "GroupByThenMean(noise0,noise_cat)": 22.028550028800964,
+    "min(noise0,noise2)": 20.227760076522827,
+    "(noise1-noise2)": 19.432900965213776,
+    "max(noise1,noise2)": 18.053600072860718,
+    "log(noise1)": 17.605570077896118,
+    "(noise0/noise1)": 17.336640119552612,
+    "square(noise0)": 15.040040254592896,
+    "(noise0*noise1)": 14.74543011188507,
+    "log(noise2)": 14.043660283088684,
+    "(noise0-noise1)": 11.97069001197815,
+    "(noise1/noise2)": 11.470789909362793,
+    "min(noise0,noise1)": 10.636330008506775,
+    "(noise1+noise2)": 9.7742999792099,
+    "GroupByThenRank(noise0,c2)": 9.468109846115112,
+    "sigmoid(noise0)": 9.399540185928345,
+    "(noise0+noise2)": 6.761340141296387,
+    "GroupByThenRank(noise2,c1)": 6.583979845046997,
+    "max(noise0,noise2)": 6.049790024757385,
+    "GroupByThenRank(noise1,c2)": 3.7487900257110596,
+    "sigmoid(noise2)": 2.9301400184631348,
+    "sigmoid(noise1)": 1.289389967918396
+   }
+  },
+  "versions": {
+   "python": "3.11.14",
+   "openfe": "0.0.12",
+   "lightgbm": "4.7.0",
+   "numpy": "2.4.6",
+   "pandas": "3.0.6",
+   "scikit-learn": "1.5.2"
+  }
+ },
+ "git_sha": "bfbedb1103a0f11b5a27595822b347b354783a94-dirty",
+ "machine": {
+  "cpu": "Apple M4 Pro",
+  "physical_cores": 14,
+  "logical_cores": 14,
+  "ram_gb": 24.0,
+  "os": "Darwin 25.6.0 arm64"
+ },
+ "jobs": 3,
+ "rekeyed_from": "cd73090ad0afb446"
+}

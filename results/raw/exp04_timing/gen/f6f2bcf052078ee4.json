@@ -1,0 +1,73 @@
+{
+ "hash": "f6f2bcf052078ee4",
+ "stage": "gen",
+ "unit": {
+  "exp": "exp04_timing",
+  "dataset": "concrete_compressive_strength",
+  "repeat": 0,
+  "fold": 0,
+  "arm": "ag_default",
+  "arm_params": {},
+  "protocol_hash": "2e52bb4ba1f5bed1",
+  "data_hash": "3757496306289002596",
+  "splits_hash": "4d0ca49ffa9df7ca",
+  "env_lock_hash": "d1b316cfbe1d2e5d",
+  "code_hash": "3c685024829851b0"
+ },
+ "status": "ok",
+ "error": "",
+ "wall_s": 1.68,
+ "peak_rss_mb": 217.4,
+ "limits": {
+  "gen_timeout_s": 3600,
+  "fit_timeout_s": 3600,
+  "mem_gb": 6,
+  "min_free_gb": 2
+ },
+ "started": "2026-11-02T17:59:39.559545+00:00",
+ "finished": "2026-11-02T17:59:41.243680+00:00",
+ "result": {
+  "n_features_in": 8,
+  "n_features_out": 8,
+  "replaces_input": true,
+  "n_inf_replaced": 0,
+  "fit_s": 0.007,
+  "transform_inner_s": 0.0,
+  "transform_test_s": 0.0,
+  "describe": {
+   "type_map_raw_out": {
+    "cement": "float",
+    "blast_furnace_slag": "float",
+    "fly_ash": "float",
+    "water": "float",
+    "superplasticizer": "float",
+    "coarse_aggregate": "float",
+    "fine_aggregate": "float",
+    "age": "float"
+   }
+  },
+  "versions": {
+   "python": "3.11.14",
+   "autogluon.tabular": "1.6.3",
+   "autogluon.features": "1.6.3",
+   "autogluon.core": "1.6.3",
+   "lightgbm": "4.7.0",
+   "catboost": "1.2.10",
+   "xgboost": "3.2.0",
+   "torch": "2.10.0",
+   "numpy": "2.4.6",
+   "pandas": "2.3.3",
+   "scikit-learn": "1.9.1"
+  }
+ },
+ "git_sha": "bfbedb1103a0f11b5a27595822b347b354783a94-dirty",
+ "machine": {
+  "cpu": "Apple M4 Pro",
+  "physical_cores": 14,
+  "logical_cores": 14,
+  "ram_gb": 24.0,
+  "os": "Darwin 25.6.0 arm64"
+ },
+ "jobs": 1,
+ "rekeyed_from": "c6d5d16d912c240d"
+}

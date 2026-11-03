@@ -1,0 +1,55 @@
+{
+ "hash": "7c77a9dbba999d2d",
+ "stage": "fit",
+ "unit": {
+  "gen_hash": "c57b9df564692b1f",
+  "arm": "manual_baseline",
+  "view": "default",
+  "model": "lgbm",
+  "model_params": {
+   "n_estimators": 5000,
+   "learning_rate": 0.05,
+   "early_stopping": 200
+  },
+  "seed": 1003,
+  "core_lock_hash": "e7221c35dc6c19a5",
+  "code_hash": "26d6f4b41f560b89"
+ },
+ "status": "ok",
+ "error": "",
+ "wall_s": 1.3,
+ "peak_rss_mb": 226.0,
+ "limits": {
+  "gen_timeout_s": 3600,
+  "fit_timeout_s": 3600,
+  "mem_gb": 6,
+  "min_free_gb": 2
+ },
+ "started": "2026-11-03T04:46:26.691256+00:00",
+ "finished": "2026-11-03T04:46:27.993251+00:00",
+ "result": {
+  "test": {
+   "rmse": 0.5137129468694726,
+   "r2": 0.790002686234816
+  },
+  "inner": 0.5002079064683144,
+  "best_iteration": 72,
+  "fit_s": 0.266,
+  "n_features": 34,
+  "n_rows": {
+   "train": 3400,
+   "inner": 600,
+   "test": 1000
+  }
+ },
+ "git_sha": "bfbedb1103a0f11b5a27595822b347b354783a94-dirty",
+ "machine": {
+  "cpu": "Apple M4 Pro",
+  "physical_cores": 14,
+  "logical_cores": 14,
+  "ram_gb": 24.0,
+  "os": "Darwin 25.6.0 arm64"
+ },
+ "jobs": 3,
+ "rekeyed_from": "37cdc63253d846b7"
+}

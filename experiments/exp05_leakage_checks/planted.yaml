@@ -1,0 +1,15 @@
+# exp05 check 4 (plan section 8): planted signals, 4 kinds x 3 seeds (`make planted splits` first).
+name: exp05_planted
+protocol:            # same as exp04
+  n_folds: 5
+  repeats: 1
+  models:
+    lgbm: {n_estimators: 5000, learning_rate: 0.05, early_stopping: 200}
+    catboost: {iterations: 3000, learning_rate: 0.1, early_stopping: 200}
+limits: {gen_timeout_s: 3600, fit_timeout_s: 3600, mem_gb: 6, min_free_gb: 2}
+arms: [base, ag_default, ag_tabprep, ag_tabprep_keepcat, lama_adv, openfe, autofeat, mljar_golden, manual_baseline]
+stages:
+  run:
+    datasets: [planted_ratio_s0, planted_ratio_s1, planted_ratio_s2, planted_product_s0, planted_product_s1,
+               planted_product_s2, planted_group_dev_s0, planted_group_dev_s1, planted_group_dev_s2,
+               planted_cat_interaction_s0, planted_cat_interaction_s1, planted_cat_interaction_s2]

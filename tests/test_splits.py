@@ -28,4 +28,4 @@ def test_deterministic_and_regression():
     assert S.make(y, "binary").equals(S.make(y, "binary"))
     yr = pd.Series(np.random.default_rng(1).normal(size=503))
     sp = S.make(yr, "regression")
-    assert sorted(sp.outer_fold.value_counts()) == [100, 100, 101, 101, 101]
+    assert sorted(sp[sp.repeat == 0].outer_fold.value_counts()) == [100, 100, 101, 101, 101]

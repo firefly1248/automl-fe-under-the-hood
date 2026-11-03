@@ -1,0 +1,15 @@
+# exp05 check 1 (plan section 8): y permuted on fit and inner rows; the test metric must stay at chance.
+name: exp05_permuted
+protocol:            # exp04 protocol + permute_y
+  n_folds: 5
+  repeats: 1
+  models:
+    lgbm: {n_estimators: 5000, learning_rate: 0.05, early_stopping: 200}
+    catboost: {iterations: 3000, learning_rate: 0.1, early_stopping: 200}
+  permute_y: true
+limits: {gen_timeout_s: 3600, fit_timeout_s: 3600, mem_gb: 6, min_free_gb: 2}
+arms: [base, ag_default, ag_tabprep, ag_tabprep_keepcat, lama_adv, openfe, autofeat, mljar_golden, manual_baseline]
+stages:
+  # the 3 smoke datasets; the first 2 primary with a categorical of >= 10 levels not already chosen, by data id;
+  # the first primary multiclass not already chosen
+  run: {datasets: [credit-g, cmc, Moneyball, socmob, bank-marketing, mfeat-fourier]}

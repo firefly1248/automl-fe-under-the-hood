@@ -9,11 +9,13 @@ results/datasets.csv and results/datasets.md.
 import hashlib
 import json
 import re
+import sys
 from pathlib import Path
 
 import openml
 import pandas as pd
 
+from afe.data.synthetic import PLANTED_KINDS, planted
 from afe.paths import CACHE, RESULTS
 
 SUITES = {99: "CC18", 353: "CTR23", 271: "AMLB-clf", 269: "AMLB-reg", 334: "TB-cat-clf", 335: "TB-cat-reg"}
@@ -200,12 +202,39 @@ def save(r: dict):
         frames[r["key"] + "_int"] = df.astype({c: str for c in nominal}).astype({c: "int64" for c in nominal})
     for key, frame in frames.items():
         # the _int variant is a case study of the same data, never in the primary aggregate
-        rec = {**r, "key": key, "primary": r["primary"] and key == r["key"]}
-        rec.update(_cat_stats(frame.drop(columns=r["target"])))  # a variant has its own column types
-        rec["frame_hash"] = str(int(pd.util.hash_pandas_object(frame, index=True).sum()))
-        frame.to_parquet(CACHE / "data" / f"{key}.parquet")
-        (CACHE / "data" / f"{key}.json").write_text(json.dumps(rec, indent=1))
-        yield rec
+        yield _write({**r, "key": key, "primary": r["primary"] and key == r["key"]}, frame)
+
+
+def _write(rec: dict, frame: pd.DataFrame) -> dict:
+    rec.update(_cat_stats(frame.drop(columns=rec["target"])))  # a variant has its own column types
+    rec["frame_hash"] = str(int(pd.util.hash_pandas_object(frame, index=True).sum()))
+    frame.to_parquet(CACHE / "data" / f"{rec['key']}.parquet")
+    (CACHE / "data" / f"{rec['key']}.json").write_text(json.dumps(rec, indent=1))
+    return rec
+
+
+def save_planted() -> list[dict]:
+    """exp05 check 4: `planted_<kind>_s<seed>`, 4 kinds x 3 seeds, n = 5,000, not primary. The oracle
+    feature goes to `<key>.oracle.parquet` next to the frame; arms never see it."""
+    recs = []
+    for kind in PLANTED_KINDS:
+        for seed in range(3):
+            X, y, oracle, formula = planted(kind, 5000, seed)
+            key = f"planted_{kind}_s{seed}"
+            oracle.to_frame().to_parquet(CACHE / "data" / f"{key}.oracle.parquet")
+            rec = {"key": key, "name": key, "family": "planted", "task": "regression", "target": "y",
+                   "source": "synthetic", "rows": len(X), "cols": X.shape[1], "dup_frac": 0.0, "primary": False,
+                   "formula": formula}
+            recs.append(_write(rec, X.assign(y=y)))
+    return recs
+
+
+def add_planted() -> None:
+    """Write the planted frames and replace their rows in results/datasets.csv (no OpenML calls)."""
+    (CACHE / "data").mkdir(parents=True, exist_ok=True)
+    recs = pd.DataFrame(save_planted()).astype(str)
+    df = pd.read_csv(RESULTS / "datasets.csv", dtype=str, keep_default_na=False)  # as text: ids and hashes unchanged
+    pd.concat([df[~df.key.isin(recs.key)], recs]).to_csv(RESULTS / "datasets.csv", index=False)
 
 
 def main() -> None:
@@ -220,7 +249,7 @@ def main() -> None:
             r["key"] = f"{r['name']}_{r['did']}"
         keys.add(r["key"])
         records += list(save(r))
-    df = pd.DataFrame(records)
+    df = pd.DataFrame(records + save_planted())
     df.to_csv(RESULTS / "datasets.csv", index=False)
     prim = df[df.primary]
     cols = ["key", "did", "version", "family", "task", "rows", "cols", "n_categorical", "max_cat_levels", "dup_frac",
@@ -251,4 +280,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    add_planted() if sys.argv[1:] == ["planted"] else main()

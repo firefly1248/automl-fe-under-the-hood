@@ -1,0 +1,42 @@
+{
+ "hash": "9db8dee52a158443",
+ "stage": "gen",
+ "unit": {
+  "exp": "exp05_permuted",
+  "dataset": "socmob",
+  "repeat": 0,
+  "fold": 1,
+  "arm": "mljar_golden",
+  "arm_params": {},
+  "protocol_hash": "e52e530f8e60c2a9",
+  "data_hash": "14581229078174021808",
+  "splits_hash": "a12f81835aca80a7",
+  "env_lock_hash": "406257d46bea0f70",
+  "code_hash": "0bef64e7b02517d2"
+ },
+ "status": "not_applicable",
+ "error": "",
+ "wall_s": 1.74,
+ "peak_rss_mb": 323.1,
+ "limits": {
+  "gen_timeout_s": 3600,
+  "fit_timeout_s": 3600,
+  "mem_gb": 6,
+  "min_free_gb": 2
+ },
+ "started": "2026-11-03T01:09:26.938083+00:00",
+ "finished": "2026-11-03T01:09:28.679162+00:00",
+ "result": {
+  "not_applicable": true
+ },
+ "git_sha": "bfbedb1103a0f11b5a27595822b347b354783a94-dirty",
+ "machine": {
+  "cpu": "Apple M4 Pro",
+  "physical_cores": 14,
+  "logical_cores": 14,
+  "ram_gb": 24.0,
+  "os": "Darwin 25.6.0 arm64"
+ },
+ "jobs": 3,
+ "rekeyed_from": "037691d525e78322"
+}

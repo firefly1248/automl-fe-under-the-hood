@@ -7,14 +7,14 @@ hard_columns,city_code,int64,40,Numeric,Category(encoding_type=auto),Numeric -> 
 hard_columns,date_int,int64,1706,Numeric,Numeric,,"numeric rules fired: rule_0,rule_7"
 hard_columns,date_str,object,1701,Datetime,Datetime,,simple guess kept
 hard_columns,ts_unix,int64,5000,Numeric,Numeric,,"numeric rules fired: rule_0,rule_7"
-hard_columns,cat_low,object,3,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
+hard_columns,cat_low,object,3,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
 hard_columns,cat_rare,object,303,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
 hard_columns,cat_binary,object,2,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
 hard_columns,uid,object,5000,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
 hard_columns,text_short,object,4,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
 hard_columns,text_long,object,5000,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
 hard_columns,num_as_str,object,947,Numeric,Numeric,,numeric rules fired: rule_7
-hard_columns,mixed,object,1264,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
+hard_columns,mixed,object,1264,Category(encoding_type=auto),Category(encoding_type=freq),,category rules fired: freq_rule_1
 hard_columns,a,float64,5000,Numeric,Numeric,,"numeric rules fired: rule_0,rule_3"
 hard_columns,b,float64,5000,Numeric,Numeric,,"numeric rules fired: rule_0,rule_3"
 adult,age,uint8,74,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
@@ -26,7 +26,7 @@ adult,marital-status,category,7,Category(encoding_type=auto),Category(encoding_t
 adult,occupation,category,14,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
 adult,relationship,category,6,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
 adult,race,category,5,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
-adult,sex,category,2,Category(encoding_type=auto),Category(encoding_type=freq),,category rules fired: freq_rule_1
+adult,sex,category,2,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
 adult,capital-gain,float64,123,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
 adult,capital-loss,float64,99,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
 adult,hours-per-week,uint8,96,Numeric,Numeric,,"numeric rules fired: rule_4,rule_6"
@@ -34,11 +34,11 @@ adult,native-country,category,41,Category(encoding_type=auto),Category(encoding_
 bank-marketing,V1,uint8,77,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
 bank-marketing,V2,category,12,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
 bank-marketing,V3,category,3,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
-bank-marketing,V4,category,4,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
+bank-marketing,V4,category,4,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
 bank-marketing,V5,category,2,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
 bank-marketing,V6,float64,7168,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
-bank-marketing,V7,category,2,Category(encoding_type=auto),Category(encoding_type=freq),,category rules fired: freq_rule_1
-bank-marketing,V8,category,2,Category(encoding_type=auto),Category(encoding_type=freq),,category rules fired: freq_rule_1
+bank-marketing,V7,category,2,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
+bank-marketing,V8,category,2,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
 bank-marketing,V9,category,3,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
 bank-marketing,V10,uint8,31,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
 bank-marketing,V11,category,12,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
@@ -50,12 +50,12 @@ bank-marketing,V16,category,4,Category(encoding_type=auto),Category(encoding_typ
 credit-g,checking_status,category,4,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
 credit-g,duration,uint8,33,Numeric,Numeric,,numeric rules fired: rule_0
 credit-g,credit_history,category,5,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
-credit-g,purpose,category,10,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
+credit-g,purpose,category,10,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
 credit-g,credit_amount,float64,921,Numeric,Numeric,,numeric rules fired: rule_0
 credit-g,savings_status,category,5,Category(encoding_type=auto),Category(encoding_type=freq),,category rules fired: freq_rule_1
 credit-g,employment,category,5,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
 credit-g,installment_commitment,uint8,4,Numeric,Numeric,,numeric rules fired: rule_0
-credit-g,personal_status,category,4,Category(encoding_type=auto),Category(encoding_type=freq),,category rules fired: freq_rule_1
+credit-g,personal_status,category,4,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
 credit-g,other_parties,category,3,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
 credit-g,residence_since,uint8,4,Numeric,Category(encoding_type=int),Numeric -> Category,no numeric rule fired -> category
 credit-g,property_magnitude,category,4,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
@@ -66,7 +66,7 @@ credit-g,existing_credits,uint8,4,Numeric,Numeric,,numeric rules fired: rule_0
 credit-g,job,category,4,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
 credit-g,num_dependents,uint8,2,Numeric,Numeric(discretization=True),,numeric rules fired: rule_2
 credit-g,own_telephone,category,2,Category(encoding_type=auto),Category(encoding_type=freq),,category rules fired: freq_rule_1
-credit-g,foreign_worker,category,2,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
+credit-g,foreign_worker,category,2,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
 Amazon_employee_access,RESOURCE,category,7518,Numeric,"Category(encoding_type=auto, ordinal=True)",Numeric -> Category,no numeric rule fired -> category
 Amazon_employee_access,MGR_ID,category,4243,Numeric,"Category(encoding_type=auto, ordinal=True)",Numeric -> Category,no numeric rule fired -> category
 Amazon_employee_access,ROLE_ROLLUP_1,category,128,Numeric,Category(encoding_type=auto),Numeric -> Category,no numeric rule fired -> category
@@ -87,7 +87,7 @@ Amazon_employee_access_int,ROLE_FAMILY,int64,67,Numeric,Category(encoding_type=a
 Amazon_employee_access_int,ROLE_CODE,int64,343,Numeric,"Category(encoding_type=auto, ordinal=True)",Numeric -> Category,no numeric rule fired -> category
 diamonds,carat,float64,273,Numeric,Numeric,,"numeric rules fired: rule_0,rule_4"
 diamonds,cut,category,5,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
-diamonds,color,category,7,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
+diamonds,color,category,7,Category(encoding_type=auto),"Category(encoding_type=auto, ordinal=True)",,category rules fired: ord_rule_1
 diamonds,clarity,category,8,Category(encoding_type=auto),Category(encoding_type=auto),,category rules fired: auto_rule_1
 diamonds,depth,float64,184,Numeric,Numeric,,numeric rules fired: rule_7
 diamonds,table,float64,127,Numeric,Numeric,,"numeric rules fired: rule_4,rule_7"

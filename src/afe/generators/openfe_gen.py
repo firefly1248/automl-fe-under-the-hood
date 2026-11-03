@@ -110,22 +110,27 @@ class OpenFEInductive(FeatureGenerator):
     name = "openfe"
     env = "openfe"
 
-    def fit_transform(self, X_fit, y_fit, task, seed) -> pd.DataFrame:
+    def _search(self, X_fit, y_fit, task, seed) -> tuple[pd.DataFrame, list]:
         Xp = prep(X_fit)
         self.names = dict(zip(Xp.columns, X_fit.columns))
         cats = [c for c in Xp.columns if not pd.api.types.is_numeric_dtype(Xp[c])]
-        ofe = OpenFE()
+        self.ofe = OpenFE()
         with tempfile.TemporaryDirectory(dir=".") as tmp:
             try:
-                ofe.fit(data=Xp, label=y_fit.to_frame(), task="regression" if task == "regression" else "classification",
-                        categorical_features=cats, n_jobs=1, seed=seed, verbose=False,
-                        tmp_save_path=str(Path(tmp) / "openfe.feather"))
+                self.ofe.fit(data=Xp, label=y_fit.to_frame(),
+                             task="regression" if task == "regression" else "classification",
+                             categorical_features=cats, n_jobs=1, seed=seed, verbose=False,
+                             tmp_save_path=str(Path(tmp) / "openfe.feather"))
             except SystemExit as e:  # OpenFE prints the traceback, then calls exit() in the pool
                 raise RuntimeError("OpenFE called exit(); its traceback is in the log above") from e
-        scored = ofe.new_features_scores_list
+        scored = self.ofe.new_features_scores_list
         kept = [node for node, gain in scored if gain > 0][:CAP]
         self.info = {"stage1_survivors": len(scored), "kept": len(kept), "cap_fired": bool(sum(g > 0 for _, g in scored) > CAP),
                      "gains": {self._name(n): float(g) for n, g in scored if g > 0}}
+        return Xp, kept
+
+    def fit_transform(self, X_fit, y_fit, task, seed) -> pd.DataFrame:
+        Xp, kept = self._search(X_fit, y_fit, task, seed)
         self.ind = Inductive(kept)
         return self._frame(self.ind.fit_transform(Xp), X_fit.index)
 
@@ -141,3 +146,20 @@ class OpenFEInductive(FeatureGenerator):
 
     def describe(self) -> dict:
         return self.info
+
+
+class OpenFETransductive(OpenFEInductive):
+    """`openfe_transductive` (exp05 check 3 only, plan section 6): the same search, then OpenFE's own
+    `transform(train, test)`, with column-wide statistics over fit and other rows together. The worker calls
+    `fit_transform_all` once with inner and test rows as `X_other`."""
+
+    name = "openfe_transductive"
+    transductive = True
+
+    def fit_transform_all(self, X_fit, y_fit, X_other, task, seed) -> tuple[pd.DataFrame, pd.DataFrame]:
+        Xp, kept = self._search(X_fit, y_fit, task, seed)
+        with tempfile.TemporaryDirectory(dir=".") as tmp:
+            self.ofe.tmp_save_path = str(Path(tmp) / "openfe.feather")
+            fit_out, other_out = self.ofe.transform(Xp, prep(X_other), kept, n_jobs=1)
+        cols = [self._name(n) for n in kept]
+        return tuple(o.iloc[:, Xp.shape[1]:].set_axis(cols, axis=1) for o in (fit_out, other_out))

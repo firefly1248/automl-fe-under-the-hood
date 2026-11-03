@@ -1,0 +1,84 @@
+{
+ "hash": "d420c3d69fa63a2e",
+ "stage": "gen",
+ "unit": {
+  "exp": "exp05_planted",
+  "dataset": "planted_product_s2",
+  "repeat": 0,
+  "fold": 3,
+  "arm": "openfe",
+  "arm_params": {},
+  "protocol_hash": "9326a6e4cc218d6d",
+  "data_hash": "8985016884005058229",
+  "splits_hash": "9118fde7d4b3623f",
+  "env_lock_hash": "57bc55f61c0489c0",
+  "code_hash": "b639a0deae5b5f39"
+ },
+ "status": "ok",
+ "error": "",
+ "wall_s": 5.56,
+ "peak_rss_mb": 487.3,
+ "limits": {
+  "gen_timeout_s": 3600,
+  "fit_timeout_s": 3600,
+  "mem_gb": 6,
+  "min_free_gb": 2
+ },
+ "started": "2026-11-03T04:41:38.801513+00:00",
+ "finished": "2026-11-03T04:41:44.364484+00:00",
+ "result": {
+  "n_features_in": 6,
+  "n_features_out": 21,
+  "replaces_input": false,
+  "n_inf_replaced": 0,
+  "fit_s": 4.216,
+  "transform_inner_s": 0.004,
+  "transform_test_s": 0.003,
+  "describe": {
+   "stage1_survivors": 22,
+   "kept": 21,
+   "cap_fired": false,
+   "gains": {
+    "(a*b)": 14118.46540927887,
+    "(a/b)": 73.56757938861847,
+    "min(noise1,noise2)": 43.05822205543518,
+    "max(a,b)": 40.39402997493744,
+    "(noise2+b)": 35.342559814453125,
+    "log(a)": 30.3719003200531,
+    "(noise0*b)": 28.8714097738266,
+    "(noise0-a)": 27.65714967250824,
+    "residual(noise1)": 26.80115008354187,
+    "(noise1*b)": 23.505460143089294,
+    "sigmoid(noise2)": 22.686839699745178,
+    "(noise0-b)": 21.770529747009277,
+    "max(noise2,a)": 20.832130193710327,
+    "max(noise0,noise2)": 19.73727023601532,
+    "(a-b)": 15.123990058898926,
+    "min(a,b)": 14.658049821853638,
+    "(noise1+a)": 14.52016019821167,
+    "(noise1-a)": 11.660559892654419,
+    "GroupByThenRank(a,noise_cat)": 11.34257972240448,
+    "(a+b)": 10.221979975700378,
+    "sigmoid(a)": 8.271459817886353
+   }
+  },
+  "versions": {
+   "python": "3.11.14",
+   "openfe": "0.0.12",
+   "lightgbm": "4.7.0",
+   "numpy": "2.4.6",
+   "pandas": "3.0.6",
+   "scikit-learn": "1.5.2"
+  }
+ },
+ "git_sha": "bfbedb1103a0f11b5a27595822b347b354783a94-dirty",
+ "machine": {
+  "cpu": "Apple M4 Pro",
+  "physical_cores": 14,
+  "logical_cores": 14,
+  "ram_gb": 24.0,
+  "os": "Darwin 25.6.0 arm64"
+ },
+ "jobs": 3,
+ "rekeyed_from": "7fa590fdba298514"
+}

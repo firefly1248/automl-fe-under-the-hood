@@ -1,0 +1,84 @@
+{
+ "hash": "c03910a37d11698e",
+ "stage": "gen",
+ "unit": {
+  "exp": "exp05_planted",
+  "dataset": "planted_cat_interaction_s0",
+  "repeat": 0,
+  "fold": 4,
+  "arm": "openfe",
+  "arm_params": {},
+  "protocol_hash": "9326a6e4cc218d6d",
+  "data_hash": "16544428506501659419",
+  "splits_hash": "9118fde7d4b3623f",
+  "env_lock_hash": "57bc55f61c0489c0",
+  "code_hash": "b639a0deae5b5f39"
+ },
+ "status": "ok",
+ "error": "",
+ "wall_s": 5.84,
+ "peak_rss_mb": 489.8,
+ "limits": {
+  "gen_timeout_s": 3600,
+  "fit_timeout_s": 3600,
+  "mem_gb": 6,
+  "min_free_gb": 2
+ },
+ "started": "2026-11-03T04:49:18.035498+00:00",
+ "finished": "2026-11-03T04:49:23.878999+00:00",
+ "result": {
+  "n_features_in": 6,
+  "n_features_out": 21,
+  "replaces_input": false,
+  "n_inf_replaced": 0,
+  "fit_s": 4.492,
+  "transform_inner_s": 0.006,
+  "transform_test_s": 0.007,
+  "describe": {
+   "stage1_survivors": 24,
+   "kept": 21,
+   "cap_fired": false,
+   "gains": {
+    "Combine(c1,c2)": 7083.304893016815,
+    "CombineThenFreq(c1,c2)": 2201.9821261167526,
+    "(noise0/noise2)": 49.2887396812439,
+    "abs(noise2)": 39.27917104959488,
+    "log(noise1)": 39.20480293035507,
+    "(noise0-noise1)": 34.786410331726074,
+    "(noise0+noise1)": 29.644659757614136,
+    "min(noise0,noise1)": 26.77493989467621,
+    "max(noise0,noise1)": 26.762486159801483,
+    "GroupByThenRank(noise0,c2)": 24.196230053901672,
+    "(noise0*noise2)": 21.900999784469604,
+    "(noise0-noise2)": 19.3226398229599,
+    "GroupByThenRank(noise1,c2)": 19.117740273475647,
+    "(noise0+noise2)": 16.38724970817566,
+    "sigmoid(noise1)": 13.094339847564697,
+    "sigmoid(noise2)": 11.248050093650818,
+    "GroupByThenRank(noise0,c1)": 10.185139894485474,
+    "GroupByThenRank(noise1,noise_cat)": 7.346609950065613,
+    "GroupByThenRank(noise1,c1)": 6.326966941356659,
+    "log(noise2)": 1.935829997062683,
+    "max(noise0,noise2)": 1.3109500408172607
+   }
+  },
+  "versions": {
+   "python": "3.11.14",
+   "openfe": "0.0.12",
+   "lightgbm": "4.7.0",
+   "numpy": "2.4.6",
+   "pandas": "3.0.6",
+   "scikit-learn": "1.5.2"
+  }
+ },
+ "git_sha": "bfbedb1103a0f11b5a27595822b347b354783a94-dirty",
+ "machine": {
+  "cpu": "Apple M4 Pro",
+  "physical_cores": 14,
+  "logical_cores": 14,
+  "ram_gb": 24.0,
+  "os": "Darwin 25.6.0 arm64"
+ },
+ "jobs": 3,
+ "rekeyed_from": "ca06499517f2164e"
+}

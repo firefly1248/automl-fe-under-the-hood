@@ -182,7 +182,8 @@ Raw JSON records, tidy parquet, splits and figures are committed. Dataset downlo
   [tool.uv.sources]
   torch = { index = "pytorch-cpu" }   # Linux; on macOS PyPI torch is already CPU
   ```
-  Pins in use: `lama` needs `numpy<2`, `pandas<3`, `scipy<1.16` (PROGRESS.md). `autofeat` passes
+  Pins in use: `lama` needs `numpy<2`, `pandas<2`, `scipy<1.16` (PROGRESS.md; `pandas<2` decided at A2:
+  LAMA 0.4.2's `OrdinalEncoder` is wrong under pandas 2). `autofeat` passes
   `force_all_finite` to scikit-learn, which 1.9.1 no longer accepts: pin `scikit-learn<1.8` in the
   `autofeat` env, and make `env-check` fit and transform on `hard_columns` to confirm it.
   `openfe` needs `scikit-learn<1.6` (it calls `mean_squared_error(squared=False)`; found in the
@@ -256,12 +257,15 @@ Two stages, so a generator runs once per fold and is reused by both downstream m
 - Generator unit: `(exp, dataset, repeat, fold, arm, arm_params)` plus
   `protocol_hash` (hash of the `protocol:` section of the exp `config.yaml`; limits are not in it and
   are stored in each record), `data_hash`, `splits_hash`, `env_lock_hash` (hash of the arm's `uv.lock`),
-  `code_hash` (hash of every file in `src/afe/generators/` and of `src/afe/run/worker.py`).
+  `code_hash` per arm: the arm's own module and its registry entry, plus the shared code that affects
+  results (`generators/base.py` with the base view, `run/worker.py`, `data/loaders.py`, `data/splits.py`).
+  Orchestration, limits and logging (`run/cli.py`, `run/limits.py`, `run/store.py`, the registry of other
+  arms) are not in it, so a fix to one wrapper reruns only that arm (decided at A3).
   `gen_hash = sha1(json.dumps(unit, sort_keys=True))[:16]`. Output: cached parquet + record.
 - Fit unit: `(gen_hash, arm, view, downstream_model, model_params, seed, core_lock_hash, code_hash)`
   -> `fit_hash`. `arm` and `view` keep `ag_tabprep_keepcat` apart from `ag_tabprep`, which share a
   `gen_hash`; `core_lock_hash` is the hash of `envs/core/uv.lock` (a LightGBM/CatBoost bump invalidates
-  fits); the fit `code_hash` also covers `src/afe/models/`.
+  fits); the fit `code_hash` also covers `src/afe/models/` (downstream).
 - A generator unit whose `applicable(X_fit)` is False writes a `not_applicable` record through
   `out.json`, no cache; its fit units are not run.
 - Skip a unit if its record exists with status in `{ok, failed, timeout, oom, not_applicable}`; `--retry-failed`
@@ -271,7 +275,10 @@ Two stages, so a generator runs once per fold and is reused by both downstream m
   n infinite values replaced, fit time, transform time (train, inner, test), peak RSS, arm env
   versions, git sha, machine info (rule 7), timestamps.
 - Fit record: test metrics, inner-validation metric, best iteration, fit time, peak RSS.
-- Limits (`run/limits.py`): generator wall clock 3,600 s, downstream wall clock 1,800 s; caps are
+- Limits (`run/limits.py`): generator wall clock 3,600 s, downstream wall clock 3,600 s (1,800 s up to
+  the pilot; raised at A3 for all datasets). `exclude` in the exp config lists (dataset, model) pairs that
+  are not run and are left out of every comparison on that model, with the reason: connect-4 on
+  CatBoost (`base` timed out at 1,800 s on 5 of 5 pilot folds, decided at A3). Caps are
   stored in each record. A run under a cap cannot measure times above it, so the pilot cannot set a
   higher cap by itself: if an arm times out in the pilot, A3 decides a higher cap for that arm and
   stage, the pilot timeouts are rerun with it (`--retry-status timeout`), and the full run uses the
@@ -281,6 +288,11 @@ Two stages, so a generator runs once per fold and is reused by both downstream m
 - Threads: in every worker set `OMP_NUM_THREADS=MKL_NUM_THREADS=OPENBLAS_NUM_THREADS=NUMBA_NUM_THREADS=1`,
   `torch.set_num_threads(1)`, LightGBM `num_threads=1`, CatBoost `thread_count=1`, and `n_jobs=1`
   in every tool (OpenFE, GoldenFeaturesTransformer, autofeat, LAMA `cpu_limit=1`).
+- `PYTHONHASHSEED` of every child process = the unit's tool seed (found at A3). autofeat's selection
+  depends on str/set hash order, which Python randomizes per process: on one concrete fold two hash seeds
+  gave 14 and 28 features; with a fixed hash seed two processes give identical output. Contract test 2
+  runs in one process and could not see it. The other arms gave bitwise-identical metrics and outputs on
+  25 random units rerun with other hash seeds; autofeat pilot units were rerun.
 - Parallelism: `jobs = min(physical_cores - 2, floor((ram_gb - 4) / mem_gb))`; `--jobs` may lower it.
   The memory term reserves `mem_gb` for each running unit and leaves 4 GB for the system and other apps.
   On the 24 GB laptop with 14 cores and `mem_gb: 6` this gives 3. The pilot records peak RSS per arm and
@@ -321,8 +333,8 @@ Downstream input = `base_view(original) + new columns`, or the arm output alone 
 datetime -> int64 ns; bool -> int8; nothing else. LightGBM gets `category` dtype; CatBoost gets
 the same columns as `cat_features` with NaN filled by the string `"__nan__"`.
 
-Contract tests (`tests/test_generators_contract.py`, run on the synthetic frame and one small real
-dataset for every arm):
+Contract tests (`tests/test_generators_contract.py`, run on the synthetic frame and two small real
+datasets, credit-g (binary) and Moneyball (regression, added at A2), for every arm):
 1. Output index/rows equal input; unique names; numeric or category dtypes; inf replaced by NaN and counted.
 2. Determinism: `fit_transform` twice with the same seed gives identical output.
 3. Isolation: running the arm on fold 0 and then fold 1 in one process and temp root gives the same fold-1
@@ -357,7 +369,11 @@ Arms, main ranking (all inductive):
 Separate arm: `openfe_transductive` (library default `transform(train, test)`), only in exp05. It does not
 fit the interface: a separate worker function takes the feature list fitted by the `openfe` arm on the
 same fold and calls `transform(X_fit, X_other)` with X_other = inner and test rows together, so exp05
-check 3 differs only in how statistics are computed.
+check 3 differs only in how statistics are computed. As built (accepted at A3): the arm repeats the
+OpenFE search with the same seed instead of reading the `openfe` feature list (the search is
+deterministic, contract test 2, so the features are the same; the cost is a second search), and runs on
+the 5 folds of repeat 0 of the pilot datasets (fold 0 at A3, extended alongside `full_r0`). Its time is
+not published.
 
 Applicability: `mljar_golden` needs >= 2 numeric columns, `autofeat` >= 1; every other arm always
 applies (an arm that builds nothing returns 0 new columns, a tie).
@@ -373,8 +389,9 @@ with the fit-row levels; unseen combinations -> NaN.
 - top-5 numeric columns by mutual information with y (`mutual_info_*`, `random_state=seed`, on a copy
   with NaN filled by fit-row medians);
   for each pair: `a/b` and `b/a` with denominator `|b| < 1e-12` -> NaN, and `a*b`;
-- key = the categorical column with the highest mutual information with y (if none: decile bins of
-  the top-MI numeric column); for each top-5 numeric: group mean and `x - group_mean`
+- key = the categorical column with the highest mutual information with y among those with at most
+  50% unique values on fit rows (decided at A2: discrete MI grows with the number of levels and picked
+  ID-like columns) (if none: decile bins of the top-MI numeric column); for each top-5 numeric: group mean and `x - group_mean`
   (unseen key -> global mean; NaN in the key is its own level).
 
 ---
@@ -382,10 +399,10 @@ with the fit-row levels; unseen combinations -> NaN.
 ## 7. Benchmark protocol (exp04; confirmed at A2)
 
 ### 7.1 Folds
-5-fold outer CV (stratified for classification, plain KFold for regression), 1 repeat (r = 0).
-Across-dataset power grows with the number of datasets, not repeats, so the budget goes to ~50
-datasets instead (section 4.2). Seed of a repeat r: `1000 + r`; tool seed for (repeat r, fold k):
-`1000 + 10*r + k`.
+5-fold outer CV (stratified for classification, plain KFold for regression), 2 repeats: 10 splits
+per dataset (restored at A3; plan v3 had cut it to 1 repeat). Run as two stages, `full_r0` then
+`full_r1`, with a commit after each. Each repeat has its own seeds, so adding repeat 1 left the repeat 0
+splits unchanged. Seed of a repeat r: `1000 + r`; tool seed for (repeat r, fold k): `1000 + 10*r + k`.
 
 ### 7.2 Who sees what
 Inside each outer train, split off 15% as inner validation first (stratified for classification).
@@ -411,13 +428,13 @@ data can overfit; that is part of what is measured, not a rigged baseline.
 - Also: n new features, generator time, total time.
 
 ### 7.5 Comparison to `base` (same model, same folds)
-Per dataset, per arm and model, on the 5 folds:
+Per dataset, per arm and model, on the 10 splits:
 - AUC: paired raw difference of per-dataset means `arm - base` (AUC is already unit-free; the
   gap-closed ratio is dropped because it explodes near AUC 1);
 - losses (log loss, RMSE): relative improvement on per-dataset means `(base - arm) / base`; for log
   loss also the raw difference, since datasets with log loss near 0 dominate relative numbers;
-- descriptive win / tie / loss: corrected k-fold t-test (Nadeau-Bengio, J = 5, correction
-  n_test/n_train with n_train = fit rows, df = 4) at alpha 0.05, no multiplicity correction
+- descriptive win / tie / loss: corrected repeated k-fold t-test (Nadeau-Bengio, J = 10, correction
+  n_test/n_train with n_train = fit rows, df = 9) at alpha 0.05, no multiplicity correction
   within a dataset. If all fold differences are 0 (e.g. the arm created no features), record a tie
   with p = 1. Per-dataset tests are near-powerless; they are descriptive only, say so.
 Across datasets (primary conclusions; primary set = one dataset per family, section 4.2):
@@ -434,13 +451,14 @@ A task type with < 8 primary datasets is reported descriptively only (none at pr
 Breakdown: with vs without a categorical column of >= 10 levels. Case-study datasets (not primary) are reported separately.
 
 ### 7.6 Failures in aggregates
-Two rules, reported side by side with equal weight:
+Two rules (decided at A3: base fallback is the main one, complete cases the secondary one):
 - base fallback: a failed or timed-out unit takes the `base` score for that fold ("what a user gets");
 - complete cases only ("what the tool does when it runs"): `base` is restricted to the same folds; a
   dataset where the arm has no ok fold drops out of that arm's comparison and shows in coverage.
-Coverage (ok / planned; `not_applicable` units count in neither) is shown next to both, per arm, split
-by stage: generator failure or timeout vs downstream timeout. A `not_applicable` unit takes the `base`
-score under the base-fallback rule and is left out of complete cases. A claim that holds under one rule
+Coverage (ok / planned) is shown next to both, per arm, split by stage: generator failure or timeout vs
+downstream timeout; `not_applicable` units are a separate coverage row, not counted as failures. A
+`not_applicable` unit takes the `base` score in aggregates and is left out of complete cases.
+Failures are results: limits are not raised for an arm that fails (autofeat, decided at A3). A claim that holds under one rule
 only says so.
 
 ### 7.7 Cost
@@ -451,10 +469,10 @@ machine idle and on power; the main run is parallel and never idle, so its times
 budgeting only.
 
 ### 7.8 Runtime and fallbacks (decided at A3)
-Rough full-run cost: about 50 datasets x 5 folds x 9 arms (7 generator arms, generator stage
-cached) x 2 models. Estimated 200-400 CPU-hours (OpenFE/autofeat generators and CatBoost on wide
-outputs dominate). Wall time is CPU-hours divided by jobs (3 on the 24 GB laptop, section 5). The pilot
-prints the measured estimate.
+Full-run cost: about 50 datasets x 10 splits x 9 arms (7 generator arms, generator stage cached) x 2
+models. Measured from the pilot (`exp04_open_benchmark/estimate.py`, A3): about 20 unit-hours per split,
+so about 34 h of wall time per repeat at 3 jobs (the 24 GB laptop, section 5); `autofeat` is a third of
+it and the least certain part.
 Fallbacks to propose at A3 if needed, in this order: row cap 50,000 (stratified subsample,
 recorded); drop the slowest arm on datasets it cannot finish, reported as coverage. Caps are decided
 as in section 5.
@@ -516,7 +534,8 @@ full presets. The per-fold trained-model list shows how much of each portfolio r
 
 ### exp04_open_benchmark (posts 4 and 5)
 Stages: `smoke` (3 datasets, 1 fold, all arms, both models, contract checks) -> A2 -> `pilot`
-(10 primary datasets, 5 folds, time estimate) -> A3 -> `full`; plus the `jobs=1` timing pass (7.7).
+(10 primary datasets, 5 folds of repeat 0, time estimate) -> A3 -> `full_r0` -> commit -> `full_r1` ->
+commit; plus the `jobs=1` timing pass (7.7).
 Pilot datasets, fixed in config: per task type the smallest and the largest by rows; then, over all
 task types, the two largest with a categorical of >= 10 levels and the two widest by columns, each not
 already chosen, so the pilot includes the slow cases.

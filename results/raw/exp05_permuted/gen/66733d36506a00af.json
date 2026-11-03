@@ -1,0 +1,78 @@
+{
+ "hash": "66733d36506a00af",
+ "stage": "gen",
+ "unit": {
+  "exp": "exp05_permuted",
+  "dataset": "bank-marketing",
+  "repeat": 0,
+  "fold": 2,
+  "arm": "openfe",
+  "arm_params": {},
+  "protocol_hash": "e52e530f8e60c2a9",
+  "data_hash": "2484976918774064709",
+  "splits_hash": "e61210d8f1655fa0",
+  "env_lock_hash": "57bc55f61c0489c0",
+  "code_hash": "b639a0deae5b5f39"
+ },
+ "status": "ok",
+ "error": "",
+ "wall_s": 49.05,
+ "peak_rss_mb": 1103.3,
+ "limits": {
+  "gen_timeout_s": 3600,
+  "fit_timeout_s": 1800,
+  "mem_gb": 6,
+  "min_free_gb": 2
+ },
+ "started": "2026-11-02T11:15:28.476372+00:00",
+ "finished": "2026-11-02T11:16:17.524426+00:00",
+ "result": {
+  "n_features_in": 16,
+  "n_features_out": 15,
+  "replaces_input": false,
+  "n_inf_replaced": 0,
+  "fit_s": 47.693,
+  "transform_inner_s": 0.022,
+  "transform_test_s": 0.03,
+  "describe": {
+   "stage1_survivors": 311,
+   "kept": 15,
+   "cap_fired": false,
+   "gains": {
+    "GroupByThenMax(V14,V1)": 25.48710060119629,
+    "GroupByThenMin(V6,V1)": 16.709800720214844,
+    "CombineThenFreq(V3,V1)": 14.998299598693848,
+    "Combine(V9,V1)": 14.61460018157959,
+    "CombineThenFreq(V8,V11)": 14.071599960327148,
+    "CombineThenFreq(V2,V8)": 12.356499671936035,
+    "Combine(V7,V13)": 11.585700035095215,
+    "CombineThenFreq(V1,V10)": 11.43910026550293,
+    "GroupByThenRank(V1,V16)": 11.090100288391113,
+    "min(V6,V13)": 10.770099639892578,
+    "GroupByThenRank(V15,V2)": 10.420499801635742,
+    "Combine(V7,V10)": 10.288800239562988,
+    "CombineThenFreq(V11,V13)": 9.793180465698242,
+    "GroupByThenRank(V12,V3)": 9.458970069885254,
+    "CombineThenFreq(V3,V4)": 9.24917984008789
+   }
+  },
+  "versions": {
+   "python": "3.11.14",
+   "openfe": "0.0.12",
+   "lightgbm": "4.7.0",
+   "numpy": "2.4.6",
+   "pandas": "3.0.6",
+   "scikit-learn": "1.5.2"
+  }
+ },
+ "git_sha": "bfbedb1103a0f11b5a27595822b347b354783a94-dirty",
+ "machine": {
+  "cpu": "Apple M4 Pro",
+  "physical_cores": 14,
+  "logical_cores": 14,
+  "ram_gb": 24.0,
+  "os": "Darwin 25.6.0 arm64"
+ },
+ "jobs": 3,
+ "rekeyed_from": "95708cb9592437d2"
+}

@@ -90,3 +90,37 @@ def hard_columns(n: int = 5000, seed: int = 0, cat_rare_mode: str = "mixed") -> 
         "cat_rare_mode": cat_rare_mode,
     }
     return X, y, meta
+
+
+PLANTED_KINDS = ("ratio", "product", "group_dev", "cat_interaction")
+
+
+def planted(kind: str, n: int = 5000, seed: int = 0) -> tuple[pd.DataFrame, pd.Series, pd.Series, str]:
+    """exp05 check 4 (plan section 4.1): a regression target driven by one planted feature.
+
+    Returns X, y, the oracle feature (the true one) and its formula. y = standardized oracle + N(0, 0.5);
+    X also holds three numeric noise columns and a 5-level noise categorical.
+    """
+    rng = np.random.default_rng(seed)
+    X = pd.DataFrame({f"noise{i}": rng.normal(size=n) for i in range(3)})
+    X["noise_cat"] = pd.Categorical(rng.choice(list("pqrst"), n))
+    if kind == "ratio":
+        X["a"], X["b"] = rng.lognormal(0, 0.5, n), rng.lognormal(0, 0.5, n)
+        f, formula = X.a / X.b, "a / b"
+    elif kind == "product":
+        X["a"], X["b"] = rng.normal(size=n), rng.normal(size=n)
+        f, formula = X.a * X.b, "a * b"
+    elif kind == "group_dev":
+        g, mu = rng.integers(0, 20, n), rng.normal(0, 2, 20)
+        X["g"] = pd.Categorical([f"g{i:02}" for i in g])
+        X["x"] = mu[g] + rng.normal(size=n)
+        f, formula = X.x - mu[g], "x - true mean of x in its group g (20 groups)"
+    elif kind == "cat_interaction":
+        c1, c2, table = rng.integers(0, 6, n), rng.integers(0, 6, n), rng.normal(size=(6, 6))
+        table -= table.mean(axis=0)
+        table -= table.mean(axis=1, keepdims=True)  # zero main effects: only the pair carries signal
+        X["c1"], X["c2"] = pd.Categorical([f"u{i}" for i in c1]), pd.Categorical([f"v{i}" for i in c2])
+        f, formula = pd.Series(table[c1, c2]), "interaction table of c1 x c2 (6 x 6 levels, zero main effects)"
+    f = pd.Series(np.asarray(f, dtype=float), name="oracle")
+    y = (f - f.mean()) / f.std() + rng.normal(0, 0.5, n)
+    return X, pd.Series(y, name="y"), f, formula

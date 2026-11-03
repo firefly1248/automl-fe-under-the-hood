@@ -70,13 +70,15 @@ class AgTabPrep(FeatureGenerator):
         self.group = build_group(PROBLEM_TYPE[task], seed)
         out = self.group.fit_transform(X1, y_fit, feature_metadata_in=self.base.feature_metadata)
         made = {c for g in walk(self.group) if type(g).__name__ in NEW_FROM for c in g.features_out}
+        te = {c for g in walk(self.group) if type(g).__name__ == "OOFTargetEncodingFeatureGenerator" for c in g.features_out}
         self.new_columns = [c for c in out.columns if c in made]
+        self.target_encoded = [c for c in out.columns if c in te]  # exp05 check 2
         return out
 
     def transform(self, X) -> pd.DataFrame:
         return self.group.transform(self.base.transform(X))
 
     def describe(self) -> dict:
-        return {"new_columns": self.new_columns, "n_out": len(self.group.features_out),
+        return {"new_columns": self.new_columns, "target_encoded": self.target_encoded, "n_out": len(self.group.features_out),
                 "by_generator": {type(g).__name__: len(g.features_out) for g in walk(self.group)
                                  if type(g).__name__ in NEW_FROM}}

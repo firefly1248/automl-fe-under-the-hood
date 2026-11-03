@@ -1,0 +1,81 @@
+{
+ "hash": "6c39f96d3099a60c",
+ "stage": "gen",
+ "unit": {
+  "exp": "exp05_planted",
+  "dataset": "planted_cat_interaction_s0",
+  "repeat": 0,
+  "fold": 2,
+  "arm": "openfe",
+  "arm_params": {},
+  "protocol_hash": "9326a6e4cc218d6d",
+  "data_hash": "16544428506501659419",
+  "splits_hash": "9118fde7d4b3623f",
+  "env_lock_hash": "57bc55f61c0489c0",
+  "code_hash": "b639a0deae5b5f39"
+ },
+ "status": "ok",
+ "error": "",
+ "wall_s": 5.85,
+ "peak_rss_mb": 489.7,
+ "limits": {
+  "gen_timeout_s": 3600,
+  "fit_timeout_s": 3600,
+  "mem_gb": 6,
+  "min_free_gb": 2
+ },
+ "started": "2026-11-03T04:49:09.409673+00:00",
+ "finished": "2026-11-03T04:49:15.259352+00:00",
+ "result": {
+  "n_features_in": 6,
+  "n_features_out": 18,
+  "replaces_input": false,
+  "n_inf_replaced": 0,
+  "fit_s": 4.387,
+  "transform_inner_s": 0.006,
+  "transform_test_s": 0.006,
+  "describe": {
+   "stage1_survivors": 18,
+   "kept": 18,
+   "cap_fired": false,
+   "gains": {
+    "Combine(c1,c2)": 3500.3664199113846,
+    "CombineThenFreq(c1,c2)": 2917.963833630085,
+    "GroupByThenMax(noise0,c2)": 1130.2404327988625,
+    "GroupByThenMean(noise2,c1)": 366.9523221850395,
+    "residual(noise2)": 60.76453858613968,
+    "(noise1/noise2)": 55.152325212955475,
+    "max(noise1,noise2)": 53.013876020908356,
+    "(noise0/noise1)": 50.95329588651657,
+    "(noise1+noise2)": 40.570230305194855,
+    "min(noise1,noise2)": 38.626075237989426,
+    "GroupByThenRank(noise0,c1)": 38.448379933834076,
+    "GroupByThenRank(noise1,c1)": 38.404951840639114,
+    "(noise0*noise1)": 38.20430910587311,
+    "GroupByThenRank(noise0,noise_cat)": 35.02896898984909,
+    "GroupByThenRank(noise0,c2)": 30.353859931230545,
+    "sqrt(noise1)": 20.458932161331177,
+    "sigmoid(noise1)": 15.49183213710785,
+    "log(noise1)": 3.1826499700546265
+   }
+  },
+  "versions": {
+   "python": "3.11.14",
+   "openfe": "0.0.12",
+   "lightgbm": "4.7.0",
+   "numpy": "2.4.6",
+   "pandas": "3.0.6",
+   "scikit-learn": "1.5.2"
+  }
+ },
+ "git_sha": "bfbedb1103a0f11b5a27595822b347b354783a94-dirty",
+ "machine": {
+  "cpu": "Apple M4 Pro",
+  "physical_cores": 14,
+  "logical_cores": 14,
+  "ram_gb": 24.0,
+  "os": "Darwin 25.6.0 arm64"
+ },
+ "jobs": 3,
+ "rekeyed_from": "856b012e301b7548"
+}

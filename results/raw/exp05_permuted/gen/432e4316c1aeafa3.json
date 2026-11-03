@@ -1,0 +1,40 @@
+{
+ "hash": "432e4316c1aeafa3",
+ "stage": "gen",
+ "unit": {
+  "exp": "exp05_permuted",
+  "dataset": "bank-marketing",
+  "repeat": 0,
+  "fold": 2,
+  "arm": "autofeat",
+  "arm_params": {},
+  "protocol_hash": "e52e530f8e60c2a9",
+  "data_hash": "2484976918774064709",
+  "splits_hash": "e61210d8f1655fa0",
+  "env_lock_hash": "58c5684de2b9b691",
+  "code_hash": "1bd420229e9e148d"
+ },
+ "status": "timeout",
+ "error": "wall clock limit 3600 s exceeded\n",
+ "wall_s": 3600.09,
+ "peak_rss_mb": 1246.4,
+ "limits": {
+  "gen_timeout_s": 3600,
+  "fit_timeout_s": 3600,
+  "mem_gb": 6,
+  "min_free_gb": 2
+ },
+ "started": "2026-11-03T01:09:30.431141+00:00",
+ "finished": "2026-11-03T02:09:30.521882+00:00",
+ "result": null,
+ "git_sha": "bfbedb1103a0f11b5a27595822b347b354783a94-dirty",
+ "machine": {
+  "cpu": "Apple M4 Pro",
+  "physical_cores": 14,
+  "logical_cores": 14,
+  "ram_gb": 24.0,
+  "os": "Darwin 25.6.0 arm64"
+ },
+ "jobs": 3,
+ "rekeyed_from": "b58912b1381f70ac"
+}

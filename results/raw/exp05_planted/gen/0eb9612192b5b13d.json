@@ -1,0 +1,163 @@
+{
+ "hash": "0eb9612192b5b13d",
+ "stage": "gen",
+ "unit": {
+  "exp": "exp05_planted",
+  "dataset": "planted_cat_interaction_s1",
+  "repeat": 0,
+  "fold": 1,
+  "arm": "lama_adv",
+  "arm_params": {},
+  "protocol_hash": "9326a6e4cc218d6d",
+  "data_hash": "5925679697050704121",
+  "splits_hash": "9118fde7d4b3623f",
+  "env_lock_hash": "a66ef9b5f624f5ca",
+  "code_hash": "9126e6e212c054d2"
+ },
+ "status": "ok",
+ "error": "",
+ "wall_s": 3.25,
+ "peak_rss_mb": 496.7,
+ "limits": {
+  "gen_timeout_s": 3600,
+  "fit_timeout_s": 3600,
+  "mem_gb": 6,
+  "min_free_gb": 2
+ },
+ "started": "2026-11-03T04:50:26.558327+00:00",
+ "finished": "2026-11-03T04:50:29.809502+00:00",
+ "result": {
+  "n_features_in": 6,
+  "n_features_out": 10,
+  "replaces_input": true,
+  "n_inf_replaced": 0,
+  "fit_s": 0.689,
+  "transform_inner_s": 0.005,
+  "transform_test_s": 0.005,
+  "describe": {
+   "roles": {
+    "noise0": "Numeric",
+    "noise1": "Numeric",
+    "noise2": "Numeric",
+    "noise_cat": "Category(encoding_type=freq)",
+    "c1": "Category(encoding_type=freq)",
+    "c2": "Category(encoding_type=auto, ordinal=True)"
+   },
+   "reader_dropped": [],
+   "selector_importance": {
+    "c1": 50543.965250927955,
+    "c2": 48100.70840088278,
+    "noise0": 11910.204474743456,
+    "noise2": 11876.283451128751,
+    "noise1": 11158.500752869993,
+    "noise_cat": 2630.0502374209464
+   },
+   "selected": [
+    "c1",
+    "c2",
+    "noise0",
+    "noise1",
+    "noise2",
+    "noise_cat"
+   ],
+   "selector_dropped": [],
+   "output_features": [
+    "freq__c1",
+    "freq__noise_cat",
+    "oof__inter__(c1__c2)",
+    "oof__inter__(c1__noise_cat)",
+    "oof__inter__(c2__noise_cat)",
+    "oof__inter__(c1__c2__noise_cat)",
+    "noise0",
+    "noise1",
+    "noise2",
+    "ord__c2"
+   ],
+   "target_encoded": [
+    "oof__inter__(c1__c2)",
+    "oof__inter__(c1__noise_cat)",
+    "oof__inter__(c2__noise_cat)",
+    "oof__inter__(c1__c2__noise_cat)"
+   ],
+   "n_folds": 5,
+   "settings": {
+    "reader": {
+     "samples": 100000,
+     "max_nan_rate": 0.999,
+     "max_constant_rate": 0.999,
+     "cv": 5,
+     "random_state": 1001,
+     "roles_params": null,
+     "n_jobs": 1,
+     "advanced_roles": true,
+     "numeric_unique_rate": 0.999,
+     "max_to_3rd_rate": 1.1,
+     "binning_enc_rate": 2,
+     "raw_decr_rate": 1.1,
+     "max_score_rate": 0.2,
+     "abs_score_val": 0.04,
+     "drop_score_co": 0.0
+    },
+    "selection": {
+     "mode": 1,
+     "importance_type": "gain",
+     "fit_on_holdout": true,
+     "cutoff": 0,
+     "feature_group_size": 1,
+     "max_features_cnt_in_result": null,
+     "select_algos": [
+      "gbm"
+     ]
+    },
+    "selector_lgb": {
+     "num_threads": 1,
+     "feature_fraction": 1,
+     "random_state": 1001
+    },
+    "gbm_pipeline": {
+     "top_intersections": 4,
+     "max_intersection_depth": 3,
+     "subsample": 100000,
+     "auto_unique_co": 10,
+     "multiclass_te_co": 3,
+     "output_categories": false,
+     "use_groupby": false,
+     "groupby_types": [
+      "delta_median",
+      "delta_mean",
+      "min",
+      "max",
+      "std",
+      "mode",
+      "is_mode"
+     ],
+     "groupby_top_based_on": "cardinality",
+     "groupby_top_categorical": 3,
+     "groupby_top_numerical": 3,
+     "groupby_triplets": []
+    }
+   }
+  },
+  "versions": {
+   "python": "3.11.14",
+   "lightautoml": "0.4.2",
+   "torch": "2.14.0",
+   "lightgbm": "4.7.0",
+   "catboost": "1.2.10",
+   "statsmodels": "0.14.0",
+   "numpy": "1.26.4",
+   "pandas": "1.5.3",
+   "scikit-learn": "1.9.1"
+  }
+ },
+ "git_sha": "bfbedb1103a0f11b5a27595822b347b354783a94-dirty",
+ "machine": {
+  "cpu": "Apple M4 Pro",
+  "physical_cores": 14,
+  "logical_cores": 14,
+  "ram_gb": 24.0,
+  "os": "Darwin 25.6.0 arm64"
+ },
+ "jobs": 3,
+ "rekeyed_from": "8f829ca3fbd1375a"
+}
