@@ -280,4 +280,7 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    add_planted() if sys.argv[1:] == ["planted"] else main()
+    if sys.argv[1:] == ["planted"]:
+        add_planted()
+    else:
+        main()

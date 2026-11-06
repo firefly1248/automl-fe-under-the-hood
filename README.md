@@ -1,5 +1,7 @@
 # automl-fe-under-the-hood
 
+Work in progress. Numbers are not final; approved values will be in results/claims.yaml.
+
 Experiments and numbers behind the LinkedIn series "What automated feature engineering really does
 under the hood". Open data (OpenML) and open code only. The plan is in
 [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md), progress in [PROGRESS.md](PROGRESS.md).
@@ -13,6 +15,7 @@ make env         # one pinned env per tool in envs/, Python 3.11
 make env-check   # writes results/ENVIRONMENT.md
 make data        # downloads datasets to ~/.cache/afe, writes results/datasets.md
 make exp01 exp03
+make unpack      # per-unit run records from the committed results/raw/<exp>/{gen,fit}.jsonl.gz
 ```
 
 ## Environments

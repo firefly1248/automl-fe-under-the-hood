@@ -32,6 +32,10 @@ SHARED_CODE = (SRC / "generators" / "base.py", SRC / "run" / "worker.py", SRC / 
                SRC / "data" / "splits.py")
 FIT_CODE = (*SHARED_CODE, SRC / "models")
 RESERVED_GB = 4  # left for the system and other apps (plan section 5)
+SLOW_FIRST = ("autofeat", "openfe", "openfe_transductive")  # launched first so no slot idles at the end of a stage
+# str/set hash order is per process and autofeat's output depends on it (A3 review: two PYTHONHASHSEED values,
+# every arm and model); fixed for every child and part of the protocol hash
+PYTHONHASHSEED = 0
 
 
 def default_jobs(mem_gb: float) -> int:
@@ -58,11 +62,23 @@ def exp_key(cfg: dict, stage: str) -> str:
     return cfg["stages"][stage].get("exp", cfg["name"])
 
 
+def excluded(cfg: dict) -> set[tuple[str, str]]:
+    """(dataset, model) pairs not run."""
+    return {(e["dataset"], e["model"]) for e in cfg.get("exclude", [])}
+
+
+def records(cfg: dict, stage: str):
+    """(gen unit, gen record, [(fit unit, fit record)]) for every planned chain; records may be None."""
+    read = lambda s, u: store.read(store.record_path(exp_key(cfg, stage), s, digest(u)))  # noqa: E731
+    for g, fits in plan(cfg, stage):
+        yield g, read("gen", g), [(f, read("fit", f)) for f in fits]
+
+
 def plan(cfg: dict, stage: str) -> list[tuple[dict, list[dict]]]:
     """[(gen unit, [fit units])] for one stage. A fit-only arm (ag_tabprep_keepcat) adds fit units to the
     chain of its source arm."""
     proto, st = cfg["protocol"], cfg["stages"][stage]
-    protocol_hash = digest(proto)
+    protocol_hash = digest({**proto, "pythonhashseed": PYTHONHASHSEED})
     core_lock = file_hash(ROOT / "envs" / "core" / "uv.lock")
     fit_code = code_hash(*FIT_CODE)
     datasets = st["datasets"]
@@ -70,7 +86,7 @@ def plan(cfg: dict, stage: str) -> list[tuple[dict, list[dict]]]:
         d = pd.read_csv(RESULTS / "datasets.csv")
         datasets = d[d.primary].key.tolist()
     arms = st.get("arms", cfg["arms"])
-    excluded = {(e["dataset"], e["model"]) for e in cfg.get("exclude", [])}  # (dataset, model) pairs not run
+    skip = excluded(cfg)
     chains = []
     for key in datasets:
         data_hash = json.loads((CACHE / "data" / f"{key}.json").read_text())["frame_hash"]
@@ -83,14 +99,14 @@ def plan(cfg: dict, stage: str) -> list[tuple[dict, list[dict]]]:
                     g = gen_unit(exp_key(cfg, stage), key, r, k, arm, cfg.get("arm_params", {}).get(arm, {}),
                                  protocol_hash, data_hash, splits_hash, lock, gen_code)
                     fits = [fit_unit(digest(g), a, v, m, p, S.tool_seed(r, k), core_lock, fit_code)
-                            for a, v in views for m, p in proto["models"].items() if (key, m) not in excluded]
+                            for a, v in views for m, p in proto["models"].items() if (key, m) not in skip]
                     chains.append((g, fits))
     return chains
 
 
 class Runner:
     def __init__(self, cfg: dict, exp: str, retry: set[str], jobs: int):
-        self.cfg, self.exp, self.retry, self.jobs = cfg, exp, retry, jobs
+        self.cfg, self.exp, self.retry = cfg, exp, retry
         self.lim = cfg["limits"]
         self.permute_y = cfg["protocol"].get("permute_y", False)  # in protocol_hash, so in every unit hash
         self.base = {"git_sha": git_sha(), "machine": machine_info(), "jobs": jobs}
@@ -104,10 +120,7 @@ class Runner:
             (Path(tmp) / "task.json").write_text(json.dumps(task))
             cmd = ["uv", "run", "--frozen", "--project", str(ROOT / "envs" / env), "python", "-m", "afe.run.worker",
                    str(Path(tmp) / "task.json")]
-            # str/set hash order is per process; autofeat's selection depends on it (A3), so it is fixed per unit
-            u = task["unit"]
-            seed = u["seed"] if task["stage"] == "fit" else S.tool_seed(u["repeat"], u["fold"])
-            env_vars = {k: v for k, v in os.environ.items() if k != "VIRTUAL_ENV"} | {"PYTHONHASHSEED": str(seed)}
+            env_vars = {k: v for k, v in os.environ.items() if k != "VIRTUAL_ENV"} | {"PYTHONHASHSEED": str(PYTHONHASHSEED)}
             limits.wait_for_memory(self.lim["min_free_gb"])
             started = datetime.now(timezone.utc).isoformat()
             res = limits.run(cmd, timeout_s, self.lim["mem_gb"], tmp, env_vars)
@@ -123,7 +136,8 @@ class Runner:
 
     def _record(self, stage: str, h: str, unit: dict, res: limits.Result, extra: dict) -> dict:
         rec = {"hash": h, "stage": stage, "unit": unit, "status": res.status, "error": res.error,
-               "wall_s": res.wall_s, "peak_rss_mb": res.peak_rss_mb, "limits": self.lim, **extra, **self.base}
+               "wall_s": res.wall_s, "peak_rss_mb": res.peak_rss_mb, "watchdog": res.kill, "limits": self.lim,
+               **extra, **self.base}
         store.write_json(store.record_path(self.exp, stage, h), rec)
         with self.lock:
             self.counts[res.status] = self.counts.get(res.status, 0) + 1
@@ -163,7 +177,7 @@ def main(argv=None) -> None:
     jobs = default_jobs(cfg["limits"]["mem_gb"])
     jobs = min(a.jobs, jobs) if a.jobs else jobs
     retry = (store.RETRY_FAILED if a.retry_failed else set()) | set(a.retry_status)
-    chains = plan(cfg, a.stage)
+    chains = sorted(plan(cfg, a.stage), key=lambda c: c[0]["arm"] not in SLOW_FIRST)  # stable: plan order otherwise
     runner = Runner(cfg, exp_key(cfg, a.stage), retry, jobs)
     print(f"{runner.exp} {a.stage}: {len(chains)} generator units, jobs={jobs}", flush=True)
     with ThreadPoolExecutor(jobs) as pool:

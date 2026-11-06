@@ -1,7 +1,7 @@
 ENVS := core autogluon lama openfe autofeat mljar
 RUN = uv run --frozen --project envs/$(1)
 
-.PHONY: env env-check data planted splits test exp01 exp03 exp04-smoke exp04-pilot exp04-timing exp05 exp04-full-r0 exp04-full-r1
+.PHONY: env env-check data planted splits test pack unpack exp01 exp03 exp04-smoke exp04-pilot exp04-timing exp05 exp04-full-r0 exp04-full-r1
 
 env:
 	for e in $(ENVS); do uv sync --frozen --project envs/$$e || exit 1; done
@@ -22,6 +22,13 @@ splits:
 test:
 	$(call RUN,core) pytest -q tests
 	for e in $(filter-out core,$(ENVS)); do AFE_ENV=$$e uv run --frozen --project envs/$$e pytest -q tests/test_generators_contract.py tests/test_openfe_equivalence.py || exit 1; done
+
+# run records: per-unit JSON <-> committed results/raw/<exp>/{gen,fit}.jsonl.gz
+pack:
+	$(call RUN,core) python -m afe.run.pack pack
+
+unpack:
+	$(call RUN,core) python -m afe.run.pack unpack
 
 # exp01 step 4 and exp03 step 2 need `make data` first
 exp01:

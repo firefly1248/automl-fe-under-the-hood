@@ -2,16 +2,19 @@
 
 import os
 import platform
+import re
 import subprocess
 from importlib import metadata
 
 import psutil
 
 HOME = os.path.expanduser("~")
+# pieces of a home path cut by a log truncation: '"/Users/ab' and 'cd/Projects/...'
+CUT_HOME = re.compile(r"/Users/[^\s\"'/]*|[^\s\"'~/]+/(?=Projects/)")
 
 
 def strip_home(text: str) -> str:
-    return text.replace(HOME, "~")
+    return CUT_HOME.sub(lambda m: "~/" if m.group().endswith("/") else "~", text.replace(HOME, "~"))
 
 
 def cpu_model() -> str:

@@ -18,7 +18,6 @@ from afe.data import splits as S
 from afe.data.loaders import load
 from afe.paths import CACHE, RESULTS, ROOT
 from afe.run import cli, store
-from afe.run.unit import digest
 from afe.run.worker import _data
 
 HERE = Path(__file__).parent
@@ -29,22 +28,18 @@ TASK = pd.read_csv(RESULTS / "datasets.csv").set_index("key").task.to_dict()
 BOOT = 2000
 
 
-def units(config: Path, stage: str):
-    """(exp, gen unit, gen record, fit unit, fit record) for every planned fit; records may be None."""
-    cfg = yaml.safe_load(config.read_text())
-    exp = cli.exp_key(cfg, stage)
-    for g, fits in cli.plan(cfg, stage):
-        gr = store.read(store.record_path(exp, "gen", digest(g)))
-        for f in fits:
-            yield exp, g, gr, f, store.read(store.record_path(exp, "fit", digest(f)))
+def chains(config: Path, stage: str):
+    return cli.records(yaml.safe_load(config.read_text()), stage)
 
 
 def fit_table(config: Path, stage: str) -> pd.DataFrame:
     rows = []
-    for _, g, gr, f, fr in units(config, stage):
-        status = fr["status"] if fr else (gr["status"] if gr and gr["status"] != "ok" else "missing")
-        rows.append({"dataset": g["dataset"], "task": TASK[g["dataset"]], "fold": g["fold"], "arm": f["arm"],
-                     "model": f["model"], "status": status, **(fr["result"]["test"] if fr and fr["status"] == "ok" else {})})
+    for g, gr, fits in chains(config, stage):
+        for f, fr in fits:
+            status = fr["status"] if fr else (gr["status"] if gr and gr["status"] != "ok" else "missing")
+            rows.append({"dataset": g["dataset"], "task": TASK[g["dataset"]], "fold": g["fold"], "arm": f["arm"],
+                         "model": f["model"], "status": status,
+                         **(fr["result"]["test"] if fr and fr["status"] == "ok" else {})})
     return pd.DataFrame(rows)
 
 
@@ -61,7 +56,7 @@ def prior_entropy(dataset: str, fold: int) -> float:
     return float(-(p * np.log(p)).sum())
 
 
-def check1() -> pd.DataFrame:
+def check1() -> tuple[pd.DataFrame, dict]:
     """Permuted labels: chance-level test metric per arm, model and task type."""
     d = fit_table(HERE / "permuted.yaml", "run")
     ok = d[d.status == "ok"].copy()
@@ -77,12 +72,16 @@ def check1() -> pd.DataFrame:
     return out, d.status.value_counts().to_dict()
 
 
+def _abs_corr(x: pd.Series, y) -> float:
+    return abs(float(np.corrcoef(x, y)[0, 1])) if x.std() > 0 else 0.0
+
+
 def _score(col: pd.Series, y: pd.Series, task: str) -> float:
     """Direction-free association of one column with y: AUC (max over classes, one vs rest) or |corr|."""
     keep = col.notna()
     x, y = col[keep].astype(float), y[keep]
     if task == "regression":
-        return abs(float(np.corrcoef(x, y)[0, 1])) if x.std() > 0 else 0.0
+        return _abs_corr(x, y)
     aucs = [roc_auc_score(y == c, x) for c in (sorted(y.unique())[1:] if task == "binary" else sorted(y.unique()))
             if 0 < (y == c).mean() < 1]
     return max(max(a, 1 - a) for a in aucs) if aucs else 0.5
@@ -91,23 +90,22 @@ def _score(col: pd.Series, y: pd.Series, task: str) -> float:
 def check2() -> pd.DataFrame:
     """TE delivery: association of each TE column with y on fit rows (as delivered) vs test rows. Raw numeric
     columns of the same outputs give the gap from sampling noise alone."""
-    rows, seen = [], set()
-    for exp, g, gr, _, _ in units(EXP04, "pilot"):
-        h = digest(g)
-        if h in seen or not gr or gr["status"] != "ok" or "target_encoded" not in gr["result"]["describe"]:
+    rows = []
+    for g, gr, _ in chains(EXP04, "pilot"):
+        if not gr or gr["status"] != "ok" or "target_encoded" not in gr["result"]["describe"]:
             continue
-        seen.add(h)
         X, y, meta, idx = _data(g)
         task = meta["task"]
-        out = {s: pd.read_parquet(store.cache_dir(exp, h) / f"{s}.parquet") for s in ("train", "test")}
+        limit = 0.1 if task == "regression" else 0.05
+        out = {s: pd.read_parquet(store.cache_dir(g["exp"], gr["hash"]) / f"{s}.parquet") for s in ("train", "test")}
         te = [c for c in gr["result"]["describe"]["target_encoded"] if c in out["train"]]
         raw = [c for c in X.columns if c in out["train"] and pd.api.types.is_numeric_dtype(out["train"][c])]
         for kind, c in [("te", c) for c in te] + [("raw", c) for c in raw]:
             fit_s = _score(out["train"][c].set_axis(y.index[idx["train"]]), y.iloc[idx["train"]], task)
             test_s = _score(out["test"][c].set_axis(y.index[idx["test"]]), y.iloc[idx["test"]], task)
-            limit = 0.1 if task == "regression" else 0.05
+            gap = fit_s - test_s
             rows.append({"arm": g["arm"], "dataset": g["dataset"], "task": task, "fold": g["fold"], "kind": kind, "column": c,
-                         "fit": fit_s, "test": test_s, "gap": fit_s - test_s, "flag": fit_s - test_s > limit})
+                         "fit": fit_s, "test": test_s, "gap": gap, "flag": gap > limit})
     out = pd.DataFrame(rows)
     out.to_csv(TIDY / "exp05_te_delivery.csv", index=False)
     return out
@@ -139,33 +137,29 @@ def _relation(col: pd.Series, oracle: np.ndarray) -> float:
         keep = means.notna()
         return float(np.sqrt(((means[keep] - o[keep].mean()) ** 2).sum() / ((o[keep] - o[keep].mean()) ** 2).sum()))
     keep = col.notna() & np.isfinite(col.astype(float))
-    x = col[keep].astype(float)
-    return abs(float(np.corrcoef(x, o[keep])[0, 1])) if x.std() > 0 else 0.0
+    return _abs_corr(col[keep].astype(float), o[keep])
 
 
 def check4() -> pd.DataFrame:
     """Planted signals: metric vs the oracle (within 1% relative) and the true feature among the created ones."""
     oracle = pd.read_csv(TIDY / "exp05_oracle.csv").set_index(["dataset", "fold", "model"]).r2
-    found = {}
-    for exp, g, gr, _, _ in units(HERE / "planted.yaml", "run"):
-        h = digest(g)
-        if h in found or not gr or gr["status"] != "ok":
-            continue
-        X, _, _ = load(g["dataset"])
-        test_rows = S.rows(S.load(g["dataset"]), g["repeat"], g["fold"])[2]
-        o = pd.read_parquet(CACHE / "data" / f"{g['dataset']}.oracle.parquet").oracle.to_numpy()[test_rows]
-        out = pd.read_parquet(store.cache_dir(exp, h) / "test.parquet")
-        new = gr["result"]["describe"].get("new_columns") or [c for c in out.columns if c not in X.columns]
-        best = max(((_relation(out[c], o), c) for c in new), default=(0.0, None))
-        found[h] = {"found": best[0] >= 0.95, "best_relation": best[0], "best_column": best[1], "n_created": len(new)}
     rows = []
-    for _, g, gr, f, fr in units(HERE / "planted.yaml", "run"):
-        r2 = fr["result"]["test"]["r2"] if fr and fr["status"] == "ok" else np.nan
-        orc = oracle[g["dataset"], g["fold"], f["model"]]
-        # keepcat shares the ag_tabprep generator; its created columns are the same list
-        rows.append({"dataset": g["dataset"], "kind": g["dataset"].split("_s")[0].removeprefix("planted_"),
-                     "fold": g["fold"], "arm": f["arm"], "model": f["model"], "r2": r2, "oracle_r2": orc,
-                     "reach": r2 >= 0.99 * orc, **found.get(digest(g), {})})
+    for g, gr, fits in chains(HERE / "planted.yaml", "run"):
+        found = {}
+        if gr and gr["status"] == "ok":
+            X, _, _ = load(g["dataset"])
+            test_rows = S.rows(S.load(g["dataset"]), g["repeat"], g["fold"])[2]
+            o = pd.read_parquet(CACHE / "data" / f"{g['dataset']}.oracle.parquet").oracle.to_numpy()[test_rows]
+            out = pd.read_parquet(store.cache_dir(g["exp"], gr["hash"]) / "test.parquet")
+            new = gr["result"]["describe"].get("new_columns") or [c for c in out.columns if c not in X.columns]
+            best = max(((_relation(out[c], o), c) for c in new), default=(0.0, None))
+            found = {"found": best[0] >= 0.95, "best_relation": best[0], "best_column": best[1], "n_created": len(new)}
+        for f, fr in fits:  # keepcat shares the ag_tabprep generator; its created columns are the same list
+            r2 = fr["result"]["test"]["r2"] if fr and fr["status"] == "ok" else np.nan
+            orc = oracle[g["dataset"], g["fold"], f["model"]]
+            rows.append({"dataset": g["dataset"], "kind": g["dataset"].split("_s")[0].removeprefix("planted_"),
+                         "fold": g["fold"], "arm": f["arm"], "model": f["model"], "r2": r2, "oracle_r2": orc,
+                         "reach": r2 >= 0.99 * orc, **found})
     out = pd.DataFrame(rows)
     out.to_csv(TIDY / "exp05_planted.csv", index=False)
     return out
@@ -190,7 +184,7 @@ def main() -> None:
         "Gap = association with y on fit rows (as delivered) - on test rows; flag above 0.05 (AUC) or 0.1 (|corr|). "
         "kind raw: the arm's untouched numeric input columns, the gap from sampling noise alone.", "",
         c2s.round(4).to_markdown(index=False), "",
-        "## 3. openfe_transductive - openfe (exp04 pilot, fold 0)", "",
+        "## 3. openfe_transductive - openfe (exp04 pilot, repeat 0)", "",
         c3.round(4).to_markdown(index=False), "",
         "## 4. Planted signals", "",
         "Share of units that reach the oracle R2 within 1% relative, and share of generator units where a created "

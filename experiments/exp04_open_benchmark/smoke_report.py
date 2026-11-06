@@ -10,9 +10,7 @@ import pandas as pd
 import yaml
 
 from afe.paths import RESULTS
-from afe.run import store
-from afe.run.cli import exp_key, plan
-from afe.run.unit import digest
+from afe.run.cli import records
 
 CFG = yaml.safe_load((Path(__file__).parent / "config.yaml").read_text())
 METRIC = {"binary": "auc", "multiclass": "logloss", "regression": "rmse"}
@@ -20,11 +18,10 @@ METRIC = {"binary": "auc", "multiclass": "logloss", "regression": "rmse"}
 
 def main() -> None:
     """Only the units the current code plans for the smoke stage (older records have other hashes)."""
-    exp, chains = exp_key(CFG, "smoke"), plan(CFG, "smoke")
-    read = lambda stage, u: store.read(store.record_path(exp, stage, digest(u)))  # noqa: E731
+    chains = list(records(CFG, "smoke"))
     tasks = pd.read_csv(RESULTS / "datasets.csv").set_index("key").task
-    gens = {digest(g): r for g, _ in chains if (r := read("gen", g))}
-    fit_records = [r for _, fits in chains for f in fits if (r := read("fit", f))]
+    gens = {gr["hash"]: gr for _, gr, _ in chains if gr}
+    fit_records = [fr for _, _, fits in chains for _, fr in fits if fr]
     rows = []
     for g in gens.values():
         u, res = g["unit"], g["result"] or {}

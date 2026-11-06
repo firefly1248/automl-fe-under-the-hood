@@ -1,5 +1,67 @@
 # Progress
 
+## 2026-11-06: record hygiene before `full_r1`
+
+- Home path: `limits` stripped the home path after cutting the error log, so a cut kept a piece of it in 13
+  `openfe` records (sick 5, fps_benchmark 5, yeast 3). It now strips before the cut, and `strip_home` also
+  removes the pieces a cut leaves at either end; every record rewritten.
+- `make test` scans every tracked file, including the records inside `*.jsonl.gz`, for home and temp paths
+  (whole or cut), the user name and the host name (`tests/test_privacy.py`).
+- Records carry git_sha "...-dirty". `tests/test_records.py`: each record's `code_hash` equals the hash of the
+  committed code; 0 of 8,809 records differ, in every arm.
+- `openfe` failures on sick, yeast and fps_benchmark reproduce with a direct `OpenFE().fit` without the
+  wrapper: tool failures, causes in `experiments/exp04_open_benchmark/README.md`; no rerun.
+- README states that the numbers are not final.
+
+## 2026-11-06: exp04 `full_r0`
+
+Repeat 0, 50 datasets x 5 folds x 8 generator arms, 3 jobs. Generator units: 1,869 ok, 75 timeout (all
+`autofeat`, 15 datasets), 35 not_applicable (`autofeat` on Amazon_employee_access, connect-4, kr-vs-kp;
+`mljar_golden` on Amazon_employee_access, socmob), 16 failed (`openfe` inside the library on sick, yeast and
+fps_benchmark, every fold; `autofeat` on one yeast fold), 5 oom (`autofeat`, numerai28.6). Fit units: 4,166
+ok, 37 timeout (all CatBoost: `ag_tabprep` and `ag_tabprep_keepcat` on GesturePhaseSegmentationProcessed,
+pendigits, texture and wall-robot-navigation, `openfe` on texture), 252 without a
+generator output. The timing stage is complete as well (45 ok, 1 oom, 2 not_applicable).
+
+## 2026-11-03: code review after A3 (`/code-review`, `/simplify`)
+
+**openfe fix** (results change: `openfe` and `openfe_transductive` rerun in every stage)
+- `GroupByThenRank` on inner and test rows was (below + equal / 2) / n, on fit rows pandas' (below +
+  (equal + 1) / 2) / n: each new-row rank 0.5 / n lower than the same value on fit rows (0.025 in a group of
+  20), a train/test shift made by the inductive evaluator. Fixed and vectorized (26x faster at 15k rows,
+  2,000 groups). Test 7 had encoded the same formula; a new test (fit rows through `transform` get their
+  `fit_transform` values) fails on the old code.
+- Gain filter rewritten as one pass; kept features and gains equal the pilot records on
+  concrete_compressive_strength, cmc and credit-g (test 7). `openfe_transductive` turns an exit() in
+  OpenFE's `transform` into an exception, as the search already did.
+
+**PYTHONHASHSEED**: every arm and both downstream models on the contract frames (synthetic, credit-g,
+Moneyball), two processes with hash seeds 1 and 2: identical outputs except `autofeat` (3 of 3 frames).
+`PYTHONHASHSEED=0` for every child, in the protocol hash. Records of the other arms moved to the new hashes
+by unit key (1,016 gen, 2,300 fit); 10 of 10 random moved pilot units rerun from scratch under hash seed 0
+matched bitwise (metrics and generator parquet, 6 arms). `autofeat` rerun in every stage.
+
+**Watchdog**: each record keeps the watchdog's marker (`watchdog`: reason, peak tree RSS); `oom` and
+`timeout` come only from it, any other SIGKILL is `failed` (before, exit code -9 or 137 counted as `oom`).
+The 6 `oom` of pilot and timing are all `autofeat` on numerai28.6, killed by the watchdog at a peak of
+6,195-6,952 MB (cap 6,144).
+
+**Other**: `pack` merges into the existing archive (tests: a repeated pack adds nothing, `*.json.tmp` is
+left alone); hashed files must have distinct names (asserted in `code_hash`); slow arms (`autofeat`,
+`openfe`) are launched first; the report scripts share `cli.records`, outputs byte-identical except the
+check 3 heading (now repeat 0) and `exp04_smoke.md` (older than the smoke records it summarized).
+exp05 results and the estimate below are recomputed after the `openfe` and `autofeat` reruns (2026-11-06):
+per-unit metrics moved by up to a few thousandths, no check changed its verdict; check 5 byte-identical.
+
+**Known limitations, not fixed (each would rerun everything)**
+- Seeds: `repeat_seed(0) = tool_seed(0, 0) = 1000` and `repeat_seed(1) = tool_seed(0, 1)`, so one seed draws
+  the outer folds of a repeat and the inner rows (and exp05 permuted labels) of a fold. No test row leaks;
+  the draws are not independent streams.
+- `splits_hash` covers the whole splits file: adding a repeat changes every unit hash (handled at A3 by
+  moving records by unit key).
+- `code_hash` hashes file names without their directories; distinct names are now asserted.
+- Records before this change took `oom` from the exit code; all 6 were watchdog kills (above).
+
 ## 2026-11-03: exp04 pilot, exp05 leakage checks, full-run estimate -> A3
 
 **A3 decisions (Ilia), applied**
@@ -33,18 +95,19 @@ connect-4 (5). All 805 fit units ok, including the two mfeat-fourier CatBoost fi
 2. TE delivery: median gap fit - test about 0 for `ag_tabprep` and `lama_adv`; flags sit on the four datasets
    under 1,500 rows, where raw columns flag at a similar rate, and none on the large ones (kick, 1,063 levels:
    max gap 0.048). Only `lama_adv` on credit-g is above the raw-column level (median gap +0.024).
-3. Transductive OpenFE (fold 0): the same columns as inductive on 10 of 10 datasets; differences from the
-   transform only, up to +0.045 AUC (kick, LightGBM) and +0.046 R2 (house_prices, CatBoost); 0 on mfeat-fourier
-   (row-wise operators). One fold: 5 splits needed before any claim.
+3. Transductive OpenFE (repeat 0, 5 folds): the same columns as inductive in 50 of 50 units; differences from
+   the transform only, up to +0.045 AUC (kick, LightGBM: +0.033 to +0.045 in every fold) and +0.041 R2
+   (house_prices, CatBoost); 0 on mfeat-fourier (row-wise operators).
 4. Planted signals (4 kinds x 3 seeds x 5 folds, oracle R2 0.76-0.80). The true feature is created on ratio
    and product by every arm except `ag_default` and `lama_adv`; on cat_interaction by `ag_tabprep`, `lama_adv`
    and `openfe` (2 of 3 units); on group_dev by `openfe` always and `manual_baseline` in 47%. Base CatBoost
    reaches the oracle R2 (within 1%) on ratio in 73% of folds, so reaching it is a weak signal there; on
-   group_dev almost no unit reaches it, even with the feature created.
+   group_dev only `openfe` with LightGBM (73%) and `manual_baseline` (47-53%) reach it often; `openfe` with
+   CatBoost reaches it in 20%, with the feature created in every unit.
 5. OpenFE operators: 23 of 23 equal to the reference on fit rows.
 
 **Estimate** (`results/tidy/exp04_estimate.md`): per-dataset interpolation of pilot times in rows x columns;
-about 20 unit-hours per fold, 3 jobs: 34 h for 5 splits, 68 h for 10 (24 h / 59 h left after the pilot).
+about 20 unit-hours per fold, 3 jobs: 34 h for 5 splits, 68 h for 10 (24 h / 58 h left after the pilot).
 `autofeat` is a third of it and the least certain part.
 
 **After A3 (Ilia)**
@@ -57,6 +120,8 @@ about 20 unit-hours per fold, 3 jobs: 34 h for 5 splits, 68 h for 10 (24 h / 59 
   had first moved live record directories as well; they were moved back, and every exp05 output and the
   estimate recomputed from them match the pre-incident files byte for byte; all record hashes match.
 - `experiments/exp05_leakage_checks/README.md` defines "found" and "reach" for check 4.
+- Run records are committed as `results/raw/<exp>/{gen,fit}.jsonl.gz` (`make pack`, 20 MB of JSON ->
+  1.5 MB); per-unit JSON is the git-ignored working store (`make unpack` restores it byte for byte).
 
 ## 2026-11-01: Phase 3 done (arm wrappers, exp04 smoke) -> A2
 

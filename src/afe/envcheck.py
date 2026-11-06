@@ -41,15 +41,12 @@ def _autofeat_fit() -> None:
     g.transform(X)
 
 
-CHECKS = {"autofeat": _autofeat_fit}  # beyond imports
-
-
 def probe(env: str) -> None:
     modules, dists = ENVS[env]
     for m in modules:
         importlib.import_module(m)
-    if env in CHECKS:
-        CHECKS[env]()
+    if env == "autofeat":  # a fit beyond imports
+        _autofeat_fit()
     print(json.dumps(versions(dists + COMMON)))
 
 

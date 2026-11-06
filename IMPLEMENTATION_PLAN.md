@@ -147,8 +147,9 @@ automl-fe-under-the-hood/
   experiments/exp01_autogluon_probe/ ... exp06_automl_end_to_end/
     each: config.yaml, run.py, README.md (question, method, how to read, findings, caveats)
   results/
-    raw/<exp>/gen/<gen_hash>.json      # generator-stage records
-    raw/<exp>/fit/<fit_hash>.json      # downstream-stage records
+    raw/<exp>/gen/<gen_hash>.json      # generator-stage records, working store, gitignored
+    raw/<exp>/fit/<fit_hash>.json      # downstream-stage records, working store, gitignored
+    raw/<exp>/{gen,fit}.jsonl.gz       # committed records (make pack / make unpack, decided at A3)
     cache/<exp>/<gen_hash>/{train,inner,test}.parquet   # NOT committed (gitignored)
     splits/<dataset>.parquet           # committed fold assignments
     tidy/<exp>.parquet  figures/<exp>/  claims.yaml  datasets.md  ENVIRONMENT.md
@@ -255,8 +256,8 @@ mean, or a category interaction; also returns the oracle feature.
 Two stages, so a generator runs once per fold and is reused by both downstream models.
 
 - Generator unit: `(exp, dataset, repeat, fold, arm, arm_params)` plus
-  `protocol_hash` (hash of the `protocol:` section of the exp `config.yaml`; limits are not in it and
-  are stored in each record), `data_hash`, `splits_hash`, `env_lock_hash` (hash of the arm's `uv.lock`),
+  `protocol_hash` (hash of the `protocol:` section of the exp `config.yaml` and `PYTHONHASHSEED`; limits are
+  not in it and are stored in each record), `data_hash`, `splits_hash`, `env_lock_hash` (hash of the arm's `uv.lock`),
   `code_hash` per arm: the arm's own module and its registry entry, plus the shared code that affects
   results (`generators/base.py` with the base view, `run/worker.py`, `data/loaders.py`, `data/splits.py`).
   Orchestration, limits and logging (`run/cli.py`, `run/limits.py`, `run/store.py`, the registry of other
@@ -283,16 +284,18 @@ Two stages, so a generator runs once per fold and is reused by both downstream m
   higher cap by itself: if an arm times out in the pilot, A3 decides a higher cap for that arm and
   stage, the pilot timeouts are rerun with it (`--retry-status timeout`), and the full run uses the
   decided caps. Memory cap 6 GB enforced by a psutil RSS watchdog that kills the child process tree (Linux and macOS; do not
-  use `RLIMIT_AS`, it kills torch/numba/LightGBM early). On Linux `systemd-run --user --scope -p
+  use `RLIMIT_AS`, it kills torch/numba/LightGBM early). The record keeps the watchdog's marker (`watchdog`:
+  reason and peak tree RSS); `oom` and `timeout` come only from it, any other kill is `failed`. On Linux `systemd-run --user --scope -p
   MemoryMax=6G` is an allowed alternative.
 - Threads: in every worker set `OMP_NUM_THREADS=MKL_NUM_THREADS=OPENBLAS_NUM_THREADS=NUMBA_NUM_THREADS=1`,
   `torch.set_num_threads(1)`, LightGBM `num_threads=1`, CatBoost `thread_count=1`, and `n_jobs=1`
   in every tool (OpenFE, GoldenFeaturesTransformer, autofeat, LAMA `cpu_limit=1`).
-- `PYTHONHASHSEED` of every child process = the unit's tool seed (found at A3). autofeat's selection
-  depends on str/set hash order, which Python randomizes per process: on one concrete fold two hash seeds
-  gave 14 and 28 features; with a fixed hash seed two processes give identical output. Contract test 2
-  runs in one process and could not see it. The other arms gave bitwise-identical metrics and outputs on
-  25 random units rerun with other hash seeds; autofeat pilot units were rerun.
+- `PYTHONHASHSEED=0` for every child process, in the protocol hash (decided after the A3 code review; it
+  was the unit's tool seed before). autofeat's selection depends on str/set hash order, which Python
+  randomizes per process: on one concrete fold two hash seeds gave 14 and 28 features. Contract test 2
+  runs in one process and could not see it. Every arm and both downstream models were run on the contract
+  frames in two processes with hash seeds 1 and 2: only autofeat differed. Its units are rerun; the
+  records of the other arms were moved to the new hashes, checked by rerunning a sample.
 - Parallelism: `jobs = min(physical_cores - 2, floor((ram_gb - 4) / mem_gb))`; `--jobs` may lower it.
   The memory term reserves `mem_gb` for each running unit and leaves 4 GB for the system and other apps.
   On the 24 GB laptop with 14 cores and `mem_gb: 6` this gives 3. The pilot records peak RSS per arm and

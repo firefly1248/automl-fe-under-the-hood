@@ -8,6 +8,7 @@ Test 7 (OpenFE operator equivalence) is in test_openfe_equivalence.py.
 """
 
 import os
+from functools import cache
 
 import numpy as np
 import pandas as pd
@@ -40,7 +41,6 @@ def _frames() -> dict:
 
 FRAMES = _frames()
 CASES = [pytest.param(a, f, id=f"{a}-{f}") for a in ENV_ARMS for f in FRAMES]
-_FITTED: dict = {}
 
 
 def _split(frame: str):
@@ -54,12 +54,11 @@ def _fit(arm: str, X, y, task, seed=0):
     return g, g.fit_transform(X, y, task, seed)
 
 
+@cache
 def fitted(arm: str, frame: str):
     """One fit per (arm, frame), shared by the tests that do not need a fresh one."""
-    if (arm, frame) not in _FITTED:
-        Xf, yf, Xt, task, _ = _split(frame)
-        _FITTED[arm, frame] = _fit(arm, Xf, yf, task)
-    return _FITTED[arm, frame]
+    Xf, yf, _, task, _ = _split(frame)
+    return _fit(arm, Xf, yf, task)
 
 
 def assert_same(a: pd.DataFrame, b: pd.DataFrame) -> None:

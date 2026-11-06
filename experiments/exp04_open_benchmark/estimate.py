@@ -15,8 +15,7 @@ import pandas as pd
 import yaml
 
 from afe.paths import RESULTS
-from afe.run import cli, store
-from afe.run.unit import digest
+from afe.run import cli
 
 CFG = yaml.safe_load((Path(__file__).parent / "config.yaml").read_text())
 LIM = CFG["limits"]
@@ -24,20 +23,16 @@ D = pd.read_csv(RESULTS / "datasets.csv").set_index("key")
 SIZE = D.rows * D.cols
 
 rows = []
-for g, fits in cli.plan(CFG, "pilot"):
-    gr = store.read(store.record_path(CFG["name"], "gen", digest(g)))
+for g, gr, fits in cli.records(CFG, "pilot"):
     if gr is None:
         continue
     rows.append((g["dataset"], g["arm"], "gen", gr["wall_s"]))
-    for f in fits:
-        fr = store.read(store.record_path(CFG["name"], "fit", digest(f)))
-        if fr:
-            rows.append((g["dataset"], f["arm"], f["model"], fr["wall_s"]))
+    rows += [(g["dataset"], f["arm"], f["model"], fr["wall_s"]) for f, fr in fits if fr]
 t = pd.DataFrame(rows, columns=["dataset", "arm", "stage", "wall_s"])
 t["size"] = t.dataset.map(SIZE)
 
 primary = D[D.primary].index
-excluded = {(e["dataset"], e["model"]) for e in CFG.get("exclude", [])}
+excluded = cli.excluded(CFG)
 out = []
 for (arm, stage), s in t.groupby(["arm", "stage"]):
     cap = LIM["gen_timeout_s"] if stage == "gen" else LIM["fit_timeout_s"]

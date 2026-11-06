@@ -5,8 +5,9 @@ train and test together. Here `fit` is OpenFE's (library defaults, `task` explic
 and the selected features are evaluated by the code below: row-wise operators by OpenFE's own
 `Node.calculate`; column-wide operators with statistics fitted on fit rows only and mapped to other rows
 (unseen key -> NaN). OpenFE's conventions are kept: raw counts, `std` with ddof=1, pct rank, `Combine`
-codes in order of first appearance. `GroupByThenRank` of a new row = share of fit-row values of its group
-below the value plus half of those equal to it.
+codes in order of first appearance. `GroupByThenRank` of a new row = (fit-row values of its group below it
++ (those equal to it + 1) / 2) / group size, pandas' average pct rank, so a value seen on fit rows gets its
+fit-row rank.
 
 Kept features: stage-2 gain > 0 (the positive-score rule OpenFE applies at stage 1), at most 2,000.
 Columns are renamed c0000, c0001, ... because OpenFE parses formulas on `()+-*/,`; names are mapped back.
@@ -53,13 +54,21 @@ def _combine(d1: pd.Series, d2: pd.Series) -> pd.Series:
 
 
 def _rank_new(d1: pd.Series, d2: pd.Series, groups: dict) -> pd.Series:
-    out = pd.Series(np.nan, index=d1.index)
-    for k, rows in d2.groupby(d2).groups.items():
-        if k in groups:
-            v, x = groups[k], d1.loc[rows].to_numpy(float)
-            r = (np.searchsorted(v, x, "left") + np.searchsorted(v, x, "right")) / 2 / len(v)
-            out.loc[rows] = np.where(np.isnan(x), np.nan, r)
-    return out
+    """One searchsorted over all groups: each fit value is keyed by (group, position among the distinct fit
+    values), which is sorted because every group's values are."""
+    sizes = np.array([len(v) for v in groups.values()])
+    fit = np.concatenate(list(groups.values()))
+    u = np.unique(fit)
+    m = len(u) + 1
+    keys = np.repeat(np.arange(len(sizes)) * m, sizes) + np.searchsorted(u, fit)
+    start = np.cumsum(sizes) - sizes
+    g, x = pd.Index(list(groups)).get_indexer(d2), d1.to_numpy(float)
+    gi = np.maximum(g, 0)
+    less = np.searchsorted(keys, gi * m + np.searchsorted(u, x, "left")) - start[gi]
+    leq = np.searchsorted(keys, gi * m + np.searchsorted(u, x, "right")) - start[gi]
+    n = sizes[gi]
+    r = (less + leq + 1) / 2 / np.maximum(n, 1)
+    return pd.Series(np.where((g >= 0) & (n > 0) & ~np.isnan(x), r, np.nan), index=d1.index)
 
 
 class Inductive:
@@ -124,9 +133,10 @@ class OpenFEInductive(FeatureGenerator):
             except SystemExit as e:  # OpenFE prints the traceback, then calls exit() in the pool
                 raise RuntimeError("OpenFE called exit(); its traceback is in the log above") from e
         scored = self.ofe.new_features_scores_list
-        kept = [node for node, gain in scored if gain > 0][:CAP]
-        self.info = {"stage1_survivors": len(scored), "kept": len(kept), "cap_fired": bool(sum(g > 0 for _, g in scored) > CAP),
-                     "gains": {self._name(n): float(g) for n, g in scored if g > 0}}
+        pos = [(n, g) for n, g in scored if g > 0]
+        kept = [n for n, _ in pos][:CAP]
+        self.info = {"stage1_survivors": len(scored), "kept": len(kept), "cap_fired": len(pos) > CAP,
+                     "gains": {self._name(n): float(g) for n, g in pos}}
         return Xp, kept
 
     def fit_transform(self, X_fit, y_fit, task, seed) -> pd.DataFrame:
@@ -160,6 +170,9 @@ class OpenFETransductive(OpenFEInductive):
         Xp, kept = self._search(X_fit, y_fit, task, seed)
         with tempfile.TemporaryDirectory(dir=".") as tmp:
             self.ofe.tmp_save_path = str(Path(tmp) / "openfe.feather")
-            fit_out, other_out = self.ofe.transform(Xp, prep(X_other), kept, n_jobs=1)
+            try:
+                fit_out, other_out = self.ofe.transform(Xp, prep(X_other), kept, n_jobs=1)
+            except SystemExit as e:
+                raise RuntimeError("OpenFE called exit(); its traceback is in the log above") from e
         cols = [self._name(n) for n in kept]
         return tuple(o.iloc[:, Xp.shape[1]:].set_axis(cols, axis=1) for o in (fit_out, other_out))

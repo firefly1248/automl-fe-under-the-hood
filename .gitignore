@@ -8,3 +8,6 @@ results/cache/
 openfe_tmp_data.feather
 AutogluonModels/
 results/stale/
+# per-unit records; git tracks results/raw/<exp>/{gen,fit}.jsonl.gz (make pack)
+results/raw/*/gen/
+results/raw/*/fit/

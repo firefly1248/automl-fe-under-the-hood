@@ -16,6 +16,8 @@ def file_hash(path: Path) -> str:
 def code_hash(*paths: Path) -> str:
     """Hash of every .py file under the given files or directories, by relative name and content."""
     files = sorted(f for p in map(Path, paths) for f in ([p] if p.is_file() else p.rglob("*.py")))
+    # only the file name is hashed, so two files of one name could swap code without changing the hash
+    assert len({f.name for f in files}) == len(files), f"hashed files share a name: {[f.name for f in files]}"
     h = hashlib.sha1()
     for f in files:
         h.update(f.name.encode() + f.read_bytes())

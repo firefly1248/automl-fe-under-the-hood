@@ -24,6 +24,7 @@ class Result:
     error: str
     wall_s: float
     peak_rss_mb: float
+    kill: dict | None = None  # the watchdog's marker if it killed the tree: reason (oom | timeout), peak RSS
 
 
 def _tree(proc: psutil.Process) -> list[psutil.Process]:
@@ -57,31 +58,31 @@ def run(cmd: list[str], timeout_s: float, mem_gb: float, cwd, env: dict) -> Resu
         t0 = time.monotonic()
         # stdout goes to the same log: OpenFE prints its tracebacks there before calling exit()
         p = subprocess.Popen(cmd, cwd=cwd, env={**env, **THREAD_ENV}, stdout=err, stderr=err)
-        proc, peak, status = psutil.Process(p.pid), 0, None
+        proc, peak, kill = psutil.Process(p.pid), 0, None
         while p.poll() is None:
             procs = _tree(proc)
             peak = max(peak, _rss(procs))
-            if peak > mem_gb * 2**30:
-                status = "oom"
-            elif time.monotonic() - t0 > timeout_s:
-                status = "timeout"
-            if status:
+            reason = "oom" if peak > mem_gb * 2**30 else "timeout" if time.monotonic() - t0 > timeout_s else None
+            if reason:
+                kill = {"reason": reason, "peak_rss_mb": round(peak / 2**20, 1)}
                 kill_tree(procs)
                 p.wait()
                 break
             time.sleep(POLL_S)
         wall = time.monotonic() - t0
-        # SIGKILL not sent by the watchdog: the OS killed the tree for memory (macOS compressed memory
-        # is invisible to the RSS watchdog). 137 = 128 + 9, as `uv run` reports a child killed by SIGKILL.
-        status = status or {0: "ok", -9: "oom", 137: "oom"}.get(p.returncode, "failed")
+        # oom and timeout only from the watchdog's marker; any other kill is failed (macOS may SIGKILL a tree
+        # under memory pressure: compressed memory is invisible to the RSS watchdog)
+        status = kill["reason"] if kill else "ok" if p.returncode == 0 else "failed"
         err.seek(0)
-        text = error_text(err.read().decode(errors="replace")) if status != "ok" else ""
+        # home stripped before the cut, which may split a path
+        text = error_text(strip_home(err.read().decode(errors="replace"))) if status != "ok" else ""
     if status == "timeout":
         text = f"wall clock limit {timeout_s} s exceeded\n" + text
     elif status == "oom":
-        cause = "tree RSS" if peak > mem_gb * 2**30 else "killed by SIGKILL outside the watchdog"
-        text = f"memory limit {mem_gb} GB exceeded ({cause})\n" + text
-    return Result(status, strip_home(text), round(wall, 2), round(peak / 2**20, 1))
+        text = f"memory limit {mem_gb} GB exceeded: peak tree RSS {kill['peak_rss_mb']} MB\n" + text
+    elif p.returncode in (-9, 137):  # 137 = 128 + 9, as `uv run` reports a child killed by SIGKILL
+        text = f"killed by SIGKILL, not by the watchdog (peak tree RSS {peak / 2**20:.0f} MB)\n" + text
+    return Result(status, text, round(wall, 2), round(peak / 2**20, 1), kill)
 
 
 def error_text(log: str) -> str:
