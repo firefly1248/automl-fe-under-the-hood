@@ -1,5 +1,24 @@
 # Progress
 
+## 2026-11-09: exp04 `full_r1`
+
+Repeat 1, same grid and caps as `full_r0`. Generator units match `full_r0` status for status: 1,869 ok, 75
+timeout, 35 not_applicable, 16 failed, 5 oom, on the same arms and datasets. Fit units: 4,173 ok, 30 timeout
+(all CatBoost on `ag_tabprep`, `ag_tabprep_keepcat` and `openfe`, the `full_r0` datasets plus satimage).
+The laptop hibernated for 5 h mid-run and the run resumed on wake. The limits use `time.monotonic`, which
+stops during sleep: the 3 `autofeat` units that spanned it (OnlineNewsPopularity) timed out at 3,600 s of
+run time, about 6 h of wall time, as all 5 folds did in `full_r0`.
+
+Generator coverage per arm over both repeats: 100% for 5 arms, `openfe` 94%, `mljar_golden` 92%, `autofeat`
+62%; every gap is explained (`experiments/exp04_open_benchmark/README.md`: tool failures, numeric-column
+requirements; `autofeat` timeouts at the 3,600 s cap). CatBoost on connect-4 stays excluded by config.
+
+Records of `full_r1` carry git_sha 7b510ee and 6be24fe, commits later squashed into 1b50cfb with the same
+code; `tests/test_records.py` checks each record's `code_hash` against the committed code.
+
+Next: A4 for exp02 (dataset list, settings, measured time of one dataset); exp04 and exp05 aggregates and
+figures while exp02 runs.
+
 ## 2026-11-06: record hygiene before `full_r1`
 
 - Home path: `limits` stripped the home path after cutting the error log, so a cut kept a piece of it in 13
@@ -17,7 +36,7 @@
 
 Repeat 0, 50 datasets x 5 folds x 8 generator arms, 3 jobs. Generator units: 1,869 ok, 75 timeout (all
 `autofeat`, 15 datasets), 35 not_applicable (`autofeat` on Amazon_employee_access, connect-4, kr-vs-kp;
-`mljar_golden` on Amazon_employee_access, socmob), 16 failed (`openfe` inside the library on sick, yeast and
+`mljar_golden` on the same three and socmob), 16 failed (`openfe` inside the library on sick, yeast and
 fps_benchmark, every fold; `autofeat` on one yeast fold), 5 oom (`autofeat`, numerai28.6). Fit units: 4,166
 ok, 37 timeout (all CatBoost: `ag_tabprep` and `ag_tabprep_keepcat` on GesturePhaseSegmentationProcessed,
 pendigits, texture and wall-robot-navigation, `openfe` on texture), 252 without a

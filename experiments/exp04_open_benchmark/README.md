@@ -13,3 +13,9 @@ the unit seed), without the wrapper:
 | yeast | `ValueError: y contains previously unseen labels` (`openfe.py`, `_evaluate`) | 10 classes, down to 3 fit rows each: OpenFE's stage-1 scoring fits LightGBM on a row subsample that lacks a class present in its validation rows |
 
 These units stay `failed`; OpenFE calls exit() in its worker pool, which the wrapper turns into an exception.
+
+## `not_applicable` units (by design)
+
+`autofeat` builds features from numeric columns and needs at least one; `mljar_golden` builds them from
+pairs of numeric columns and needs at least two. Amazon_employee_access, connect-4 and kr-vs-kp have no
+numeric column (both arms skip them), socmob has one (`mljar_golden` skips it). Every fold of both repeats.
