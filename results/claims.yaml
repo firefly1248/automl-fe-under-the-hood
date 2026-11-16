@@ -1,0 +1,501 @@
+- id: p4_openfe_reg_median_lgbm
+  post: 4
+  text: median relative RMSE improvement of OpenFE on regression, LightGBM downstream
+  source: results/tidy/exp04_summary.csv
+  query: task=='regression' & arm=='openfe' & model=='lgbm' & effect=='rmse_rel' & rule=='base_fallback'
+  stat: median_effect
+  value: 0.004659
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -0.016684
+  - 0.03083
+  coverage: 0.95
+- id: p4_openfe_bin_auc_lgbm
+  post: 4
+  text: median AUC difference of OpenFE on binary, LightGBM downstream
+  source: results/tidy/exp04_summary.csv
+  query: task=='binary' & arm=='openfe' & model=='lgbm' & effect=='auc_diff' & rule=='base_fallback'
+  stat: median_effect
+  value: 0.000226
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.0005
+  ci:
+  - -0.00241
+  - 0.003288
+  coverage: 0.95
+- id: p4_ag_tabprep_bin_auc_lgbm
+  post: 4
+  text: median AUC difference of the _r13 configuration on binary, LightGBM downstream
+  source: results/tidy/exp04_summary.csv
+  query: task=='binary' & arm=='ag_tabprep' & model=='lgbm' & effect=='auc_diff' & rule=='base_fallback'
+  stat: median_effect
+  value: 0.000941
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.0005
+  ci:
+  - -0.000805
+  - 0.003651
+  coverage: 1.0
+- id: p4_lama_reg_median_lgbm
+  post: 4
+  text: 'median relative RMSE improvement of lama_adv on regression, LightGBM downstream (negative: it hurts)'
+  source: results/tidy/exp04_summary.csv
+  query: task=='regression' & arm=='lama_adv' & model=='lgbm' & effect=='rmse_rel' & rule=='base_fallback'
+  stat: median_effect
+  value: -0.010627
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -0.053674
+  - -0.000717
+  coverage: 1.0
+- id: p4_lama_reg_wilcoxon_lgbm
+  post: 4
+  text: Holm-adjusted Wilcoxon p for lama_adv on regression, LightGBM downstream
+  source: results/tidy/exp04_summary.csv
+  query: task=='regression' & arm=='lama_adv' & model=='lgbm' & effect=='rmse_rel' & rule=='base_fallback'
+  stat: wilcoxon_p_holm
+  value: 0.013519
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -0.053674
+  - -0.000717
+  coverage: 1.0
+- id: p4_autofeat_ok_units
+  post: 4
+  text: autofeat fit units that ran to completion, both repeats and models
+  source: results/tidy/exp04.parquet
+  query: arm=='autofeat' & status=='ok'
+  stat: count
+  value: 616
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: p4_autofeat_planned_units
+  post: 4
+  text: autofeat fit units planned, both repeats and models
+  source: results/tidy/exp04.parquet
+  query: arm=='autofeat'
+  stat: count
+  value: 990
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: p45_permuted_failures
+  post: 5
+  text: permuted-label cells (arm x model x task) whose CI lies above chance (leakage signals); expect 0
+  source: results/tidy/exp05_permuted.csv
+  query: '`pass` == False'
+  stat: count
+  value: 0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: p45_te_flagged
+  post: 5
+  text: TE columns flagged by the fit-vs-test delivery gap (compare with the raw-column control)
+  source: results/tidy/exp05_te_delivery.csv
+  query: kind=='te' & flag
+  stat: count
+  value: 145
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: p45_te_columns
+  post: 5
+  text: TE columns checked
+  source: results/tidy/exp05_te_delivery.csv
+  query: kind=='te'
+  stat: count
+  value: 5040
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: p45_raw_flagged
+  post: 5
+  text: untouched numeric control columns flagged by the same thresholds (sampling noise alone)
+  source: results/tidy/exp05_te_delivery.csv
+  query: kind=='raw' & flag
+  stat: count
+  value: 78
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: p45_raw_columns
+  post: 5
+  text: untouched numeric control columns checked
+  source: results/tidy/exp05_te_delivery.csv
+  query: kind=='raw'
+  stat: count
+  value: 2115
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: p45_planted_openfe_product_reach
+  post: 5
+  text: share of planted-product units where OpenFE reaches the oracle R2
+  source: results/figures/exp05/planted.csv
+  query: arm=='openfe' & kind=='product'
+  stat: reach
+  value: 1.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: p45_planted_base_product_reach
+  post: 5
+  text: share of planted-product units where the raw columns alone reach the oracle R2
+  source: results/figures/exp05/planted.csv
+  query: arm=='base' & kind=='product'
+  stat: reach
+  value: 0.266667
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: p2_gbm_prep_cpu_configs
+  post: 2
+  text: GBM_PREP configs in the zeroshot_2025_12_18_cpu portfolio
+  source: results/tidy/exp01_prep_configs.csv
+  query: portfolio=='zeroshot_2025_12_18_cpu'
+  stat: count
+  value: 14
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: p2_arithmetic_recovers_ratio
+  post: 2
+  text: ArithmeticFeatureGenerator recovers the planted a/b on hard_columns (1.0 = exact rank match)
+  source: results/tidy/exp01_tabprep.csv
+  query: dataset=='hard_columns' & arm=='arithmetic'
+  stat: max_abs_rho_with_a_over_b
+  value: 1.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.0001
+- id: f4_median_effect
+  post: 4
+  kind: figure
+  text: median effect vs base by task type and model (base_fallback)
+  output: results/figures/exp04/median_effect_base_fallback.svg
+  data: results/figures/exp04/median_effect_base_fallback.csv
+  data_hash: a0f1a66d0d890663
+  approved_data_hash: null
+  approved_git_sha: null
+- id: f4_win_tie_loss
+  post: 4
+  kind: figure
+  text: descriptive win/tie/loss vs base (base_fallback)
+  output: results/figures/exp04/win_tie_loss_base_fallback.svg
+  data: results/figures/exp04/win_tie_loss_base_fallback.csv
+  data_hash: 2e0814f67be82aa5
+  approved_data_hash: null
+  approved_git_sha: null
+- id: f4_effect_vs_gen_time
+  post: 4
+  kind: figure
+  text: per-dataset effect vs generator time (complete cases)
+  output: results/figures/exp04/effect_vs_gen_time.svg
+  data: results/figures/exp04/effect_vs_gen_time.csv
+  data_hash: 04548bced854e6b9
+  approved_data_hash: null
+  approved_git_sha: null
+- id: f4_effect_vs_n_features
+  post: 4
+  kind: figure
+  text: per-dataset effect vs number of new features (complete cases)
+  output: results/figures/exp04/effect_vs_n_features.svg
+  data: results/figures/exp04/effect_vs_n_features.csv
+  data_hash: 186c52d394203fdd
+  approved_data_hash: null
+  approved_git_sha: null
+- id: f5_permuted
+  post: 5
+  kind: figure
+  text: permuted-label check per arm, model and task
+  output: results/figures/exp05/permuted.svg
+  data: results/figures/exp05/permuted.csv
+  data_hash: e7ee8bb1994a46c5
+  approved_data_hash: null
+  approved_git_sha: null
+- id: f5_planted
+  post: 5
+  kind: figure
+  text: planted-signal grid (reach oracle, find the true feature)
+  output: results/figures/exp05/planted.svg
+  data: results/figures/exp05/planted.csv
+  data_hash: 7b20ebdc4ee0dd3c
+  approved_data_hash: null
+  approved_git_sha: null
+- id: p2_b_a_binary
+  post: 2
+  text: median over 4 binary datasets of the relative log loss improvement, B (ArithmeticFeatureGenerator only)
+    over A (AutoGluon default features)
+  source: results/tidy/exp02_contrasts_summary.csv
+  query: contrast=='B-A' & task=='binary'
+  stat: median
+  value: 0.005695
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: p2_b_a_multiclass
+  post: 2
+  text: median over 4 multiclass datasets of the relative log loss improvement, B (ArithmeticFeatureGenerator only)
+    over A (AutoGluon default features)
+  source: results/tidy/exp02_contrasts_summary.csv
+  query: contrast=='B-A' & task=='multiclass'
+  stat: median
+  value: 0.01278
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: p2_b_a_regression
+  post: 2
+  text: median over 4 regression datasets of the relative RMSE improvement, B (ArithmeticFeatureGenerator only)
+    over A (AutoGluon default features)
+  source: results/tidy/exp02_contrasts_summary.csv
+  query: contrast=='B-A' & task=='regression'
+  stat: median
+  value: 0.124944
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: p2_d_a_binary
+  post: 2
+  text: median over 4 binary datasets of the relative log loss improvement, D (full best_quality with TabPrep) over
+    A
+  source: results/tidy/exp02_contrasts_summary.csv
+  query: contrast=='D-A' & task=='binary'
+  stat: median
+  value: 0.310364
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: p2_d_a_multiclass
+  post: 2
+  text: median over 4 multiclass datasets of the relative log loss improvement, D (full best_quality with TabPrep)
+    over A
+  source: results/tidy/exp02_contrasts_summary.csv
+  query: contrast=='D-A' & task=='multiclass'
+  stat: median
+  value: 0.108606
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: p2_d_a_regression
+  post: 2
+  text: median over 4 regression datasets of the relative RMSE improvement, D (full best_quality with TabPrep) over
+    A
+  source: results/tidy/exp02_contrasts_summary.csv
+  query: contrast=='D-A' & task=='regression'
+  stat: median
+  value: 0.471457
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: p2_d_d0_binary
+  post: 2
+  text: median over 4 binary datasets of the relative log loss improvement, D over D0 (same stack without TabPrep)
+  source: results/tidy/exp02_contrasts_summary.csv
+  query: contrast=='D-D0' & task=='binary'
+  stat: median
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: p2_d_d0_multiclass
+  post: 2
+  text: median over 4 multiclass datasets of the relative log loss improvement, D over D0 (same stack without TabPrep)
+  source: results/tidy/exp02_contrasts_summary.csv
+  query: contrast=='D-D0' & task=='multiclass'
+  stat: median
+  value: 0.026512
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: p2_d_d0_regression
+  post: 2
+  text: median over 4 regression datasets of the relative RMSE improvement, D over D0 (same stack without TabPrep)
+  source: results/tidy/exp02_contrasts_summary.csv
+  query: contrast=='D-D0' & task=='regression'
+  stat: median
+  value: 0.024956
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: p2_e_d0_binary
+  post: 2
+  text: median over 4 binary datasets of the relative log loss improvement, E over D0
+  source: results/tidy/exp02_contrasts_summary.csv
+  query: contrast=='E-D0' & task=='binary'
+  stat: median
+  value: -0.039739
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: p2_e_d0_multiclass
+  post: 2
+  text: median over 4 multiclass datasets of the relative log loss improvement, E over D0
+  source: results/tidy/exp02_contrasts_summary.csv
+  query: contrast=='E-D0' & task=='multiclass'
+  stat: median
+  value: 0.006952
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: p2_e_d0_regression
+  post: 2
+  text: median over 4 regression datasets of the relative RMSE improvement, E over D0
+  source: results/tidy/exp02_contrasts_summary.csv
+  query: contrast=='E-D0' & task=='regression'
+  stat: median
+  value: -0.011773
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: p2_b_b2_binary
+  post: 2
+  text: median over 4 binary datasets of the relative log loss improvement, B over B2
+  source: results/tidy/exp02_contrasts_summary.csv
+  query: contrast=='B-B2' & task=='binary'
+  stat: median
+  value: -0.051995
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: p2_b_b2_multiclass
+  post: 2
+  text: median over 4 multiclass datasets of the relative log loss improvement, B over B2
+  source: results/tidy/exp02_contrasts_summary.csv
+  query: contrast=='B-B2' & task=='multiclass'
+  stat: median
+  value: 0.026292
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: p2_b_b2_regression
+  post: 2
+  text: median over 4 regression datasets of the relative RMSE improvement, B over B2
+  source: results/tidy/exp02_contrasts_summary.csv
+  query: contrast=='B-B2' & task=='regression'
+  stat: median
+  value: 0.094384
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: p6_lama_ag_binary
+  post: 6
+  text: median over the binary datasets of the relative log loss improvement, LightAutoML over AutoGluon best_quality
+  source: results/tidy/exp06_contrasts_summary.csv
+  query: contrast=='lama-ag' & task=='binary'
+  stat: median
+  value: -0.395566
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: p6_lama_ag_multiclass
+  post: 6
+  text: median over the multiclass datasets of the relative log loss improvement, LightAutoML over AutoGluon best_quality
+  source: results/tidy/exp06_contrasts_summary.csv
+  query: contrast=='lama-ag' & task=='multiclass'
+  stat: median
+  value: 0.000409
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: p6_lama_ag_regression
+  post: 6
+  text: median over the regression datasets of the relative RMSE improvement, LightAutoML over AutoGluon best_quality
+  source: results/tidy/exp06_contrasts_summary.csv
+  query: contrast=='lama-ag' & task=='regression'
+  stat: median
+  value: -0.460448
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: p6_h2o_ag_binary
+  post: 6
+  text: median over the binary datasets of the relative log loss improvement, H2O AutoML over AutoGluon best_quality
+  source: results/tidy/exp06_contrasts_summary.csv
+  query: contrast=='h2o-ag' & task=='binary'
+  stat: median
+  value: -0.143573
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: p6_h2o_ag_multiclass
+  post: 6
+  text: median over the multiclass datasets of the relative log loss improvement, H2O AutoML over AutoGluon best_quality
+  source: results/tidy/exp06_contrasts_summary.csv
+  query: contrast=='h2o-ag' & task=='multiclass'
+  stat: median
+  value: -0.006603
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: p6_h2o_ag_regression
+  post: 6
+  text: median over the regression datasets of the relative RMSE improvement, H2O AutoML over AutoGluon best_quality
+  source: results/tidy/exp06_contrasts_summary.csv
+  query: contrast=='h2o-ag' & task=='regression'
+  stat: median
+  value: -0.075167
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: p6_h2o_te_h2o_binary
+  post: 6
+  text: median over the binary datasets of the relative log loss improvement, H2O AutoML with target encoding over
+    without
+  source: results/tidy/exp06_contrasts_summary.csv
+  query: contrast=='h2o_te-h2o' & task=='binary'
+  stat: median
+  value: 0.000944
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: p6_h2o_te_h2o_multiclass
+  post: 6
+  text: median over the multiclass datasets of the relative log loss improvement, H2O AutoML with target encoding
+    over without
+  source: results/tidy/exp06_contrasts_summary.csv
+  query: contrast=='h2o_te-h2o' & task=='multiclass'
+  stat: median
+  value: -0.010404
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: p6_h2o_te_h2o_regression
+  post: 6
+  text: median over the regression datasets of the relative RMSE improvement, H2O AutoML with target encoding over
+    without
+  source: results/tidy/exp06_contrasts_summary.csv
+  query: contrast=='h2o_te-h2o' & task=='regression'
+  stat: median
+  value: -0.071283
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: f2_contrasts
+  post: 2
+  kind: figure
+  text: per-dataset relative improvement of each exp02 contrast with fold-bootstrap 95% CI
+  output: results/figures/exp02/contrasts.svg
+  data: results/figures/exp02/contrasts.csv
+  data_hash: 358649d025ea3646
+  approved_data_hash: null
+  approved_git_sha: null
+- id: f6_contrasts
+  post: 6
+  kind: figure
+  text: per-dataset relative improvement of each exp06 contrast with fold-bootstrap 95% CI
+  output: results/figures/exp06/contrasts.svg
+  data: results/figures/exp06/contrasts.csv
+  data_hash: f312083de599792c
+  approved_data_hash: null
+  approved_git_sha: null

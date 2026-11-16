@@ -26,6 +26,7 @@ ENVS = {
     "openfe": (["openfe"], ["openfe", "lightgbm"]),
     "autofeat": (["autofeat"], ["autofeat", "numba"]),
     "mljar": (["supervised.preprocessing.goldenfeatures_transformer"], ["mljar-supervised", "lightgbm", "xgboost"]),
+    "h2o": (["h2o"], ["h2o"]),  # exp06 only; needs Java 17 (JAVA_HOME=/opt/homebrew/opt/openjdk@17 on macOS)
 }
 
 

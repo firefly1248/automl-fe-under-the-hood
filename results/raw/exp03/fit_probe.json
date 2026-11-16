@@ -1,0 +1,208 @@
+{
+ "adult": {
+  "metrics": {
+   "oof_rows": 48842,
+   "auc": 0.931742058598212,
+   "logloss": 0.26960569620132446
+  },
+  "used_features": [
+   "age",
+   "capital-gain",
+   "capital-loss",
+   "education",
+   "education-num",
+   "fnlwgt",
+   "hours-per-week",
+   "marital-status",
+   "native-country",
+   "occupation",
+   "race",
+   "relationship",
+   "sex",
+   "workclass"
+  ],
+  "roles": {
+   "age": "Category role, dtype <class 'numpy.float32'>. Additional params: [('encoding_type', 'auto'), ('unknown', 5), ('force_input', False), ('label_encoded', False), ('ordinal', False)]",
+   "workclass": "Category role, dtype <class 'object'>. Additional params: [('encoding_type', 'auto'), ('unknown', 5), ('force_input', False), ('label_encoded', False), ('ordinal', False)]",
+   "fnlwgt": "Category role, dtype <class 'numpy.float32'>. Additional params: [('encoding_type', 'freq'), ('unknown', 5), ('force_input', False), ('label_encoded', False), ('ordinal', True)]",
+   "education": "Category role, dtype <class 'object'>. Additional params: [('encoding_type', 'auto'), ('unknown', 5), ('force_input', False), ('label_encoded', False), ('ordinal', False)]",
+   "education-num": "Numeric role, dtype float32. Additional params: [('force_input', False), ('prob', False), ('discretization', False)]",
+   "marital-status": "Category role, dtype <class 'object'>. Additional params: [('encoding_type', 'auto'), ('unknown', 5), ('force_input', False), ('label_encoded', False), ('ordinal', False)]",
+   "occupation": "Category role, dtype <class 'object'>. Additional params: [('encoding_type', 'auto'), ('unknown', 5), ('force_input', False), ('label_encoded', False), ('ordinal', False)]",
+   "relationship": "Category role, dtype <class 'object'>. Additional params: [('encoding_type', 'auto'), ('unknown', 5), ('force_input', False), ('label_encoded', False), ('ordinal', False)]",
+   "race": "Category role, dtype <class 'object'>. Additional params: [('encoding_type', 'auto'), ('unknown', 5), ('force_input', False), ('label_encoded', False), ('ordinal', False)]",
+   "sex": "Category role, dtype <class 'object'>. Additional params: [('encoding_type', 'auto'), ('unknown', 5), ('force_input', False), ('label_encoded', False), ('ordinal', True)]",
+   "capital-gain": "Category role, dtype <class 'numpy.float32'>. Additional params: [('encoding_type', 'auto'), ('unknown', 5), ('force_input', False), ('label_encoded', False), ('ordinal', False)]",
+   "capital-loss": "Category role, dtype <class 'numpy.float32'>. Additional params: [('encoding_type', 'auto'), ('unknown', 5), ('force_input', False), ('label_encoded', False), ('ordinal', False)]",
+   "hours-per-week": "Numeric role, dtype float32. Additional params: [('force_input', False), ('prob', False), ('discretization', False)]",
+   "native-country": "Category role, dtype <class 'object'>. Additional params: [('encoding_type', 'auto'), ('unknown', 5), ('force_input', False), ('label_encoded', False), ('ordinal', False)]"
+  },
+  "selector": {
+   "pipe_0": {
+    "selected_features": [
+     "age",
+     "capital-gain",
+     "capital-loss",
+     "education",
+     "education-num",
+     "fnlwgt",
+     "hours-per-week",
+     "marital-status",
+     "native-country",
+     "occupation",
+     "race",
+     "relationship",
+     "sex",
+     "workclass"
+    ]
+   },
+   "pipe_1": {
+    "selected_features": [
+     "age",
+     "capital-gain",
+     "capital-loss",
+     "education",
+     "education-num",
+     "fnlwgt",
+     "hours-per-week",
+     "marital-status",
+     "native-country",
+     "occupation",
+     "race",
+     "relationship",
+     "sex",
+     "workclass"
+    ],
+    "importances": {
+     "relationship": 74640.85864877701,
+     "capital-gain": 55549.71230864525,
+     "education-num": 46180.581575751305,
+     "marital-status": 33114.83675277233,
+     "age": 28462.142842054367,
+     "capital-loss": 18880.303956389427,
+     "hours-per-week": 16034.267461299896,
+     "fnlwgt": 14018.85241496563,
+     "occupation": 13111.910311222076,
+     "workclass": 5158.785965561867,
+     "education": 3253.3601326942444,
+     "native-country": 2796.9180686473846,
+     "sex": 1709.4375312328339,
+     "race": 1667.3561744689941
+    },
+    "dropped": []
+   }
+  }
+ },
+ "diamonds": {
+  "metrics": {
+   "oof_rows": 53940,
+   "rmse": 541.8922286765146,
+   "r2": 0.9815494418144226
+  },
+  "used_features": [
+   "carat",
+   "clarity",
+   "color",
+   "cut",
+   "depth",
+   "table",
+   "x",
+   "y",
+   "z"
+  ],
+  "roles": {
+   "carat": "Numeric role, dtype float32. Additional params: [('force_input', False), ('prob', False), ('discretization', False)]",
+   "cut": "Category role, dtype <class 'object'>. Additional params: [('encoding_type', 'auto'), ('unknown', 5), ('force_input', False), ('label_encoded', False), ('ordinal', False)]",
+   "color": "Category role, dtype <class 'object'>. Additional params: [('encoding_type', 'auto'), ('unknown', 5), ('force_input', False), ('label_encoded', False), ('ordinal', True)]",
+   "clarity": "Category role, dtype <class 'object'>. Additional params: [('encoding_type', 'auto'), ('unknown', 5), ('force_input', False), ('label_encoded', False), ('ordinal', False)]",
+   "depth": "Numeric role, dtype float32. Additional params: [('force_input', False), ('prob', False), ('discretization', False)]",
+   "table": "Numeric role, dtype float32. Additional params: [('force_input', False), ('prob', False), ('discretization', False)]",
+   "x": "Numeric role, dtype float32. Additional params: [('force_input', False), ('prob', False), ('discretization', False)]",
+   "y": "Numeric role, dtype float32. Additional params: [('force_input', False), ('prob', False), ('discretization', False)]",
+   "z": "Numeric role, dtype float32. Additional params: [('force_input', False), ('prob', False), ('discretization', False)]"
+  },
+  "selector": {
+   "pipe_0": {
+    "selected_features": [
+     "carat",
+     "clarity",
+     "color",
+     "cut",
+     "depth",
+     "table",
+     "x",
+     "y",
+     "z"
+    ],
+    "importances": {
+     "carat": 4897733134608.0,
+     "y": 4156678725209.0,
+     "clarity": 697822511744.0,
+     "color": 309882396518.0,
+     "z": 207706420066.0,
+     "x": 41138408133.0,
+     "depth": 17051100860.0,
+     "cut": 14513163660.0,
+     "table": 7520671550.0
+    },
+    "dropped": []
+   }
+  }
+ },
+ "Amazon_employee_access": {
+  "metrics": {
+   "oof_rows": 32769,
+   "auc": 0.8860207460587173,
+   "logloss": 0.15144963562488556
+  },
+  "used_features": [
+   "MGR_ID",
+   "RESOURCE",
+   "ROLE_CODE",
+   "ROLE_DEPTNAME",
+   "ROLE_FAMILY",
+   "ROLE_FAMILY_DESC",
+   "ROLE_ROLLUP_1",
+   "ROLE_ROLLUP_2",
+   "ROLE_TITLE"
+  ],
+  "roles": {
+   "RESOURCE": "Category role, dtype <class 'numpy.float32'>. Additional params: [('encoding_type', 'auto'), ('unknown', 5), ('force_input', False), ('label_encoded', False), ('ordinal', True)]",
+   "MGR_ID": "Category role, dtype <class 'numpy.float32'>. Additional params: [('encoding_type', 'auto'), ('unknown', 5), ('force_input', False), ('label_encoded', False), ('ordinal', True)]",
+   "ROLE_ROLLUP_1": "Category role, dtype <class 'numpy.float32'>. Additional params: [('encoding_type', 'auto'), ('unknown', 5), ('force_input', False), ('label_encoded', False), ('ordinal', False)]",
+   "ROLE_ROLLUP_2": "Category role, dtype <class 'numpy.float32'>. Additional params: [('encoding_type', 'auto'), ('unknown', 5), ('force_input', False), ('label_encoded', False), ('ordinal', False)]",
+   "ROLE_DEPTNAME": "Category role, dtype <class 'numpy.float32'>. Additional params: [('encoding_type', 'auto'), ('unknown', 5), ('force_input', False), ('label_encoded', False), ('ordinal', True)]",
+   "ROLE_TITLE": "Category role, dtype <class 'numpy.float32'>. Additional params: [('encoding_type', 'auto'), ('unknown', 5), ('force_input', False), ('label_encoded', False), ('ordinal', True)]",
+   "ROLE_FAMILY_DESC": "Category role, dtype <class 'numpy.float32'>. Additional params: [('encoding_type', 'auto'), ('unknown', 5), ('force_input', False), ('label_encoded', False), ('ordinal', True)]",
+   "ROLE_FAMILY": "Category role, dtype <class 'numpy.float32'>. Additional params: [('encoding_type', 'auto'), ('unknown', 5), ('force_input', False), ('label_encoded', False), ('ordinal', False)]",
+   "ROLE_CODE": "Category role, dtype <class 'numpy.float32'>. Additional params: [('encoding_type', 'auto'), ('unknown', 5), ('force_input', False), ('label_encoded', False), ('ordinal', True)]"
+  },
+  "selector": {
+   "pipe_0": {
+    "selected_features": [
+     "MGR_ID",
+     "RESOURCE",
+     "ROLE_CODE",
+     "ROLE_DEPTNAME",
+     "ROLE_FAMILY",
+     "ROLE_FAMILY_DESC",
+     "ROLE_ROLLUP_1",
+     "ROLE_ROLLUP_2",
+     "ROLE_TITLE"
+    ],
+    "importances": {
+     "MGR_ID": 23535.170563042164,
+     "RESOURCE": 21085.370663046837,
+     "ROLE_DEPTNAME": 19755.03966397047,
+     "ROLE_FAMILY_DESC": 16555.8378636837,
+     "ROLE_ROLLUP_2": 12901.92237329483,
+     "ROLE_CODE": 10340.622263371944,
+     "ROLE_FAMILY": 7171.8866911530495,
+     "ROLE_ROLLUP_1": 6467.177698194981,
+     "ROLE_TITLE": 4725.98588848114
+    },
+    "dropped": []
+   }
+  }
+ }
+}

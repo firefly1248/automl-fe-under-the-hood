@@ -1,0 +1,13 @@
+# exp06: AutoML end to end (plan section 8, optional; A4 decisions in PROGRESS.md 2026-11-10).
+name: exp06_automl_end_to_end
+protocol:            # hashed into every unit
+  n_folds: 5
+  repeat: 0
+  time_limit: 600
+  eval_metric: {binary: log_loss, multiclass: log_loss, regression: root_mean_squared_error}
+arms: [ag_best, lama, h2o, h2o_te]   # workers: worker_ag.py, worker_lama.py, worker_h2o.py (h2o_te too)
+# the exp02 list minus mfeat-fourier and pendigits: both are pure numeric multiclass, where the
+# H2O target-encoding contrast (h2o_te - h2o) is moot; every >= 10-level categorical dataset stays
+datasets: [kr-vs-kp, credit-g, sick, bank-marketing, cmc, okcupid-stem,
+           pol, elevators, socmob, Moneyball]
+limits: {unit_timeout_s: 1800, min_free_gb: 2}

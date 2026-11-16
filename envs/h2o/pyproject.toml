@@ -1,0 +1,17 @@
+[project]
+name = "afe-env-h2o"
+version = "0"
+requires-python = "==3.11.*"
+dependencies = [
+    "afe",
+    "pytest",
+    "h2o==3.46.0.8",
+    "scikit-learn",
+    "pyarrow",
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+afe = { path = "../..", editable = true }

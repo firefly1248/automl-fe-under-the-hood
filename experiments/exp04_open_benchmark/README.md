@@ -19,3 +19,23 @@ These units stay `failed`; OpenFE calls exit() in its worker pool, which the wra
 `autofeat` builds features from numeric columns and needs at least one; `mljar_golden` builds them from
 pairs of numeric columns and needs at least two. Amazon_employee_access, connect-4 and kr-vs-kp have no
 numeric column (both arms skip them), socmob has one (`mljar_golden` skips it). Every fold of both repeats.
+
+## Findings (both repeats; numbers live in `results/tidy/exp04_report.md` and `results/claims.yaml`)
+
+- With untuned default LightGBM and CatBoost downstream (a design choice, plan 7.3), no arm moves the
+  median primary metric across primary datasets by more than noise: the 95% bootstrap CIs straddle zero
+  in almost every (task, model, arm) cell under both failure rules
+  (`results/figures/exp04/median_effect_*.svg`).
+- The one Holm-significant across-dataset effect is negative: `lama_adv` on regression makes RMSE worse
+  (claims `p4_lama_reg_median_lgbm`, `p4_lama_reg_wilcoxon_lgbm`).
+- `openfe` has the widest per-dataset spread: the largest single-dataset wins (multiclass log loss) next
+  to the highest share of descriptive losses on binary (`exp04_summary.csv`).
+- Coverage separates the tools more than accuracy does: `autofeat` finishes well under the 3,600 s cap on
+  barely over half of its units, `openfe` and `mljar_golden` sit in the low nineties, the rest are at
+  100% (coverage table in `exp04_report.md`; failures above).
+- Cost: on the jobs=1 timing pass, `ag_tabprep` and `openfe` multiply the whole pipeline time by tens
+  versus fitting the same model on raw columns, mostly through wider downstream inputs
+  (`exp04_timing_summary.csv`).
+
+Caveats: per-dataset tests are near-powerless and descriptive only (plan 7.5); the AUC differences sit in
+the third decimal; results are for defaults-no-retune downstream, not for tuned pipelines.

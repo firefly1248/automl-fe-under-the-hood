@@ -1,5 +1,73 @@
 # Progress
 
+## 2026-11-16: exp06 complete (200 of 200 ok); phase 6 pieces written
+
+1. exp06 finished: 200 units, all ok. Mean wall per unit: `ag_best` 588 s, `h2o` 611 s, `h2o_te` 609 s,
+   `lama` 213 s (52 to 450 s): LightAutoML stops on its own well under the 600 s budget. The run was paused twice
+   for other jobs (the in-flight unit was recomputed each time).
+2. `afe.analysis.exp06` (in `make aggregate`) writes tidy/exp06.parquet, exp06_contrasts*.csv and
+   figures/exp06/contrasts.*; `afe.analysis.exp02` helpers (`records`, `contrasts`, `figure`) take the experiment
+   and the contrast pairs as parameters. Contrasts: `lama` and `h2o` against `ag_best`, `h2o_te` against `h2o`.
+3. claims.yaml: 24 new entries (`p2_*`, `p6_*` medians of the contrast summaries, figures `f2_contrasts`,
+   `f6_contrasts`); `make claims` recomputes all 48, none approved yet (the `approved_*` fields are Ilia's).
+4. READMEs written for exp02 and exp06; `posts/README.md` lists the claim ids per post.
+5. Fresh-clone check (local clone of HEAD with the working-tree changes overlaid; `make env`, the documented torch
+   libomp symlink, `make data`, `make unpack`, `make exp01`, `make exp04-smoke`): every step ran; the smoke ran its 24
+   generator units, all ok. Differences against the committed tables are not results: `exp01_tabprep.csv` differs only
+   in `fit_transform_s`; `exp01_types.csv` only in the order of the column lists (exp01 runs without
+   `PYTHONHASHSEED=0`) and in the random `__nlp__` column names of 4 rows; `datasets.csv` only in `did`/`version`
+   written as floats now that the planted frames are in the registry, and `datasets.md` was stale (case studies 2,
+   now 14). `results/datasets.csv` and `datasets.md` were replaced by the regenerated versions. `make test`: all six
+   stages pass. `make pack` wrote exp02 and exp06 `fit.jsonl.gz`; the records test passes on them.
+6. Nothing is committed. The commit set is shown to Ilia for approval; `review*_plan_*.md` stay out of it.
+
+## 2026-11-11: A4 for exp02 (decided by the agent under the autonomous-finish authorization)
+
+Ilia chose "decide yourself and launch" for A4; this entry records what was decided.
+
+1. Datasets: the 12 of `experiments/exp02_autogluon_ablation/config.yaml`, chosen by the plan 8 rule (<= 60,000 rows;
+   per task type the first 2 with a categorical of >= 10 levels and the first 2 without, by OpenML id; multiclass has
+   one such dataset, okcupid-stem): kr-vs-kp, credit-g, sick, bank-marketing (binary); mfeat-fourier, cmc, pendigits,
+   okcupid-stem (multiclass); pol, elevators, socmob, Moneyball (regression).
+2. Settings as in the plan: repeat 0, 5 outer folds, 7 arms (A, B, B2, C, D, D0, E), `time_limit=600`, log loss /
+   RMSE as eval metric, `num_cpus=12` (physical cores - 2), memory watchdog 20 GB, unit timeout 1800 s, one unit at a
+   time, no thread variables, no other job on the machine. 420 units.
+3. Timing check on cmc (1,473 rows, 35 units, all ok): mean wall per unit A 9 s, B 7 s, B2 11 s, C 45 s, D 28 s,
+   D0 15 s, E 50 s; D builds 38 models, E and C 12. cmc is the smallest set, so this is a floor: on the larger sets
+   C, D, D0 and E are bounded by the 600 s budget (plus AutoGluon's overshoot, hard kill at 1800 s). Upper bound of
+   the run: 420 units at about 11 minutes.
+4. Fault found by the check: arm E failed on all 5 folds after 5 s (`No models were trained successfully`). Ray's
+   uv runtime-env hook refuses a worker cwd outside the project (the unit runs in a temp dir). Fix in both
+   orchestrators: `RAY_ENABLE_UV_RUN_RUNTIME_ENV=0` in the unit's environment (orchestration, not hashed; it changes how
+   Ray workers start, not what is fitted). The 5 failed E records were rerun with `--retry-failed`. exp06 `ag_best`
+   would have failed the same way.
+5. First reading (cmc only, not for posts): D - D0 = -0.069 relative log loss (stacking hurts on 1.5k rows),
+   E - D0 = +0.013, B - A = +0.007, B - B2 = +0.021.
+6. Launch: `make exp02` (385 units left), detached.
+7. Paused at 163 of 420 units (cmc, kr-vs-kp, credit-g, sick done; bank-marketing in progress at arm D fold 4) at Ilia's
+   request, to free the machine for another job (another session's feature-selection runs). Stopped by terminating the
+   orchestrator and its workers right after a unit finished; no unit record was corrupted. One record caused by the kill
+   (bank-marketing D fold 3, `killed by SIGKILL`) was deleted, so it reruns. Resume: `make exp02`, which skips finished
+   units. `time_limit` is wall-clock, so units must never be frozen with SIGSTOP; each unit ran alone before the pause.
+
+## 2026-11-11: exp03 step 3 (LAMA fit probe), OpenMP deadlock on macOS
+
+`make exp03-step3`: default `TabularAutoML` (timeout 600, cpu_limit 12) on adult, diamonds, Amazon_employee_access.
+
+1. OOF blend (`exp03_fit_oof.csv`): adult AUC 0.9317 / log loss 0.2696; diamonds RMSE 541.89 / R2 0.9815;
+   Amazon AUC 0.8860 / log loss 0.1514. Reruns reproduce these to 4 digits.
+2. Per model (`exp03_fit_models.csv`): the GBMs get the `LGBAdvancedPipeline` columns (`oof__inter__(a__b)` target-encoded
+   interactions, `freq__`, `ord__`); `linear_l2` gets `le__` and scaled columns. LAMA keeps the features on the
+   algo (`algo.features`), not on the pipeline.
+3. Selector (`selector` in `fit_probe.json`): kept every input column on all three datasets (nothing dropped at
+   cutoff 0), for each pipeline that has one (adult: linear and GBM; diamonds, Amazon: the GBM pipeline).
+4. Environment fault, found while running this: in the lama env torch ships its own `libomp.dylib` and LightGBM
+   loads the Homebrew one. Two OpenMP runtimes in one process deadlocked (twice, hours of idle CPU) and then
+   segfaulted in `__kmp_suspend_64` (crash report, 12 threads; one thread of one runtime in code of the other).
+   Fix: in `envs/lama/.venv/.../torch/lib` replace `libomp.dylib` with a symlink to
+   `/opt/homebrew/opt/libomp/lib/libomp.dylib` (noted in `envs/lama/pyproject.toml`). It is a local, untracked step
+   after `uv sync`; any rebuild of the lama env needs it again (exp03 step 3 and exp06 `lama` arm).
+
 ## 2026-11-09: exp04 `full_r1`
 
 Repeat 1, same grid and caps as `full_r0`. Generator units match `full_r0` status for status: 1,869 ok, 75

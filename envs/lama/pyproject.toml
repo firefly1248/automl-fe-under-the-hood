@@ -23,3 +23,9 @@ torch = { index = "pytorch-cpu", marker = "sys_platform == 'linux'" }
 name = "pytorch-cpu"
 url = "https://download.pytorch.org/whl/cpu"
 explicit = true
+
+# macOS: torch bundles its own libomp.dylib; lightgbm links the brew one. Two OpenMP runtimes
+# in one process deadlock or segfault (seen in exp03 step 3 and would hit exp06 worker_lama).
+# After uv sync, point torch at the brew copy:
+#   cd .venv/lib/python3.11/site-packages/torch/lib
+#   mv libomp.dylib libomp.dylib.orig && ln -s /opt/homebrew/opt/libomp/lib/libomp.dylib libomp.dylib

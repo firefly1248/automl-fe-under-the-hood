@@ -1,7 +1,7 @@
 ENVS := core autogluon lama openfe autofeat mljar
 RUN = uv run --frozen --project envs/$(1)
 
-.PHONY: env env-check data planted splits test pack unpack exp01 exp03 exp04-smoke exp04-pilot exp04-timing exp05 exp04-full-r0 exp04-full-r1
+.PHONY: exp06 aggregate figures claims commit-results env env-check data planted splits test pack unpack exp01 exp02 exp03 exp03-step3 exp04-smoke exp04-pilot exp04-timing exp05 exp04-full-r0 exp04-full-r1
 
 env:
 	for e in $(ENVS); do uv sync --frozen --project envs/$$e || exit 1; done
@@ -35,8 +35,15 @@ exp01:
 	$(call RUN,autogluon) python experiments/exp01_autogluon_probe/inventory.py
 	$(call RUN,autogluon) python experiments/exp01_autogluon_probe/run.py
 
+# runs alone: one unit at a time with the whole machine (plan section 8)
+exp02:
+	$(call RUN,core) python experiments/exp02_autogluon_ablation/run.py $(ARGS)
+
 exp03:
 	$(call RUN,lama) python experiments/exp03_lama_probe/run.py
+
+exp03-step3:
+	$(call RUN,lama) python experiments/exp03_lama_probe/fit_probe.py
 
 EXP04 = experiments/exp04_open_benchmark/config.yaml
 
@@ -59,3 +66,26 @@ exp04-full-r0:
 
 exp04-full-r1:
 	$(call RUN,core) python -m afe.run.cli $(EXP04) full_r1 $(ARGS)
+
+# phase 6 (plan section 9)
+aggregate:
+	$(call RUN,core) python -m afe.analysis.aggregate
+	$(call RUN,core) python -m afe.analysis.stats
+	$(call RUN,core) python experiments/exp04_open_benchmark/report.py
+	$(call RUN,core) python -m afe.analysis.exp02
+	$(call RUN,core) python -m afe.analysis.exp06
+
+figures:
+	$(call RUN,core) python -m afe.analysis.figures
+
+claims:
+	$(call RUN,core) python -m afe.analysis.claims
+
+# stage everything reviewable; shows the list, commits nothing (plan rule 9)
+commit-results: aggregate figures claims pack
+	git add -A results experiments posts README.md PROGRESS.md
+	git status --short
+
+# optional, runs alone, after exp02 (A4 in PROGRESS.md 2026-11-10); needs envs/h2o and Java 17
+exp06:
+	$(call RUN,core) python experiments/exp06_automl_end_to_end/run.py $(ARGS)

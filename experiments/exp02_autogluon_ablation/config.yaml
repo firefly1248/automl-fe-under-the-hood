@@ -1,0 +1,17 @@
+# exp02: AutoGluon ablation (plan section 8): new features vs model diversity vs stacking vs portfolio.
+name: exp02_autogluon_ablation
+protocol:            # hashed into every unit; limits and the machine-dependent num_cpus are not
+  n_folds: 5
+  repeat: 0
+  time_limit: 600
+  eval_metric: {binary: log_loss, multiclass: log_loss, regression: root_mean_squared_error}
+arms: [A, B, B2, C, D, D0, E]   # defined in worker.py
+# per task type the first 2 primary datasets <= 60,000 rows with a categorical of >= 10 levels and the
+# first 2 without, by OpenML data id; multiclass has one such dataset (okcupid-stem), the rest come from
+# those without (plan section 8)
+datasets: [kr-vs-kp, credit-g, sick, bank-marketing,
+           mfeat-fourier, cmc, pendigits, okcupid-stem,
+           pol, elevators, socmob, Moneyball]
+# unit_timeout_s: hard kill well above time_limit (AutoGluon may overshoot its budget);
+# the memory watchdog cap is ram_gb - 4, computed at launch (plan section 8)
+limits: {unit_timeout_s: 1800, min_free_gb: 2}

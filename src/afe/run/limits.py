@@ -53,11 +53,11 @@ def kill_tree(procs) -> None:
     psutil.wait_procs(procs, timeout=10)
 
 
-def run(cmd: list[str], timeout_s: float, mem_gb: float, cwd, env: dict) -> Result:
+def run(cmd: list[str], timeout_s: float, mem_gb: float, cwd, env: dict, thread_env: dict = THREAD_ENV) -> Result:
     with tempfile.TemporaryFile() as err:
         t0 = time.monotonic()
         # stdout goes to the same log: OpenFE prints its tracebacks there before calling exit()
-        p = subprocess.Popen(cmd, cwd=cwd, env={**env, **THREAD_ENV}, stdout=err, stderr=err)
+        p = subprocess.Popen(cmd, cwd=cwd, env={**env, **thread_env}, stdout=err, stderr=err)
         proc, peak, kill = psutil.Process(p.pid), 0, None
         while p.poll() is None:
             procs = _tree(proc)
