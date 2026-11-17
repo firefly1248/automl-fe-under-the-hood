@@ -1,0 +1,191 @@
+probe,item,value
+frame_types,num,real
+frame_types,cat_4,enum
+frame_types,cat_20,enum
+frame_types,cat_21,enum
+frame_types,cat_22,enum
+frame_types,cat_23,enum
+frame_types,cat_24,enum
+frame_types,cat_25,enum
+frame_types,cat_60,enum
+frame_types,dt,time
+frame_types,text_free,string
+frame_types,text_few,enum
+frame_types,y,enum
+default,DeepLearning_grid_2_model_1.categorical_encoding,"deeplearning: default=AUTO, input=AUTO, actual=OneHotInternal"
+default,DeepLearning_grid_2_model_1.predictors,cat_60; cat_25; cat_24; cat_23; cat_22; cat_21; cat_20; text_few; cat_4; num; dt
+default,GLM_1.categorical_encoding,glm: absent
+default,GLM_1.predictors,cat_60; cat_25; cat_24; cat_23; cat_22; cat_21; cat_20; text_few; cat_4; num; dt
+default,StackedEnsemble_BestOfFamily_3.categorical_encoding,stackedensemble: absent
+default,StackedEnsemble_BestOfFamily_3.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,GBM_grid_1_model_16.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+default,GBM_grid_1_model_16.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,GBM_grid_1_model_4.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+default,GBM_grid_1_model_4.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,StackedEnsemble_BestOfFamily_1.categorical_encoding,stackedensemble: absent
+default,StackedEnsemble_BestOfFamily_1.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,GBM_grid_1_model_15.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+default,GBM_grid_1_model_15.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,GBM_1.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+default,GBM_1.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,DeepLearning_1.categorical_encoding,"deeplearning: default=AUTO, input=AUTO, actual=OneHotInternal"
+default,DeepLearning_1.predictors,cat_60; cat_25; cat_24; cat_23; cat_22; cat_21; cat_20; text_few; cat_4; num; dt
+default,GBM_5.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+default,GBM_5.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,StackedEnsemble_BestOfFamily_2.categorical_encoding,stackedensemble: absent
+default,StackedEnsemble_BestOfFamily_2.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,GBM_grid_1_model_8.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+default,GBM_grid_1_model_8.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,GBM_grid_1_model_3.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+default,GBM_grid_1_model_3.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,GBM_grid_1_model_10.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+default,GBM_grid_1_model_10.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,GBM_grid_1_model_7.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+default,GBM_grid_1_model_7.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,GBM_grid_1_model_9.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+default,GBM_grid_1_model_9.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,GBM_4.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+default,GBM_4.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,StackedEnsemble_BestOfFamily_4.categorical_encoding,stackedensemble: absent
+default,StackedEnsemble_BestOfFamily_4.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,StackedEnsemble_AllModels_2.categorical_encoding,stackedensemble: absent
+default,StackedEnsemble_AllModels_2.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,GBM_grid_1_model_1.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+default,GBM_grid_1_model_1.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,GBM_grid_1_model_13.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+default,GBM_grid_1_model_13.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,GBM_grid_1_model_12.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+default,GBM_grid_1_model_12.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,GBM_grid_1_model_11.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+default,GBM_grid_1_model_11.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,DeepLearning_grid_1_model_2.categorical_encoding,"deeplearning: default=AUTO, input=AUTO, actual=OneHotInternal"
+default,DeepLearning_grid_1_model_2.predictors,cat_60; cat_25; cat_24; cat_23; cat_22; cat_21; cat_20; text_few; cat_4; num; dt
+default,StackedEnsemble_AllModels_1.categorical_encoding,stackedensemble: absent
+default,StackedEnsemble_AllModels_1.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,GBM_grid_1_model_17.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+default,GBM_grid_1_model_17.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,GBM_grid_1_model_2.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+default,GBM_grid_1_model_2.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,DRF_1.categorical_encoding,"drf: default=AUTO, input=AUTO, actual=Enum"
+default,DRF_1.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,XRT_1.categorical_encoding,"drf: default=AUTO, input=AUTO, actual=Enum"
+default,XRT_1.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,GBM_grid_1_model_6.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+default,GBM_grid_1_model_6.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,DeepLearning_grid_1_model_1.categorical_encoding,"deeplearning: default=AUTO, input=AUTO, actual=OneHotInternal"
+default,DeepLearning_grid_1_model_1.predictors,cat_60; cat_25; cat_24; cat_23; cat_22; cat_21; cat_20; text_few; cat_4; num; dt
+default,GBM_2.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+default,GBM_2.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,GBM_3.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+default,GBM_3.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,GBM_grid_1_model_14.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+default,GBM_grid_1_model_14.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,StackedEnsemble_AllModels_3.categorical_encoding,stackedensemble: absent
+default,StackedEnsemble_AllModels_3.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+default,GBM_grid_1_model_5.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+default,GBM_grid_1_model_5.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+target_encoding,GBM_grid_1_model_15.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_grid_1_model_15.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,GLM_1.categorical_encoding,glm: absent
+target_encoding,GLM_1.predictors,cat_60; cat_25; cat_24; cat_23; cat_22; cat_21; cat_20; text_few; cat_4; num; dt
+target_encoding,GBM_grid_1_model_1.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_grid_1_model_1.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,GBM_grid_1_model_23.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_grid_1_model_23.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,GBM_grid_1_model_4.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_grid_1_model_4.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,StackedEnsemble_BestOfFamily_3.categorical_encoding,stackedensemble: absent
+target_encoding,StackedEnsemble_BestOfFamily_3.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+target_encoding,GBM_1.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_1.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,StackedEnsemble_BestOfFamily_6.categorical_encoding,stackedensemble: absent
+target_encoding,StackedEnsemble_BestOfFamily_6.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+target_encoding,StackedEnsemble_BestOfFamily_4.categorical_encoding,stackedensemble: absent
+target_encoding,StackedEnsemble_BestOfFamily_4.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+target_encoding,DeepLearning_grid_2_model_1.categorical_encoding,"deeplearning: default=AUTO, input=AUTO, actual=OneHotInternal"
+target_encoding,DeepLearning_grid_2_model_1.predictors,cat_60; cat_25; cat_24; cat_23; cat_22; cat_21; cat_20; text_few; cat_4; num; dt
+target_encoding,GBM_grid_1_model_19.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_grid_1_model_19.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,DeepLearning_grid_1_model_3.categorical_encoding,"deeplearning: default=AUTO, input=AUTO, actual=OneHotInternal"
+target_encoding,DeepLearning_grid_1_model_3.predictors,cat_60; cat_25; cat_24; cat_23; cat_22; cat_21; cat_20; text_few; cat_4; num; dt
+target_encoding,GBM_2.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_2.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,GBM_grid_1_model_2.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_grid_1_model_2.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,GBM_grid_1_model_7.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_grid_1_model_7.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,StackedEnsemble_AllModels_4.categorical_encoding,stackedensemble: absent
+target_encoding,StackedEnsemble_AllModels_4.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+target_encoding,StackedEnsemble_BestOfFamily_1.categorical_encoding,stackedensemble: absent
+target_encoding,StackedEnsemble_BestOfFamily_1.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+target_encoding,GBM_grid_1_model_13.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_grid_1_model_13.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,StackedEnsemble_BestOfFamily_2.categorical_encoding,stackedensemble: absent
+target_encoding,StackedEnsemble_BestOfFamily_2.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+target_encoding,DeepLearning_1.categorical_encoding,"deeplearning: default=AUTO, input=AUTO, actual=OneHotInternal"
+target_encoding,DeepLearning_1.predictors,cat_60; cat_25; cat_24; cat_23; cat_22; cat_21; cat_20; text_few; cat_4; num; dt
+target_encoding,GBM_grid_1_model_14.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_grid_1_model_14.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,GBM_grid_1_model_24.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_grid_1_model_24.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,StackedEnsemble_BestOfFamily_5.categorical_encoding,stackedensemble: absent
+target_encoding,StackedEnsemble_BestOfFamily_5.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+target_encoding,GBM_grid_1_model_9.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_grid_1_model_9.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,StackedEnsemble_AllModels_2.categorical_encoding,stackedensemble: absent
+target_encoding,StackedEnsemble_AllModels_2.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+target_encoding,DeepLearning_grid_3_model_1.categorical_encoding,"deeplearning: default=AUTO, input=AUTO, actual=OneHotInternal"
+target_encoding,DeepLearning_grid_3_model_1.predictors,cat_60; cat_25; cat_24; cat_23; cat_22; cat_21; cat_20; text_few; cat_4; num; dt
+target_encoding,GBM_5.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_5.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,GBM_grid_1_model_21.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_grid_1_model_21.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,GBM_grid_1_model_8.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_grid_1_model_8.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,GBM_grid_1_model_16.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_grid_1_model_16.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,GBM_grid_1_model_3.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_grid_1_model_3.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,DRF_1.categorical_encoding,"drf: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,DRF_1.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,GBM_grid_1_model_22.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_grid_1_model_22.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,GBM_grid_1_model_17.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_grid_1_model_17.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,GBM_4.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_4.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,StackedEnsemble_AllModels_3.categorical_encoding,stackedensemble: absent
+target_encoding,StackedEnsemble_AllModels_3.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+target_encoding,GBM_grid_1_model_20.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_grid_1_model_20.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,StackedEnsemble_AllModels_1.categorical_encoding,stackedensemble: absent
+target_encoding,StackedEnsemble_AllModels_1.predictors,num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; cat_25; cat_60; dt; text_few
+target_encoding,XRT_1.categorical_encoding,"drf: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,XRT_1.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,GBM_grid_1_model_6.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_grid_1_model_6.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,GBM_grid_1_model_5.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_grid_1_model_5.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,GBM_grid_1_model_11.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_grid_1_model_11.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,GBM_3.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_3.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,DeepLearning_grid_1_model_2.categorical_encoding,"deeplearning: default=AUTO, input=AUTO, actual=OneHotInternal"
+target_encoding,DeepLearning_grid_1_model_2.predictors,cat_60; cat_25; cat_24; cat_23; cat_22; cat_21; cat_20; text_few; cat_4; num; dt
+target_encoding,DeepLearning_grid_1_model_1.categorical_encoding,"deeplearning: default=AUTO, input=AUTO, actual=OneHotInternal"
+target_encoding,DeepLearning_grid_1_model_1.predictors,cat_60; cat_25; cat_24; cat_23; cat_22; cat_21; cat_20; text_few; cat_4; num; dt
+target_encoding,GBM_grid_1_model_10.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_grid_1_model_10.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,GBM_grid_1_model_12.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_grid_1_model_12.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding,GBM_grid_1_model_18.categorical_encoding,"gbm: default=AUTO, input=AUTO, actual=Enum"
+target_encoding,GBM_grid_1_model_18.predictors,cat_25_te; cat_60_te; num; cat_4; cat_20; cat_21; cat_22; cat_23; cat_24; dt; text_few
+target_encoding.te_model,blending,True (default False)
+target_encoding.te_model,inflection_point,5.0 (default 10.0)
+target_encoding.te_model,smoothing,10.0 (default 20.0)
+target_encoding.te_model,noise,0.0 (default 0.01)
+target_encoding.te_model,data_leakage_handling,KFold (default None)
+target_encoding.te_model,keep_original_categorical_columns,False (default True)
+target_encoding.te_model,seed,0 (default -1)
+target_encoding.te_model,fold_column,y_te_fold
+target_encoding.te_model,columns_encoded,cat_25; cat_60

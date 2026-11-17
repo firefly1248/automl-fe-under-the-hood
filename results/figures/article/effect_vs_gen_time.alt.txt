@@ -1,0 +1,1 @@
+Per-dataset effect against the base model versus generator fit time on a log axis, one dot per arm and dataset, for LightGBM and CatBoost. Dots cluster around zero at every generator time, from milliseconds to over a thousand seconds; a few single-dataset outliers in both directions do not line up with slower generators.

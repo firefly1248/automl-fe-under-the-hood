@@ -1,0 +1,1 @@
+Share of units where each arm reaches the oracle R2 (left) and creates the planted true feature (right), for four kinds of planted signal. Product and ratio are created by most arithmetic arms but not by ag_default or lama_adv, group_dev only by openfe and half the time by manual_baseline.

@@ -26,9 +26,13 @@ from afe.run.unit import code_hash, digest, file_hash
 HERE = Path(__file__).parent
 CFG = yaml.safe_load((HERE / "config.yaml").read_text())
 SRC = ROOT / "src" / "afe"
-# code that affects results; orchestration and limits are not hashed (plan section 5)
-CODE = code_hash(HERE / "worker.py", SRC / "generators" / "ag_tabprep.py", SRC / "data" / "loaders.py",
-                 SRC / "data" / "splits.py")
+# code that affects results; orchestration and limits are not hashed (plan section 5). The single-model
+# diagnostic arms have their own worker file and hash, so adding them leaves the hashes of the first 7 arms alone
+SHARED = (SRC / "generators" / "ag_tabprep.py", SRC / "data" / "loaders.py", SRC / "data" / "splits.py")
+FILES = {**{a: ("worker_single.py",) for a in ("A_def", "B_def", "A_et0", "B_et0")},
+         **{a: ("worker_single.py", "worker_hp.py") for a in ("A_et0_nosamp", "A_et0_nocap", "A_et0_noreg", "A_et0_nocat")}}
+CODE = {arm: code_hash(HERE / "worker.py", *(HERE / f for f in FILES.get(arm, ())), *SHARED)
+        for arm in CFG["arms"] + CFG["hp_groups"]["arms"]}
 
 
 def plan() -> list[dict]:
@@ -39,11 +43,11 @@ def plan() -> list[dict]:
     for key in CFG["datasets"]:
         data_hash = json.loads((CACHE / "data" / f"{key}.json").read_text())["frame_hash"]
         splits_hash = S.splits_hash(S.load(key))
-        for arm in CFG["arms"]:
+        for arm in CFG["arms"] + (CFG["hp_groups"]["arms"] if key in CFG["hp_groups"]["datasets"] else []):
             for fold in range(proto["n_folds"]):
                 units.append({"exp": CFG["name"], "dataset": key, "repeat": proto["repeat"], "fold": fold,
                               "arm": arm, "protocol_hash": protocol_hash, "data_hash": data_hash,
-                              "splits_hash": splits_hash, "env_lock_hash": lock, "code_hash": CODE})
+                              "splits_hash": splits_hash, "env_lock_hash": lock, "code_hash": CODE[arm]})
     return units
 
 
@@ -72,8 +76,9 @@ def main() -> None:
                     "time_limit": CFG["protocol"]["time_limit"], "eval_metric": CFG["protocol"]["eval_metric"],
                     "num_cpus": num_cpus}
             (Path(tmp) / "task.json").write_text(json.dumps(task))
+            worker = FILES[u["arm"]][-1] if u["arm"] in FILES else "worker.py"
             cmd = ["uv", "run", "--frozen", "--project", str(ROOT / "envs" / "autogluon"), "python",
-                   str(HERE / "worker.py"), str(Path(tmp) / "task.json")]
+                   str(HERE / worker), str(Path(tmp) / "task.json")]
             env = {k: v for k, v in os.environ.items() if k != "VIRTUAL_ENV"} | {
                 "PYTHONHASHSEED": str(PYTHONHASHSEED),
                 "RAY_ENABLE_UV_RUN_RUNTIME_ENV": "0",  # Ray's uv hook rejects a cwd outside the project

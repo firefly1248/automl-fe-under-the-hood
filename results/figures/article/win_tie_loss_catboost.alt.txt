@@ -1,0 +1,1 @@
+Stacked bars of how many datasets each arm wins, ties or loses against plain CatBoost under a corrected t-test, one panel per task type. Ties are the largest part of every bar, with the most losses for the ag_tabprep arms on regression.

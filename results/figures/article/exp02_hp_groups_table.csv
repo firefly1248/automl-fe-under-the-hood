@@ -1,0 +1,8 @@
+"arm (mean of 5 folds, lower is better)",elevators (RMSE),kr-vs-kp (log loss),socmob (RMSE)
+A,0.0036,0.0368,22.03
+A_et0,0.0034,0.0350,19.83
+A_et0_nosamp,0.0033,0.0342,20.27
+A_et0_nocap,0.0034,0.0327,20.25
+A_et0_noreg,0.0021,0.0242,19.70
+A_et0_nocat,0.0034,0.0350,17.03
+A_def,0.0021,0.0248,18.00

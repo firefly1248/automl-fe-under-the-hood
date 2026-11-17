@@ -1,7 +1,7 @@
-"""Figures for the posts (plan section 9): matplotlib, SVG + PNG, one fixed colour per arm.
+"""Figures for the article (plan section 9): matplotlib, SVG + PNG, one fixed colour per arm.
 
 `python -m afe.analysis.figures` writes results/figures/exp04/*.{svg,png} and exp05/*. Each figure used
-in a post gets a claims entry with the hash of its rendered data table (analysis/claims.py).
+in the article gets a claims entry with the hash of its rendered data table (analysis/claims.py).
 """
 
 import matplotlib
@@ -19,7 +19,8 @@ COLOR = dict(zip(ARMS, plt.get_cmap("tab10").colors))
 EFFECT_LABEL = {"auc_diff": "AUC difference vs base", "logloss_rel": "relative log loss improvement vs base",
                 "rmse_rel": "relative RMSE improvement vs base"}
 PRIMARY_EFFECT = {"binary": "auc_diff", "multiclass": "logloss_rel", "regression": "rmse_rel"}
-plt.rcParams.update({"figure.dpi": 100, "savefig.bbox": "tight", "font.size": 11, "axes.grid": True,
+LOW_COVERAGE = 0.8  # arms with a smaller share of ok units get a hollow marker and the coverage written out
+plt.rcParams.update({"svg.hashsalt": "afe", "figure.dpi": 100, "savefig.bbox": "tight", "font.size": 11, "axes.grid": True,
                      "grid.alpha": 0.3, "axes.axisbelow": True})
 
 
@@ -27,7 +28,7 @@ def save(fig, sub: str, name: str, data: pd.DataFrame = None) -> None:
     """Write the figure and, for claims, the exact data table it rendered (plan section 9)."""
     out = RESULTS / "figures" / sub
     out.mkdir(parents=True, exist_ok=True)
-    fig.savefig(out / f"{name}.svg")
+    fig.savefig(out / f"{name}.svg", metadata={"Date": None})  # with svg.hashsalt: same data, same bytes
     fig.savefig(out / f"{name}.png", dpi=150)
     plt.close(fig)
     if data is not None:
@@ -50,7 +51,13 @@ def median_effect(summ: pd.DataFrame, rule: str = "base_fallback"):
             for yi, arm in zip(y, arms):
                 r = g.loc[arm]
                 ax.plot([r.ci_lo, r.ci_hi], [yi, yi], color=COLOR[arm], lw=2)
-            ax.scatter(g.median_effect, y, c=[COLOR[a] for a in arms], zorder=3)
+            colors, low = np.array([COLOR[a] for a in arms]), (g.coverage < LOW_COVERAGE).to_numpy()
+            ax.scatter(g.median_effect[~low], y[~low], c=colors[~low], zorder=3)
+            ax.scatter(g.median_effect[low], y[low], facecolors="none", edgecolors=colors[low], linewidths=1.8,
+                       zorder=3)
+            for yi, r in zip(y[low], g[low].itertuples()):
+                ax.annotate(f"{r.coverage:.0%} ok", (r.ci_hi, yi), xytext=(4, 0), textcoords="offset points",
+                            va="center", fontsize=8)
             ax.axvline(0, color="grey", lw=1)
             ax.set_yticks(y, arms)
             ax.invert_yaxis()
@@ -60,8 +67,9 @@ def median_effect(summ: pd.DataFrame, rule: str = "base_fallback"):
                 ax.set_xlabel(EFFECT_LABEL[PRIMARY_EFFECT[task]].replace(" vs base", ""))
             if j == 0:
                 ax.set_ylabel(model)
-    fig.suptitle(f"Median effect vs base over primary datasets, 95% bootstrap CI ({rule})")
-    cols=["task","model","arm","n_datasets","median_effect","ci_lo","ci_hi"]
+    fig.suptitle(f"Median effect vs base over primary datasets, 95% bootstrap CI ({rule}); "
+                 f"hollow marker: under {LOW_COVERAGE:.0%} of units ok")
+    cols = ["task", "model", "arm", "n_datasets", "median_effect", "ci_lo", "ci_hi", "coverage"]
     save(fig, "exp04", f"median_effect_{rule}", s[cols])
 
 
@@ -77,6 +85,7 @@ def win_tie_loss(eff: pd.DataFrame, rule: str = "base_fallback"):
             ax = axes[i, j]
             g = e[(e.task == task) & (e.model == model)]
             counts = g.groupby("arm").verdict.value_counts().unstack(fill_value=0).reindex(arms).fillna(0)
+            cov = g.groupby("arm").coverage.mean().reindex(arms)
             for v in ("win", "tie", "loss"):
                 if v not in counts:
                     counts[v] = 0
@@ -85,6 +94,10 @@ def win_tie_loss(eff: pd.DataFrame, rule: str = "base_fallback"):
             for v, c in (("win", "#2a9d3f"), ("tie", "#d0d0d0"), ("loss", "#d62728")):
                 ax.barh(y, counts[v], left=left, color=c, label=v)
                 left += counts[v].to_numpy()
+            for yi, c, x in zip(y, cov, left):
+                if c < LOW_COVERAGE:
+                    ax.annotate(f"{c:.0%} ok", (x, yi), xytext=(4, 0), textcoords="offset points", va="center",
+                                fontsize=8)
             ax.set_yticks(y, arms)
             ax.invert_yaxis()
             if i == 0:
@@ -93,8 +106,10 @@ def win_tie_loss(eff: pd.DataFrame, rule: str = "base_fallback"):
                 ax.set_ylabel(model)
             ax.set_xlabel("datasets")
     axes[0, 0].legend(loc="lower right", fontsize=9)
-    fig.suptitle(f"Descriptive win / tie / loss vs base, Nadeau-Bengio t-test at 0.05 ({rule})")
+    fig.suptitle(f"Descriptive win / tie / loss vs base, Nadeau-Bengio t-test at 0.05 ({rule}); "
+                 f"label: arms with under {LOW_COVERAGE:.0%} of units ok")
     wtl = e.groupby(["task","model","arm"], observed=True).verdict.value_counts().unstack(fill_value=0).reset_index()
+    wtl = wtl.merge(e.groupby(["task", "model", "arm"], observed=True).coverage.mean().reset_index())
     save(fig, "exp04", f"win_tie_loss_{rule}", wtl)
 
 

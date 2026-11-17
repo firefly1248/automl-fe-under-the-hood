@@ -11,3 +11,5 @@ arms: [ag_best, lama, h2o, h2o_te]   # workers: worker_ag.py, worker_lama.py, wo
 datasets: [kr-vs-kp, credit-g, sick, bank-marketing, cmc, okcupid-stem,
            pol, elevators, socmob, Moneyball]
 limits: {unit_timeout_s: 1800, min_free_gb: 2}
+# LAMA diagnostics: `lama` trails the base GBM on pol and socmob; arms run on those two only
+diagnostics: {datasets: [pol, socmob], arms: [lama_num, lama_full, lama_num_full]}   # worker_lama_diag.py

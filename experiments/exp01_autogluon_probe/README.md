@@ -1,4 +1,4 @@
-# exp01: AutoGluon probe (post 2)
+# exp01: AutoGluon probe (article section 2)
 
 **Question.** What does AutoGluon 1.6.3 do to raw columns by default, and which presets reach the
 TabPrep generators (`GBM_PREP`)?

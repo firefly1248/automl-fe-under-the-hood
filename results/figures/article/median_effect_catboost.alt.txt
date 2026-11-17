@@ -1,0 +1,1 @@
+Same layout as the LightGBM figure, with CatBoost as the downstream model. Intervals include zero except openfe on binary (just above zero), manual_baseline on multiclass and lama_adv on regression (below); hollow markers show autofeat on binary and multiclass and the two ag_tabprep arms on multiclass, where under 80% of units finished.

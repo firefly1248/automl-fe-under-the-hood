@@ -5,7 +5,9 @@
   the Nadeau-Bengio corrected t-test verdict (descriptive win / tie / loss) and its p;
 - exp04_summary.csv: per (task, model, arm, effect, rule) over primary datasets: median effect with a
   bootstrap 95% CI over datasets, Wilcoxon signed-rank p with Holm within the family
-  (task, model, primary effect, rule), share of wins and losses, coverage.
+  (task, model, primary effect, rule), share of wins and losses among the n_datasets datasets that have data
+  (a dataset with no complete case under complete_cases is not in the denominator), coverage (the mean over all
+  listed datasets, a dataset with no complete case counts as 0).
 
 Effects (per-dataset means over the splits; positive favours the arm):
 - auc_diff: mean(arm AUC) - mean(base AUC) (binary);
@@ -106,10 +108,11 @@ def summary_table(eff: pd.DataFrame, primary_only: bool = True) -> pd.DataFrame:
                 continue
             lo, hi = boot_ci(v)
             w = sp.wilcoxon(v, zero_method="pratt").pvalue if np.any(v != 0) else 1.0
+            has = ga[ga.verdict != "no_data"]  # shares are over the datasets with data (n_datasets), not all listed
             rows.append({"task": task, "model": model, "effect": effect, "rule": rule, "arm": arm,
                          "n_datasets": len(v), "median_effect": float(np.median(v)), "ci_lo": lo, "ci_hi": hi,
-                         "wilcoxon_p": float(w), "share_win": (ga.verdict == "win").mean(),
-                         "share_loss": (ga.verdict == "loss").mean(), "coverage": ga.coverage.mean()})
+                         "wilcoxon_p": float(w), "share_win": (has.verdict == "win").mean(),
+                         "share_loss": (has.verdict == "loss").mean(), "coverage": ga.coverage.mean()})
     out = pd.DataFrame(rows)
     out["in_family"] = [r.effect in PRIMARY[r.task] for r in out.itertuples()]
     out["wilcoxon_p_holm"] = np.nan

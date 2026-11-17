@@ -1,0 +1,1 @@
+Per-dataset effect against the base model versus the number of new features on a log axis, one dot per arm and dataset, for LightGBM and CatBoost. Dots cluster around zero from no new features to about two thousand; the largest swings are single datasets and appear at both few and many features.

@@ -1,0 +1,20 @@
+dataset,lama-ag,h2o-ag,h2o_te-h2o
+bank-marketing (bin),-4.3%,-2.8%,0.0%
+credit-g (bin),-4.2%,-13.1%,-23.5%
+kr-vs-kp (bin),-91.3%,-15.6%,+3.1%
+sick (bin),-74.8%,-17.5%,+0.2%
+cmc (mul),+0.3%,-0.2%,0.0%
+okcupid-stem (mul),-0.3%,-1.2%,-2.1%
+Moneyball (reg),+0.6%,-3.1%,-5.3%
+elevators (reg),-14.8%,-7.5%,+0.8%
+pol (reg),-86.4%,-7.6%,-10.2%
+socmob (reg),-77.3%,-33.8%,-8.9%
+binary: better (sign),0 of 4,0 of 4,2 of 4
+binary: clearly better,0 of 4,0 of 4,0 of 4
+binary: clearly worse,4 of 4,3 of 4,1 of 4
+multiclass: better (sign),1 of 2,0 of 2,0 of 2
+multiclass: clearly better,0 of 2,0 of 2,0 of 2
+multiclass: clearly worse,1 of 2,1 of 2,1 of 2
+regression: better (sign),1 of 4,0 of 4,1 of 4
+regression: clearly better,0 of 4,0 of 4,0 of 4
+regression: clearly worse,3 of 4,3 of 4,2 of 4

@@ -1,9 +1,14 @@
 # Implementation plan: `automl-fe-under-the-hood` companion repo (v3, after A1 and the second review)
 
-Owner: Ilia (firefly1248). Implementer: coding agent on a laptop.
-Purpose: one repo that holds every experiment and every number used in the LinkedIn series
-"What automated feature engineering really does under the hood". Every figure in a post must be
+Owner: Ilia. Implementer: coding agent on a laptop.
+Purpose: one repo that holds every experiment and every number used in the article
+"What automated feature engineering really does under the hood". Every figure in the article must be
 reproducible from this repo with one command.
+
+Format change (2026-11-16): the series became one Medium article. Wherever this plan says "post N" read
+"article section N" (`article/README.md` maps sections to experiments and claim ids; ids are `s<N>_*`, figure claims
+`s<N>_fig_*`; the old `p<N>_*` ids no longer exist). Article figures are PNGs of at least 1400 px with a
+hand-written alt-text file each (`make article`).
 
 Read the whole plan before writing code. Sections 0 and 1 are hard rules and starting facts.
 
@@ -95,7 +100,7 @@ The 14 `GBM_PREP` configs in the cpu 2025-12-18 portfolio differ: 7 use both bra
 Hypothesis to test: with default presets, AutoGluon builds almost no features; its gains come from
 model diversity, bagging and stacking.
 
-### 1.4 Preliminary probe (sandbox, one run, NOT for posts until exp01 reproduces it)
+### 1.4 Preliminary probe (sandbox, one run, NOT for the article until exp01 reproduces it)
 Input 9 columns gave 11 columns. All-unique string id dropped; duplicate numeric dropped;
 int-coded category stayed int64; integer date `20210530` stayed int64 (not detected as a date);
 ISO string date became int64 plus year/month/day/dayofweek; free text with 4 distinct values
@@ -154,7 +159,7 @@ automl-fe-under-the-hood/
     splits/<dataset>.parquet           # committed fold assignments
     tidy/<exp>.parquet  figures/<exp>/  claims.yaml  datasets.md  ENVIRONMENT.md
   tests/
-  posts/README.md                      # post -> experiments -> claim ids
+  article/README.md                    # article section -> experiments -> claim ids
 ```
 
 Raw JSON records, tidy parquet, splits and figures are committed. Dataset downloads live in
@@ -485,7 +490,7 @@ Keep the laptop awake (`caffeinate -i` on macOS, `systemd-inhibit` on Linux).
 
 ## 8. Experiments
 
-### exp01_autogluon_probe (post 2) — env autogluon, minutes
+### exp01_autogluon_probe (article section 2) — env autogluon, minutes
 1. `AutoMLPipelineFeatureGenerator` on `hard_columns()`, 3 seeds, verbosity 3. Save
    `input column -> output columns -> dtype -> action` to `results/tidy/exp01_types.csv` and
    `feature_metadata`.
@@ -498,7 +503,7 @@ Keep the laptop awake (`caffeinate -i` on macOS, `systemd-inhibit` on Linux).
    candidates built, kept, time (no correlation filter with the default `selection_method`, 1.2); does it
    recover the planted `a/b`?
 
-### exp02_autogluon_ablation (post 2) — env autogluon, runs alone, A4 before the run
+### exp02_autogluon_ablation (article section 2) — env autogluon, runs alone, A4 before the run
 12 primary datasets with <= 60,000 rows, fixed in the exp02 config before the run: per task type the
 first 2 with a categorical of >= 10 levels and the first 2 without, in OpenML data id order; where a
 task type has fewer than 2 such datasets (multiclass has one, okcupid-stem), the rest come from those
@@ -523,7 +528,7 @@ Caveat for the README and post: with `time_limit=600` on this laptop, D and E wi
 portfolios on the larger datasets; D - A and D - D0 measure "what fits in 600 s on 12 cores", not the
 full presets. The per-fold trained-model list shows how much of each portfolio ran.
 
-### exp03_lama_probe (post 3) — env lama
+### exp03_lama_probe (article section 3) — env lama
 1. Default config of `TabularAutoML` for 0.4.2: feature pipeline per model, `auto_unique_co`,
    intersection settings, `use_groupby`, selection mode. Save `exp03_config.yaml`.
 2. Reader alone on `hard_columns()` and the typed set: `column -> dtype -> LAMA role -> reason`
@@ -564,7 +569,7 @@ Outputs: `results/tidy/exp04.parquet`, tables by task type, figures, README with
 5. OpenFE operator equivalence (contract test 7) reported per operator: max abs difference between
    the inductive wrapper and OpenFE's own values on fit rows.
 
-### exp06_automl_end_to_end (post 6, optional, A4)
+### exp06_automl_end_to_end (article section 6, optional, A4)
 AutoGluon `best_quality` vs LightAutoML `TabularAutoML` vs H2O AutoML with and without
 `preprocessing=["target_encoding"]`, 10 datasets, 600 s each, same folds.
 
@@ -587,8 +592,8 @@ AutoGluon `best_quality` vs LightAutoML `TabularAutoML` vs H2O AutoML with and w
   the manual arm is labelled `manual_baseline`.
 - `results/claims.yaml`:
   ```yaml
-  - id: p4_openfe_reg_median_lgbm
-    post: 4
+  - id: s4_openfe_reg_median_lgbm
+    section: 4
     text: "median relative RMSE improvement of OpenFE on regression, LightGBM downstream"
     source: results/tidy/exp04.parquet
     query: "primary & task=='regression' & arm=='openfe' & model=='lgbm'"
@@ -617,7 +622,7 @@ make env env-check data test
 make exp01 exp02 exp03
 make exp04-smoke exp04-pilot exp04-full
 make exp05 exp06
-make aggregate figures claims commit-results
+make aggregate figures article claims commit-results
 ```
 
 ---
@@ -632,7 +637,7 @@ make aggregate figures claims commit-results
 | 3 | all arm wrappers (incl. `lama_adv` from exp03 step 4), registry fix for variants (4.2), exp04 smoke | smoke report -> **A2** |
 | 4 | exp04 pilot, exp05 | time estimate, leakage report -> **A3**, then exp04 full; coverage >= 95% or failures explained per arm |
 | 5 | exp02, exp03 step 3 | READMEs with findings |
-| 6 | aggregate, figures, claims, README, `posts/README.md` | `make claims` passes; fresh clone reproduces exp01 and exp04 smoke |
+| 6 | aggregate, figures, claims, README, `article/README.md` | `make claims` passes; fresh clone reproduces exp01 and exp04 smoke |
 
 After each phase: add a `PROGRESS.md` entry (date, what ran, coverage, surprises, open questions).
 Commit and push only after Ilia approves them. This file is how Ilia and later sessions resume the work.

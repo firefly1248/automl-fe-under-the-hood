@@ -5,7 +5,13 @@ protocol:            # hashed into every unit; limits and the machine-dependent 
   repeat: 0
   time_limit: 600
   eval_metric: {binary: log_loss, multiclass: log_loss, regression: root_mean_squared_error}
-arms: [A, B, B2, C, D, D0, E]   # defined in worker.py
+arms: [A, B, B2, C, D, D0, E,   # defined in worker.py
+        A_def, B_def, A_et0, B_et0]   # single-model diagnostics, worker_single.py
+# one `_r13` hyperparameter group of A_et0 back to the default (worker_hp.py), only where A_et0 still trailed A_def after
+# extra_trees=False: elevators, kr-vs-kp and socmob (pol and okcupid-stem also trail and were not run)
+hp_groups:
+  datasets: [elevators, kr-vs-kp, socmob]
+  arms: [A_et0_nosamp, A_et0_nocap, A_et0_noreg, A_et0_nocat]
 # per task type the first 2 primary datasets <= 60,000 rows with a categorical of >= 10 levels and the
 # first 2 without, by OpenML data id; multiclass has one such dataset (okcupid-stem), the rest come from
 # those without (plan section 8)

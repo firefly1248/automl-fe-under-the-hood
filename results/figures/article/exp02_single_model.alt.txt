@@ -1,0 +1,1 @@
+Six dot-and-interval panels, one dot per dataset, separating the _r13 hyperparameters from the _r13 features in single GBM models (A, A_def, A_et0, B, B_def, B_et0). The _r13 hyperparameters are clearly worse than the default ones on five datasets (pol, sick, elevators, kr-vs-kp, bank-marketing) and clearly better on three; switching extra_trees off recovers part of the loss.

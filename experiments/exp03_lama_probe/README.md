@@ -1,4 +1,4 @@
-# exp03: LightAutoML probe (post 3)
+# exp03: LightAutoML probe (article section 3)
 
 **Question.** Which feature pipeline does `TabularAutoML` 0.4.2 give each model by default, and how
 does its `Reader` assign column roles?
@@ -42,4 +42,12 @@ numeric -> category and the reverse, `reason` names the rules that fired.
   through `PandasToPandasReader` and `LGBSimpleFeatures`. Share of NaN in the encoded column: 0.00 under
   pandas 1.5.3 (`envs/lama`), 1.00 under pandas 2.3.3 (same LAMA 0.4.2, numpy 1.26.4, scipy 1.15.3,
   statsmodels 0.14.0, torch 2.14.0, LightGBM 4.7.0).
-- Step 3 (end-to-end runs) is not run yet.
+- Step 3 (`fit_probe.py`, default `TabularAutoML` on adult, diamonds and Amazon_employee_access;
+  `exp03_fit_models.csv`, `exp03_fit_oof.csv`, `results/raw/exp03/fit_probe.json`): the reader keeps every input
+  column on all three (`used_features` equals the column count: 14, 9, 9), and the level-0 LightGBM widens
+  them to 25 features on adult (10 are OOF target encodings of category intersections, 1 a frequency
+  encoding), 13 on diamonds (4 intersections) and 25 on Amazon_employee_access (10 intersections). Numbers for
+  the article: the `s3_*` entries of `results/claims.yaml`.
+
+Dates and text in LAMA: `probe_dates_text.py` (lama env, run by hand, no make target) writes
+`results/tidy/exp03_dates_text.csv`; the `s2_lama_*` claims read it.

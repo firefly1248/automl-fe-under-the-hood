@@ -27,15 +27,25 @@ numeric column (both arms skip them), socmob has one (`mljar_golden` skips it). 
   in almost every (task, model, arm) cell under both failure rules
   (`results/figures/exp04/median_effect_*.svg`).
 - The one Holm-significant across-dataset effect is negative: `lama_adv` on regression makes RMSE worse
-  (claims `p4_lama_reg_median_lgbm`, `p4_lama_reg_wilcoxon_lgbm`).
+  (claims `s4_lama_reg_median_lgbm`, `s4_lama_reg_wilcoxon_lgbm`).
 - `openfe` has the widest per-dataset spread: the largest single-dataset wins (multiclass log loss) next
   to the highest share of descriptive losses on binary (`exp04_summary.csv`).
 - Coverage separates the tools more than accuracy does: `autofeat` finishes well under the 3,600 s cap on
-  barely over half of its units, `openfe` and `mljar_golden` sit in the low nineties, the rest are at
-  100% (coverage table in `exp04_report.md`; failures above).
+  62% of its units, `openfe` and `mljar_golden` on 92 to 94%, `ag_tabprep` and `ag_tabprep_keepcat` on CatBoost on 94%
+  (100% on LightGBM), the rest are at 100% (coverage table in `exp04_report.md`; failures above).
 - Cost: on the jobs=1 timing pass, `ag_tabprep` and `openfe` multiply the whole pipeline time by tens
   versus fitting the same model on raw columns, mostly through wider downstream inputs
   (`exp04_timing_summary.csv`).
 
 Caveats: per-dataset tests are near-powerless and descriptive only (plan 7.5); the AUC differences sit in
 the third decimal; results are for defaults-no-retune downstream, not for tuned pipelines.
+
+Test details. The per-dataset verdicts use the Nadeau-Bengio corrected t-test with the ratio
+n_test / n_train taken over the fit rows (`n_train` is the fit rows, not the outer train): the fit rows are
+68% of a dataset (outer train 80% minus the 15% inner split), the test fold 20%, so the ratio is 0.294
+(median over units, range 0.293 to 0.296); with the outer train it would be 0.25. `share_win` and
+`share_loss` in `exp04_summary.csv` are shares of the `n_datasets` datasets that have data for that arm
+(under `complete_cases` a dataset with no complete split is not counted), not of all primary datasets;
+the `coverage` column is the mean over all listed datasets (a dataset with no complete split counts as 0).
+The median-effect figures mark every (task, model, arm) cell where fewer than 80% of the units are ok with a
+hollow marker and the coverage written next to it; the win/tie/loss figures write the coverage label only.

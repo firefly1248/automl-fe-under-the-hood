@@ -1,0 +1,1 @@
+Share of ok units per arm, task type and downstream model; cells under 80% are shaded red. They are autofeat on binary and multiclass (50%, 50%, 18%, 20%) and the two ag_tabprep arms on multiclass CatBoost (66%, 68%).

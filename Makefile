@@ -1,7 +1,7 @@
 ENVS := core autogluon lama openfe autofeat mljar
 RUN = uv run --frozen --project envs/$(1)
 
-.PHONY: exp06 aggregate figures claims commit-results env env-check data planted splits test pack unpack exp01 exp02 exp03 exp03-step3 exp04-smoke exp04-pilot exp04-timing exp05 exp04-full-r0 exp04-full-r1
+.PHONY: exp06 aggregate figures article claims commit-results env env-check data planted splits test pack unpack exp01 exp02 exp03 exp03-step3 exp04-smoke exp04-pilot exp04-timing exp05 exp04-full-r0 exp04-full-r1
 
 env:
 	for e in $(ENVS); do uv sync --frozen --project envs/$$e || exit 1; done
@@ -78,12 +78,17 @@ aggregate:
 figures:
 	$(call RUN,core) python -m afe.analysis.figures
 
+# PNGs for the Medium article (results/figures/article), after aggregate
+article:
+	$(call RUN,core) python -m afe.analysis.transform_map
+	$(call RUN,core) python -m afe.analysis.article
+
 claims:
 	$(call RUN,core) python -m afe.analysis.claims
 
 # stage everything reviewable; shows the list, commits nothing (plan rule 9)
-commit-results: aggregate figures claims pack
-	git add -A results experiments posts README.md PROGRESS.md
+commit-results: aggregate figures article claims pack
+	git add -A results experiments article README.md PROGRESS.md
 	git status --short
 
 # optional, runs alone, after exp02 (A4 in PROGRESS.md 2026-11-10); needs envs/h2o and Java 17

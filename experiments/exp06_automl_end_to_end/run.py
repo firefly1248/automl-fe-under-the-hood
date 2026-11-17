@@ -26,7 +26,8 @@ HERE = Path(__file__).parent
 CFG = yaml.safe_load((HERE / "config.yaml").read_text())
 SRC = ROOT / "src" / "afe"
 WORKER = {"ag_best": ("autogluon", "worker_ag.py"), "lama": ("lama", "worker_lama.py"),
-          "h2o": ("h2o", "worker_h2o.py"), "h2o_te": ("h2o", "worker_h2o.py")}
+          "h2o": ("h2o", "worker_h2o.py"), "h2o_te": ("h2o", "worker_h2o.py"),
+          **{a: ("lama", "worker_lama_diag.py") for a in CFG["diagnostics"]["arms"]}}
 SHARED = (SRC / "data" / "loaders.py", SRC / "data" / "splits.py")
 CODE = {arm: code_hash(HERE / w, *SHARED) for arm, (_, w) in WORKER.items()}
 
@@ -38,7 +39,7 @@ def plan() -> list[dict]:
     for key in CFG["datasets"]:
         data_hash = json.loads((CACHE / "data" / f"{key}.json").read_text())["frame_hash"]
         splits_hash = S.splits_hash(S.load(key))
-        for arm in CFG["arms"]:
+        for arm in CFG["arms"] + (CFG["diagnostics"]["arms"] if key in CFG["diagnostics"]["datasets"] else []):
             lock = file_hash(ROOT / "envs" / WORKER[arm][0] / "uv.lock")
             for fold in range(proto["n_folds"]):
                 units.append({"exp": CFG["name"], "dataset": key, "repeat": proto["repeat"], "fold": fold,

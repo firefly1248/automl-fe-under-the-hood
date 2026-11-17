@@ -12,3 +12,4 @@ results/stale/
 results/raw/*/gen/
 results/raw/*/fit/
 logs/
+review[0-9]*_*.md

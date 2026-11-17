@@ -2,8 +2,8 @@
 
 Work in progress. Numbers are not final; approved values will be in results/claims.yaml.
 
-Experiments and numbers behind the LinkedIn series "What automated feature engineering really does
-under the hood". Open data (OpenML) and open code only. The plan is in
+Experiments and numbers behind the Medium article "What automated feature engineering really does
+under the hood" (see [article/README.md](article/README.md)). Open data (OpenML) and open code only. The plan is in
 [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md), progress in [PROGRESS.md](PROGRESS.md).
 
 ## Setup
