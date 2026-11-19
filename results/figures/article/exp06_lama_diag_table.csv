@@ -6,6 +6,6 @@ lama_num,4.07,17.98
 lama_num_full,4.07,17.13
 exp02_A_def,4.30,18.00
 exp04_base_catboost_68pct,4.48,15.81
-exp04_base_lgbm_68pct,4.49,18.29
+exp04_base_lgbm_68pct,4.49,16.88
 lama,4.91,20.59
 lama_full,4.91,20.16

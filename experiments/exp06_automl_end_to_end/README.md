@@ -13,8 +13,10 @@ Contrast as in exp02: relative improvement of the first arm over the second on l
 or RMSE (regression), mean over folds per dataset with a fold-bootstrap 95% CI. The headline per task type is
 `N better of M` datasets (the sign of the mean effect), with the per-dataset table beside it; the median is secondary
 (`role: secondary` in the claims) and is not shown without that count. The fold CI covers the variation between folds
-only, not between repeated runs of a time-limited tool; the noise measurement (below) shows it matters for `h2o`, so the
-text uses sign counts, while the tables and dots still colour by the fold CI.
+only, not between repeated runs of a time-limited tool. The noise measurement (below) shows it matters for `h2o` (5 to 10
+points) and not for `lama` or `ag_best` (at most 0.4 points). Decided by the author 2026-11-19: "clearly better" or "clearly
+worse" (the fold CI excludes zero) may be said for `lama` over `ag_best`, with the caveat that the spread is measured on 2
+datasets; for `h2o` the text uses sign counts only. The tables and dots colour by the fold CI.
 
 ## Findings (descriptive; 4 binary, 2 multiclass, 4 regression datasets)
 
@@ -28,7 +30,8 @@ points on pol (-7.6%, -11.6%, -6.7%), and its mean loss differs between runs by 
 fold CI of `h2o` over `ag_best` is 25 points wide on both, so the repeats stay inside it, but one run of `h2o` does not
 fix its place between `lama` and `ag_best` on these datasets. Two datasets of ten.
 
-- `ag_best` is the strongest arm. `lama` is better than it on 0 of 4, 1 of 2 and 1 of 4 datasets (`s6_lama_ag_*`);
+- `ag_best` is the strongest arm. `lama` is better than it on 0 of 4, 1 of 2 and 1 of 4 datasets (`s6_lama_ag_*`), clearly
+  worse (the fold CI excludes zero) on 4 of 4, 1 of 2 and 3 of 4 and clearly better on none (`s6_lama_ag_*_clear_worse`);
   `h2o` is better on 0 of 4, 0 of 2 and 0 of 4 (`s6_h2o_ag_*`).
 - Target encoding in H2O encodes only columns of 25 or more levels (the probe left a 24-level column raw; claim
   `s2_h2o_te_columns_encoded`). Only okcupid-stem (7,019 levels) and Moneyball (39) have such a column, and `h2o_te` is

@@ -14,9 +14,11 @@ datasets (`n_better` of `n_datasets`, the sign of the mean effect), and for sing
 clearly better or clearly worse (the fold CI excludes zero) is given in brackets, with the per-dataset table beside it.
 The median over 4 datasets is a secondary column, not a result. Numbers live in
 `results/tidy/exp02_contrasts_summary.csv` and `results/claims.yaml` (`s2_*`; `*_median` entries are
-`role: secondary`). The fold CI covers the variation between folds only. For `C`, `D`, `D0` and `E` (time-limited
-ensembles) the variation between repeated runs of the same unit is not known until the noise measurement below is in,
-so their text uses sign counts only; the tables and dots still colour by the fold CI.
+`role: secondary`). The fold CI covers the variation between folds only. For `C`, `D`, `D0` and `E` (time-limited ensembles) the variation
+between repeated runs of the same unit was measured on pol and credit-g (noise section below): at most 0.4 percentage
+points. On that basis the text may say "clearly better" or "clearly worse" (the fold CI excludes zero) for these contrasts,
+with the caveat that the spread is measured on 2 datasets of 12; the sign count stays the headline and the CI count is given
+next to it (decided by the author 2026-11-19). The tables and dots colour by the fold CI.
 
 The article tables are anchored on `A_def`, AutoGluon's default LightGBM: `B_def` over `A_def` (new features with
 default hyperparameters) and `D` over `A_def` (the full ensemble) are the main contrasts, next to `D` over `D0`,
@@ -26,7 +28,9 @@ default hyperparameters) and `D` over `A_def` (the full ensemble) are the main c
 ## Findings (descriptive; 4 datasets per task type)
 
 Counts are better by sign on binary, multiclass and regression; the number clearly better by the fold CI follows in
-brackets for single-model contrasts only.
+brackets for single-model contrasts, and for `D` over `A_def` (3, 4, 4 clearly better of 4, none clearly worse), `D` over
+`D0` (0, 2, 2 clearly better; 0, 1, 0 clearly worse) and `E` over `D0` (0, 1, 0 clearly better; 4, 1, 2 clearly worse),
+in the order binary, multiclass, regression (`s2_*_clear_better`, `s2_*_clear_worse`).
 
 - `D` over `A_def`: 4, 4 and 4 of 4 by sign (`s2_d_a_def_*`). `D` is `best_quality` with the 2023 portfolio, bagging
   and stacking; it has no TabPrep model, and it bundles many models, so it does not say which part helps.
@@ -116,9 +120,9 @@ of `D` over `A_def`, `D` over `A`, `D` over `D0` and `E` over `D0` moves by at m
 runs (`s2_noise_*`), far inside the fold CIs (0.7 to 5.1 points wide; zero for `D` over `D0` on credit-g, where the two arms are the same model), and every run lies inside the CI of run 0. On
 credit-g the three runs of `D` and `E` are identical to six digits (the same fold losses); on pol the mean loss of `D`
 differs by 0.4% between runs and that of `E` by 0.05%. So for these two datasets the fold CI is not understating the
-run-to-run variation of AutoGluon. Two datasets of ten cannot say the same for the rest, so the article text for
-`C`, `D`, `D0`, `E` keeps the sign counts as the headline and gives the CI counts as a secondary figure; whether to
-state "clearly better" on the strength of this measurement is left to the author.
+run-to-run variation of AutoGluon. Two datasets cannot say the same for the rest; the author decided (2026-11-19) that
+"clearly better" is allowed for `C`, `D`, `D0`, `E` with that caveat stated, the sign count staying the headline. Where the two
+arms are the same model (`D` over `D0` on the four binary datasets, see above) the CI says nothing about stacking.
 
 Caveats: 4 datasets per task type make the medians descriptive; the CIs are over folds of one dataset and say
 nothing about other datasets. `D` and `D0` turn dynamic stacking off so that both spend the full budget;

@@ -1,5 +1,54 @@
 # Progress
 
+## 2026-11-19 (later): categorical handling fixed, `base_codes`, reruns
+
+Author decision after the round below: fix both protocol artifacts (B and C) and run the extra arm.
+
+- C: `afe.models.downstream._lgbm` makes ordered pandas categoricals unordered before the fit, so LightGBM's
+  `categorical_feature="auto"` takes them (all 301 categorical columns of the 28 datasets are ordered; they were integer codes
+  before). Done in the downstream, not in `BaseView`, so no generator hash changed. Test `test_lgbm_ordered_categorical_is_used_as_categorical`.
+- B: `ag_default` renames the levels of its category columns to strings, so they survive the parquet cache as categories instead of
+  becoming `int64`; contract test 1 now rejects numeric levels in any arm output (it fails on the old `ag_default`).
+- Extra arm `base_codes` (`base` with every categorical as integer codes) in exp09, on the same five datasets (200 fit units).
+- Hashes: changing `downstream.py` changes the fit code hash of every fit unit. Rerun: all LightGBM units (5000 exp04, exp05, exp09,
+  timing), the `ag_default` generator (500) and CatBoost units. The CatBoost records of the other arms were moved to the new hash with
+  `experiments/exp04_open_benchmark/rekey.py` (`rekeyed_from` in the record; 5,011 exp04/exp05/exp09/timing, 670 exp07); 36 of
+  them (nine arms, repeat 0), recomputed, matched exactly on test metrics, inner loss and best iteration, and every CatBoost effect
+  of an arm other than `ag_default` in `exp04_effects.csv` is identical to the first run (0 of 1568 differ). Stale records pruned
+  (12,550 files), archives repacked, `tests/test_records.py` passes. Chain `logs/rerun_catfix.sh`: exp09, exp04 full_r0 and full_r1
+  (2,864 units each), exp05 (1,029), timing pass with `--jobs 1` (79), 06:42 to 15:05 UTC, no failures.
+- Effects: `ag_default` on CatBoost was +59.7 / +49.4 / +39.6% RMSE on fps_benchmark / auction_verification / Brazilian_houses and is
+  +1.0 / 0.0 / +3.4 with categoricals kept; `skrub_tv` (numbers) keeps +68.8 / +51.2 / +20.7; `base_codes` gives +60.2 / +49.4 / +35.1.
+  So the large CatBoost effect is its categorical handling against plain numbers, not generated features. LightGBM goes the other
+  way on fps_benchmark and socmob (`base_codes` -59.7, -14.0). Details and the five-dataset tables: `experiments/exp09_numcast/README.md`.
+- Subgroup counts (better by sign / clearly better / clearly worse): `ag_default` LightGBM 1/1/1 of 28, CatBoost 15/3/2 of 27;
+  `skrub_tv` LightGBM 12/6/10, CatBoost 11/5/7. Median CIs exclude zero in 9 of 72 cells (5 before); the one Holm-significant effect is
+  still `lama_adv` on regression with LightGBM, now -2.1% (was -1.1%). The exp07 CatBoost ablation is unchanged.
+- Docs: exp04 and exp09 READMEs, plan section 7.3 (base view), `rekey.py` docstring. Claims: 463, 0 differ from approved (none
+  approved); `s2_types_lgbm_*` removed, `s4_numcast_base_codes_*` (10) added.
+
+## 2026-11-19: round after 737a375
+
+- Text policy (author): "clearly better/worse" (fold CI excludes zero) allowed for AutoGluon and LAMA contrasts (exp02 C, D, D0,
+  E; exp06 lama over ag_best) with the caveat that run-to-run spread (at most 0.4 points) is measured on 2 datasets; `h2o` keeps
+  sign counts. READMEs of exp02, exp06 and article updated.
+- skrub_tv and ag_default on the 28 primary datasets with categorical columns (`afe.analysis.cat_subgroup`, `exp04_cat_*.csv`,
+  `cat_subgroup_table`, claims `s4_cat_*`): better by sign / clearly better / clearly worse, ag_default LightGBM 9/2/2 of 28, CatBoost
+  10/5/8 of 27; skrub_tv LightGBM 13/8/5 of 28, CatBoost 11/5/7 of 27. The `s4_skrub_tv_*` medians over all 50 are `role: secondary`.
+- exp09 (`experiments/exp09_numcast`): type diagnostic on fps_benchmark, auction_verification, Brazilian_houses, socmob,
+  Amazon_employee_access, arm `base_numcast` (100 fit units ok), `exp09_types_table`, `numcast_table`, claims `s2_types_*`,
+  `s4_numcast_*`. Findings: auction_verification +49.4% on CatBoost is the cast of its two number-like columns alone;
+  Brazilian_houses partly (+15.4 of +39.6); fps_benchmark not (+2.3 of +59.7); Amazon_employee_access loses 5.3 AUC points either way.
+- Two things found on the way (both fixed in the entry above; the counts of this entry are the values before the fixes): (1) every categorical column of the 28 datasets is an
+  ordered pandas category, which LightGBM's `categorical_feature="auto"` skips, so downstream LightGBM saw integer codes in exp04
+  and exp07, for every arm that keeps categoricals; (2) the `ag_default` output (a category with integer categories) comes back
+  from the parquet cache as `int64`, so neither model sees a categorical column under that arm.
+- exp07 `ctr_ablation_table`: units labelled per task type (AUC points for binary, % log loss, % RMSE), effects now in the primary
+  metric (binary was log loss), median dropped (mixed units), fps_benchmark moved to a note under the table (counted in the summary
+  rows). Counts now: base 4 better / 1 clearly better / 7 clearly worse of 17; paired difference 11/5/0, 12/7/1 (of 17), 12/6/1 (of 16).
+- 455 claims, 0 differ from approved (none approved).
+
+
 ## 2026-11-18: skrub_tv and exp07 done
 
 - `skrub_tv` (A4): env `envs/skrub` (skrub 0.11.0), arm `src/afe/generators/skrub_tv.py`, probe exp08 on `hard_columns()` and the

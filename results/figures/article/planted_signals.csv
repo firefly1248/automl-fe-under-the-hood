@@ -1,8 +1,8 @@
 arm,kind,reach,found
-ag_default,cat_interaction,0.0,0.0
-ag_default,group_dev,0.0,0.0
-ag_default,product,0.13333333333333333,0.0
-ag_default,ratio,0.4666666666666667,0.0
+ag_default,cat_interaction,0.2,0.0
+ag_default,group_dev,0.16666666666666666,0.0
+ag_default,product,0.26666666666666666,0.0
+ag_default,ratio,0.5666666666666667,0.0
 ag_tabprep,cat_interaction,0.6666666666666666,1.0
 ag_tabprep,group_dev,0.0,0.0
 ag_tabprep,product,0.8666666666666667,1.0

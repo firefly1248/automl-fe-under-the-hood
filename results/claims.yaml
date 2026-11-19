@@ -4,13 +4,13 @@
   source: results/tidy/exp04_summary.csv
   query: task=='regression' & arm=='openfe' & model=='lgbm' & effect=='rmse_rel' & rule=='base_fallback'
   stat: median_effect
-  value: 0.004659
+  value: -0.002361
   approved_value: null
   approved_git_sha: null
   tolerance: 0.001
   ci:
-  - -0.016684
-  - 0.03083
+  - -0.013982
+  - 0.028094
   coverage: 0.95
 - id: s4_openfe_bin_auc_lgbm
   section: 4
@@ -18,13 +18,13 @@
   source: results/tidy/exp04_summary.csv
   query: task=='binary' & arm=='openfe' & model=='lgbm' & effect=='auc_diff' & rule=='base_fallback'
   stat: median_effect
-  value: 0.000226
+  value: 0.000679
   approved_value: null
   approved_git_sha: null
   tolerance: 0.0005
   ci:
-  - -0.00241
-  - 0.003288
+  - -0.003025
+  - 0.003913
   coverage: 0.95
 - id: s4_ag_tabprep_bin_auc_lgbm
   section: 4
@@ -32,13 +32,13 @@
   source: results/tidy/exp04_summary.csv
   query: task=='binary' & arm=='ag_tabprep' & model=='lgbm' & effect=='auc_diff' & rule=='base_fallback'
   stat: median_effect
-  value: 0.000941
+  value: 0.002488
   approved_value: null
   approved_git_sha: null
   tolerance: 0.0005
   ci:
-  - -0.000805
-  - 0.003651
+  - 0.000599
+  - 0.004048
   coverage: 1.0
 - id: s4_lama_reg_median_lgbm
   section: 4
@@ -46,13 +46,13 @@
   source: results/tidy/exp04_summary.csv
   query: task=='regression' & arm=='lama_adv' & model=='lgbm' & effect=='rmse_rel' & rule=='base_fallback'
   stat: median_effect
-  value: -0.010627
+  value: -0.02092
   approved_value: null
   approved_git_sha: null
   tolerance: 0.001
   ci:
-  - -0.053674
-  - -0.000717
+  - -0.106965
+  - -0.002011
   coverage: 1.0
 - id: s4_lama_reg_wilcoxon_lgbm
   section: 4
@@ -60,7 +60,7 @@
   source: results/tidy/exp04_summary.csv
   query: task=='regression' & arm=='lama_adv' & model=='lgbm' & effect=='rmse_rel' & rule=='base_fallback'
   stat: wilcoxon_p_holm
-  value: 0.015209
+  value: 0.012892
   approved_value: null
   approved_git_sha: null
   tolerance: 0.001
@@ -1584,7 +1584,7 @@
   source: results/tidy/exp06_lama_diag.csv
   query: dataset=='socmob' & arm=='exp04_base_lgbm_68pct'
   stat: rmse
-  value: 18.2938
+  value: 16.8761
   approved_value: null
   approved_git_sha: null
   tolerance: 0.001
@@ -1624,7 +1624,7 @@
   text: median effect per arm with CI over datasets (lgbm downstream, base fallback; hollow marker below 80% coverage)
   output: results/figures/article/median_effect_lgbm.png
   data: results/figures/article/median_effect_lgbm.csv
-  data_hash: 192baf8a26d6def2
+  data_hash: accf9f77b9f282dc
   approved_data_hash: null
   approved_git_sha: null
 - id: s4_fig_win_tie_loss_lgbm
@@ -1633,7 +1633,7 @@
   text: number of datasets won, tied and lost per arm (lgbm downstream, base fallback)
   output: results/figures/article/win_tie_loss_lgbm.png
   data: results/figures/article/win_tie_loss_lgbm.csv
-  data_hash: dffcfcb444f176bd
+  data_hash: c1e0018f9ab82e68
   approved_data_hash: null
   approved_git_sha: null
 - id: s4_fig_median_effect_catboost
@@ -1643,7 +1643,7 @@
     coverage)
   output: results/figures/article/median_effect_catboost.png
   data: results/figures/article/median_effect_catboost.csv
-  data_hash: b8ecffb327e02d72
+  data_hash: 387e24e339fb3670
   approved_data_hash: null
   approved_git_sha: null
 - id: s4_fig_win_tie_loss_catboost
@@ -1652,7 +1652,7 @@
   text: number of datasets won, tied and lost per arm (catboost downstream, base fallback)
   output: results/figures/article/win_tie_loss_catboost.png
   data: results/figures/article/win_tie_loss_catboost.csv
-  data_hash: e9c3e12f62337d42
+  data_hash: f40ac54ff1a9985e
   approved_data_hash: null
   approved_git_sha: null
 - id: s4_fig_preview
@@ -1661,7 +1661,7 @@
   text: preview chart, 1500 x 680 px, stands in the text
   output: results/figures/article/preview.png
   data: results/figures/article/preview.csv
-  data_hash: 192baf8a26d6def2
+  data_hash: accf9f77b9f282dc
   approved_data_hash: null
   approved_git_sha: null
 - id: s4_fig_effect_vs_gen_time
@@ -1670,7 +1670,7 @@
   text: effect against generator fit time
   output: results/figures/article/effect_vs_gen_time.png
   data: results/figures/article/effect_vs_gen_time.csv
-  data_hash: e067565ae6c3c3f1
+  data_hash: '8969985336027791'
   approved_data_hash: null
   approved_git_sha: null
 - id: s4_fig_effect_vs_n_features
@@ -1679,7 +1679,7 @@
   text: effect against number of new features
   output: results/figures/article/effect_vs_n_features.png
   data: results/figures/article/effect_vs_n_features.csv
-  data_hash: f020e8a46e66e942
+  data_hash: 88ba2672474e8177
   approved_data_hash: null
   approved_git_sha: null
 - id: s4_fig_coverage_table
@@ -1697,7 +1697,7 @@
   text: permuted-label leakage check
   output: results/figures/article/permuted_labels.png
   data: results/figures/article/permuted_labels.csv
-  data_hash: e7ee8bb1994a46c5
+  data_hash: e3dc726665322e35
   approved_data_hash: null
   approved_git_sha: null
 - id: s5_fig_planted_signals
@@ -1706,7 +1706,7 @@
   text: planted-signal grid (reach oracle, find the true feature)
   output: results/figures/article/planted_signals.png
   data: results/figures/article/planted_signals.csv
-  data_hash: 7b20ebdc4ee0dd3c
+  data_hash: 6de408685b2305f0
   approved_data_hash: null
   approved_git_sha: null
 - id: s2_fig_transform_map_automl
@@ -1800,7 +1800,7 @@
     exp02 A_def
   output: results/figures/article/exp06_lama_diag_table.png
   data: results/figures/article/exp06_lama_diag_table.csv
-  data_hash: d8a9af285ba73742
+  data_hash: 5af0befa8693b67b
   approved_data_hash: null
   approved_git_sha: null
 - id: s2_single_features_pol_def
@@ -3831,7 +3831,8 @@
   tolerance: 0
 - id: s4_skrub_tv_bin_auc_lgbm
   section: 4
-  text: median auc_diff of skrub_tv on binary, lgbm downstream
+  text: 'median auc_diff of skrub_tv on binary, lgbm downstream (secondary: over all 50 datasets, mostly numeric-only
+    ones with exactly 0)'
   source: results/tidy/exp04_summary.csv
   query: task=='binary' & arm=='skrub_tv' & model=='lgbm' & effect=='auc_diff' & rule=='base_fallback'
   stat: median_effect
@@ -3841,11 +3842,13 @@
   tolerance: 0.0005
   ci:
   - -2.0e-06
-  - 0.000239
+  - 0.000252
   coverage: 1.0
+  role: secondary
 - id: s4_skrub_tv_bin_auc_catboost
   section: 4
-  text: median auc_diff of skrub_tv on binary, catboost downstream
+  text: 'median auc_diff of skrub_tv on binary, catboost downstream (secondary: over all 50 datasets, mostly numeric-only
+    ones with exactly 0)'
   source: results/tidy/exp04_summary.csv
   query: task=='binary' & arm=='skrub_tv' & model=='catboost' & effect=='auc_diff' & rule=='base_fallback'
   stat: median_effect
@@ -3857,9 +3860,11 @@
   - -0.000428
   - 0.0
   coverage: 1.0
+  role: secondary
 - id: s4_skrub_tv_multi_logloss_lgbm
   section: 4
-  text: median logloss_rel of skrub_tv on multiclass, lgbm downstream
+  text: 'median logloss_rel of skrub_tv on multiclass, lgbm downstream (secondary: over all 50 datasets, mostly
+    numeric-only ones with exactly 0)'
   source: results/tidy/exp04_summary.csv
   query: task=='multiclass' & arm=='skrub_tv' & model=='lgbm' & effect=='logloss_rel' & rule=='base_fallback'
   stat: median_effect
@@ -3868,12 +3873,14 @@
   approved_git_sha: null
   tolerance: 0.001
   ci:
-  - -9.5e-05
-  - 0.006135
+  - -0.00019
+  - 0.000884
   coverage: 1.0
+  role: secondary
 - id: s4_skrub_tv_multi_logloss_catboost
   section: 4
-  text: median logloss_rel of skrub_tv on multiclass, catboost downstream
+  text: 'median logloss_rel of skrub_tv on multiclass, catboost downstream (secondary: over all 50 datasets, mostly
+    numeric-only ones with exactly 0)'
   source: results/tidy/exp04_summary.csv
   query: task=='multiclass' & arm=='skrub_tv' & model=='catboost' & effect=='logloss_rel' & rule=='base_fallback'
   stat: median_effect
@@ -3885,23 +3892,27 @@
   - -0.001095
   - 0.0
   coverage: 1.0
+  role: secondary
 - id: s4_skrub_tv_reg_rmse_lgbm
   section: 4
-  text: median rmse_rel of skrub_tv on regression, lgbm downstream
+  text: 'median rmse_rel of skrub_tv on regression, lgbm downstream (secondary: over all 50 datasets, mostly numeric-only
+    ones with exactly 0)'
   source: results/tidy/exp04_summary.csv
   query: task=='regression' & arm=='skrub_tv' & model=='lgbm' & effect=='rmse_rel' & rule=='base_fallback'
   stat: median_effect
-  value: -8.0e-05
+  value: -0.000255
   approved_value: null
   approved_git_sha: null
   tolerance: 0.001
   ci:
-  - -0.002832
-  - 1.0e-05
+  - -0.004169
+  - 0.0
   coverage: 1.0
+  role: secondary
 - id: s4_skrub_tv_reg_rmse_catboost
   section: 4
-  text: median rmse_rel of skrub_tv on regression, catboost downstream
+  text: 'median rmse_rel of skrub_tv on regression, catboost downstream (secondary: over all 50 datasets, mostly
+    numeric-only ones with exactly 0)'
   source: results/tidy/exp04_summary.csv
   query: task=='regression' & arm=='skrub_tv' & model=='catboost' & effect=='rmse_rel' & rule=='base_fallback'
   stat: median_effect
@@ -3913,6 +3924,7 @@
   - -0.002724
   - 0.001056
   coverage: 1.0
+  role: secondary
 - id: s4_ctr_ag_tabprep_keepcat_n_datasets
   section: 4
   text: 'ag_tabprep_keepcat: datasets with fits for both CatBoost settings'
@@ -3930,7 +3942,7 @@
   source: results/tidy/exp07_summary.csv
   query: arm=='ag_tabprep_keepcat'
   stat: n_better
-  value: 13.0
+  value: 11.0
   approved_value: null
   approved_git_sha: null
   tolerance: 0
@@ -3940,7 +3952,7 @@
   source: results/tidy/exp07_summary.csv
   query: arm=='ag_tabprep_keepcat'
   stat: n_clear_better
-  value: 6.0
+  value: 5.0
   approved_value: null
   approved_git_sha: null
   tolerance: 0
@@ -3954,17 +3966,6 @@
   approved_value: null
   approved_git_sha: null
   tolerance: 0
-- id: s4_ctr_ag_tabprep_keepcat_median
-  section: 4
-  text: 'ag_tabprep_keepcat: secondary: median over datasets of the paired difference (ctr=1 minus default) in relative
-    loss improvement'
-  source: results/tidy/exp07_summary.csv
-  query: arm=='ag_tabprep_keepcat'
-  stat: median
-  value: 0.005216
-  approved_value: null
-  approved_git_sha: null
-  tolerance: 0.001
 - id: s4_ctr_lama_adv_n_datasets
   section: 4
   text: 'lama_adv: datasets with fits for both CatBoost settings'
@@ -3981,7 +3982,7 @@
   source: results/tidy/exp07_summary.csv
   query: arm=='lama_adv'
   stat: n_better
-  value: 13.0
+  value: 12.0
   approved_value: null
   approved_git_sha: null
   tolerance: 0
@@ -3991,7 +3992,7 @@
   source: results/tidy/exp07_summary.csv
   query: arm=='lama_adv'
   stat: n_clear_better
-  value: 8.0
+  value: 7.0
   approved_value: null
   approved_git_sha: null
   tolerance: 0
@@ -4001,21 +4002,10 @@
   source: results/tidy/exp07_summary.csv
   query: arm=='lama_adv'
   stat: n_clear_worse
-  value: 0.0
+  value: 1.0
   approved_value: null
   approved_git_sha: null
   tolerance: 0
-- id: s4_ctr_lama_adv_median
-  section: 4
-  text: 'lama_adv: secondary: median over datasets of the paired difference (ctr=1 minus default) in relative loss
-    improvement'
-  source: results/tidy/exp07_summary.csv
-  query: arm=='lama_adv'
-  stat: median
-  value: 0.005443
-  approved_value: null
-  approved_git_sha: null
-  tolerance: 0.001
 - id: s4_ctr_openfe_n_datasets
   section: 4
   text: 'openfe: datasets with fits for both CatBoost settings'
@@ -4052,21 +4042,10 @@
   source: results/tidy/exp07_summary.csv
   query: arm=='openfe'
   stat: n_clear_worse
-  value: 2.0
+  value: 1.0
   approved_value: null
   approved_git_sha: null
   tolerance: 0
-- id: s4_ctr_openfe_median
-  section: 4
-  text: 'openfe: secondary: median over datasets of the paired difference (ctr=1 minus default) in relative loss
-    improvement'
-  source: results/tidy/exp07_summary.csv
-  query: arm=='openfe'
-  stat: median
-  value: 0.003398
-  approved_value: null
-  approved_git_sha: null
-  tolerance: 0.001
 - id: s4_ctr_base_n_datasets
   section: 4
   text: 'base, CatBoost ctr=1 against default: datasets'
@@ -4083,7 +4062,7 @@
   source: results/tidy/exp07_summary.csv
   query: arm=='base'
   stat: n_better
-  value: 3.0
+  value: 4.0
   approved_value: null
   approved_git_sha: null
   tolerance: 0
@@ -4094,7 +4073,7 @@
   source: results/tidy/exp07_summary.csv
   query: arm=='base'
   stat: n_clear_worse
-  value: 8.0
+  value: 7.0
   approved_value: null
   approved_git_sha: null
   tolerance: 0
@@ -4105,21 +4084,10 @@
   source: results/tidy/exp07_summary.csv
   query: arm=='base'
   stat: n_clear_better
-  value: 0.0
+  value: 1.0
   approved_value: null
   approved_git_sha: null
   tolerance: 0
-- id: s4_ctr_base_median
-  section: 4
-  text: 'base, CatBoost ctr=1 against default: secondary: median over datasets of the relative loss improvement
-    of base with ctr=1 over default CatBoost'
-  source: results/tidy/exp07_summary.csv
-  query: arm=='base'
-  stat: median
-  value: -0.00548
-  approved_value: null
-  approved_git_sha: null
-  tolerance: 0.001
 - id: s4_fig_ctr_ablation_table
   section: 4
   kind: figure
@@ -4127,6 +4095,1091 @@
     CatBoost and their difference
   output: results/figures/article/ctr_ablation_table.png
   data: results/figures/article/ctr_ablation_table.csv
-  data_hash: 5260941b066756f9
+  data_hash: d797100e43ab7b4a
+  approved_data_hash: null
+  approved_git_sha: null
+- id: s4_cat_ag_default_lgbm_n_datasets
+  section: 4
+  text: 'ag_default over base, lgbm downstream, primary datasets with categorical columns: datasets with categorical
+    columns that have fits for both the arm and base'
+  source: results/tidy/exp04_cat_summary.csv
+  query: arm=='ag_default' & model=='lgbm' & task=='all'
+  stat: n_datasets
+  value: 28.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_cat_ag_default_lgbm_n_better
+  section: 4
+  text: 'ag_default over base, lgbm downstream, primary datasets with categorical columns: datasets better by the
+    sign of the mean per-split effect'
+  source: results/tidy/exp04_cat_summary.csv
+  query: arm=='ag_default' & model=='lgbm' & task=='all'
+  stat: n_better
+  value: 1.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_cat_ag_default_lgbm_n_clear_better
+  section: 4
+  text: 'ag_default over base, lgbm downstream, primary datasets with categorical columns: datasets clearly better
+    (fold CI of the effect excludes zero)'
+  source: results/tidy/exp04_cat_summary.csv
+  query: arm=='ag_default' & model=='lgbm' & task=='all'
+  stat: n_clear_better
+  value: 1.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_cat_ag_default_lgbm_n_clear_worse
+  section: 4
+  text: 'ag_default over base, lgbm downstream, primary datasets with categorical columns: datasets clearly worse
+    (fold CI of the effect excludes zero)'
+  source: results/tidy/exp04_cat_summary.csv
+  query: arm=='ag_default' & model=='lgbm' & task=='all'
+  stat: n_clear_worse
+  value: 1.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_cat_ag_default_catboost_n_datasets
+  section: 4
+  text: 'ag_default over base, catboost downstream, primary datasets with categorical columns: datasets with categorical
+    columns that have fits for both the arm and base'
+  source: results/tidy/exp04_cat_summary.csv
+  query: arm=='ag_default' & model=='catboost' & task=='all'
+  stat: n_datasets
+  value: 27.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_cat_ag_default_catboost_n_better
+  section: 4
+  text: 'ag_default over base, catboost downstream, primary datasets with categorical columns: datasets better by
+    the sign of the mean per-split effect'
+  source: results/tidy/exp04_cat_summary.csv
+  query: arm=='ag_default' & model=='catboost' & task=='all'
+  stat: n_better
+  value: 15.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_cat_ag_default_catboost_n_clear_better
+  section: 4
+  text: 'ag_default over base, catboost downstream, primary datasets with categorical columns: datasets clearly
+    better (fold CI of the effect excludes zero)'
+  source: results/tidy/exp04_cat_summary.csv
+  query: arm=='ag_default' & model=='catboost' & task=='all'
+  stat: n_clear_better
+  value: 3.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_cat_ag_default_catboost_n_clear_worse
+  section: 4
+  text: 'ag_default over base, catboost downstream, primary datasets with categorical columns: datasets clearly
+    worse (fold CI of the effect excludes zero)'
+  source: results/tidy/exp04_cat_summary.csv
+  query: arm=='ag_default' & model=='catboost' & task=='all'
+  stat: n_clear_worse
+  value: 2.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_cat_skrub_tv_lgbm_n_datasets
+  section: 4
+  text: 'skrub_tv over base, lgbm downstream, primary datasets with categorical columns: datasets with categorical
+    columns that have fits for both the arm and base'
+  source: results/tidy/exp04_cat_summary.csv
+  query: arm=='skrub_tv' & model=='lgbm' & task=='all'
+  stat: n_datasets
+  value: 28.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_cat_skrub_tv_lgbm_n_better
+  section: 4
+  text: 'skrub_tv over base, lgbm downstream, primary datasets with categorical columns: datasets better by the
+    sign of the mean per-split effect'
+  source: results/tidy/exp04_cat_summary.csv
+  query: arm=='skrub_tv' & model=='lgbm' & task=='all'
+  stat: n_better
+  value: 12.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_cat_skrub_tv_lgbm_n_clear_better
+  section: 4
+  text: 'skrub_tv over base, lgbm downstream, primary datasets with categorical columns: datasets clearly better
+    (fold CI of the effect excludes zero)'
+  source: results/tidy/exp04_cat_summary.csv
+  query: arm=='skrub_tv' & model=='lgbm' & task=='all'
+  stat: n_clear_better
+  value: 6.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_cat_skrub_tv_lgbm_n_clear_worse
+  section: 4
+  text: 'skrub_tv over base, lgbm downstream, primary datasets with categorical columns: datasets clearly worse
+    (fold CI of the effect excludes zero)'
+  source: results/tidy/exp04_cat_summary.csv
+  query: arm=='skrub_tv' & model=='lgbm' & task=='all'
+  stat: n_clear_worse
+  value: 10.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_cat_skrub_tv_catboost_n_datasets
+  section: 4
+  text: 'skrub_tv over base, catboost downstream, primary datasets with categorical columns: datasets with categorical
+    columns that have fits for both the arm and base'
+  source: results/tidy/exp04_cat_summary.csv
+  query: arm=='skrub_tv' & model=='catboost' & task=='all'
+  stat: n_datasets
+  value: 27.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_cat_skrub_tv_catboost_n_better
+  section: 4
+  text: 'skrub_tv over base, catboost downstream, primary datasets with categorical columns: datasets better by
+    the sign of the mean per-split effect'
+  source: results/tidy/exp04_cat_summary.csv
+  query: arm=='skrub_tv' & model=='catboost' & task=='all'
+  stat: n_better
+  value: 11.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_cat_skrub_tv_catboost_n_clear_better
+  section: 4
+  text: 'skrub_tv over base, catboost downstream, primary datasets with categorical columns: datasets clearly better
+    (fold CI of the effect excludes zero)'
+  source: results/tidy/exp04_cat_summary.csv
+  query: arm=='skrub_tv' & model=='catboost' & task=='all'
+  stat: n_clear_better
+  value: 5.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_cat_skrub_tv_catboost_n_clear_worse
+  section: 4
+  text: 'skrub_tv over base, catboost downstream, primary datasets with categorical columns: datasets clearly worse
+    (fold CI of the effect excludes zero)'
+  source: results/tidy/exp04_cat_summary.csv
+  query: arm=='skrub_tv' & model=='catboost' & task=='all'
+  stat: n_clear_worse
+  value: 7.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_fig_cat_subgroup_table
+  section: 4
+  kind: figure
+  text: skrub_tv and ag_default over base on the datasets with categorical columns, counts by sign and by fold CI
+  output: results/figures/article/cat_subgroup_table.png
+  data: results/figures/article/cat_subgroup_table.csv
+  data_hash: 164af2117217a732
+  approved_data_hash: null
+  approved_git_sha: null
+- id: s2_types_cat_columns_fps_benchmark
+  section: 2
+  text: 'fps_benchmark: categorical columns in the raw frame (non-numeric dtype)'
+  source: results/tidy/exp09_columns.csv
+  query: dataset=='fps_benchmark'
+  stat: count
+  value: 14
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_numeric_like_fps_benchmark
+  section: 2
+  text: 'fps_benchmark: categorical columns whose levels all parse as numbers'
+  source: results/tidy/exp09_columns.csv
+  query: dataset=='fps_benchmark' & numeric_like
+  stat: count
+  value: 4
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_catboost_cat_features_base_fps_benchmark
+  section: 2
+  text: 'fps_benchmark: columns reaching CatBoost as categorical features under base'
+  source: results/tidy/exp09_dtypes.csv
+  query: dataset=='fps_benchmark' & arm=='base'
+  stat: n_categorical
+  value: 14.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_catboost_cat_features_ag_default_fps_benchmark
+  section: 2
+  text: 'fps_benchmark: columns reaching CatBoost as categorical features under ag_default'
+  source: results/tidy/exp09_dtypes.csv
+  query: dataset=='fps_benchmark' & arm=='ag_default'
+  stat: n_categorical
+  value: 6.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_catboost_cat_features_skrub_tv_fps_benchmark
+  section: 2
+  text: 'fps_benchmark: columns reaching CatBoost as categorical features under skrub_tv'
+  source: results/tidy/exp09_dtypes.csv
+  query: dataset=='fps_benchmark' & arm=='skrub_tv'
+  stat: n_categorical
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_catboost_cat_features_base_numcast_fps_benchmark
+  section: 2
+  text: 'fps_benchmark: columns reaching CatBoost as categorical features under base_numcast'
+  source: results/tidy/exp09_dtypes.csv
+  query: dataset=='fps_benchmark' & arm=='base_numcast'
+  stat: n_categorical
+  value: 9.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_cat_columns_auction_verification
+  section: 2
+  text: 'auction_verification: categorical columns in the raw frame (non-numeric dtype)'
+  source: results/tidy/exp09_columns.csv
+  query: dataset=='auction_verification'
+  stat: count
+  value: 2
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_numeric_like_auction_verification
+  section: 2
+  text: 'auction_verification: categorical columns whose levels all parse as numbers'
+  source: results/tidy/exp09_columns.csv
+  query: dataset=='auction_verification' & numeric_like
+  stat: count
+  value: 2
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_catboost_cat_features_base_auction_verification
+  section: 2
+  text: 'auction_verification: columns reaching CatBoost as categorical features under base'
+  source: results/tidy/exp09_dtypes.csv
+  query: dataset=='auction_verification' & arm=='base'
+  stat: n_categorical
+  value: 2.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_catboost_cat_features_ag_default_auction_verification
+  section: 2
+  text: 'auction_verification: columns reaching CatBoost as categorical features under ag_default'
+  source: results/tidy/exp09_dtypes.csv
+  query: dataset=='auction_verification' & arm=='ag_default'
+  stat: n_categorical
+  value: 2.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_catboost_cat_features_skrub_tv_auction_verification
+  section: 2
+  text: 'auction_verification: columns reaching CatBoost as categorical features under skrub_tv'
+  source: results/tidy/exp09_dtypes.csv
+  query: dataset=='auction_verification' & arm=='skrub_tv'
+  stat: n_categorical
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_catboost_cat_features_base_numcast_auction_verification
+  section: 2
+  text: 'auction_verification: columns reaching CatBoost as categorical features under base_numcast'
+  source: results/tidy/exp09_dtypes.csv
+  query: dataset=='auction_verification' & arm=='base_numcast'
+  stat: n_categorical
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_cat_columns_brazilian_houses
+  section: 2
+  text: 'Brazilian_houses: categorical columns in the raw frame (non-numeric dtype)'
+  source: results/tidy/exp09_columns.csv
+  query: dataset=='Brazilian_houses'
+  stat: count
+  value: 4
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_numeric_like_brazilian_houses
+  section: 2
+  text: 'Brazilian_houses: categorical columns whose levels all parse as numbers'
+  source: results/tidy/exp09_columns.csv
+  query: dataset=='Brazilian_houses' & numeric_like
+  stat: count
+  value: 1
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_catboost_cat_features_base_brazilian_houses
+  section: 2
+  text: 'Brazilian_houses: columns reaching CatBoost as categorical features under base'
+  source: results/tidy/exp09_dtypes.csv
+  query: dataset=='Brazilian_houses' & arm=='base'
+  stat: n_categorical
+  value: 4.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_catboost_cat_features_ag_default_brazilian_houses
+  section: 2
+  text: 'Brazilian_houses: columns reaching CatBoost as categorical features under ag_default'
+  source: results/tidy/exp09_dtypes.csv
+  query: dataset=='Brazilian_houses' & arm=='ag_default'
+  stat: n_categorical
+  value: 2.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_catboost_cat_features_skrub_tv_brazilian_houses
+  section: 2
+  text: 'Brazilian_houses: columns reaching CatBoost as categorical features under skrub_tv'
+  source: results/tidy/exp09_dtypes.csv
+  query: dataset=='Brazilian_houses' & arm=='skrub_tv'
+  stat: n_categorical
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_catboost_cat_features_base_numcast_brazilian_houses
+  section: 2
+  text: 'Brazilian_houses: columns reaching CatBoost as categorical features under base_numcast'
+  source: results/tidy/exp09_dtypes.csv
+  query: dataset=='Brazilian_houses' & arm=='base_numcast'
+  stat: n_categorical
+  value: 3.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_cat_columns_socmob
+  section: 2
+  text: 'socmob: categorical columns in the raw frame (non-numeric dtype)'
+  source: results/tidy/exp09_columns.csv
+  query: dataset=='socmob'
+  stat: count
+  value: 4
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_numeric_like_socmob
+  section: 2
+  text: 'socmob: categorical columns whose levels all parse as numbers'
+  source: results/tidy/exp09_columns.csv
+  query: dataset=='socmob' & numeric_like
+  stat: count
+  value: 0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_catboost_cat_features_base_socmob
+  section: 2
+  text: 'socmob: columns reaching CatBoost as categorical features under base'
+  source: results/tidy/exp09_dtypes.csv
+  query: dataset=='socmob' & arm=='base'
+  stat: n_categorical
+  value: 4.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_catboost_cat_features_ag_default_socmob
+  section: 2
+  text: 'socmob: columns reaching CatBoost as categorical features under ag_default'
+  source: results/tidy/exp09_dtypes.csv
+  query: dataset=='socmob' & arm=='ag_default'
+  stat: n_categorical
+  value: 2.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_catboost_cat_features_skrub_tv_socmob
+  section: 2
+  text: 'socmob: columns reaching CatBoost as categorical features under skrub_tv'
+  source: results/tidy/exp09_dtypes.csv
+  query: dataset=='socmob' & arm=='skrub_tv'
+  stat: n_categorical
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_catboost_cat_features_base_numcast_socmob
+  section: 2
+  text: 'socmob: columns reaching CatBoost as categorical features under base_numcast'
+  source: results/tidy/exp09_dtypes.csv
+  query: dataset=='socmob' & arm=='base_numcast'
+  stat: n_categorical
+  value: 4.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_cat_columns_amazon_employee_access
+  section: 2
+  text: 'Amazon_employee_access: categorical columns in the raw frame (non-numeric dtype)'
+  source: results/tidy/exp09_columns.csv
+  query: dataset=='Amazon_employee_access'
+  stat: count
+  value: 9
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_numeric_like_amazon_employee_access
+  section: 2
+  text: 'Amazon_employee_access: categorical columns whose levels all parse as numbers'
+  source: results/tidy/exp09_columns.csv
+  query: dataset=='Amazon_employee_access' & numeric_like
+  stat: count
+  value: 9
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_catboost_cat_features_base_amazon_employee_access
+  section: 2
+  text: 'Amazon_employee_access: columns reaching CatBoost as categorical features under base'
+  source: results/tidy/exp09_dtypes.csv
+  query: dataset=='Amazon_employee_access' & arm=='base'
+  stat: n_categorical
+  value: 9.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_catboost_cat_features_ag_default_amazon_employee_access
+  section: 2
+  text: 'Amazon_employee_access: columns reaching CatBoost as categorical features under ag_default'
+  source: results/tidy/exp09_dtypes.csv
+  query: dataset=='Amazon_employee_access' & arm=='ag_default'
+  stat: n_categorical
+  value: 8.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_catboost_cat_features_skrub_tv_amazon_employee_access
+  section: 2
+  text: 'Amazon_employee_access: columns reaching CatBoost as categorical features under skrub_tv'
+  source: results/tidy/exp09_dtypes.csv
+  query: dataset=='Amazon_employee_access' & arm=='skrub_tv'
+  stat: n_categorical
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_catboost_cat_features_base_numcast_amazon_employee_access
+  section: 2
+  text: 'Amazon_employee_access: columns reaching CatBoost as categorical features under base_numcast'
+  source: results/tidy/exp09_dtypes.csv
+  query: dataset=='Amazon_employee_access' & arm=='base_numcast'
+  stat: n_categorical
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_ordered_datasets
+  section: 2
+  text: primary datasets with categorical columns in which every categorical column is an ordered pandas category
+    (LightGBM skipped these until the downstream fix of 2026-11-19)
+  source: results/tidy/exp09_ordered.csv
+  query: n_ordered == n_category_columns
+  stat: count
+  value: 28
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_types_unordered_datasets
+  section: 2
+  text: primary datasets with categorical columns that have at least one unordered categorical column
+  source: results/tidy/exp09_ordered.csv
+  query: n_ordered < n_category_columns
+  stat: count
+  value: 0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_numcast_ag_default_catboost_fps_benchmark
+  section: 4
+  text: 'ag_default over base, catboost downstream, fps_benchmark: effect in the primary metric (AUC difference
+    for binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='fps_benchmark' & model=='catboost' & arm=='ag_default'
+  stat: effect
+  value: 0.009551
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -0.036364
+  - 0.043862
+- id: s4_numcast_skrub_tv_catboost_fps_benchmark
+  section: 4
+  text: 'skrub_tv over base, catboost downstream, fps_benchmark: effect in the primary metric (AUC difference for
+    binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='fps_benchmark' & model=='catboost' & arm=='skrub_tv'
+  stat: effect
+  value: 0.687677
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - 0.649918
+  - 0.717884
+- id: s4_numcast_base_numcast_catboost_fps_benchmark
+  section: 4
+  text: 'base_numcast over base, catboost downstream, fps_benchmark: effect in the primary metric (AUC difference
+    for binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='fps_benchmark' & model=='catboost' & arm=='base_numcast'
+  stat: effect
+  value: 0.0229
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -0.016877
+  - 0.05813
+- id: s4_numcast_base_codes_catboost_fps_benchmark
+  section: 4
+  text: 'base_codes over base, catboost downstream, fps_benchmark: effect in the primary metric (AUC difference
+    for binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='fps_benchmark' & model=='catboost' & arm=='base_codes'
+  stat: effect
+  value: 0.601856
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - 0.523232
+  - 0.656887
+- id: s4_numcast_ag_default_lgbm_fps_benchmark
+  section: 4
+  text: 'ag_default over base, lgbm downstream, fps_benchmark: effect in the primary metric (AUC difference for
+    binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='fps_benchmark' & model=='lgbm' & arm=='ag_default'
+  stat: effect
+  value: -0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -0.0
+  - 0.0
+- id: s4_numcast_skrub_tv_lgbm_fps_benchmark
+  section: 4
+  text: 'skrub_tv over base, lgbm downstream, fps_benchmark: effect in the primary metric (AUC difference for binary,
+    relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='fps_benchmark' & model=='lgbm' & arm=='skrub_tv'
+  stat: effect
+  value: -0.205669
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -0.263192
+  - -0.143245
+- id: s4_numcast_base_numcast_lgbm_fps_benchmark
+  section: 4
+  text: 'base_numcast over base, lgbm downstream, fps_benchmark: effect in the primary metric (AUC difference for
+    binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='fps_benchmark' & model=='lgbm' & arm=='base_numcast'
+  stat: effect
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - 0.0
+  - 0.0
+- id: s4_numcast_base_codes_lgbm_fps_benchmark
+  section: 4
+  text: 'base_codes over base, lgbm downstream, fps_benchmark: effect in the primary metric (AUC difference for
+    binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='fps_benchmark' & model=='lgbm' & arm=='base_codes'
+  stat: effect
+  value: -0.596876
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -0.681696
+  - -0.506572
+- id: s4_numcast_ag_default_catboost_auction_verification
+  section: 4
+  text: 'ag_default over base, catboost downstream, auction_verification: effect in the primary metric (AUC difference
+    for binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='auction_verification' & model=='catboost' & arm=='ag_default'
+  stat: effect
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - 0.0
+  - 0.0
+- id: s4_numcast_skrub_tv_catboost_auction_verification
+  section: 4
+  text: 'skrub_tv over base, catboost downstream, auction_verification: effect in the primary metric (AUC difference
+    for binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='auction_verification' & model=='catboost' & arm=='skrub_tv'
+  stat: effect
+  value: 0.511879
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - 0.442641
+  - 0.587373
+- id: s4_numcast_base_numcast_catboost_auction_verification
+  section: 4
+  text: 'base_numcast over base, catboost downstream, auction_verification: effect in the primary metric (AUC difference
+    for binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='auction_verification' & model=='catboost' & arm=='base_numcast'
+  stat: effect
+  value: 0.493692
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - 0.441588
+  - 0.554284
+- id: s4_numcast_base_codes_catboost_auction_verification
+  section: 4
+  text: 'base_codes over base, catboost downstream, auction_verification: effect in the primary metric (AUC difference
+    for binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='auction_verification' & model=='catboost' & arm=='base_codes'
+  stat: effect
+  value: 0.493692
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - 0.441806
+  - 0.556076
+- id: s4_numcast_ag_default_lgbm_auction_verification
+  section: 4
+  text: 'ag_default over base, lgbm downstream, auction_verification: effect in the primary metric (AUC difference
+    for binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='auction_verification' & model=='lgbm' & arm=='ag_default'
+  stat: effect
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - 0.0
+  - 0.0
+- id: s4_numcast_skrub_tv_lgbm_auction_verification
+  section: 4
+  text: 'skrub_tv over base, lgbm downstream, auction_verification: effect in the primary metric (AUC difference
+    for binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='auction_verification' & model=='lgbm' & arm=='skrub_tv'
+  stat: effect
+  value: 0.090835
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -0.009066
+  - 0.185102
+- id: s4_numcast_base_numcast_lgbm_auction_verification
+  section: 4
+  text: 'base_numcast over base, lgbm downstream, auction_verification: effect in the primary metric (AUC difference
+    for binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='auction_verification' & model=='lgbm' & arm=='base_numcast'
+  stat: effect
+  value: 0.19946
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - 0.131095
+  - 0.27833
+- id: s4_numcast_base_codes_lgbm_auction_verification
+  section: 4
+  text: 'base_codes over base, lgbm downstream, auction_verification: effect in the primary metric (AUC difference
+    for binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='auction_verification' & model=='lgbm' & arm=='base_codes'
+  stat: effect
+  value: 0.19946
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - 0.130713
+  - 0.277121
+- id: s4_numcast_ag_default_catboost_brazilian_houses
+  section: 4
+  text: 'ag_default over base, catboost downstream, Brazilian_houses: effect in the primary metric (AUC difference
+    for binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='Brazilian_houses' & model=='catboost' & arm=='ag_default'
+  stat: effect
+  value: 0.033818
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -0.000142
+  - 0.086246
+- id: s4_numcast_skrub_tv_catboost_brazilian_houses
+  section: 4
+  text: 'skrub_tv over base, catboost downstream, Brazilian_houses: effect in the primary metric (AUC difference
+    for binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='Brazilian_houses' & model=='catboost' & arm=='skrub_tv'
+  stat: effect
+  value: 0.206675
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -0.372623
+  - 0.529038
+- id: s4_numcast_base_numcast_catboost_brazilian_houses
+  section: 4
+  text: 'base_numcast over base, catboost downstream, Brazilian_houses: effect in the primary metric (AUC difference
+    for binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='Brazilian_houses' & model=='catboost' & arm=='base_numcast'
+  stat: effect
+  value: 0.15354
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - 0.037493
+  - 0.308095
+- id: s4_numcast_base_codes_catboost_brazilian_houses
+  section: 4
+  text: 'base_codes over base, catboost downstream, Brazilian_houses: effect in the primary metric (AUC difference
+    for binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='Brazilian_houses' & model=='catboost' & arm=='base_codes'
+  stat: effect
+  value: 0.351414
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - 0.101787
+  - 0.459753
+- id: s4_numcast_ag_default_lgbm_brazilian_houses
+  section: 4
+  text: 'ag_default over base, lgbm downstream, Brazilian_houses: effect in the primary metric (AUC difference for
+    binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='Brazilian_houses' & model=='lgbm' & arm=='ag_default'
+  stat: effect
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - 0.0
+  - 0.0
+- id: s4_numcast_skrub_tv_lgbm_brazilian_houses
+  section: 4
+  text: 'skrub_tv over base, lgbm downstream, Brazilian_houses: effect in the primary metric (AUC difference for
+    binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='Brazilian_houses' & model=='lgbm' & arm=='skrub_tv'
+  stat: effect
+  value: 0.00191
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -0.005929
+  - 0.014875
+- id: s4_numcast_base_numcast_lgbm_brazilian_houses
+  section: 4
+  text: 'base_numcast over base, lgbm downstream, Brazilian_houses: effect in the primary metric (AUC difference
+    for binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='Brazilian_houses' & model=='lgbm' & arm=='base_numcast'
+  stat: effect
+  value: 0.064962
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -8.4e-05
+  - 0.205711
+- id: s4_numcast_base_codes_lgbm_brazilian_houses
+  section: 4
+  text: 'base_codes over base, lgbm downstream, Brazilian_houses: effect in the primary metric (AUC difference for
+    binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='Brazilian_houses' & model=='lgbm' & arm=='base_codes'
+  stat: effect
+  value: 0.05646
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -0.003529
+  - 0.188985
+- id: s4_numcast_ag_default_catboost_socmob
+  section: 4
+  text: 'ag_default over base, catboost downstream, socmob: effect in the primary metric (AUC difference for binary,
+    relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='socmob' & model=='catboost' & arm=='ag_default'
+  stat: effect
+  value: 0.019701
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - 5.1e-05
+  - 0.045414
+- id: s4_numcast_skrub_tv_catboost_socmob
+  section: 4
+  text: 'skrub_tv over base, catboost downstream, socmob: effect in the primary metric (AUC difference for binary,
+    relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='socmob' & model=='catboost' & arm=='skrub_tv'
+  stat: effect
+  value: 0.093537
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - 0.021227
+  - 0.174001
+- id: s4_numcast_base_numcast_catboost_socmob
+  section: 4
+  text: 'base_numcast over base, catboost downstream, socmob: effect in the primary metric (AUC difference for binary,
+    relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='socmob' & model=='catboost' & arm=='base_numcast'
+  stat: effect
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - 0.0
+  - 0.0
+- id: s4_numcast_base_codes_catboost_socmob
+  section: 4
+  text: 'base_codes over base, catboost downstream, socmob: effect in the primary metric (AUC difference for binary,
+    relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='socmob' & model=='catboost' & arm=='base_codes'
+  stat: effect
+  value: 0.016319
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -0.038701
+  - 0.076277
+- id: s4_numcast_ag_default_lgbm_socmob
+  section: 4
+  text: 'ag_default over base, lgbm downstream, socmob: effect in the primary metric (AUC difference for binary,
+    relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='socmob' & model=='lgbm' & arm=='ag_default'
+  stat: effect
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - 0.0
+  - 0.0
+- id: s4_numcast_skrub_tv_lgbm_socmob
+  section: 4
+  text: 'skrub_tv over base, lgbm downstream, socmob: effect in the primary metric (AUC difference for binary, relative
+    RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='socmob' & model=='lgbm' & arm=='skrub_tv'
+  stat: effect
+  value: -0.188053
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -0.321081
+  - -0.078591
+- id: s4_numcast_base_numcast_lgbm_socmob
+  section: 4
+  text: 'base_numcast over base, lgbm downstream, socmob: effect in the primary metric (AUC difference for binary,
+    relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='socmob' & model=='lgbm' & arm=='base_numcast'
+  stat: effect
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - 0.0
+  - 0.0
+- id: s4_numcast_base_codes_lgbm_socmob
+  section: 4
+  text: 'base_codes over base, lgbm downstream, socmob: effect in the primary metric (AUC difference for binary,
+    relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='socmob' & model=='lgbm' & arm=='base_codes'
+  stat: effect
+  value: -0.140396
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -0.23435
+  - -0.057728
+- id: s4_numcast_ag_default_catboost_amazon_employee_access
+  section: 4
+  text: 'ag_default over base, catboost downstream, Amazon_employee_access: effect in the primary metric (AUC difference
+    for binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='Amazon_employee_access' & model=='catboost' & arm=='ag_default'
+  stat: effect
+  value: -0.005321
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -0.008411
+  - -0.002299
+- id: s4_numcast_skrub_tv_catboost_amazon_employee_access
+  section: 4
+  text: 'skrub_tv over base, catboost downstream, Amazon_employee_access: effect in the primary metric (AUC difference
+    for binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='Amazon_employee_access' & model=='catboost' & arm=='skrub_tv'
+  stat: effect
+  value: -0.0298
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -0.036859
+  - -0.022045
+- id: s4_numcast_base_numcast_catboost_amazon_employee_access
+  section: 4
+  text: 'base_numcast over base, catboost downstream, Amazon_employee_access: effect in the primary metric (AUC
+    difference for binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='Amazon_employee_access' & model=='catboost' & arm=='base_numcast'
+  stat: effect
+  value: -0.053
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -0.059902
+  - -0.046571
+- id: s4_numcast_base_codes_catboost_amazon_employee_access
+  section: 4
+  text: 'base_codes over base, catboost downstream, Amazon_employee_access: effect in the primary metric (AUC difference
+    for binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='Amazon_employee_access' & model=='catboost' & arm=='base_codes'
+  stat: effect
+  value: -0.052992
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -0.060135
+  - -0.046387
+- id: s4_numcast_ag_default_lgbm_amazon_employee_access
+  section: 4
+  text: 'ag_default over base, lgbm downstream, Amazon_employee_access: effect in the primary metric (AUC difference
+    for binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='Amazon_employee_access' & model=='lgbm' & arm=='ag_default'
+  stat: effect
+  value: 0.000645
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - 0.00011
+  - 0.001238
+- id: s4_numcast_skrub_tv_lgbm_amazon_employee_access
+  section: 4
+  text: 'skrub_tv over base, lgbm downstream, Amazon_employee_access: effect in the primary metric (AUC difference
+    for binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='Amazon_employee_access' & model=='lgbm' & arm=='skrub_tv'
+  stat: effect
+  value: 0.015918
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - 0.011052
+  - 0.02041
+- id: s4_numcast_base_numcast_lgbm_amazon_employee_access
+  section: 4
+  text: 'base_numcast over base, lgbm downstream, Amazon_employee_access: effect in the primary metric (AUC difference
+    for binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='Amazon_employee_access' & model=='lgbm' & arm=='base_numcast'
+  stat: effect
+  value: -0.00095
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -0.004643
+  - 0.003249
+- id: s4_numcast_base_codes_lgbm_amazon_employee_access
+  section: 4
+  text: 'base_codes over base, lgbm downstream, Amazon_employee_access: effect in the primary metric (AUC difference
+    for binary, relative RMSE or log loss reduction otherwise)'
+  source: results/tidy/exp09_effects.csv
+  query: dataset=='Amazon_employee_access' & model=='lgbm' & arm=='base_codes'
+  stat: effect
+  value: -0.001682
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -0.006505
+  - 0.003713
+- id: s4_fig_numcast_table
+  section: 4
+  kind: figure
+  text: effect over base of ag_default, skrub_tv and base_numcast on the five diagnostic datasets
+  output: results/figures/article/numcast_table.png
+  data: results/figures/article/numcast_table.csv
+  data_hash: c10acc0351825cc2
+  approved_data_hash: null
+  approved_git_sha: null
+- id: s2_fig_exp09_types_table
+  section: 2
+  kind: figure
+  text: per categorical column of the five diagnostic datasets, what reaches CatBoost and LightGBM under base and
+    each arm
+  output: results/figures/article/exp09_types_table.png
+  data: results/figures/article/exp09_types_table.csv
+  data_hash: ddd1b2fc13bdf1b8
   approved_data_hash: null
   approved_git_sha: null

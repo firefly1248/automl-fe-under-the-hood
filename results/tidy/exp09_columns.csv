@@ -1,0 +1,34 @@
+dataset,column,raw_dtype,n_levels,numeric_like,ordered_in_base,base,ag_default,skrub_kind,skrub_n_outputs,skrub_dtype,base_numcast
+fps_benchmark,CpuName,category,19,False,True,categorical,categorical,low_cardinality,19,float32,categorical
+fps_benchmark,CpuMultiplierUnlocked,category,2,True,True,categorical,numeric (int8),low_cardinality,1,float32,numeric (float64)
+fps_benchmark,GpuName,category,27,False,True,categorical,categorical,low_cardinality,27,float32,categorical
+fps_benchmark,GpuArchitecture,category,6,False,True,categorical,categorical,low_cardinality,6,float32,categorical
+fps_benchmark,GpuBus.interface,category,2,False,True,categorical,numeric (int8),low_cardinality,1,float32,categorical
+fps_benchmark,GpuDirectX,category,2,False,True,categorical,numeric (int8),low_cardinality,1,float32,categorical
+fps_benchmark,GpuNumberOfExecutionUnits,object,0,False,False,categorical,dropped,dropped,0,,numeric (float64)
+fps_benchmark,GpuMemoryType,category,4,False,True,categorical,categorical,low_cardinality,4,float32,categorical
+fps_benchmark,GpuOpenCL,category,2,True,True,categorical,numeric (int8),low_cardinality,1,float32,numeric (float64)
+fps_benchmark,GpuOpenGL,category,1,True,True,categorical,dropped,low_cardinality,1,float32,numeric (float64)
+fps_benchmark,GpuShaderModel,category,2,True,True,categorical,numeric (int8),low_cardinality,1,float32,numeric (float64)
+fps_benchmark,GpuVulkan,category,3,False,True,categorical,categorical,low_cardinality,3,float32,categorical
+fps_benchmark,GameName,category,24,False,True,categorical,categorical,low_cardinality,24,float32,categorical
+fps_benchmark,GameSetting,category,2,False,True,categorical,numeric (int8),low_cardinality,1,float32,categorical
+auction_verification,property.product,category,6,True,True,categorical,categorical,low_cardinality,6,float32,numeric (float64)
+auction_verification,property.winner,category,5,True,True,categorical,categorical,low_cardinality,5,float32,numeric (float64)
+Brazilian_houses,city,category,5,False,True,categorical,categorical,low_cardinality,5,float32,categorical
+Brazilian_houses,floor,category,33,True,True,categorical,categorical,low_cardinality,33,float32,numeric (float64)
+Brazilian_houses,animal,category,2,False,True,categorical,numeric (int8),low_cardinality,1,float32,categorical
+Brazilian_houses,furniture,category,2,False,True,categorical,numeric (int8),low_cardinality,1,float32,categorical
+socmob,fathers_occupation,category,17,False,True,categorical,categorical,low_cardinality,17,float32,categorical
+socmob,sons_occupation,category,17,False,True,categorical,categorical,low_cardinality,17,float32,categorical
+socmob,family_structure,category,2,False,True,categorical,numeric (int8),low_cardinality,1,float32,categorical
+socmob,race,category,2,False,True,categorical,numeric (int8),low_cardinality,1,float32,categorical
+Amazon_employee_access,RESOURCE,category,6136,True,True,categorical,categorical,high_cardinality,30,float32,numeric (float64)
+Amazon_employee_access,MGR_ID,category,3877,True,True,categorical,categorical,high_cardinality,30,float32,numeric (float64)
+Amazon_employee_access,ROLE_ROLLUP_1,category,124,True,True,categorical,categorical,high_cardinality,30,float32,numeric (float64)
+Amazon_employee_access,ROLE_ROLLUP_2,category,172,True,True,categorical,categorical,high_cardinality,30,float32,numeric (float64)
+Amazon_employee_access,ROLE_DEPTNAME,category,443,True,True,categorical,categorical,high_cardinality,30,float32,numeric (float64)
+Amazon_employee_access,ROLE_TITLE,category,335,True,True,categorical,categorical,high_cardinality,30,float32,numeric (float64)
+Amazon_employee_access,ROLE_FAMILY_DESC,category,2118,True,True,categorical,categorical,high_cardinality,30,float32,numeric (float64)
+Amazon_employee_access,ROLE_FAMILY,category,67,True,True,categorical,categorical,high_cardinality,30,float32,numeric (float64)
+Amazon_employee_access,ROLE_CODE,category,335,True,True,categorical,dropped,high_cardinality,30,float32,numeric (float64)

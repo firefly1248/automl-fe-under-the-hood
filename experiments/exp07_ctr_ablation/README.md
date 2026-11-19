@@ -20,7 +20,7 @@ the same test log loss to the last digit (0.5009686182654032, best iteration 132
 Analysis (`afe.analysis.exp07`, in `make aggregate`; tables `results/tidy/exp07_effects.csv`, `exp07_summary.csv`; claims
 `s4_ctr_*`; article table `ctr_ablation_table`). Per dataset and arm, over the folds where all four fits exist (default and
 `ctr=1`, arm and base): the effect of the arm over `base` with the default CatBoost, the same with `ctr=1`, and their paired
-difference `ctr=1 minus default`, as relative loss improvement (log loss, RMSE for regression) with a fold-bootstrap 95% CI;
+difference `ctr=1 minus default`, in the primary metric of the task type (AUC difference for binary, relative log loss or RMSE reduction otherwise) with a fold-bootstrap 95% CI;
 counts better by sign and clearly better or worse (CI excludes zero). A positive difference means the arm helps more once
 CatBoost has no combinations of its own. `base` alone: `ctr=1` over default, negative where CatBoost loses without its own
 combinations.
@@ -29,16 +29,17 @@ combinations.
 
 680 planned units: 670 ok, 10 `no_generator` (openfe on fps_benchmark, whose generator failed in exp04, so openfe has 16 datasets
 and the other arms 17). Mean wall time of a `ctr=1` fit: base 15.5 s, `lama_adv` 5.0 s, `openfe` 93.6 s, `ag_tabprep_keepcat` 159.3 s
-(`s4_ctr_*`, `ctr_ablation_table`).
+(`s4_ctr_*`, `ctr_ablation_table`). Effects are in the primary metric of the task type, as in exp04: AUC points for binary,
+% log loss for multiclass, % RMSE for regression (the table labels the unit on every row). No median over datasets: the units differ.
 
-- `base` alone, `ctr=1` over default CatBoost: better on 3 of 17 datasets by sign, clearly worse on 8 (fold CI excludes zero),
-  clearly better on 0; median -0.5%. Large losses without CatBoost's own combinations: fps_benchmark (RMSE 5.56 against 0.90,
-  -537%), socmob -25.8%, Amazon_employee_access -11.0%.
+- `base` alone, `ctr=1` over default CatBoost: better on 4 of 17 datasets by sign, clearly worse on 7 (fold CI excludes
+  zero), clearly better on 1. The largest losses without CatBoost's own combinations: fps_benchmark (RMSE 5.56 against 0.90,
+  -537%, an outlier shown in a note under the table, not as a row), socmob -25.8% RMSE, Amazon_employee_access -2.8 AUC points.
 - Paired difference `ctr=1` minus default (the arm helps more once CatBoost has no combinations of its own), better by sign /
-  clearly better / clearly worse: `ag_tabprep_keepcat` 13 / 6 / 0 of 17, `lama_adv` 13 / 8 / 0 of 17, `openfe` 12 / 6 / 2 of 16. The
-  median shift is about half a point (+0.5, +0.5 and +0.3 points; secondary figures), so the sign counts are lopsided but the typical
-  size is small; the large differences sit on socmob, Amazon_employee_access and fps_benchmark, where `base` also loses most
-  without combinations. Brazilian_houses has huge fold-to-fold variation and no clear result.
+  clearly better / clearly worse: `ag_tabprep_keepcat` 11 / 5 / 0 of 17, `lama_adv` 12 / 7 / 1 of 17, `openfe` 12 / 6 / 1 of 16.
+  The sign counts are lopsided, but the large differences sit on three datasets, socmob, Amazon_employee_access and
+  fps_benchmark, where `base` also loses most without combinations; elsewhere the differences are a fraction of a point.
+  Brazilian_houses has huge fold-to-fold variation and no clear result.
 - Reading: on these datasets the arms that add crossings or target encodings help CatBoost more when its own combinations are off,
   which fits the hypothesis, but turning the combinations off also hurts `base` itself on most datasets, so the comparison is of
   two different CatBoosts, and 17 datasets with one default setting of everything else do not say how general it is.

@@ -32,14 +32,21 @@ def _lgbm(params, seed, task, k, X_fit, y_fit, X_inner, y_inner):
     import lightgbm as lgb
 
     names = {c: f"f{i}" for i, c in enumerate(X_fit.columns)}  # LightGBM rejects JSON characters in names
+
+    def prepare(X):
+        """Renamed columns; ordered categoricals made unordered, since `categorical_feature="auto"` skips ordered ones."""
+        ordered = {c: pd.CategoricalDtype(X[c].cat.categories) for c in X.columns
+                   if isinstance(X[c].dtype, pd.CategoricalDtype) and X[c].cat.ordered}
+        return X.astype(ordered).rename(columns=names)
+
     kw = {n: v for n, v in params.items() if n != "early_stopping"}
     cls = lgb.LGBMRegressor if task == "regression" else lgb.LGBMClassifier
     m = cls(**kw, random_state=seed, n_jobs=1, verbose=-1)
-    m.fit(X_fit.rename(columns=names), y_fit, eval_X=X_inner.rename(columns=names), eval_y=y_inner,
+    m.fit(prepare(X_fit), y_fit, eval_X=prepare(X_inner), eval_y=y_inner,
           callbacks=[lgb.early_stopping(params["early_stopping"], verbose=False)])
 
     def predict(X):
-        X = X.rename(columns=names)
+        X = prepare(X)
         return m.predict(X) if task == "regression" else _full_proba(m.classes_, m.predict_proba(X), k)
 
     return predict, int(m.best_iteration_)

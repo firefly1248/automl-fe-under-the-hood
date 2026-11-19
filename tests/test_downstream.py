@@ -32,3 +32,12 @@ def test_missing_class_in_fit_rows():
     fit = y != 2  # class 2 absent from fit rows
     res = fit_score("lgbm", PARAMS["lgbm"], 0, "multiclass", 3, (X[fit], y[fit]), (X[fit], y[fit]), (X, y))
     assert np.isfinite(res["test"]["logloss"])
+
+
+def test_lgbm_ordered_categorical_is_used_as_categorical():
+    X, y = _data("regression")
+    ordered = X.assign(c=X.c.cat.as_ordered())
+    parts = lambda Z: [(Z.iloc[a:b], y.iloc[a:b]) for a, b in ((0, 250), (250, 320), (320, 400))]  # noqa: E731
+    a = fit_score("lgbm", PARAMS["lgbm"], 0, "regression", 0, *parts(X))
+    b = fit_score("lgbm", PARAMS["lgbm"], 0, "regression", 0, *parts(ordered))
+    assert a["test"] == b["test"] and a["best_iteration"] == b["best_iteration"]

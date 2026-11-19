@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from afe.analysis import exp02, exp06, exp07
+from afe.analysis import exp02, exp06, exp07, exp09
 from afe.analysis.figures import ARMS, COLOR, EFFECT_LABEL, LOW_COVERAGE, PRIMARY_EFFECT
 from afe.paths import RESULTS
 
@@ -196,12 +196,17 @@ def contrasts(per: pd.DataFrame, pairs, name: str, ncols: int) -> None:
 
 
 def table(df: pd.DataFrame, name: str, cell, shade, col_labels=None, col_width=1.3, first_width=2.6,
-          group_gap: str = None, header_size: float = None) -> None:
+          group_gap: str = None, header_size: float = None, note: str = None) -> None:
     """Rendered table: `cell(value)` gives the text, `shade(value)` a colour or None; first column is the row label."""
     labels = list(col_labels or df.columns[1:])
     n, m = len(df), len(labels)
-    fig, ax = plt.subplots(figsize=(max(11, first_width + col_width * m), 0.27 * (n + 1) + 0.5))
-    fig.subplots_adjust(0.01, 0.01, 0.99, 0.99)
+    lines = note.split("\n") if note else []
+    extra = 0.3 * len(lines)  # inches under the table for the note
+    height = 0.27 * (n + 1) + 0.5 + extra
+    fig, ax = plt.subplots(figsize=(max(11, first_width + col_width * m), height))
+    fig.subplots_adjust(0.01, 0.01 + extra / height, 0.99, 0.99)
+    for i, line in enumerate(lines):
+        fig.text(0.012, (extra - 0.3 * (i + 1) + 0.1) / height, line, fontsize=11, ha="left", va="bottom")
     ax.axis("off")
     widths = [first_width / (first_width + col_width * m)] + [col_width / (first_width + col_width * m)] * m
     t = ax.table(cellText=[[df.iloc[i, 0]] + [cell(v) for v in df.iloc[i, 1:]] for i in range(n)],
@@ -285,20 +290,26 @@ def noise_table(exp: str, name: str) -> None:
           col_width=1.8, first_width=2.3)
 
 
+CTR_UNIT = {"binary": "pp AUC", "multiclass": "% log loss", "regression": "% RMSE"}  # the primary metric of each task type
+CTR_OUTLIERS = ["fps_benchmark"]  # shown in the note under the table, not as a row; still counted in the summary rows
+
+
 def ctr_ablation_table() -> None:
     """exp07: per dataset, `base` with `max_ctr_complexity=1` over the default CatBoost, and for each arm the effect over
-    base with the default CatBoost, with `ctr=1` and their difference (`ctr=1` minus default), in %, three numbers
-    in a cell (default | ctr=1 | difference). Shaded green or
-    red where the fold CI of the difference excludes zero (green: the arm helps more once CatBoost has no combinations of
-    its own). The last rows count datasets better by the sign of the difference and clearly better or worse."""
+    base with the default CatBoost, with `ctr=1` and their difference (`ctr=1` minus default), three numbers in a cell
+    (default | ctr=1 | difference), in the unit of the task type given after the dataset name (AUC points for binary,
+    % log loss for multiclass, % RMSE for regression). Shaded green or red where the fold CI of the difference excludes zero
+    (green: the arm helps more once CatBoost has no combinations of its own). The last rows count datasets better by the
+    sign of the difference and clearly better or worse, outliers included; the outliers are in a note under the table."""
     eff = pd.read_csv(RESULTS / "tidy" / "exp07_effects.csv")
     summ = pd.read_csv(RESULTS / "tidy" / "exp07_summary.csv").set_index("arm")
     arms = [a for a in exp07.ARMS if a in set(eff.arm)]
     e = eff.set_index(["dataset", "arm"])
+    task = eff.drop_duplicates("dataset").set_index("dataset").task
     pct = lambda v: f"{round(v * 100, 1) + 0.0:+.1f}"  # + 0.0: no "-0.0"
     rows = []
-    for dataset in sorted(eff.dataset.unique()):
-        row = [dataset]
+    for dataset in sorted(set(eff.dataset) - set(CTR_OUTLIERS)):
+        row = [f"{dataset} ({CTR_UNIT[task[dataset]]})"]
         b = e.loc[(dataset, "base")] if (dataset, "base") in e.index else None
         row.append(("text", pct(b.effect_diff)) if b is not None else ("text", ""))
         for a in arms:
@@ -309,9 +320,60 @@ def ctr_ablation_table() -> None:
     for label, col in (("better (sign)", "n_better"), ("clearly better", "n_clear_better"), ("clearly worse", "n_clear_worse")):
         rows.append([label, ("text", "")] + [("count", f"{int(summ.loc[a, col])} of {int(summ.loc[a, 'n_datasets'])}") if a in summ.index
                                              else ("text", "") for a in arms])
-    df = pd.DataFrame(rows, columns=["dataset (arm cells: default | ctr=1 | diff)", "base: ctr=1 vs default"] + arms)
+    df = pd.DataFrame(rows, columns=["dataset (unit); arm cells: default | ctr=1 | diff", "base: ctr=1 vs default"] + arms)
     shade = lambda v: ("#cfe9d3" if v[2] > 0 else "#f3cccc" if v[3] < 0 else None) if v[0] == "arm" else "#f3f3f3" if v[0] == "count" else None
-    table(df, "ctr_ablation_table", lambda v: v[1], shade, col_width=2.6, first_width=4.4, header_size=10.5)
+    notes = []
+    for d in CTR_OUTLIERS:
+        parts = [f"base {pct(e.loc[(d, 'base')].effect_diff)}"]
+        parts += [f"{a} diff {pct(e.loc[(d, a)].effect_diff)}" for a in arms if (d, a) in e.index]
+        notes.append(f"Outlier not shown: {d} ({CTR_UNIT[task[d]]}): " + ", ".join(parts) + "; counted in the summary rows.")
+    table(df, "ctr_ablation_table", lambda v: v[1], shade, col_width=2.6, first_width=4.9, header_size=10.5, note="\n".join(notes))
+
+
+def cat_subgroup_table() -> None:
+    """`skrub_tv` and `ag_default` over `base` on the primary datasets that have a categorical column (28 of 50; 27 for
+    CatBoost, which skips connect-4): datasets better by the sign of the mean effect and clearly better or worse (the
+    fold CI of the dataset's effect excludes zero), per downstream model. The median over all 50 datasets is not shown."""
+    s = pd.read_csv(RESULTS / "tidy" / "exp04_cat_summary.csv")
+    s = s[s.task == "all"].sort_values(["arm", "model"])
+    t = pd.DataFrame({"arm, downstream model": [f"{r.arm}, {r.model}" for r in s.itertuples()],
+                      "n datasets": s.n_datasets.to_numpy(), "better (sign)": s.n_better.to_numpy(),
+                      "clearly better": s.n_clear_better.to_numpy(), "clearly worse": s.n_clear_worse.to_numpy()})
+    table(t, "cat_subgroup_table", lambda v: str(v), lambda v: None, col_width=2.2, first_width=3.2)
+
+
+def numcast_table() -> None:
+    """exp09: effect over `base` of `ag_default`, `skrub_tv`, `base_numcast` (base with number-like categoricals cast to
+    float) and `base_codes` (base with every categorical as integer codes) on the five diagnostic datasets, per downstream model, in the unit of the task type (AUC points for binary,
+    % log loss for multiclass, % RMSE for regression). Shaded green or red where the paired bootstrap CI over the splits
+    excludes zero."""
+    e = pd.read_csv(RESULTS / "tidy" / "exp09_effects.csv").set_index(["dataset", "model", "arm"])
+    rows = []
+    for dataset in exp09.CFG["stages"]["run"]["datasets"]:
+        for model in ("catboost", "lgbm"):
+            task = e.loc[(dataset, model, exp09.ARMS[0]), "task"]
+            rows.append([f"{dataset} ({CTR_UNIT[task]}), {model}"] + [tuple(e.loc[(dataset, model, a), ["effect", "ci_lo", "ci_hi"]])
+                                                                     for a in exp09.ARMS])
+    df = pd.DataFrame(rows, columns=["dataset (unit), downstream model", *exp09.ARMS])
+    pct = lambda v: f"{round(v[0] * 100, 1) + 0.0:+.1f}"
+    shade = lambda v: "#cfe9d3" if v[1] > 0 else "#f3cccc" if v[2] < 0 else None
+    table(df, "numcast_table", pct, shade, col_width=2.2, first_width=5.2)
+
+
+def types_table() -> None:
+    """exp09: per categorical column of the five diagnostic datasets, what reaches CatBoost and LightGBM under `base` and
+    each arm: `cat` is a categorical feature for both models, `num` a plain number (`dropped`: not in the output)."""
+    c = pd.read_csv(RESULTS / "tidy" / "exp09_columns.csv")
+    rows = []
+    for r in c.itertuples():
+        nc = "num" if r.base_numcast.startswith("numeric") else "cat"
+        ag = "dropped" if r.ag_default == "dropped" else ("num" if r.ag_default.startswith("numeric") else "cat")
+        sk = "dropped" if r.skrub_n_outputs == 0 else f"{r.skrub_n_outputs} num"
+        rows.append([f"{r.dataset}: {r.column}", f"{r.n_levels}", "yes" if r.numeric_like else "no", "cat", ag, sk, nc, "num"])
+    df = pd.DataFrame(rows, columns=["column", "levels", "levels are numbers", "base", "ag_default", "skrub_tv", "base_numcast",
+                                     "base_codes"])
+    table(df, "exp09_types_table", lambda v: v, lambda v: "#fff2c2" if v == "yes" else None, col_width=1.9, first_width=5.4,
+          header_size=11)
 
 
 def hp_groups_table() -> None:
@@ -355,6 +417,10 @@ def main() -> None:
         contrast_table(per, summary, pairs, f"{name}_table")
     hp_groups_table()
     lama_table()
+    cat_subgroup_table()
+    if (RESULTS / "tidy" / "exp09_effects.csv").exists():  # after `make exp09` and aggregate
+        numcast_table()
+        types_table()
     if (RESULTS / "tidy" / "exp07_effects.csv").exists():  # after `make exp07`
         ctr_ablation_table()
     if len(pd.read_csv(RESULTS / "tidy" / "noise_contrasts.csv")):  # after `make exp02-noise exp06-noise` and noise

@@ -84,6 +84,8 @@ def test_1_shape_names_dtypes(arm, frame):
         o, _ = finalize(o)
         assert all(pd.api.types.is_numeric_dtype(o[c]) or isinstance(o[c].dtype, pd.CategoricalDtype) for c in o)
         assert not np.isinf(o.select_dtypes("number").to_numpy(dtype=float)).any()
+        # integer levels do not survive the parquet cache of the run store: the column would come back as a plain number
+        assert not any(pd.api.types.is_numeric_dtype(o[c].cat.categories) for c in o if isinstance(o[c].dtype, pd.CategoricalDtype))
 
 
 @pytest.mark.parametrize("arm,frame", CASES)

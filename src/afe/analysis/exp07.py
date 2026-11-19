@@ -6,10 +6,11 @@ output and seeds as exp04) and the exp04 CatBoost fits with the default setting,
 - tidy/exp07.parquet: one row per exp07 unit (dataset, repeat, fold, arm, status, wall time, test loss);
 - tidy/exp07_effects.csv: per arm and dataset, over the folds present in all four fits (default and `ctr=1`, arm and base):
   the effect of the arm over `base` with the default CatBoost, with `ctr=1`, and their paired difference
-  (`ctr1 - default`), each as the mean relative loss improvement (log loss, RMSE for regression) with a fold-bootstrap 95% CI;
+  (`ctr1 - default`), each as the mean improvement in the task's primary metric (AUC difference for binary, relative log loss
+  reduction for multiclass, relative RMSE reduction for regression; as in exp04) with a fold-bootstrap 95% CI;
 - tidy/exp07_summary.csv: per arm over datasets `n_better` (sign of the mean difference), `n_clear_better` and
   `n_clear_worse` (the fold CI excludes zero); for `base` the same on `ctr1` over default CatBoost (negative: CatBoost loses
-  without its own combinations).
+  without its own combinations). No median: the datasets' effects are in different units.
 Folds are the 10 outer folds (2 repeats of 5) as units; complete cases only. The bootstrap uses one random stream over arms
 and datasets in the order below, so a CI depends on the position: append new arms at the end.
 """
@@ -22,7 +23,7 @@ from afe.paths import RESULTS
 
 EXP = "exp07_ctr_ablation"
 ARMS = ["ag_tabprep_keepcat", "lama_adv", "openfe"]  # base is the reference
-LOSS = {"binary": "logloss", "multiclass": "logloss", "regression": "rmse"}
+METRIC = {"binary": "auc", "multiclass": "logloss", "regression": "rmse"}  # the primary metric of each task type (exp04)
 N_BOOT = 10_000
 
 
@@ -33,16 +34,21 @@ def tidy() -> pd.DataFrame:
         u, res = r["unit"], r.get("result") or {}
         task = ds.loc[u["dataset"], "task"]
         rows.append({"dataset": u["dataset"], "task": task, "repeat": u["repeat"], "fold": u["fold"], "arm": u["arm"],
-                     "status": r["status"], "wall_s": r["wall_s"], "loss": (res.get("test") or {}).get(LOSS[task])})
+                     "status": r["status"], "wall_s": r["wall_s"], "loss": (res.get("test") or {}).get(METRIC[task])})
     df = pd.DataFrame(rows, columns=["dataset", "task", "repeat", "fold", "arm", "status", "wall_s", "loss"])
     return df.sort_values(["dataset", "arm", "repeat", "fold"]).reset_index(drop=True)
+
+
+def gain(task: str, ref, new):
+    """Improvement of `new` over `ref`: the AUC difference for binary, the relative loss reduction otherwise."""
+    return new - ref if task == "binary" else (ref - new) / ref
 
 
 def default_fits(exp04: pd.DataFrame, datasets: list[str]) -> pd.DataFrame:
     """The exp04 CatBoost units of the ablation arms and datasets: test loss with the default setting."""
     d = exp04[(exp04.model == "catboost") & exp04.dataset.isin(datasets) & (exp04.status == "ok")
               & exp04.arm.isin(["base", *ARMS])].copy()
-    d["loss"] = [getattr(r, LOSS[r.task]) for r in d.itertuples()]
+    d["loss"] = [getattr(r, METRIC[r.task]) for r in d.itertuples()]
     return d[["dataset", "task", "repeat", "fold", "arm", "loss"]]
 
 
@@ -71,7 +77,7 @@ def effects(df: pd.DataFrame, default: pd.DataFrame) -> pd.DataFrame:
         # base: relative improvement of ctr=1 over the default CatBoost (negative: it loses without combinations)
         gb = g.dropna(subset=["base_default", "base_ctr1"])
         if len(gb):
-            v = ((gb.base_default - gb.base_ctr1) / gb.base_default).to_numpy()
+            v = gain(task, gb.base_default, gb.base_ctr1).to_numpy()
             add("base", dataset, task, None, None, v)
         for arm in ARMS:
             if f"{arm}_default" not in g or f"{arm}_ctr1" not in g:
@@ -79,15 +85,15 @@ def effects(df: pd.DataFrame, default: pd.DataFrame) -> pd.DataFrame:
             ga = g.dropna(subset=["base_default", "base_ctr1", f"{arm}_default", f"{arm}_ctr1"])
             if not len(ga):
                 continue
-            e_default = ((ga.base_default - ga[f"{arm}_default"]) / ga.base_default).to_numpy()
-            e_ctr1 = ((ga.base_ctr1 - ga[f"{arm}_ctr1"]) / ga.base_ctr1).to_numpy()
+            e_default = gain(task, ga.base_default, ga[f"{arm}_default"]).to_numpy()
+            e_ctr1 = gain(task, ga.base_ctr1, ga[f"{arm}_ctr1"]).to_numpy()
             add(arm, dataset, task, e_default, e_ctr1, e_ctr1 - e_default)
     return pd.DataFrame(rows)
 
 
 def summary(eff: pd.DataFrame) -> pd.DataFrame:
     g = eff.groupby("arm")
-    s = g.effect_diff.agg(n_datasets="size", n_better=lambda v: int((v > 0).sum()), median="median").reset_index()
+    s = g.effect_diff.agg(n_datasets="size", n_better=lambda v: int((v > 0).sum())).reset_index()
     s["n_clear_better"] = g.ci_lo_diff.agg(lambda v: int((v > 0).sum())).to_numpy()
     s["n_clear_worse"] = g.ci_hi_diff.agg(lambda v: int((v < 0).sum())).to_numpy()
     return s

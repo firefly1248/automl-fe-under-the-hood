@@ -1,7 +1,7 @@
 ENVS := core autogluon lama openfe autofeat mljar skrub
 RUN = uv run --frozen --project envs/$(1)
 
-.PHONY: exp08 exp02-noise exp06-noise exp06 exp07 aggregate figures article claims commit-results env env-check data planted splits test pack unpack exp01 exp02 exp03 exp03-step3 exp04-smoke exp04-pilot exp04-timing exp05 exp04-full-r0 exp04-full-r1
+.PHONY: exp09 exp08 exp02-noise exp06-noise exp06 exp07 aggregate figures article claims commit-results env env-check data planted splits test pack unpack exp01 exp02 exp03 exp03-step3 exp04-smoke exp04-pilot exp04-timing exp05 exp04-full-r0 exp04-full-r1
 
 env:
 	for e in $(ENVS); do uv sync --frozen --project envs/$$e || exit 1; done
@@ -80,6 +80,9 @@ aggregate:
 	$(call RUN,core) python -m afe.analysis.exp06
 	$(call RUN,core) python -m afe.analysis.noise
 	$(call RUN,core) python -m afe.analysis.exp07
+	$(call RUN,core) python -m afe.analysis.cat_subgroup
+	$(call RUN,core) python -m afe.analysis.exp09
+	$(call RUN,core) python experiments/exp09_numcast/diagnose.py
 
 figures:
 	$(call RUN,core) python -m afe.analysis.figures
@@ -113,3 +116,8 @@ exp07:
 # skrub TableVectorizer probe (A4, 2026-11-17): what its defaults do to each column
 exp08:
 	$(call RUN,skrub) python experiments/exp08_skrub_probe/run.py
+
+# base_numcast and base_codes diagnostics (2026-11-19): base with number-like categoricals cast to float (5 datasets), with all
+# categoricals as integer codes (both on 5 datasets); both repeats and models
+exp09:
+	$(call RUN,core) python -m afe.run.cli experiments/exp09_numcast/config.yaml run $(ARGS)

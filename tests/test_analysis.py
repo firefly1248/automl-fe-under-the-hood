@@ -56,7 +56,8 @@ def test_noise_spread_and_ci():
 
 
 def test_ctr_ablation_effects():
-    """Arm over base with default CatBoost and with ctr=1, and their paired difference, on a toy loss table."""
+    """Arm over base with default CatBoost and with ctr=1, and their paired difference, on a toy table: relative loss
+    reduction for a regression dataset, AUC difference for a binary one."""
     from afe.analysis import exp07
 
     folds = [(r, f) for r in (0, 1) for f in range(5)]
@@ -65,13 +66,31 @@ def test_ctr_ablation_effects():
     drows, crows = [], []
     for r, f in folds:
         for a, vals in (("base", base), ("openfe", arm)):
-            drows.append({"dataset": "d", "task": "binary", "repeat": r, "fold": f, "arm": a, "loss": vals["default"]})
-            crows.append({"dataset": "d", "task": "binary", "repeat": r, "fold": f, "arm": a, "status": "ok",
+            drows.append({"dataset": "d", "task": "regression", "repeat": r, "fold": f, "arm": a, "loss": vals["default"]})
+            crows.append({"dataset": "d", "task": "regression", "repeat": r, "fold": f, "arm": a, "status": "ok",
                           "wall_s": 1.0, "loss": vals["ctr1"]})
+        for a, d, c in (("base", 0.70, 0.68), ("openfe", 0.72, 0.75)):  # AUC
+            drows.append({"dataset": "e", "task": "binary", "repeat": r, "fold": f, "arm": a, "loss": d})
+            crows.append({"dataset": "e", "task": "binary", "repeat": r, "fold": f, "arm": a, "status": "ok",
+                          "wall_s": 1.0, "loss": c})
     eff = exp07.effects(pd.DataFrame(crows), pd.DataFrame(drows))
-    o = eff[eff.arm == "openfe"].iloc[0]
+    o = eff[(eff.arm == "openfe") & (eff.dataset == "d")].iloc[0]
     assert np.isclose(o.effect_default, 0.10) and np.isclose(o.effect_ctr1, 0.20) and np.isclose(o.effect_diff, 0.10)
-    b = eff[eff.arm == "base"].iloc[0]
+    b = eff[(eff.arm == "base") & (eff.dataset == "d")].iloc[0]
     assert np.isclose(b.effect_diff, -0.10) and o.n_folds == 10  # CatBoost without combinations loses 10% on base
+    ob = eff[(eff.arm == "openfe") & (eff.dataset == "e")].iloc[0]  # binary: AUC differences, not relative
+    assert np.isclose(ob.effect_default, 0.02) and np.isclose(ob.effect_ctr1, 0.07) and np.isclose(ob.effect_diff, 0.05)
+    assert np.isclose(eff[(eff.arm == "base") & (eff.dataset == "e")].effect_diff.iloc[0], -0.02)
     s = exp07.summary(eff).set_index("arm")
-    assert s.loc["openfe", "n_better"] == 1 and s.loc["base", "n_better"] == 0
+    assert s.loc["openfe", "n_better"] == 2 and s.loc["base", "n_better"] == 0
+
+
+def test_cat_subgroup_effect():
+    """Effect of the means as in exp04_effects: AUC difference for binary, relative reduction of the mean loss otherwise."""
+    from afe.analysis import cat_subgroup
+
+    arm, base = np.array([0.72, 0.74]), np.array([0.70, 0.70])
+    assert np.isclose(cat_subgroup.effect(arm, base, "binary"), 0.03)
+    assert np.isclose(cat_subgroup.effect(np.array([1.0, 3.0]), np.array([2.0, 6.0]), "regression"), 0.5)  # mean 2 vs 4
+    e, lo, hi = cat_subgroup.effect_ci(np.full(10, 0.5), np.full(10, 1.0), "multiclass", np.random.default_rng(0))
+    assert np.isclose(e, 0.5) and np.isclose(lo, 0.5) and np.isclose(hi, 0.5)

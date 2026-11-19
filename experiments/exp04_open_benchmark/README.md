@@ -23,8 +23,9 @@ numeric column (both arms skip them), socmob has one (`mljar_golden` skips it). 
 ## Findings (both repeats; numbers live in `results/tidy/exp04_report.md` and `results/claims.yaml`)
 
 - With untuned default LightGBM and CatBoost downstream (a design choice, plan 7.3), no arm moves the
-  median primary metric across primary datasets by more than noise: the 95% bootstrap CIs straddle zero
-  in almost every (task, model, arm) cell under both failure rules
+  median primary metric across primary datasets by more than noise: the 95% bootstrap CIs of the median straddle zero
+  in all but 9 of the 72 (task, model, arm) cells under the base-fallback rule, all small (a few tenths of an AUC point, 1 to 2%
+  in loss); `lama_adv` is worse in three of them and `manual_baseline` in one
   (`results/figures/exp04/median_effect_*.svg`).
 - The one Holm-significant across-dataset effect is negative: `lama_adv` on regression makes RMSE worse
   (claims `s4_lama_reg_median_lgbm`, `s4_lama_reg_wilcoxon_lgbm`).
@@ -33,8 +34,28 @@ numeric column (both arms skip them), socmob has one (`mljar_golden` skips it). 
 - `skrub_tv` (skrub 0.11.0 `TableVectorizer()` with all defaults, own env `envs/skrub`, fit on fit rows only, replaces the
   input; probe `experiments/exp08_skrub_probe`, defaults in `results/tidy/exp08_skrub_defaults.yaml`) ran on all 50 datasets,
   both repeats, both models: 990 of 990 fit units ok. Its median effect is exactly 0 on every (task, model) cell but one
-  (regression, LightGBM, -0.008%; `s4_skrub_tv_*`): the 40-level threshold sends most categoricals to one-hot and the
+  (regression, LightGBM, -0.026%; `s4_skrub_tv_*`): the 40-level threshold sends most categoricals to one-hot and the
   numeric columns pass through unchanged, so on the many numeric-only datasets only the float32 cast changes anything.
+- On the 28 primary datasets that have a categorical column (`n_categorical > 0`), the headline for `skrub_tv` and `ag_default`
+  is a count, not the median over all 50 (which is exactly 0 on the numeric-only datasets; the medians stay as secondary claims).
+  Better by sign / clearly better / clearly worse (bootstrap CI over the splits excludes zero), of 28 datasets (27 for CatBoost,
+  which skips connect-4): `ag_default` on LightGBM 1 / 1 / 1, on CatBoost 15 / 3 / 2; `skrub_tv` on LightGBM 12 / 6 / 10, on
+  CatBoost 11 / 5 / 7 (`afe.analysis.cat_subgroup`, `s4_cat_*`, `cat_subgroup_table`). `ag_default` is close to `base` once it
+  keeps categorical columns (next bullet); `skrub_tv` turns them into numbers.
+- Two protocol corrections of 2026-11-19, found by the exp09 diagnostic (`experiments/exp09_numcast/README.md`), applied to every
+  record of this experiment: (1) every categorical column of these datasets is an ordered pandas category, which LightGBM's
+  `categorical_feature="auto"` skips, so LightGBM had read all of them as integer codes in the first runs; `afe.models.downstream`
+  now makes them unordered before the fit, so LightGBM uses its native categorical handling for `base` and every arm that keeps the
+  columns; (2) the `ag_default` output (a category with integer categories) came back from the parquet cache as `int64`, so neither
+  model had seen a categorical column under that arm; the generator now renames the levels to strings. All LightGBM fits and the
+  `ag_default` generator and CatBoost fits were rerun (full_r0, full_r1, timing, exp05, exp09); the other CatBoost records, whose
+  code path did not change, were moved to the new code hash (`rekey.py`, `rekeyed_from` in the record), and 36 of them (nine arms)
+  recomputed afterwards matched to the last digit. Effects of the arms over `base` on LightGBM and all `ag_default` effects on
+  CatBoost changed; every other CatBoost effect is identical to the first run.
+- What that did to the large CatBoost effects on fps_benchmark, auction_verification and Brazilian_houses: `ag_default` was +59.7,
+  +49.4 and +39.6% RMSE with its categoricals lost, and is +1.0, 0.0 and +3.4 now; `skrub_tv` (all categoricals become numbers)
+  keeps +68.8, +51.2 and +20.7. So the effect was CatBoost's categorical handling against plain numbers on these datasets, not
+  generated features: `base_codes` (`base` with every categorical as integer codes) gives +60.2, +49.4 and +35.1 (`numcast_table`).
 - Coverage separates the tools more than accuracy does: `autofeat` finishes well under the 3,600 s cap on
   62% of its units, `openfe` and `mljar_golden` on 92 to 94%, `ag_tabprep` and `ag_tabprep_keepcat` on CatBoost on 94%
   (100% on LightGBM), the rest are at 100% (coverage table in `exp04_report.md`; failures above).

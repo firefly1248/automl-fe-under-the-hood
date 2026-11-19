@@ -13,6 +13,8 @@ ARMS = {
     "autofeat": ("afe.generators.autofeat_gen", "AutoFeat", "autofeat"),
     "mljar_golden": ("afe.generators.mljar_golden", "MljarGolden", "mljar"),
     "skrub_tv": ("afe.generators.skrub_tv", "SkrubTV", "skrub"),
+    "base_numcast": ("afe.generators.base_numcast", "BaseNumcast", "core"),  # exp09 only
+    "base_codes": ("afe.generators.base_codes", "BaseCodes", "core"),  # exp09 only
 }
 # fit-only arms: arm -> source arm whose cached generator output they reuse with their own view
 FIT_ONLY = {"ag_tabprep_keepcat": "ag_tabprep"}

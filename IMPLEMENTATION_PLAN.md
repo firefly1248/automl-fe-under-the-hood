@@ -340,6 +340,9 @@ Downstream input = `base_view(original) + new columns`, or the arm output alone 
 `base_view` (applied identically in every arm, also to `base`): object/string -> `category`;
 datetime -> int64 ns; bool -> int8; nothing else. LightGBM gets `category` dtype; CatBoost gets
 the same columns as `cat_features` with NaN filled by the string `"__nan__"`.
+Change of 2026-11-19: the datasets' categoricals are ordered pandas categories, which LightGBM's `categorical_feature="auto"`
+skips; the LightGBM fit now makes them unordered, so they are native categoricals as stated. Arm outputs must also keep
+categorical levels as strings (an integer-level category is read back from the parquet cache as `int64`).
 
 Contract tests (`tests/test_generators_contract.py`, run on the synthetic frame and two small real
 datasets, credit-g (binary) and Moneyball (regression, added at A2), for every arm):

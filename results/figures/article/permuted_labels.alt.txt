@@ -1,1 +1,1 @@
-Test metric with shuffled labels for each arm and both downstream models, in three panels (binary AUC minus 0.5, multiclass entropy gain, regression R2), with 95% intervals over units. No interval lies above zero, which is where leakage would show; 17 of 54 lie slightly below it.
+Test metric with shuffled labels for each arm and both downstream models, in three panels (binary AUC minus 0.5, multiclass entropy gain, regression R2), with 95% intervals over units. No interval lies above zero, which is where leakage would show; 21 of 54 lie slightly below it.

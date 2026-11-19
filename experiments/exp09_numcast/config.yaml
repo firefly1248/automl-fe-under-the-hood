@@ -1,0 +1,16 @@
+# exp09: why do ag_default and skrub_tv help CatBoost by 20-70% on fps_benchmark, auction_verification and
+# Brazilian_houses? Arm base_numcast = base with number-like categoricals cast to float (protocol change of 2026-11-19).
+# Protocol and limits are exp04's; both repeats, both models, the five diagnostic datasets (100 fit units).
+# Arm base_codes (added the same day after the first results): base with every categorical as integer codes, because
+# base_numcast leaves the effect on fps_benchmark unexplained; same five datasets, so 200 fit units in all.
+name: exp09_numcast
+protocol:
+  n_folds: 5
+  repeats: 2
+  models:
+    lgbm: {n_estimators: 5000, learning_rate: 0.05, early_stopping: 200}
+    catboost: {iterations: 3000, learning_rate: 0.1, early_stopping: 200}
+limits: {gen_timeout_s: 3600, fit_timeout_s: 3600, mem_gb: 6, min_free_gb: 2}
+arms: [base_numcast, base_codes]
+stages:
+  run: {datasets: [fps_benchmark, auction_verification, Brazilian_houses, socmob, Amazon_employee_access]}
