@@ -30,6 +30,11 @@ numeric column (both arms skip them), socmob has one (`mljar_golden` skips it). 
   (claims `s4_lama_reg_median_lgbm`, `s4_lama_reg_wilcoxon_lgbm`).
 - `openfe` has the widest per-dataset spread: the largest single-dataset wins (multiclass log loss) next
   to the highest share of descriptive losses on binary (`exp04_summary.csv`).
+- `skrub_tv` (skrub 0.11.0 `TableVectorizer()` with all defaults, own env `envs/skrub`, fit on fit rows only, replaces the
+  input; probe `experiments/exp08_skrub_probe`, defaults in `results/tidy/exp08_skrub_defaults.yaml`) ran on all 50 datasets,
+  both repeats, both models: 990 of 990 fit units ok. Its median effect is exactly 0 on every (task, model) cell but one
+  (regression, LightGBM, -0.008%; `s4_skrub_tv_*`): the 40-level threshold sends most categoricals to one-hot and the
+  numeric columns pass through unchanged, so on the many numeric-only datasets only the float32 cast changes anything.
 - Coverage separates the tools more than accuracy does: `autofeat` finishes well under the 3,600 s cap on
   62% of its units, `openfe` and `mljar_golden` on 92 to 94%, `ag_tabprep` and `ag_tabprep_keepcat` on CatBoost on 94%
   (100% on LightGBM), the rest are at 100% (coverage table in `exp04_report.md`; failures above).

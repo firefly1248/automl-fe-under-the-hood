@@ -10,30 +10,39 @@ PNGs.
 
 Contrast = relative improvement of the first arm over the second on the eval metric (positive favours the
 first), mean over folds per dataset with a fold-bootstrap 95% CI. Per task type the result is `N better of M`
-datasets (`n_better` of `n_datasets`, the sign of the mean effect) with how many of them are clearly better or
-clearly worse (the fold CI excludes zero), and the per-dataset table beside it. The median over 4 datasets is a
-secondary column, not a result. Numbers live in `results/tidy/exp02_contrasts_summary.csv` and
-`results/claims.yaml` (`s2_*`; `*_median` entries are `role: secondary`).
+datasets (`n_better` of `n_datasets`, the sign of the mean effect), and for single-model contrasts the number of them
+clearly better or clearly worse (the fold CI excludes zero) is given in brackets, with the per-dataset table beside it.
+The median over 4 datasets is a secondary column, not a result. Numbers live in
+`results/tidy/exp02_contrasts_summary.csv` and `results/claims.yaml` (`s2_*`; `*_median` entries are
+`role: secondary`). The fold CI covers the variation between folds only. For `C`, `D`, `D0` and `E` (time-limited
+ensembles) the variation between repeated runs of the same unit is not known until the noise measurement below is in,
+so their text uses sign counts only; the tables and dots still colour by the fold CI.
+
+The article tables are anchored on `A_def`, AutoGluon's default LightGBM: `B_def` over `A_def` (new features with
+default hyperparameters) and `D` over `A_def` (the full ensemble) are the main contrasts, next to `D` over `D0`,
+`E` over `D0` and `B` over `B2`. `B` over `A` and `D` over `A`, which use the `_r13` baseline, are in a separate table
+(`_r13` in a single model, below).
 
 ## Findings (descriptive; 4 datasets per task type)
 
-Counts are better by sign (clearly better by CI) on binary, multiclass and regression.
+Counts are better by sign on binary, multiclass and regression; the number clearly better by the fold CI follows in
+brackets for single-model contrasts only.
 
-- `D` over `A`: 4 (4), 4 (3) and 4 (4) of 4; cmc is the smallest gain (+0.7%, CI includes zero). Against the
-  default-hyperparameter `A_def`: 4 (3), 4 (4), 4 (4) (`s2_d_a_*`, `s2_d_a_def_*`). `D` is `best_quality` with the 2023 portfolio, bagging
+- `D` over `A_def`: 4, 4 and 4 of 4 by sign (`s2_d_a_def_*`). `D` is `best_quality` with the 2023 portfolio, bagging
   and stacking; it has no TabPrep model, and it bundles many models, so it does not say which part helps.
-- Stacking over the same portfolio (`D` over `D0`): 1 (0), 2 (2) and 3 (2) of 4. On all four binary datasets `D`
+- `B_def` over `A_def` (the `_r13` feature group with default hyperparameters, one model against one model): 1 (0), 2
+  (2) and 2 (2) of 4 (`s2_single_b_def_a_def_*`).
+- Stacking over the same portfolio (`D` over `D0`): 1, 2 and 3 of 4 by sign. On all four binary datasets `D`
   trained no level-2 models (model counts equal `D0`'s, for example 109 and 109 on credit-g; why was not
   investigated), so there `D` over `D0` compares two runs of the same configuration, and two datasets are exactly
-  equal. It is a stacking comparison on multiclass and regression only. Large gains: pol +17.5%, pendigits +10.3%; cmc is -1.6% (clearly worse, CI [-2.0%, -1.2%]) (`s2_d_d0_*`).
-- The 2025 portfolio with `GBM_PREP` and no stacking (`E` over `D0`): 0 (0), 2 (1) and 1 (0) of 4; clearly worse
-  on all 4 binary datasets, on 1 of 4 multiclass datasets (pendigits, -24.9%) and on 2 of 4 regression datasets (`s2_e_d0_*`). The arms are not matched in effort: `E`
-  trains 6 to 18 models (including ensembles) and stops early (mean 346 s), `D0` 14 to 109 and runs to the budget (mean 559 s), so the
-  contrast mixes the portfolio with the amount of search.
-- `B` over `A` keeps the `_r13` hyperparameters and changes the features: feature group on, native categoricals
-  replaced by out-of-fold target encodings. 2 (2), 3 (3) and 4 (2) of 4 (`s2_b_a_*`). `B` over `B2` changes the
-  hyperparameters as well (`B2` is the portfolio's `_r21`: `extra_trees=False`, learning rate 0.013, 20 leaves, no
-  feature group): 1 (0), 4 (4) and 4 (4) of 4 (`s2_b_b2_*`). The two contrasts answer different questions; the
+  equal. It is a stacking comparison on multiclass and regression only. Largest gains: pol +17.5%, pendigits +10.3%;
+  cmc is -1.6% (`s2_d_d0_*`).
+- The 2025 portfolio with `GBM_PREP` and no stacking (`E` over `D0`): 0, 2 and 1 of 4 by sign; negative on all 4
+  binary datasets, on pendigits and cmc (-24.9% and -0.03%) and on 3 of 4 regression datasets (`s2_e_d0_*`). The arms are not matched in
+  effort: `E` trains 6 to 18 models (including ensembles) and stops early (mean 346 s), `D0` 14 to 109 and runs to the
+  budget (mean 559 s), so the contrast mixes the portfolio with the amount of search.
+- `B` over `B2` changes the features and the hyperparameters (`B2` is the portfolio's `_r21`: `extra_trees=False`,
+  learning rate 0.013, 20 leaves, no feature group): 1 (0), 4 (4) and 4 (4) of 4 (`s2_b_b2_*`). The
   single-model section below separates features from hyperparameters.
 - Cost: mean wall per unit `A` 23 s, `B` 40 s, `B2` 21 s, `C` 83 s, `E` 346 s, `D0` 559 s, `D` 611 s;
   `D` and `D0` sit at the 600 s budget on most sets and overshoot it by up to about 110 s (`s2_wall_*`).
@@ -43,7 +52,8 @@ Counts are better by sign (clearly better by CI) on binary, multiclass and regre
 `A` and `B` carry the `_r13` hyperparameters (a member of AutoGluon's 2025 portfolio, which it fits bagged:
 `extra_trees=True`,
 learning rate 0.019, 64 leaves, `lambda_l1` 0.91, `lambda_l2` 1.90), so `B - A` is the feature effect on top of that
-configuration. Arms: `A_def` (GBM, AutoGluon defaults, no bagging), `B_def` (`_r13` feature group, default
+configuration (2 (2), 3 (3) and 4 (2) of 4, `s2_b_a_*`) and `D - A` the ensemble's gain over that baseline (4, 4 and 4
+of 4 by sign, `s2_d_a_*`; cmc +0.7%). Arms: `A_def` (GBM, AutoGluon defaults, no bagging), `B_def` (`_r13` feature group, default
 hyperparameters), `A_et0` and `B_et0` (`A` and `B` with `extra_trees=False`), and four arms that return one
 `_r13` group to the default while keeping `A_et0`: sampling (`feature_fraction`, `bagging_*`), capacity (learning
 rate, leaves, `min_data_in_leaf`), regularization (`lambda_l1`, `lambda_l2`) and categorical (`cat_*`,
@@ -89,6 +99,26 @@ rate, leaves, `min_data_in_leaf`), regularization (`lambda_l1`, `lambda_l2`) and
 Scope of the hyperparameter-group arms: they ran on elevators, kr-vs-kp and socmob, three of the datasets where
 `A_et0` still trailed `A_def` (pol and okcupid-stem also trail and were not run); each group is removed on its
 own, so interactions between groups are untested, and `extra_trees` belongs to no group.
+
+## Run-to-run noise
+
+The fold CI covers the variation between folds, not between repeated runs of a time-limited ensemble. `make exp02-noise`
+runs the 20 units of each of `D` and `E` on pol and credit-g twice more (unit key `rep` = 1, 2: own hashes and records,
+excluded from every main table; `exp06` adds `ag_best`, `lama`, `h2o` the same way, `make exp06-noise`), and
+`afe.analysis.noise` (in `make aggregate`) writes `results/tidy/noise_runs.csv`, `noise_arms.csv` (spread of the mean loss
+between runs) and `noise_contrasts.csv` (per contrast and dataset the effect in each run, the spread in percentage points
+and the fold CI of the original run beside it). Where the reference was not repeated (`A_def`, `A`, `D0`) every run uses
+the original reference. The measurement is meant for a quiet machine: another job on the cores adds noise of its own;
+short commands (tests, table builds, seconds of one core) did run during it.
+
+Results (`noise_contrasts.csv`, `exp02_noise_table`; pol and credit-g only, two repeats each, all 40 units ok): the effect
+of `D` over `A_def`, `D` over `A`, `D` over `D0` and `E` over `D0` moves by at most 0.4 percentage points between the three
+runs (`s2_noise_*`), far inside the fold CIs (0.7 to 5.1 points wide; zero for `D` over `D0` on credit-g, where the two arms are the same model), and every run lies inside the CI of run 0. On
+credit-g the three runs of `D` and `E` are identical to six digits (the same fold losses); on pol the mean loss of `D`
+differs by 0.4% between runs and that of `E` by 0.05%. So for these two datasets the fold CI is not understating the
+run-to-run variation of AutoGluon. Two datasets of ten cannot say the same for the rest, so the article text for
+`C`, `D`, `D0`, `E` keeps the sign counts as the headline and gives the CI counts as a secondary figure; whether to
+state "clearly better" on the strength of this measurement is left to the author.
 
 Caveats: 4 datasets per task type make the medians descriptive; the CIs are over folds of one dataset and say
 nothing about other datasets. `D` and `D0` turn dynamic stacking off so that both spend the full budget;

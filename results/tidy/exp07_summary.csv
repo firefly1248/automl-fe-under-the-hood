@@ -1,0 +1,5 @@
+arm,n_datasets,n_better,median,n_clear_better,n_clear_worse
+ag_tabprep_keepcat,17,13,0.005216,6,0
+base,17,3,-0.00548,0,8
+lama_adv,17,13,0.005443,8,0
+openfe,16,12,0.003398,6,2

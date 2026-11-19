@@ -21,3 +21,6 @@ datasets: [kr-vs-kp, credit-g, sick, bank-marketing,
 # unit_timeout_s: hard kill well above time_limit (AutoGluon may overshoot its budget);
 # the memory watchdog cap is ram_gb - 4, computed at launch (plan section 8)
 limits: {unit_timeout_s: 1800, min_free_gb: 2}
+# run-to-run noise: the same units of D and E run again (rep 1, 2) on two datasets, `run.py --noise`; the repeats
+# never enter the main tables (afe.analysis.noise reads them)
+noise: {datasets: [pol, credit-g], arms: [D, E], reps: [1, 2]}

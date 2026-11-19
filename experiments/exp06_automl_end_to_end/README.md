@@ -11,20 +11,29 @@ article` the article PNGs; numbers for the article are the `s6_*` entries of `re
 
 Contrast as in exp02: relative improvement of the first arm over the second on log loss (classification)
 or RMSE (regression), mean over folds per dataset with a fold-bootstrap 95% CI. The headline per task type is
-`N better of M` datasets, with the per-dataset table beside it; the median is secondary (`role: secondary` in
-the claims) and is not shown without that count.
+`N better of M` datasets (the sign of the mean effect), with the per-dataset table beside it; the median is secondary
+(`role: secondary` in the claims) and is not shown without that count. The fold CI covers the variation between folds
+only, not between repeated runs of a time-limited tool; the noise measurement (below) shows it matters for `h2o`, so the
+text uses sign counts, while the tables and dots still colour by the fold CI.
 
 ## Findings (descriptive; 4 binary, 2 multiclass, 4 regression datasets)
 
-Counts are better by sign (clearly better by the fold CI) on binary, multiclass and regression.
+Counts are better by sign on binary, multiclass and regression.
 
-- `ag_best` is the strongest arm. `lama` is better than it on 0 (0) of 4, 1 (0) of 2 and 1 (0) of 4 datasets and
-  clearly worse on 4, 1 and 3 (`s6_lama_ag_*`); `h2o` is better on 0 of 4, 0 of 2 and 0 of 4, clearly worse on 3, 1
-  and 3 (`s6_h2o_ag_*`).
+Run-to-run noise (`make exp06-noise`, `noise_contrasts.csv`, `exp06_noise_table`; pol and credit-g, `ag_best`, `lama`,
+`h2o` twice more, all 60 units ok): `ag_best` and `lama` repeat to within 0.2 percentage points in the contrast with
+each other (`s6_noise_lama_ag_*`); on credit-g their fold losses are identical across runs, and so are those of `lama` on
+pol. `h2o` does not: the effect of `h2o` over `ag_best` moves by 9.7 points on credit-g (-13.1%, -4.2%, -3.4%) and by 5.0
+points on pol (-7.6%, -11.6%, -6.7%), and its mean loss differs between runs by 8.5% and 4.7% (`s6_noise_h2o_*`). The
+fold CI of `h2o` over `ag_best` is 25 points wide on both, so the repeats stay inside it, but one run of `h2o` does not
+fix its place between `lama` and `ag_best` on these datasets. Two datasets of ten.
+
+- `ag_best` is the strongest arm. `lama` is better than it on 0 of 4, 1 of 2 and 1 of 4 datasets (`s6_lama_ag_*`);
+  `h2o` is better on 0 of 4, 0 of 2 and 0 of 4 (`s6_h2o_ag_*`).
 - Target encoding in H2O encodes only columns of 25 or more levels (the probe left a 24-level column raw; claim
   `s2_h2o_te_columns_encoded`). Only okcupid-stem (7,019 levels) and Moneyball (39) have such a column, and `h2o_te` is
-  clearly worse than `h2o` on both (-2.1%, -5.3%; `s6_h2o_te_h2o_okcupid_stem`, `s6_h2o_te_h2o_moneyball`). On the
-  other 8 datasets nothing is encoded, yet the two arms still differ: pol -10.2% (clearly worse by the fold CI),
+  worse than `h2o` on both (-2.1%, -5.3%; `s6_h2o_te_h2o_okcupid_stem`, `s6_h2o_te_h2o_moneyball`). On the
+  other 8 datasets nothing is encoded, yet the two arms still differ: pol -10.2%,
   credit-g -23.5% (`s6_h2o_te_h2o_pol`, `s6_h2o_te_h2o_credit_g`), cmc exactly 0. That is a difference the encoding
   cannot cause; it is probably H2O's own variation between time-limited runs, which the fold CIs do not include (the
   cause was not isolated). The counts over all 10 datasets (`s6_h2o_te_h2o_*`) mix the two cases, so read them with
@@ -58,7 +67,7 @@ category codes as numbers), `lama_full` (`TabularUtilizedAutoML`) and `lama_num_
   (CI [0.4%, 4.6%]).
 - Both together on socmob: 17.13 (+16.3% over `lama`, CI [6.9%, 25.8%]), below `A_def` (18.00) and the base LightGBM
   (18.29), above the base CatBoost (15.81) and `ag_best` (11.90). On pol the same arm equals `lama_num`.
-- Summary: forced numeric roles bring `lama` from clearly behind the `A_def` LightGBM to about level or slightly
+- Summary: forced numeric roles bring `lama` from behind the `A_def` LightGBM to about level or slightly
   better on both datasets; full budget adds a little on socmob only. `lama` as a tool stays behind `ag_best`, `h2o`
   and the base CatBoost on socmob.
 

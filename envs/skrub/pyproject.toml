@@ -1,0 +1,15 @@
+[project]
+name = "afe-env-skrub"
+version = "0"
+requires-python = "==3.11.*"
+dependencies = [
+    "afe",
+    "pytest",
+    "skrub==0.11.0",  # latest stable on PyPI at the start of the skrub_tv arm (2026-11-18)
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+afe = { path = "../..", editable = true }

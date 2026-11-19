@@ -7,6 +7,7 @@ openfe,1,16,3,binary,0.95
 autofeat,0,19,1,binary,0.5
 mljar_golden,0,20,0,binary,0.9
 manual_baseline,2,15,3,binary,1.0
+skrub_tv,3,17,0,binary,1.0
 ag_default,1,8,0,multiclass,1.0
 ag_tabprep,1,8,0,multiclass,0.6555555555555556
 ag_tabprep_keepcat,1,8,0,multiclass,0.6777777777777777
@@ -15,6 +16,7 @@ openfe,1,5,3,multiclass,0.8111111111111111
 autofeat,0,9,0,multiclass,0.2
 mljar_golden,0,8,1,multiclass,1.0
 manual_baseline,2,6,1,multiclass,1.0
+skrub_tv,0,9,0,multiclass,1.0
 ag_default,0,18,2,regression,1.0
 ag_tabprep,7,11,2,regression,1.0
 ag_tabprep_keepcat,5,13,2,regression,1.0
@@ -23,3 +25,4 @@ openfe,2,15,3,regression,0.95
 autofeat,3,15,2,regression,0.95
 mljar_golden,2,18,0,regression,0.95
 manual_baseline,2,16,2,regression,1.0
+skrub_tv,2,16,2,regression,1.0

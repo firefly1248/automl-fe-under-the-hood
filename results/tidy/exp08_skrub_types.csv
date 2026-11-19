@@ -1,0 +1,150 @@
+dataset,input_col,input_dtype,nunique,skrub_kind,steps,action,n_outputs,output_cols,output_dtypes
+hard_columns,num,float64,5000,numeric,DropUninformative() > ToFloat() > PassThrough() > {'num': ToFloat()},retyped,1,num,float32
+hard_columns,dup_num,float64,5000,numeric,DropUninformative() > ToFloat() > PassThrough() > {'dup_num': ToFloat()},retyped,1,dup_num,float32
+hard_columns,const,float64,1,numeric,DropUninformative() > ToFloat() > PassThrough() > {'const': ToFloat()},retyped,1,const,float32
+hard_columns,near_const,float64,2,numeric,DropUninformative() > ToFloat() > PassThrough() > {'near_const': ToFloat()},retyped,1,near_const,float32
+hard_columns,city_code,int64,40,numeric,DropUninformative() > ToFloat() > PassThrough() > {'city_code': ToFloat()},retyped,1,city_code,float32
+hard_columns,date_int,int64,1706,numeric,DropUninformative() > ToFloat() > PassThrough() > {'date_int': ToFloat()},retyped,1,date_int,float32
+hard_columns,date_str,str,1701,datetime,"CleanNullStrings() > DropUninformative() > ToDatetime() > DatetimeEncoder() > {'date_str_day': ToFloat(), 'date_str_month': ToFloat(), ...}",expanded,4,date_str_year; date_str_month; date_str_day; date_str_total_seconds,float32
+hard_columns,ts_unix,int64,5000,numeric,DropUninformative() > ToFloat() > PassThrough() > {'ts_unix': ToFloat()},retyped,1,ts_unix,float32
+hard_columns,cat_low,str,3,low_cardinality,"CleanNullStrings() > DropUninformative() > ToStr() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'cat_low_high': ToFloat(), 'cat_low_low': ToFloat(), ...}",expanded,3,cat_low_high; cat_low_low; cat_low_mid,float32
+hard_columns,cat_rare,str,303,high_cardinality,"CleanNullStrings() > DropUninformative() > ToStr() > StringEncoder() > {'cat_rare_00': ToFloat(), 'cat_rare_01': ToFloat(), ...}",expanded,30,cat_rare_00; cat_rare_01; cat_rare_02; cat_rare_03; cat_rare_04; cat_rare_05 ...,float32
+hard_columns,cat_binary,str,2,low_cardinality,"CleanNullStrings() > DropUninformative() > ToStr() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'cat_binary_yes': ToFloat()}",expanded,1,cat_binary_yes,float32
+hard_columns,uid,str,5000,high_cardinality,"CleanNullStrings() > DropUninformative() > ToStr() > StringEncoder() > {'uid_00': ToFloat(), 'uid_01': ToFloat(), ...}",expanded,30,uid_00; uid_01; uid_02; uid_03; uid_04; uid_05 ...,float32
+hard_columns,text_short,str,4,low_cardinality,"CleanNullStrings() > DropUninformative() > ToStr() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'text_short_fast delivery': ToFloat(), 'text_short_great service': ToFloat(), ...}",expanded,4,text_short_fast delivery; text_short_great service; text_short_item damaged; text_short_late delivery,float32
+hard_columns,text_long,str,5000,high_cardinality,"CleanNullStrings() > DropUninformative() > ToStr() > StringEncoder() > {'text_long_00': ToFloat(), 'text_long_01': ToFloat(), ...}",expanded,30,text_long_00; text_long_01; text_long_02; text_long_03; text_long_04; text_long_05 ...,float32
+hard_columns,num_as_str,str,947,numeric,CleanNullStrings() > DropUninformative() > ToFloat() > PassThrough() > {'num_as_str': ToFloat()},retyped,1,num_as_str,float32
+hard_columns,mixed,object,1264,numeric,CleanNullStrings() > DropUninformative() > ToFloat() > PassThrough() > {'mixed': ToFloat()},retyped,1,mixed,float32
+hard_columns,a,float64,5000,numeric,DropUninformative() > ToFloat() > PassThrough() > {'a': ToFloat()},retyped,1,a,float32
+hard_columns,b,float64,5000,numeric,DropUninformative() > ToFloat() > PassThrough() > {'b': ToFloat()},retyped,1,b,float32
+adult,age,uint8,74,numeric,DropUninformative() > ToFloat() > PassThrough() > {'age': ToFloat()},retyped,1,age,float32
+adult,workclass,category,8,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'workclass_Federal-gov': ToFloat(), 'workclass_Local-gov': ToFloat(), ...}",expanded,9,workclass_Federal-gov; workclass_Local-gov; workclass_Never-worked; workclass_Private; workclass_Self-emp-inc; workclass_Self-emp-not-inc ...,float32
+adult,fnlwgt,float64,28523,numeric,DropUninformative() > ToFloat() > PassThrough() > {'fnlwgt': ToFloat()},retyped,1,fnlwgt,float32
+adult,education,category,16,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'education_10th': ToFloat(), 'education_11th': ToFloat(), ...}",expanded,16,education_10th; education_11th; education_12th; education_1st-4th; education_5th-6th; education_7th-8th ...,float32
+adult,education-num,uint8,16,numeric,DropUninformative() > ToFloat() > PassThrough() > {'education-num': ToFloat()},retyped,1,education-num,float32
+adult,marital-status,category,7,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'marital-status_Divorced': ToFloat(), 'marital-stat...ied-AF-spouse': ToFloat(), ...}",expanded,7,marital-status_Divorced; marital-status_Married-AF-spouse; marital-status_Married-civ-spouse; marital-status_Married-spouse-absent; marital-status_Never-married; marital-status_Separated ...,float32
+adult,occupation,category,14,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'occupation_Adm-clerical': ToFloat(), 'occupation_Armed-Forces': ToFloat(), ...}",expanded,15,occupation_Adm-clerical; occupation_Armed-Forces; occupation_Craft-repair; occupation_Exec-managerial; occupation_Farming-fishing; occupation_Handlers-cleaners ...,float32
+adult,relationship,category,6,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'relationship_Husband': ToFloat(), 'relationship_Not-in-family': ToFloat(), ...}",expanded,6,relationship_Husband; relationship_Not-in-family; relationship_Other-relative; relationship_Own-child; relationship_Unmarried; relationship_Wife,float32
+adult,race,category,5,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'race_Amer-Indian-Eskimo': ToFloat(), 'race_Asian-Pac-Islander': ToFloat(), ...}",expanded,5,race_Amer-Indian-Eskimo; race_Asian-Pac-Islander; race_Black; race_Other; race_White,float32
+adult,sex,category,2,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'sex_Male': ToFloat()}",expanded,1,sex_Male,float32
+adult,capital-gain,float64,123,numeric,DropUninformative() > ToFloat() > PassThrough() > {'capital-gain': ToFloat()},retyped,1,capital-gain,float32
+adult,capital-loss,float64,99,numeric,DropUninformative() > ToFloat() > PassThrough() > {'capital-loss': ToFloat()},retyped,1,capital-loss,float32
+adult,hours-per-week,uint8,96,numeric,DropUninformative() > ToFloat() > PassThrough() > {'hours-per-week': ToFloat()},retyped,1,hours-per-week,float32
+adult,native-country,category,41,high_cardinality,"DropUninformative() > CleanCategories() > StringEncoder() > {'native-country_00': ToFloat(), 'native-country_01': ToFloat(), ...}",expanded,30,native-country_00; native-country_01; native-country_02; native-country_03; native-country_04; native-country_05 ...,float32
+bank-marketing,V1,uint8,77,numeric,DropUninformative() > ToFloat() > PassThrough() > {'V1': ToFloat()},retyped,1,V1,float32
+bank-marketing,V2,category,12,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'V2_admin.': ToFloat(), 'V2_blue-collar': ToFloat(), ...}",expanded,12,V2_admin.; V2_blue-collar; V2_entrepreneur; V2_housemaid; V2_management; V2_retired ...,float32
+bank-marketing,V3,category,3,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'V3_divorced': ToFloat(), 'V3_married': ToFloat(), ...}",expanded,3,V3_divorced; V3_married; V3_single,float32
+bank-marketing,V4,category,4,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'V4_primary': ToFloat(), 'V4_secondary': ToFloat(), ...}",expanded,4,V4_primary; V4_secondary; V4_tertiary; V4_unknown,float32
+bank-marketing,V5,category,2,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'V5_yes': ToFloat()}",expanded,1,V5_yes,float32
+bank-marketing,V6,float64,7168,numeric,DropUninformative() > ToFloat() > PassThrough() > {'V6': ToFloat()},retyped,1,V6,float32
+bank-marketing,V7,category,2,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'V7_yes': ToFloat()}",expanded,1,V7_yes,float32
+bank-marketing,V8,category,2,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'V8_yes': ToFloat()}",expanded,1,V8_yes,float32
+bank-marketing,V9,category,3,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'V9_cellular': ToFloat(), 'V9_telephone': ToFloat(), ...}",expanded,3,V9_cellular; V9_telephone; V9_unknown,float32
+bank-marketing,V10,uint8,31,numeric,DropUninformative() > ToFloat() > PassThrough() > {'V10': ToFloat()},retyped,1,V10,float32
+bank-marketing,V11,category,12,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'V11_apr': ToFloat(), 'V11_aug': ToFloat(), ...}",expanded,12,V11_apr; V11_aug; V11_dec; V11_feb; V11_jan; V11_jul ...,float32
+bank-marketing,V12,float64,1573,numeric,DropUninformative() > ToFloat() > PassThrough() > {'V12': ToFloat()},retyped,1,V12,float32
+bank-marketing,V13,uint8,48,numeric,DropUninformative() > ToFloat() > PassThrough() > {'V13': ToFloat()},retyped,1,V13,float32
+bank-marketing,V14,float64,559,numeric,DropUninformative() > ToFloat() > PassThrough() > {'V14': ToFloat()},retyped,1,V14,float32
+bank-marketing,V15,float64,41,numeric,DropUninformative() > ToFloat() > PassThrough() > {'V15': ToFloat()},retyped,1,V15,float32
+bank-marketing,V16,category,4,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'V16_failure': ToFloat(), 'V16_other': ToFloat(), ...}",expanded,4,V16_failure; V16_other; V16_success; V16_unknown,float32
+credit-g,checking_status,category,4,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'checking_status_0<=X<200': ToFloat(), 'checking_status_<0': ToFloat(), ...}",expanded,4,checking_status_0<=X<200; checking_status_<0; checking_status_>=200; checking_status_no checking,float32
+credit-g,duration,uint8,33,numeric,DropUninformative() > ToFloat() > PassThrough() > {'duration': ToFloat()},retyped,1,duration,float32
+credit-g,credit_history,category,5,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'credit_history_all paid': ToFloat(), 'credit_histo...isting credit': ToFloat(), ...}",expanded,5,credit_history_all paid; credit_history_critical/other existing credit; credit_history_delayed previously; credit_history_existing paid; credit_history_no credits/all paid,float32
+credit-g,purpose,category,10,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'purpose_business': ToFloat(), 'purpose_domestic appliance': ToFloat(), ...}",expanded,10,purpose_business; purpose_domestic appliance; purpose_education; purpose_furniture/equipment; purpose_new car; purpose_other ...,float32
+credit-g,credit_amount,float64,921,numeric,DropUninformative() > ToFloat() > PassThrough() > {'credit_amount': ToFloat()},retyped,1,credit_amount,float32
+credit-g,savings_status,category,5,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'savings_status_100<=X<500': ToFloat(), 'savings_status_500<=X<1000': ToFloat(), ...}",expanded,5,savings_status_100<=X<500; savings_status_500<=X<1000; savings_status_<100; savings_status_>=1000; savings_status_no known savings,float32
+credit-g,employment,category,5,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'employment_1<=X<4': ToFloat(), 'employment_4<=X<7': ToFloat(), ...}",expanded,5,employment_1<=X<4; employment_4<=X<7; employment_<1; employment_>=7; employment_unemployed,float32
+credit-g,installment_commitment,uint8,4,numeric,DropUninformative() > ToFloat() > PassThrough() > {'installment_commitment': ToFloat()},retyped,1,installment_commitment,float32
+credit-g,personal_status,category,4,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'personal_sta...e div/dep/mar': ToFloat(), 'personal_status_male div/sep': ToFloat(), ...}",expanded,4,personal_status_female div/dep/mar; personal_status_male div/sep; personal_status_male mar/wid; personal_status_male single,float32
+credit-g,other_parties,category,3,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'other_parties_co applicant': ToFloat(), 'other_parties_guarantor': ToFloat(), ...}",expanded,3,other_parties_co applicant; other_parties_guarantor; other_parties_none,float32
+credit-g,residence_since,uint8,4,numeric,DropUninformative() > ToFloat() > PassThrough() > {'residence_since': ToFloat()},retyped,1,residence_since,float32
+credit-g,property_magnitude,category,4,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'property_magnitude_car': ToFloat(), 'property_mag...ife insurance': ToFloat(), ...}",expanded,4,property_magnitude_car; property_magnitude_life insurance; property_magnitude_no known property; property_magnitude_real estate,float32
+credit-g,age,uint8,53,numeric,DropUninformative() > ToFloat() > PassThrough() > {'age': ToFloat()},retyped,1,age,float32
+credit-g,other_payment_plans,category,3,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'other_payment_plans_bank': ToFloat(), 'other_payment_plans_none': ToFloat(), ...}",expanded,3,other_payment_plans_bank; other_payment_plans_none; other_payment_plans_stores,float32
+credit-g,housing,category,3,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'housing_for free': ToFloat(), 'housing_own': ToFloat(), ...}",expanded,3,housing_for free; housing_own; housing_rent,float32
+credit-g,existing_credits,uint8,4,numeric,DropUninformative() > ToFloat() > PassThrough() > {'existing_credits': ToFloat()},retyped,1,existing_credits,float32
+credit-g,job,category,4,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'job_high qua...self emp/mgmt': ToFloat(), 'job_skilled': ToFloat(), ...}",expanded,4,job_high qualif/self emp/mgmt; job_skilled; job_unemp/unskilled non res; job_unskilled resident,float32
+credit-g,num_dependents,uint8,2,numeric,DropUninformative() > ToFloat() > PassThrough() > {'num_dependents': ToFloat()},retyped,1,num_dependents,float32
+credit-g,own_telephone,category,2,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'own_telephone_yes': ToFloat()}",expanded,1,own_telephone_yes,float32
+credit-g,foreign_worker,category,2,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'foreign_worker_yes': ToFloat()}",expanded,1,foreign_worker_yes,float32
+Amazon_employee_access,RESOURCE,category,7518,high_cardinality,"DropUninformative() > CleanCategories() > StringEncoder() > {'RESOURCE_00': ToFloat(), 'RESOURCE_01': ToFloat(), ...}",expanded,30,RESOURCE_00; RESOURCE_01; RESOURCE_02; RESOURCE_03; RESOURCE_04; RESOURCE_05 ...,float32
+Amazon_employee_access,MGR_ID,category,4243,high_cardinality,"DropUninformative() > CleanCategories() > StringEncoder() > {'MGR_ID_00': ToFloat(), 'MGR_ID_01': ToFloat(), ...}",expanded,30,MGR_ID_00; MGR_ID_01; MGR_ID_02; MGR_ID_03; MGR_ID_04; MGR_ID_05 ...,float32
+Amazon_employee_access,ROLE_ROLLUP_1,category,128,high_cardinality,"DropUninformative() > CleanCategories() > StringEncoder() > {'ROLE_ROLLUP_1_00': ToFloat(), 'ROLE_ROLLUP_1_01': ToFloat(), ...}",expanded,30,ROLE_ROLLUP_1_00; ROLE_ROLLUP_1_01; ROLE_ROLLUP_1_02; ROLE_ROLLUP_1_03; ROLE_ROLLUP_1_04; ROLE_ROLLUP_1_05 ...,float32
+Amazon_employee_access,ROLE_ROLLUP_2,category,177,high_cardinality,"DropUninformative() > CleanCategories() > StringEncoder() > {'ROLE_ROLLUP_2_00': ToFloat(), 'ROLE_ROLLUP_2_01': ToFloat(), ...}",expanded,30,ROLE_ROLLUP_2_00; ROLE_ROLLUP_2_01; ROLE_ROLLUP_2_02; ROLE_ROLLUP_2_03; ROLE_ROLLUP_2_04; ROLE_ROLLUP_2_05 ...,float32
+Amazon_employee_access,ROLE_DEPTNAME,category,449,high_cardinality,"DropUninformative() > CleanCategories() > StringEncoder() > {'ROLE_DEPTNAME_00': ToFloat(), 'ROLE_DEPTNAME_01': ToFloat(), ...}",expanded,30,ROLE_DEPTNAME_00; ROLE_DEPTNAME_01; ROLE_DEPTNAME_02; ROLE_DEPTNAME_03; ROLE_DEPTNAME_04; ROLE_DEPTNAME_05 ...,float32
+Amazon_employee_access,ROLE_TITLE,category,343,high_cardinality,"DropUninformative() > CleanCategories() > StringEncoder() > {'ROLE_TITLE_00': ToFloat(), 'ROLE_TITLE_01': ToFloat(), ...}",expanded,30,ROLE_TITLE_00; ROLE_TITLE_01; ROLE_TITLE_02; ROLE_TITLE_03; ROLE_TITLE_04; ROLE_TITLE_05 ...,float32
+Amazon_employee_access,ROLE_FAMILY_DESC,category,2358,high_cardinality,"DropUninformative() > CleanCategories() > StringEncoder() > {'ROLE_FAMILY_DESC_00': ToFloat(), 'ROLE_FAMILY_DESC_01': ToFloat(), ...}",expanded,30,ROLE_FAMILY_DESC_00; ROLE_FAMILY_DESC_01; ROLE_FAMILY_DESC_02; ROLE_FAMILY_DESC_03; ROLE_FAMILY_DESC_04; ROLE_FAMILY_DESC_05 ...,float32
+Amazon_employee_access,ROLE_FAMILY,category,67,high_cardinality,"DropUninformative() > CleanCategories() > StringEncoder() > {'ROLE_FAMILY_00': ToFloat(), 'ROLE_FAMILY_01': ToFloat(), ...}",expanded,30,ROLE_FAMILY_00; ROLE_FAMILY_01; ROLE_FAMILY_02; ROLE_FAMILY_03; ROLE_FAMILY_04; ROLE_FAMILY_05 ...,float32
+Amazon_employee_access,ROLE_CODE,category,343,high_cardinality,"DropUninformative() > CleanCategories() > StringEncoder() > {'ROLE_CODE_00': ToFloat(), 'ROLE_CODE_01': ToFloat(), ...}",expanded,30,ROLE_CODE_00; ROLE_CODE_01; ROLE_CODE_02; ROLE_CODE_03; ROLE_CODE_04; ROLE_CODE_05 ...,float32
+Amazon_employee_access_int,RESOURCE,int64,7518,numeric,DropUninformative() > ToFloat() > PassThrough() > {'RESOURCE': ToFloat()},retyped,1,RESOURCE,float32
+Amazon_employee_access_int,MGR_ID,int64,4243,numeric,DropUninformative() > ToFloat() > PassThrough() > {'MGR_ID': ToFloat()},retyped,1,MGR_ID,float32
+Amazon_employee_access_int,ROLE_ROLLUP_1,int64,128,numeric,DropUninformative() > ToFloat() > PassThrough() > {'ROLE_ROLLUP_1': ToFloat()},retyped,1,ROLE_ROLLUP_1,float32
+Amazon_employee_access_int,ROLE_ROLLUP_2,int64,177,numeric,DropUninformative() > ToFloat() > PassThrough() > {'ROLE_ROLLUP_2': ToFloat()},retyped,1,ROLE_ROLLUP_2,float32
+Amazon_employee_access_int,ROLE_DEPTNAME,int64,449,numeric,DropUninformative() > ToFloat() > PassThrough() > {'ROLE_DEPTNAME': ToFloat()},retyped,1,ROLE_DEPTNAME,float32
+Amazon_employee_access_int,ROLE_TITLE,int64,343,numeric,DropUninformative() > ToFloat() > PassThrough() > {'ROLE_TITLE': ToFloat()},retyped,1,ROLE_TITLE,float32
+Amazon_employee_access_int,ROLE_FAMILY_DESC,int64,2358,numeric,DropUninformative() > ToFloat() > PassThrough() > {'ROLE_FAMILY_DESC': ToFloat()},retyped,1,ROLE_FAMILY_DESC,float32
+Amazon_employee_access_int,ROLE_FAMILY,int64,67,numeric,DropUninformative() > ToFloat() > PassThrough() > {'ROLE_FAMILY': ToFloat()},retyped,1,ROLE_FAMILY,float32
+Amazon_employee_access_int,ROLE_CODE,int64,343,numeric,DropUninformative() > ToFloat() > PassThrough() > {'ROLE_CODE': ToFloat()},retyped,1,ROLE_CODE,float32
+diamonds,carat,float64,273,numeric,DropUninformative() > ToFloat() > PassThrough() > {'carat': ToFloat()},retyped,1,carat,float32
+diamonds,cut,category,5,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'cut_Fair': ToFloat(), 'cut_Good': ToFloat(), ...}",expanded,5,cut_Fair; cut_Good; cut_Ideal; cut_Premium; cut_Very Good,float32
+diamonds,color,category,7,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'color_D': ToFloat(), 'color_E': ToFloat(), ...}",expanded,7,color_D; color_E; color_F; color_G; color_H; color_I ...,float32
+diamonds,clarity,category,8,low_cardinality,"DropUninformative() > CleanCategories() > OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+              sparse_output=False) > {'clarity_I1': ToFloat(), 'clarity_IF': ToFloat(), ...}",expanded,8,clarity_I1; clarity_IF; clarity_SI1; clarity_SI2; clarity_VS1; clarity_VS2 ...,float32
+diamonds,depth,float64,184,numeric,DropUninformative() > ToFloat() > PassThrough() > {'depth': ToFloat()},retyped,1,depth,float32
+diamonds,table,float64,127,numeric,DropUninformative() > ToFloat() > PassThrough() > {'table': ToFloat()},retyped,1,table,float32
+diamonds,x,float64,554,numeric,DropUninformative() > ToFloat() > PassThrough() > {'x': ToFloat()},retyped,1,x,float32
+diamonds,y,float64,552,numeric,DropUninformative() > ToFloat() > PassThrough() > {'y': ToFloat()},retyped,1,y,float32
+diamonds,z,float64,375,numeric,DropUninformative() > ToFloat() > PassThrough() > {'z': ToFloat()},retyped,1,z,float32
+house_sales_42092,date,str,372,datetime,"CleanNullStrings() > DropUninformative() > ToDatetime() > DatetimeEncoder() > {'date_day': ToFloat(), 'date_month': ToFloat(), ...}",expanded,4,date_year; date_month; date_day; date_total_seconds,float32
+house_sales_42092,bedrooms,uint8,13,numeric,DropUninformative() > ToFloat() > PassThrough() > {'bedrooms': ToFloat()},retyped,1,bedrooms,float32
+house_sales_42092,bathrooms,float64,30,numeric,DropUninformative() > ToFloat() > PassThrough() > {'bathrooms': ToFloat()},retyped,1,bathrooms,float32
+house_sales_42092,sqft_living,int64,1038,numeric,DropUninformative() > ToFloat() > PassThrough() > {'sqft_living': ToFloat()},retyped,1,sqft_living,float32
+house_sales_42092,sqft_lot,int64,9782,numeric,DropUninformative() > ToFloat() > PassThrough() > {'sqft_lot': ToFloat()},retyped,1,sqft_lot,float32
+house_sales_42092,floors,float64,6,numeric,DropUninformative() > ToFloat() > PassThrough() > {'floors': ToFloat()},retyped,1,floors,float32
+house_sales_42092,waterfront,uint8,2,numeric,DropUninformative() > ToFloat() > PassThrough() > {'waterfront': ToFloat()},retyped,1,waterfront,float32
+house_sales_42092,view,uint8,5,numeric,DropUninformative() > ToFloat() > PassThrough() > {'view': ToFloat()},retyped,1,view,float32
+house_sales_42092,condition,uint8,5,numeric,DropUninformative() > ToFloat() > PassThrough() > {'condition': ToFloat()},retyped,1,condition,float32
+house_sales_42092,grade,uint8,12,numeric,DropUninformative() > ToFloat() > PassThrough() > {'grade': ToFloat()},retyped,1,grade,float32
+house_sales_42092,sqft_above,int64,946,numeric,DropUninformative() > ToFloat() > PassThrough() > {'sqft_above': ToFloat()},retyped,1,sqft_above,float32
+house_sales_42092,sqft_basement,int64,306,numeric,DropUninformative() > ToFloat() > PassThrough() > {'sqft_basement': ToFloat()},retyped,1,sqft_basement,float32
+house_sales_42092,yr_built,int64,116,numeric,DropUninformative() > ToFloat() > PassThrough() > {'yr_built': ToFloat()},retyped,1,yr_built,float32
+house_sales_42092,yr_renovated,int64,70,numeric,DropUninformative() > ToFloat() > PassThrough() > {'yr_renovated': ToFloat()},retyped,1,yr_renovated,float32
+house_sales_42092,zipcode,category,70,high_cardinality,"DropUninformative() > CleanCategories() > StringEncoder() > {'zipcode_00': ToFloat(), 'zipcode_01': ToFloat(), ...}",expanded,30,zipcode_00; zipcode_01; zipcode_02; zipcode_03; zipcode_04; zipcode_05 ...,float32
+house_sales_42092,lat,float64,5034,numeric,DropUninformative() > ToFloat() > PassThrough() > {'lat': ToFloat()},retyped,1,lat,float32
+house_sales_42092,long,float64,752,numeric,DropUninformative() > ToFloat() > PassThrough() > {'long': ToFloat()},retyped,1,long,float32
+house_sales_42092,sqft_living15,int64,777,numeric,DropUninformative() > ToFloat() > PassThrough() > {'sqft_living15': ToFloat()},retyped,1,sqft_living15,float32
+house_sales_42092,sqft_lot15,int64,8689,numeric,DropUninformative() > ToFloat() > PassThrough() > {'sqft_lot15': ToFloat()},retyped,1,sqft_lot15,float32

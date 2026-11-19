@@ -60,7 +60,7 @@
   source: results/tidy/exp04_summary.csv
   query: task=='regression' & arm=='lama_adv' & model=='lgbm' & effect=='rmse_rel' & rule=='base_fallback'
   stat: wilcoxon_p_holm
-  value: 0.013519
+  value: 0.015209
   approved_value: null
   approved_git_sha: null
   tolerance: 0.001
@@ -894,11 +894,11 @@
   tolerance: 0
 - id: s2_map_cells
   section: 2
-  text: cells in the transform map (9 technique families by 8 tools)
+  text: cells in the transform map (9 technique families by 9 tools)
   source: results/tidy/transform_map_evidence.csv
   query: family==family
   stat: count
-  value: 72
+  value: 81
   approved_value: null
   approved_git_sha: null
   tolerance: 0
@@ -918,7 +918,7 @@
   source: results/tidy/transform_map_evidence.csv
   query: status=='confirmed_run'
   stat: count
-  value: 50
+  value: 59
   approved_value: null
   approved_git_sha: null
   tolerance: 0
@@ -1624,7 +1624,7 @@
   text: median effect per arm with CI over datasets (lgbm downstream, base fallback; hollow marker below 80% coverage)
   output: results/figures/article/median_effect_lgbm.png
   data: results/figures/article/median_effect_lgbm.csv
-  data_hash: 8c07b853281cd5e9
+  data_hash: 192baf8a26d6def2
   approved_data_hash: null
   approved_git_sha: null
 - id: s4_fig_win_tie_loss_lgbm
@@ -1633,7 +1633,7 @@
   text: number of datasets won, tied and lost per arm (lgbm downstream, base fallback)
   output: results/figures/article/win_tie_loss_lgbm.png
   data: results/figures/article/win_tie_loss_lgbm.csv
-  data_hash: f5b3d068fad81896
+  data_hash: dffcfcb444f176bd
   approved_data_hash: null
   approved_git_sha: null
 - id: s4_fig_median_effect_catboost
@@ -1643,7 +1643,7 @@
     coverage)
   output: results/figures/article/median_effect_catboost.png
   data: results/figures/article/median_effect_catboost.csv
-  data_hash: e4b9bc1b32bdedfd
+  data_hash: b8ecffb327e02d72
   approved_data_hash: null
   approved_git_sha: null
 - id: s4_fig_win_tie_loss_catboost
@@ -1652,7 +1652,7 @@
   text: number of datasets won, tied and lost per arm (catboost downstream, base fallback)
   output: results/figures/article/win_tie_loss_catboost.png
   data: results/figures/article/win_tie_loss_catboost.csv
-  data_hash: 902d61036729341b
+  data_hash: e9c3e12f62337d42
   approved_data_hash: null
   approved_git_sha: null
 - id: s4_fig_preview
@@ -1661,7 +1661,7 @@
   text: preview chart, 1500 x 680 px, stands in the text
   output: results/figures/article/preview.png
   data: results/figures/article/preview.csv
-  data_hash: 8c07b853281cd5e9
+  data_hash: 192baf8a26d6def2
   approved_data_hash: null
   approved_git_sha: null
 - id: s4_fig_effect_vs_gen_time
@@ -1670,7 +1670,7 @@
   text: effect against generator fit time
   output: results/figures/article/effect_vs_gen_time.png
   data: results/figures/article/effect_vs_gen_time.csv
-  data_hash: 04548bced854e6b9
+  data_hash: e067565ae6c3c3f1
   approved_data_hash: null
   approved_git_sha: null
 - id: s4_fig_effect_vs_n_features
@@ -1679,7 +1679,7 @@
   text: effect against number of new features
   output: results/figures/article/effect_vs_n_features.png
   data: results/figures/article/effect_vs_n_features.csv
-  data_hash: 186c52d394203fdd
+  data_hash: f020e8a46e66e942
   approved_data_hash: null
   approved_git_sha: null
 - id: s4_fig_coverage_table
@@ -1688,7 +1688,7 @@
   text: coverage per arm, task and downstream model; below 80% shaded
   output: results/figures/article/coverage_table.png
   data: results/figures/article/coverage_table.csv
-  data_hash: cac8ad5d40ef2e4f
+  data_hash: 7974dceb16f8f213
   approved_data_hash: null
   approved_git_sha: null
 - id: s5_fig_permuted_labels
@@ -1709,22 +1709,33 @@
   data_hash: 7b20ebdc4ee0dd3c
   approved_data_hash: null
   approved_git_sha: null
-- id: s2_fig_transform_map
+- id: s2_fig_transform_map_automl
   section: 2
   kind: figure
-  text: 'transformation map: nine families against eight tools, with evidence status (data: the map table)'
-  output: results/figures/article/transform_map.png
-  data: results/tidy/transform_map.csv
-  data_hash: f0dd520c1684c113
+  text: 'the transformation map for the AutoML tools (AutoGluon default and tabprep group, LightAutoML, H2O): nine
+    families, cell colour = done, partial, not done'
+  output: results/figures/article/transform_map_automl.png
+  data: results/figures/article/transform_map_automl.csv
+  data_hash: dd03c65347fa2022
+  approved_data_hash: null
+  approved_git_sha: null
+- id: s2_fig_transform_map_generators
+  section: 2
+  kind: figure
+  text: the transformation map for the feature generators (OpenFE, autofeat, MLJAR golden features, manual baseline)
+  output: results/figures/article/transform_map_generators.png
+  data: results/figures/article/transform_map_generators.csv
+  data_hash: d450c95f2b93cb86
   approved_data_hash: null
   approved_git_sha: null
 - id: s2_fig_contrasts
   section: 2
   kind: figure
-  text: per-dataset relative improvement of each exp02 contrast with fold-bootstrap 95% CI
+  text: per-dataset relative improvement of the main exp02 contrasts (anchored on A_def) with fold-bootstrap 95%
+    CI
   output: results/figures/article/exp02_contrasts.png
   data: results/figures/article/exp02_contrasts.csv
-  data_hash: 0add26a2160182ee
+  data_hash: 980d5e1608fa23c2
   approved_data_hash: null
   approved_git_sha: null
 - id: s2_fig_contrasts_table
@@ -1733,25 +1744,26 @@
   text: the same as a per-dataset table with `better of M` rows
   output: results/figures/article/exp02_contrasts_table.png
   data: results/figures/article/exp02_contrasts_table.csv
-  data_hash: acc30e2397c6863a
+  data_hash: a72ec1803b56335e
   approved_data_hash: null
   approved_git_sha: null
 - id: s2_fig_single_model
   section: 2
   kind: figure
-  text: single-model contrasts separating the `_r13` hyperparameters from the `_r13` feature group
+  text: the `_r13` baseline in a single model, B-A, D-A and the contrasts separating the `_r13` hyperparameters
+    from the `_r13` feature group
   output: results/figures/article/exp02_single_model.png
   data: results/figures/article/exp02_single_model.csv
-  data_hash: 2c95172a4a93901b
+  data_hash: 5de8c3f94258abe7
   approved_data_hash: null
   approved_git_sha: null
 - id: s2_fig_single_model_table
   section: 2
   kind: figure
-  text: single-model contrasts as a per-dataset table
+  text: the `_r13` single-model contrasts (with B-A and D-A) as a per-dataset table
   output: results/figures/article/exp02_single_model_table.png
   data: results/figures/article/exp02_single_model_table.csv
-  data_hash: 452e95d7bb333808
+  data_hash: 49c0e38c3bc19f66
   approved_data_hash: null
   approved_git_sha: null
 - id: s2_fig_hp_groups_table
@@ -3546,3 +3558,575 @@
   approved_value: null
   approved_git_sha: null
   tolerance: 0
+- id: s2_noise_d_a_def_pol
+  section: 2
+  text: spread in percentage points between the effects of D-A_def in the original run and two repeat runs on pol
+  source: results/tidy/noise_contrasts.csv
+  query: contrast=='D-A_def' & dataset=='pol'
+  stat: spread_pp
+  value: 0.290203
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.05
+- id: s2_noise_d_a_def_credit_g
+  section: 2
+  text: spread in percentage points between the effects of D-A_def in the original run and two repeat runs on credit-g
+  source: results/tidy/noise_contrasts.csv
+  query: contrast=='D-A_def' & dataset=='credit-g'
+  stat: spread_pp
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.05
+- id: s2_noise_d_a_pol
+  section: 2
+  text: spread in percentage points between the effects of D-A in the original run and two repeat runs on pol
+  source: results/tidy/noise_contrasts.csv
+  query: contrast=='D-A' & dataset=='pol'
+  stat: spread_pp
+  value: 0.165843
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.05
+- id: s2_noise_d_a_credit_g
+  section: 2
+  text: spread in percentage points between the effects of D-A in the original run and two repeat runs on credit-g
+  source: results/tidy/noise_contrasts.csv
+  query: contrast=='D-A' & dataset=='credit-g'
+  stat: spread_pp
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.05
+- id: s2_noise_d_d0_pol
+  section: 2
+  text: spread in percentage points between the effects of D-D0 in the original run and two repeat runs on pol
+  source: results/tidy/noise_contrasts.csv
+  query: contrast=='D-D0' & dataset=='pol'
+  stat: spread_pp
+  value: 0.386018
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.05
+- id: s2_noise_d_d0_credit_g
+  section: 2
+  text: spread in percentage points between the effects of D-D0 in the original run and two repeat runs on credit-g
+  source: results/tidy/noise_contrasts.csv
+  query: contrast=='D-D0' & dataset=='credit-g'
+  stat: spread_pp
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.05
+- id: s2_noise_e_d0_pol
+  section: 2
+  text: spread in percentage points between the effects of E-D0 in the original run and two repeat runs on pol
+  source: results/tidy/noise_contrasts.csv
+  query: contrast=='E-D0' & dataset=='pol'
+  stat: spread_pp
+  value: 0.052513
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.05
+- id: s2_noise_e_d0_credit_g
+  section: 2
+  text: spread in percentage points between the effects of E-D0 in the original run and two repeat runs on credit-g
+  source: results/tidy/noise_contrasts.csv
+  query: contrast=='E-D0' & dataset=='credit-g'
+  stat: spread_pp
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.05
+- id: s6_noise_lama_ag_pol
+  section: 6
+  text: spread in percentage points between the effects of lama-ag in the original run and two repeat runs on pol
+  source: results/tidy/noise_contrasts.csv
+  query: contrast=='lama-ag' & dataset=='pol'
+  stat: spread_pp
+  value: 0.228038
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.05
+- id: s6_noise_lama_ag_credit_g
+  section: 6
+  text: spread in percentage points between the effects of lama-ag in the original run and two repeat runs on credit-g
+  source: results/tidy/noise_contrasts.csv
+  query: contrast=='lama-ag' & dataset=='credit-g'
+  stat: spread_pp
+  value: 0.025868
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.05
+- id: s6_noise_h2o_ag_pol
+  section: 6
+  text: spread in percentage points between the effects of h2o-ag in the original run and two repeat runs on pol
+  source: results/tidy/noise_contrasts.csv
+  query: contrast=='h2o-ag' & dataset=='pol'
+  stat: spread_pp
+  value: 4.959877
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.05
+- id: s6_noise_h2o_ag_credit_g
+  section: 6
+  text: spread in percentage points between the effects of h2o-ag in the original run and two repeat runs on credit-g
+  source: results/tidy/noise_contrasts.csv
+  query: contrast=='h2o-ag' & dataset=='credit-g'
+  stat: spread_pp
+  value: 9.744987
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.05
+- id: s6_noise_h2o_loss_pol
+  section: 6
+  text: spread of the mean H2O loss between the three runs on pol, (max - min) / mean of the run means
+  source: results/tidy/noise_arms.csv
+  query: arm=='h2o' & dataset=='pol'
+  stat: spread_rel
+  value: 0.046785
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: s6_noise_h2o_loss_credit_g
+  section: 6
+  text: spread of the mean H2O loss between the three runs on credit-g, (max - min) / mean of the run means
+  source: results/tidy/noise_arms.csv
+  query: arm=='h2o' & dataset=='credit-g'
+  stat: spread_rel
+  value: 0.085428
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: s2_fig_exp02_noise_table
+  section: 2
+  kind: figure
+  text: run-to-run noise table of the exp02 contrasts, effect per run, spread and fold CI
+  output: results/figures/article/exp02_noise_table.png
+  data: results/figures/article/exp02_noise_table.csv
+  data_hash: 80556ca00a3c65c0
+  approved_data_hash: null
+  approved_git_sha: null
+- id: s6_fig_exp06_noise_table
+  section: 6
+  kind: figure
+  text: run-to-run noise table of the exp06 contrasts, effect per run, spread and fold CI
+  output: results/figures/article/exp06_noise_table.png
+  data: results/figures/article/exp06_noise_table.csv
+  data_hash: 9da70c372309e735
+  approved_data_hash: null
+  approved_git_sha: null
+- id: s2_skrub_numeric_strings
+  section: 2
+  text: 'skrub TableVectorizer: numbers stored as strings (num_as_str, mixed with n/a) read as numeric columns on
+    hard_columns'
+  source: results/tidy/exp08_skrub_types.csv
+  query: dataset=='hard_columns' & input_col in ['num_as_str', 'mixed'] & skrub_kind=='numeric'
+  stat: count
+  value: 2
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_skrub_date_str_outputs
+  section: 2
+  text: 'skrub TableVectorizer: output columns of the ISO date string column on hard_columns (year, month, day,
+    total seconds)'
+  source: results/tidy/exp08_skrub_types.csv
+  query: dataset=='hard_columns' & input_col=='date_str'
+  stat: n_outputs
+  value: 4.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_skrub_text_long_outputs
+  section: 2
+  text: 'skrub TableVectorizer: output columns of the long free-text column on hard_columns (StringEncoder, 30 SVD
+    components)'
+  source: results/tidy/exp08_skrub_types.csv
+  query: dataset=='hard_columns' & input_col=='text_long'
+  stat: n_outputs
+  value: 30.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_skrub_uid_outputs
+  section: 2
+  text: 'skrub TableVectorizer: output columns of the all-unique id column on hard_columns (same path as text)'
+  source: results/tidy/exp08_skrub_types.csv
+  query: dataset=='hard_columns' & input_col=='uid'
+  stat: n_outputs
+  value: 30.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_skrub_cat_low_outputs
+  section: 2
+  text: 'skrub TableVectorizer: output columns of the 3-level categorical on hard_columns (one-hot)'
+  source: results/tidy/exp08_skrub_types.csv
+  query: dataset=='hard_columns' & input_col=='cat_low'
+  stat: n_outputs
+  value: 3.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_skrub_cat_binary_outputs
+  section: 2
+  text: 'skrub TableVectorizer: output columns of the 2-level categorical on hard_columns (one-hot, one column dropped)'
+  source: results/tidy/exp08_skrub_types.csv
+  query: dataset=='hard_columns' & input_col=='cat_binary'
+  stat: n_outputs
+  value: 1.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_skrub_const_kept
+  section: 2
+  text: 'skrub TableVectorizer: output columns of the constant column on hard_columns (kept, drop_if_constant=False)'
+  source: results/tidy/exp08_skrub_types.csv
+  query: dataset=='hard_columns' & input_col=='const'
+  stat: n_outputs
+  value: 1.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_skrub_dropped_columns
+  section: 2
+  text: 'skrub TableVectorizer: columns dropped over hard_columns and the seven typed datasets'
+  source: results/tidy/exp08_skrub_types.csv
+  query: action=='dropped'
+  stat: count
+  value: 0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s2_skrub_non_float32_columns
+  section: 2
+  text: 'skrub TableVectorizer: probed input columns whose output is not float32'
+  source: results/tidy/exp08_skrub_types.csv
+  query: output_dtypes!='float32'
+  stat: count
+  value: 0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_skrub_tv_ok_units
+  section: 4
+  text: skrub_tv fit units that ran to completion, both repeats and models
+  source: results/tidy/exp04.parquet
+  query: arm=='skrub_tv' & status=='ok'
+  stat: count
+  value: 990
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_skrub_tv_planned_units
+  section: 4
+  text: skrub_tv fit units planned, both repeats and models
+  source: results/tidy/exp04.parquet
+  query: arm=='skrub_tv'
+  stat: count
+  value: 990
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_skrub_tv_bin_auc_lgbm
+  section: 4
+  text: median auc_diff of skrub_tv on binary, lgbm downstream
+  source: results/tidy/exp04_summary.csv
+  query: task=='binary' & arm=='skrub_tv' & model=='lgbm' & effect=='auc_diff' & rule=='base_fallback'
+  stat: median_effect
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.0005
+  ci:
+  - -2.0e-06
+  - 0.000239
+  coverage: 1.0
+- id: s4_skrub_tv_bin_auc_catboost
+  section: 4
+  text: median auc_diff of skrub_tv on binary, catboost downstream
+  source: results/tidy/exp04_summary.csv
+  query: task=='binary' & arm=='skrub_tv' & model=='catboost' & effect=='auc_diff' & rule=='base_fallback'
+  stat: median_effect
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.0005
+  ci:
+  - -0.000428
+  - 0.0
+  coverage: 1.0
+- id: s4_skrub_tv_multi_logloss_lgbm
+  section: 4
+  text: median logloss_rel of skrub_tv on multiclass, lgbm downstream
+  source: results/tidy/exp04_summary.csv
+  query: task=='multiclass' & arm=='skrub_tv' & model=='lgbm' & effect=='logloss_rel' & rule=='base_fallback'
+  stat: median_effect
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -9.5e-05
+  - 0.006135
+  coverage: 1.0
+- id: s4_skrub_tv_multi_logloss_catboost
+  section: 4
+  text: median logloss_rel of skrub_tv on multiclass, catboost downstream
+  source: results/tidy/exp04_summary.csv
+  query: task=='multiclass' & arm=='skrub_tv' & model=='catboost' & effect=='logloss_rel' & rule=='base_fallback'
+  stat: median_effect
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -0.001095
+  - 0.0
+  coverage: 1.0
+- id: s4_skrub_tv_reg_rmse_lgbm
+  section: 4
+  text: median rmse_rel of skrub_tv on regression, lgbm downstream
+  source: results/tidy/exp04_summary.csv
+  query: task=='regression' & arm=='skrub_tv' & model=='lgbm' & effect=='rmse_rel' & rule=='base_fallback'
+  stat: median_effect
+  value: -8.0e-05
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -0.002832
+  - 1.0e-05
+  coverage: 1.0
+- id: s4_skrub_tv_reg_rmse_catboost
+  section: 4
+  text: median rmse_rel of skrub_tv on regression, catboost downstream
+  source: results/tidy/exp04_summary.csv
+  query: task=='regression' & arm=='skrub_tv' & model=='catboost' & effect=='rmse_rel' & rule=='base_fallback'
+  stat: median_effect
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+  ci:
+  - -0.002724
+  - 0.001056
+  coverage: 1.0
+- id: s4_ctr_ag_tabprep_keepcat_n_datasets
+  section: 4
+  text: 'ag_tabprep_keepcat: datasets with fits for both CatBoost settings'
+  source: results/tidy/exp07_summary.csv
+  query: arm=='ag_tabprep_keepcat'
+  stat: n_datasets
+  value: 17.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_ctr_ag_tabprep_keepcat_n_better
+  section: 4
+  text: 'ag_tabprep_keepcat: datasets where the arm helps more with ctr=1 than with default CatBoost (sign of the
+    paired difference)'
+  source: results/tidy/exp07_summary.csv
+  query: arm=='ag_tabprep_keepcat'
+  stat: n_better
+  value: 13.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_ctr_ag_tabprep_keepcat_n_clear_better
+  section: 4
+  text: 'ag_tabprep_keepcat: datasets where the paired difference is clearly positive (fold CI excludes zero)'
+  source: results/tidy/exp07_summary.csv
+  query: arm=='ag_tabprep_keepcat'
+  stat: n_clear_better
+  value: 6.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_ctr_ag_tabprep_keepcat_n_clear_worse
+  section: 4
+  text: 'ag_tabprep_keepcat: datasets where the paired difference is clearly negative (fold CI excludes zero)'
+  source: results/tidy/exp07_summary.csv
+  query: arm=='ag_tabprep_keepcat'
+  stat: n_clear_worse
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_ctr_ag_tabprep_keepcat_median
+  section: 4
+  text: 'ag_tabprep_keepcat: secondary: median over datasets of the paired difference (ctr=1 minus default) in relative
+    loss improvement'
+  source: results/tidy/exp07_summary.csv
+  query: arm=='ag_tabprep_keepcat'
+  stat: median
+  value: 0.005216
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: s4_ctr_lama_adv_n_datasets
+  section: 4
+  text: 'lama_adv: datasets with fits for both CatBoost settings'
+  source: results/tidy/exp07_summary.csv
+  query: arm=='lama_adv'
+  stat: n_datasets
+  value: 17.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_ctr_lama_adv_n_better
+  section: 4
+  text: 'lama_adv: datasets where the arm helps more with ctr=1 than with default CatBoost (sign of the paired difference)'
+  source: results/tidy/exp07_summary.csv
+  query: arm=='lama_adv'
+  stat: n_better
+  value: 13.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_ctr_lama_adv_n_clear_better
+  section: 4
+  text: 'lama_adv: datasets where the paired difference is clearly positive (fold CI excludes zero)'
+  source: results/tidy/exp07_summary.csv
+  query: arm=='lama_adv'
+  stat: n_clear_better
+  value: 8.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_ctr_lama_adv_n_clear_worse
+  section: 4
+  text: 'lama_adv: datasets where the paired difference is clearly negative (fold CI excludes zero)'
+  source: results/tidy/exp07_summary.csv
+  query: arm=='lama_adv'
+  stat: n_clear_worse
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_ctr_lama_adv_median
+  section: 4
+  text: 'lama_adv: secondary: median over datasets of the paired difference (ctr=1 minus default) in relative loss
+    improvement'
+  source: results/tidy/exp07_summary.csv
+  query: arm=='lama_adv'
+  stat: median
+  value: 0.005443
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: s4_ctr_openfe_n_datasets
+  section: 4
+  text: 'openfe: datasets with fits for both CatBoost settings'
+  source: results/tidy/exp07_summary.csv
+  query: arm=='openfe'
+  stat: n_datasets
+  value: 16.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_ctr_openfe_n_better
+  section: 4
+  text: 'openfe: datasets where the arm helps more with ctr=1 than with default CatBoost (sign of the paired difference)'
+  source: results/tidy/exp07_summary.csv
+  query: arm=='openfe'
+  stat: n_better
+  value: 12.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_ctr_openfe_n_clear_better
+  section: 4
+  text: 'openfe: datasets where the paired difference is clearly positive (fold CI excludes zero)'
+  source: results/tidy/exp07_summary.csv
+  query: arm=='openfe'
+  stat: n_clear_better
+  value: 6.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_ctr_openfe_n_clear_worse
+  section: 4
+  text: 'openfe: datasets where the paired difference is clearly negative (fold CI excludes zero)'
+  source: results/tidy/exp07_summary.csv
+  query: arm=='openfe'
+  stat: n_clear_worse
+  value: 2.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_ctr_openfe_median
+  section: 4
+  text: 'openfe: secondary: median over datasets of the paired difference (ctr=1 minus default) in relative loss
+    improvement'
+  source: results/tidy/exp07_summary.csv
+  query: arm=='openfe'
+  stat: median
+  value: 0.003398
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: s4_ctr_base_n_datasets
+  section: 4
+  text: 'base, CatBoost ctr=1 against default: datasets'
+  source: results/tidy/exp07_summary.csv
+  query: arm=='base'
+  stat: n_datasets
+  value: 17.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_ctr_base_n_better
+  section: 4
+  text: 'base, CatBoost ctr=1 against default: datasets where base with ctr=1 is better than default CatBoost'
+  source: results/tidy/exp07_summary.csv
+  query: arm=='base'
+  stat: n_better
+  value: 3.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_ctr_base_n_clear_worse
+  section: 4
+  text: 'base, CatBoost ctr=1 against default: datasets where base with ctr=1 is clearly worse than default CatBoost
+    (fold CI excludes zero)'
+  source: results/tidy/exp07_summary.csv
+  query: arm=='base'
+  stat: n_clear_worse
+  value: 8.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_ctr_base_n_clear_better
+  section: 4
+  text: 'base, CatBoost ctr=1 against default: datasets where base with ctr=1 is clearly better than default CatBoost
+    (fold CI excludes zero)'
+  source: results/tidy/exp07_summary.csv
+  query: arm=='base'
+  stat: n_clear_better
+  value: 0.0
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0
+- id: s4_ctr_base_median
+  section: 4
+  text: 'base, CatBoost ctr=1 against default: secondary: median over datasets of the relative loss improvement
+    of base with ctr=1 over default CatBoost'
+  source: results/tidy/exp07_summary.csv
+  query: arm=='base'
+  stat: median
+  value: -0.00548
+  approved_value: null
+  approved_git_sha: null
+  tolerance: 0.001
+- id: s4_fig_ctr_ablation_table
+  section: 4
+  kind: figure
+  text: CatBoost max_ctr_complexity ablation table, per dataset effect of each arm over base with default and ctr=1
+    CatBoost and their difference
+  output: results/figures/article/ctr_ablation_table.png
+  data: results/figures/article/ctr_ablation_table.csv
+  data_hash: 5260941b066756f9
+  approved_data_hash: null
+  approved_git_sha: null

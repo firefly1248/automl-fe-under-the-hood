@@ -1,0 +1,28 @@
+skrub_version: 0.11.0
+TableVectorizer:
+  cardinality_threshold: '40'
+  low_cardinality: "OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',\n              sparse_output=False)"
+  high_cardinality: StringEncoder()
+  numeric: PassThrough()
+  datetime: DatetimeEncoder()
+  specific_transformers: ()
+  drop_null_fraction: '1.0'
+  drop_if_constant: 'False'
+  drop_if_unique: 'False'
+  datetime_format: None
+  null_strings: None
+  n_jobs: None
+StringEncoder:
+  n_components: '30'
+  vectorizer: '''tfidf'''
+  ngram_range: (3, 4)
+  analyzer: '''char_wb'''
+  stop_words: None
+  random_state: None
+  vocabulary: None
+DatetimeEncoder:
+  resolution: '''hour'''
+  add_weekday: 'False'
+  add_total_seconds: 'True'
+  add_day_of_year: 'False'
+  periodic_encoding: None

@@ -1,0 +1,10 @@
+family,openfe,autofeat,mljar_golden,manual_baseline,skrub_tv,openfe_does_it,autofeat_does_it,mljar_golden_does_it,manual_baseline_does_it,skrub_tv_does_it
+types,numeric or category,"numeric, one-hot cats",numeric only,numeric vs rest,"type, then cardinality",partial,partial,partial,yes,yes
+categorical_encoding,"freq, pair codes",one-hot only,not done,freq share,"one-hot below 40, else SVD",partial,partial,no,yes,yes
+interactions,cat pairs: Combine,not done,not done,not done,not done,yes,no,no,no,no
+arithmetic,+ - * / min max,"+ - * pairs, 2 steps","diff, ratio, sum, product","ratio, product, top 5",not done,yes,yes,yes,yes,no
+unary,abs log sqrt sigmoid,1/x exp log powers,not done,not done,not done,yes,yes,no,no,no
+groupby,mean std rank by cat,not done,not done,"group mean, diff",not done,yes,no,no,yes,no
+dates,not done,not done,not done,not done,"year, month, day, seconds",no,no,no,no,yes
+text,not done,not done,not done,not done,SVD of char n-grams,no,no,no,no,partial
+selection,"halving, GBM gain",L1 with noise cols,top by tree score,top 5 by MI,drops all-null only,yes,yes,yes,partial,partial

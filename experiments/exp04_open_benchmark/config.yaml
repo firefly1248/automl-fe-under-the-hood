@@ -12,7 +12,7 @@ limits: {gen_timeout_s: 3600, fit_timeout_s: 3600, mem_gb: 6, min_free_gb: 2}
 exclude:
   - {dataset: connect-4, model: catboost, reason: "base CatBoost timed out at 1800 s on 5 of 5 pilot folds"}
 # ag_tabprep_keepcat is fit-only: it reuses the ag_tabprep generator output with its own view
-arms: [base, ag_default, ag_tabprep, ag_tabprep_keepcat, lama_adv, openfe, autofeat, mljar_golden, manual_baseline]
+arms: [base, ag_default, ag_tabprep, ag_tabprep_keepcat, lama_adv, openfe, autofeat, mljar_golden, manual_baseline, skrub_tv]
 # repeats / folds in a stage: a subset of the protocol's (default: all)
 stages:
   smoke: {datasets: [credit-g, cmc, Moneyball], repeats: [0], folds: [0]}

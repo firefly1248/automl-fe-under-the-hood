@@ -12,6 +12,7 @@ ARMS = {
     "openfe_transductive": ("afe.generators.openfe_gen", "OpenFETransductive", "openfe"),  # exp05 only
     "autofeat": ("afe.generators.autofeat_gen", "AutoFeat", "autofeat"),
     "mljar_golden": ("afe.generators.mljar_golden", "MljarGolden", "mljar"),
+    "skrub_tv": ("afe.generators.skrub_tv", "SkrubTV", "skrub"),
 }
 # fit-only arms: arm -> source arm whose cached generator output they reuse with their own view
 FIT_ONLY = {"ag_tabprep_keepcat": "ag_tabprep"}

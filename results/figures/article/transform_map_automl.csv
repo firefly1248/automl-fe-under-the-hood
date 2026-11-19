@@ -1,0 +1,10 @@
+family,ag_default,ag_tabprep,lama,h2o,ag_default_does_it,ag_tabprep_does_it,lama_does_it,h2o_does_it
+types,"retype, drop junk",AG default first,Reader guesses roles,"real, enum, time, string",yes,partial,yes,yes
+categorical_encoding,category dtype only,"OOF target enc., alpha 10","OOF TE, ordinal, freq","Enum trees, TE opt-in",partial,yes,yes,yes
+interactions,not done,"cat pairs, depth 3, TE","top-4 cats, depth 3, TE",not done,no,yes,yes,no
+arithmetic,not done,+ - * / random pick,not done,not done,no,yes,no,no
+unary,not done,not done,"linear: bins, scale",not done,no,no,partial,no
+groupby,not done,"exists, unused",off by default,not done,no,no,no,no
+dates,int stamp + 4 parts,as AG default,"year, month, weekday",one time column,yes,partial,yes,partial
+text,special stats + n-grams,as AG default,"none, needs extras",unique strings dropped,yes,partial,no,no
+selection,"drops const, dups, IDs","random pick, dedupe",GBM gain > 0,not done,partial,partial,yes,no

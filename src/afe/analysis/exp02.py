@@ -10,7 +10,8 @@
 - tidy/exp02_arm_means.csv and exp02_arm_wall.csv: per dataset and arm the mean and sd of the metric over folds and the
   mean wall seconds; per arm the wall seconds over all units;
 - tidy/exp02_rounds.csv: median boosting rounds of the single-model arms per dataset;
-- figures/exp02/contrasts.{svg,png,csv} (the main contrasts) and single_model.* (hyperparameters vs features of `_r13`).
+- figures/exp02/contrasts.{svg,png,csv} (the main contrasts, anchored on `A_def`) and single_model.* (`_r13` in a single
+  model: B - A and D - A against the `_r13` baseline, hyperparameters vs features).
 Only folds where both arms of a contrast are ok enter it.
 """
 
@@ -36,23 +37,26 @@ CONTRASTS = {  # name -> (arm, reference); improvement of arm over reference
     **{f"A_et0_no{g}-A_et0": (f"A_et0_no{g}", "A_et0") for g in ("samp", "cap", "reg", "cat")},
     "A_et0_noreg-A_def": ("A_et0_noreg", "A_def"), "A_et0_nocat-A_def": ("A_et0_nocat", "A_def"),
 }
-MAIN = ["B-A", "D-A", "D-D0", "E-D0", "B-B2"]
-SINGLE = ["A-A_def", "A_et0-A", "B_def-A_def", "B_et0-A_et0", "B-B_def", "B_et0-B"]  # B-A is in MAIN
+MAIN = ["B_def-A_def", "D-A_def", "D-D0", "E-D0", "B-B2"]  # anchored on A_def, AutoGluon's default LightGBM
+SINGLE = ["B-A", "D-A", "A-A_def", "A_et0-A", "B_et0-A_et0", "B-B_def", "B_et0-B"]  # the `_r13` hyperparameters in a single model
 N_BOOT = 10_000
 
 
-def records(exp=EXP):
-    """Loose records first, then the packed ones that are not already loose (a pack keeps copies of both)."""
+def records(exp=EXP, noise: bool = False):
+    """Loose records first, then the packed ones that are not already loose (a pack keeps copies of both). The
+    repeat runs of the noise measurement (unit key `rep`) are kept apart: `noise=True` yields only them."""
     raw = RESULTS / "raw" / exp
     seen = set()
     for p in sorted((raw / "fit").glob("*.json")):
         seen.add(p.stem)
-        yield json.loads(p.read_text())
+        r = json.loads(p.read_text())
+        if ("rep" in r["unit"]) == noise:
+            yield r
     gz = raw / "fit.jsonl.gz"
     if gz.exists():
         for line in gzip.open(gz, "rt"):
             r = json.loads(line)
-            if r["hash"] not in seen:
+            if r["hash"] not in seen and ("rep" in r["unit"]) == noise:
                 yield r
 
 

@@ -13,3 +13,5 @@ datasets: [kr-vs-kp, credit-g, sick, bank-marketing, cmc, okcupid-stem,
 limits: {unit_timeout_s: 1800, min_free_gb: 2}
 # LAMA diagnostics: `lama` trails the base GBM on pol and socmob; arms run on those two only
 diagnostics: {datasets: [pol, socmob], arms: [lama_num, lama_full, lama_num_full]}   # worker_lama_diag.py
+# run-to-run noise: the same units run again (rep 1, 2) on two datasets, `run.py --noise` (see exp02)
+noise: {datasets: [pol, credit-g], arms: [ag_best, lama, h2o], reps: [1, 2]}

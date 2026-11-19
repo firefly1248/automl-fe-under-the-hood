@@ -1,0 +1,11 @@
+# exp07: CatBoost ablation of its built-in categorical combinations (protocol change A4, 2026-11-17). Downstream only:
+# the generator outputs are the cached exp04 ones, the default-CatBoost fits are the exp04 records.
+name: exp07_ctr_ablation
+exp04_config: experiments/exp04_open_benchmark/config.yaml
+# max_ctr_complexity = the largest number of categorical features in one combination; 1 switches the combinations off
+catboost: {max_ctr_complexity: 1}
+# the arms that build categorical crossings or target encodings (and base as the reference); ag_tabprep_keepcat is the
+# AutoGluon tabprep output next to the raw categoricals
+arms: [base, ag_tabprep_keepcat, lama_adv, openfe]
+repeats: [0, 1]            # all 10 outer folds
+limits: {fit_timeout_s: 3600, mem_gb: 6, min_free_gb: 2}

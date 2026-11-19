@@ -14,7 +14,7 @@ import pandas as pd
 from afe.paths import RESULTS
 
 ARMS = ["base", "ag_default", "ag_tabprep", "ag_tabprep_keepcat", "lama_adv", "openfe", "autofeat",
-        "mljar_golden", "manual_baseline"]
+        "mljar_golden", "manual_baseline", "skrub_tv"]
 COLOR = dict(zip(ARMS, plt.get_cmap("tab10").colors))
 EFFECT_LABEL = {"auc_diff": "AUC difference vs base", "logloss_rel": "relative log loss improvement vs base",
                 "rmse_rel": "relative RMSE improvement vs base"}

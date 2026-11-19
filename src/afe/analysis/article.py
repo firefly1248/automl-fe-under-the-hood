@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from afe.analysis import exp02, exp06
+from afe.analysis import exp02, exp06, exp07
 from afe.analysis.figures import ARMS, COLOR, EFFECT_LABEL, LOW_COVERAGE, PRIMARY_EFFECT
 from afe.paths import RESULTS
 
@@ -196,7 +196,7 @@ def contrasts(per: pd.DataFrame, pairs, name: str, ncols: int) -> None:
 
 
 def table(df: pd.DataFrame, name: str, cell, shade, col_labels=None, col_width=1.3, first_width=2.6,
-          group_gap: str = None) -> None:
+          group_gap: str = None, header_size: float = None) -> None:
     """Rendered table: `cell(value)` gives the text, `shade(value)` a colour or None; first column is the row label."""
     labels = list(col_labels or df.columns[1:])
     n, m = len(df), len(labels)
@@ -213,7 +213,7 @@ def table(df: pd.DataFrame, name: str, cell, shade, col_labels=None, col_width=1
         cl.set_edgecolor("0.8")
         if r == 0:
             cl.set_facecolor("#e8e8e8")
-            cl.set_text_props(weight="bold")
+            cl.set_text_props(weight="bold", fontsize=header_size or (13 if m < 6 else 10.5))  # seven pair names must fit one column
         elif c > 0 and (col := shade(df.iloc[r - 1, c])):
             cl.set_facecolor(col)
         if c == 0:
@@ -270,6 +270,50 @@ def coverage_table(summ: pd.DataFrame) -> None:
           col_width=1.3, first_width=2.8)
 
 
+def noise_table(exp: str, name: str) -> None:
+    """Run-to-run noise (afe.analysis.noise): per contrast and dataset the effect in the original run and the two
+    repeats, the spread between them in percentage points, and the fold CI of the original run next to it."""
+    c = pd.read_csv(RESULTS / "tidy" / "noise_contrasts.csv")
+    c = c[c.exp == exp]
+    pct = lambda v: f"{v * 100:+.1f}%"
+    t = pd.DataFrame({"contrast, dataset": [f"{r.contrast}, {r.dataset}" for r in c.itertuples()],
+                      "run 0": [pct(v) for v in c.effect_run0], "run 1": [pct(v) for v in c.effect_run1],
+                      "run 2": [pct(v) for v in c.effect_run2], "spread, points": [f"{v:.1f}" for v in c.spread_pp],
+                      "fold CI of run 0": [f"{pct(lo)} to {pct(hi)}" for lo, hi in zip(c.ci_lo, c.ci_hi)],
+                      "runs inside CI": ["yes" if v else "no" for v in c.inside_ci]})
+    table(t, name, lambda v: v, lambda v: "#f3cccc" if v == "no" else "#cfe8d5" if v == "yes" else None,
+          col_width=1.8, first_width=2.3)
+
+
+def ctr_ablation_table() -> None:
+    """exp07: per dataset, `base` with `max_ctr_complexity=1` over the default CatBoost, and for each arm the effect over
+    base with the default CatBoost, with `ctr=1` and their difference (`ctr=1` minus default), in %, three numbers
+    in a cell (default | ctr=1 | difference). Shaded green or
+    red where the fold CI of the difference excludes zero (green: the arm helps more once CatBoost has no combinations of
+    its own). The last rows count datasets better by the sign of the difference and clearly better or worse."""
+    eff = pd.read_csv(RESULTS / "tidy" / "exp07_effects.csv")
+    summ = pd.read_csv(RESULTS / "tidy" / "exp07_summary.csv").set_index("arm")
+    arms = [a for a in exp07.ARMS if a in set(eff.arm)]
+    e = eff.set_index(["dataset", "arm"])
+    pct = lambda v: f"{round(v * 100, 1) + 0.0:+.1f}"  # + 0.0: no "-0.0"
+    rows = []
+    for dataset in sorted(eff.dataset.unique()):
+        row = [dataset]
+        b = e.loc[(dataset, "base")] if (dataset, "base") in e.index else None
+        row.append(("text", pct(b.effect_diff)) if b is not None else ("text", ""))
+        for a in arms:
+            r = e.loc[(dataset, a)] if (dataset, a) in e.index else None
+            row.append(("arm", f"{pct(r.effect_default)} | {pct(r.effect_ctr1)} | {pct(r.effect_diff)}", r.ci_lo_diff, r.ci_hi_diff)
+                       if r is not None else ("text", ""))
+        rows.append(row)
+    for label, col in (("better (sign)", "n_better"), ("clearly better", "n_clear_better"), ("clearly worse", "n_clear_worse")):
+        rows.append([label, ("text", "")] + [("count", f"{int(summ.loc[a, col])} of {int(summ.loc[a, 'n_datasets'])}") if a in summ.index
+                                             else ("text", "") for a in arms])
+    df = pd.DataFrame(rows, columns=["dataset (arm cells: default | ctr=1 | diff)", "base: ctr=1 vs default"] + arms)
+    shade = lambda v: ("#cfe9d3" if v[2] > 0 else "#f3cccc" if v[3] < 0 else None) if v[0] == "arm" else "#f3f3f3" if v[0] == "count" else None
+    table(df, "ctr_ablation_table", lambda v: v[1], shade, col_width=2.6, first_width=4.4, header_size=10.5)
+
+
 def hp_groups_table() -> None:
     """exp02 worker_hp.py: mean test loss on elevators, kr-vs-kp and socmob, three of the datasets where `A_et0` still
     trailed `A_def` after extra_trees=False (pol and okcupid-stem also trail and were not run)."""
@@ -311,6 +355,11 @@ def main() -> None:
         contrast_table(per, summary, pairs, f"{name}_table")
     hp_groups_table()
     lama_table()
+    if (RESULTS / "tidy" / "exp07_effects.csv").exists():  # after `make exp07`
+        ctr_ablation_table()
+    if len(pd.read_csv(RESULTS / "tidy" / "noise_contrasts.csv")):  # after `make exp02-noise exp06-noise` and noise
+        noise_table("exp02", "exp02_noise_table")
+        noise_table("exp06", "exp06_noise_table")
     missing = [p.name for p in sorted(OUT.glob("*.png")) if not p.with_suffix(".alt.txt").exists()]
     assert not missing, f"no alt text (1 to 2 sentences on what is shown) for: {missing}"
 

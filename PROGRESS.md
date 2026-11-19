@@ -1,5 +1,60 @@
 # Progress
 
+## 2026-11-18: skrub_tv and exp07 done
+
+- `skrub_tv` (A4): env `envs/skrub` (skrub 0.11.0), arm `src/afe/generators/skrub_tv.py`, probe exp08 on `hard_columns()` and the
+  typed datasets (0 of 114 columns dropped, all outputs float32), new transform-map column (every cell confirmed by run or
+  source), exp04 on all 50 datasets: 990 of 990 fit units ok. Median effects are 0 in all cells but one (-0.008%).
+  Claims `s2_skrub_*` (9) and `s4_skrub_tv_*` (8).
+- exp07 (A4): 680 units, 670 ok, 10 `no_generator` (openfe on fps_benchmark, failed in exp04). CatBoost default
+  `max_ctr_complexity` is 4 (docstring; `get_all_params()` of an unset model prints 1, which training does not use; checked by
+  a direct fit on credit-g). Result (`s4_ctr_*`, `ctr_ablation_table`): `base` with `ctr=1` is better on 3 of 17 datasets
+  and clearly worse on 8; the arms help more with `ctr=1` on 13, 13 and 12 of 17, 17 and 16 datasets (`ag_tabprep_keepcat`,
+  `lama_adv`, `openfe`), clearly so on 6, 8 and 6, clearly less on 0, 0 and 2; median shift about half a point.
+- 376 claims, 0 differ from approved (none approved yet). Nothing committed since f7bcbd9; commit awaits approval.
+
+## 2026-11-18: noise measurement done
+
+100 of 100 repeat units ok, no failures (exp02 D and E: 40; exp06 ag_best, lama, h2o: 60; pol and credit-g, runs 1 and 2).
+- AutoGluon `D`, `E` and `ag_best`, and `lama`: effects move by at most 0.4 percentage points between runs, always inside
+  the fold CI of run 0; on credit-g (and `lama` on pol) the fold losses are identical across runs.
+- `h2o` moves by 9.7 points (credit-g) and 5.0 points (pol) in its effect over `ag_best`, on a fold CI 25 points wide.
+- Two datasets of ten, so the text keeps sign counts as the headline for C, D, D0, E and exp06; whether to say "clearly
+  better" on this basis is for the author. Tables and dots still colour by the fold CI.
+- Added: `exp02_noise_table`, `exp06_noise_table` (+ alt texts), 16 claims `s2_noise_*`, `s6_noise_*`, two figure claims
+  (338 claims). READMEs of exp02, exp06 and article updated. Both then done, see the entry above.
+
+## 2026-11-17 (next round): noise measurement set up, tables re-anchored, map split
+
+Done without compute:
+1. Cause of the broken cmc `D` and `D0` records (exp02 timing check of 2026-11-11): reproduced by running the worker in a
+   directory outside the project without `RAY_ENABLE_UV_RUN_RUNTIME_ENV=0`. Every Ray-based bagged model (LightGBM,
+   CatBoost, XGBoost, neural nets) failed at `ray.init` in Ray's uv runtime-env hook; AutoGluon logged "Exception caused
+   ... to fail during training... Skipping this model", fitted random forests and extra trees only and exited 0. The
+   reproduction gave the old record's fold-0 log loss to the last digit (0.9817811250686646). `E` (GBM_PREP only) failed
+   outright in the same session, which is how the hook was found; unbagged arms (A, B, B2, C) never start Ray.
+2. `afe.run.checks` (called by the exp02 and exp06 orchestrators, not by the hashed workers): a unit whose result lists no
+   LightGBM, CatBoost, XGBoost or neural-net model (AutoGluon dict, H2O list or LAMA text) is stored as failed. It rejects
+   all 10 old cmc records and none of the 950 stored ok records; `tests/test_checks.py`.
+3. Noise measurement prepared: `noise` in both configs, unit key `rep` (own hashes and records, kept out of every main
+   table by `exp02.records`), `run.py --noise`, `make exp02-noise` and `make exp06-noise` (D and E on pol and credit-g
+   twice more; `ag_best`, `lama`, `h2o` likewise), `afe.analysis.noise` (in `make aggregate`) and two article tables.
+   Until it is in, the text for `C`, `D`, `D0`, `E` and exp06 uses sign counts only.
+4. exp02 article tables anchored on `A_def` (`B_def` over `A_def`, `D` over `A_def`, `D` over `D0`, `E` over `D0`, `B` over
+   `B2`); `B` over `A` and `D` over `A` moved to the `_r13` single-model table.
+5. The transform map is built by `src/afe/analysis/transform_map_build.py` (run by `make article`; no hand edits remain,
+   the three earlier corrections are in the definitions) and drawn as two PNGs, AutoML tools and feature generators, with
+   colour as the only status; the confirmation type is in the evidence CSV.
+6. exp07 (CatBoost `max_ctr_complexity=1` against the default, protocol change A4 approved 2026-11-17) written, not run:
+   `experiments/exp07_ctr_ablation` (config, `run.py` planning 680 fit units from the exp04 plan, `worker_ctr.py`,
+   README), `afe.analysis.exp07` (effects of the arm over `base` with both settings and their paired difference, fold
+   bootstrap CIs, counts), `make exp07`, test on a toy table. It needs the exp04 generator caches and runs after the noise
+   measurement. (Done 2026-11-18.)
+7. skrub `TableVectorizer` arm (`skrub_tv`, own env `envs/skrub`, exp04, probe table, map column, claims): done
+   2026-11-18.
+8. The noise measurement runs on one machine that was not completely idle: short commands (tests, table builds, seconds
+   of one core) ran during it.
+
 ## 2026-11-16 to 2026-11-17: one Medium article, single-model and LAMA diagnostics, transform map
 
 Done without compute:
@@ -57,13 +112,14 @@ tables `exp02_arm_means.csv`, `exp02_arm_wall.csv`, `exp02_rounds.csv`, `exp06_a
 (`n_better`, sign only), `*_clear_better` and `*_clear_worse` entries, a `*_median` entry with `role: secondary`,
 `s2_n_datasets_*`/`s6_n_datasets_*` (the M; multiclass has 2 datasets in exp06), per-dataset entries for the
 diagnostics and the README numbers, figure claims pointing at the article PNG and its CSV. `make claims`: no value
-differs from approved (none approved). `make article` renders 19 PNGs, each with an alt text.
+differs from approved (none approved). `make article` renders 19 PNGs (20 after the map split), each with an alt text.
 
 Transform map (done): `results/tidy/transform_map.csv` (9 families by 8 tools, full cells with refs and status),
-`transform_map_evidence.csv` (72 rows: 50 confirmed by a run, 22 by source, 0 unconfirmed), PNG
-`results/figures/article/transform_map.png` (`make article`), probes `experiments/exp03_lama_probe/probe_dates_text.py`
-and `experiments/exp06_automl_end_to_end/probe_h2o.py`; 18 claims `s2_map_*`, `s2_lama_*`, `s2_h2o_*`. The two CSVs
-were written once by a scratch script, they are not regenerated by make; only the PNG is. "Not done" cells are
+`transform_map_evidence.csv` (72 rows: 50 confirmed by a run, 22 by source, 0 unconfirmed), built by
+`src/afe/analysis/transform_map_build.py` (run by `make article`; it resolves source lines in the installed tool envs)
+and drawn as two PNGs, `transform_map_automl.png` and `transform_map_generators.png` (colour = done, partial, not done;
+the confirmation type is in the evidence CSV), probes `experiments/exp03_lama_probe/probe_dates_text.py` and
+`experiments/exp06_automl_end_to_end/probe_h2o.py`; 18 claims `s2_map_*`, `s2_lama_*`, `s2_h2o_*`. "Not done" cells are
 confirmed by the absence of code in the cited place or by a probe, not by a positive line.
 
 ## 2026-11-16: exp06 complete (200 of 200 ok); phase 6 pieces written

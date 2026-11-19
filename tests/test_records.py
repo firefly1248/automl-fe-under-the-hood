@@ -17,12 +17,12 @@ from afe.run.unit import code_hash
 arm_code = cache(cli.arm_code)
 
 
-RUNNERS = {"exp02_autogluon_ablation", "exp06_automl_end_to_end"}  # standalone runners with their own CODE
+RUNNERS = {"exp02_autogluon_ablation", "exp06_automl_end_to_end", "exp07_ctr_ablation"}  # standalone runners with their own CODE
 
 
 @cache
 def runner_code(exp: str) -> str | dict:
-    """The CODE of a standalone runner (exp02: one hash; exp06: one per arm)."""
+    """The CODE of a standalone runner (exp02 and exp07: one hash; exp06: one per arm)."""
     spec = importlib.util.spec_from_file_location(exp, ROOT / "experiments" / exp / "run.py")
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)

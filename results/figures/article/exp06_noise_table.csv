@@ -1,0 +1,5 @@
+"contrast, dataset",run 0,run 1,run 2,"spread, points",fold CI of run 0,runs inside CI
+"lama-ag, credit-g",-4.2%,-4.1%,-4.1%,0.0,-5.9% to -2.2%,yes
+"lama-ag, pol",-86.4%,-86.3%,-86.5%,0.2,-96.4% to -77.5%,yes
+"h2o-ag, credit-g",-13.1%,-4.2%,-3.4%,9.7,-26.9% to -2.1%,yes
+"h2o-ag, pol",-7.6%,-11.6%,-6.7%,5.0,-19.9% to +5.2%,yes

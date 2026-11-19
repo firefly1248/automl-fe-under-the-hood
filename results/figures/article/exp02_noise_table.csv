@@ -1,0 +1,9 @@
+"contrast, dataset",run 0,run 1,run 2,"spread, points",fold CI of run 0,runs inside CI
+"D-A_def, credit-g",+7.1%,+7.1%,+7.1%,0.0,+5.1% to +10.2%,yes
+"D-A_def, pol",+39.4%,+39.7%,+39.6%,0.3,+37.3% to +40.8%,yes
+"D-A, credit-g",+2.4%,+2.4%,+2.4%,0.0,+1.5% to +3.2%,yes
+"D-A, pol",+63.2%,+63.3%,+63.3%,0.2,+61.9% to +64.4%,yes
+"D-D0, credit-g",+0.0%,+0.0%,+0.0%,0.0,+0.0% to +0.0%,yes
+"D-D0, pol",+17.5%,+17.9%,+17.8%,0.4,+16.8% to +18.3%,yes
+"E-D0, credit-g",-0.5%,-0.5%,-0.5%,0.0,-0.8% to -0.2%,yes
+"E-D0, pol",+1.3%,+1.2%,+1.3%,0.1,-0.5% to +2.8%,yes

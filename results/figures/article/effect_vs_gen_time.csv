@@ -15,6 +15,8 @@ Amazon_employee_access,binary,mljar_golden,catboost,auc_diff,,
 Amazon_employee_access,binary,mljar_golden,lgbm,auc_diff,,
 Amazon_employee_access,binary,openfe,catboost,auc_diff,-0.0043707867825082,16.2705
 Amazon_employee_access,binary,openfe,lgbm,auc_diff,0.0120440119823034,16.2705
+Amazon_employee_access,binary,skrub_tv,catboost,auc_diff,-0.0297998810085345,1.0430000000000001
+Amazon_employee_access,binary,skrub_tv,lgbm,auc_diff,0.017599607477014,1.0430000000000001
 Bike_Sharing_Demand,regression,ag_default,catboost,rmse_rel,0.0031383290791152,0.014
 Bike_Sharing_Demand,regression,ag_default,lgbm,rmse_rel,0.000874131357471,0.014
 Bike_Sharing_Demand,regression,ag_tabprep,catboost,rmse_rel,-0.0654838025409705,0.0945
@@ -31,6 +33,8 @@ Bike_Sharing_Demand,regression,mljar_golden,catboost,rmse_rel,-0.027215062148545
 Bike_Sharing_Demand,regression,mljar_golden,lgbm,rmse_rel,-0.0403761455723614,0.0875
 Bike_Sharing_Demand,regression,openfe,catboost,rmse_rel,-0.0115327120402658,29.741500000000002
 Bike_Sharing_Demand,regression,openfe,lgbm,rmse_rel,-0.0543228255636238,29.741500000000002
+Bike_Sharing_Demand,regression,skrub_tv,catboost,rmse_rel,0.0021112050872636,0.0295
+Bike_Sharing_Demand,regression,skrub_tv,lgbm,rmse_rel,-0.0016166165167764,0.0295
 Brazilian_houses,regression,ag_default,catboost,rmse_rel,0.3959298696014132,0.013
 Brazilian_houses,regression,ag_default,lgbm,rmse_rel,0.0013722897073828,0.013
 Brazilian_houses,regression,ag_tabprep,catboost,rmse_rel,0.6925921565661224,0.187
@@ -47,6 +51,8 @@ Brazilian_houses,regression,mljar_golden,catboost,rmse_rel,0.4621732778042027,0.
 Brazilian_houses,regression,mljar_golden,lgbm,rmse_rel,-0.0168701346504,0.125
 Brazilian_houses,regression,openfe,catboost,rmse_rel,0.3210865344747044,13.399999999999999
 Brazilian_houses,regression,openfe,lgbm,rmse_rel,0.17239500782269,13.399999999999999
+Brazilian_houses,regression,skrub_tv,catboost,rmse_rel,0.2066750779938194,0.0315
+Brazilian_houses,regression,skrub_tv,lgbm,rmse_rel,-0.0578136083767873,0.0315
 Click_prediction_small,binary,ag_default,catboost,auc_diff,-0.0088542137103322,0.04
 Click_prediction_small,binary,ag_default,lgbm,auc_diff,-0.01765249990957,0.04
 Click_prediction_small,binary,ag_tabprep,catboost,auc_diff,-0.0062222933507656,0.374
@@ -63,6 +69,8 @@ Click_prediction_small,binary,mljar_golden,catboost,auc_diff,-0.000818370063235,
 Click_prediction_small,binary,mljar_golden,lgbm,auc_diff,-0.0007576933516708,0.127
 Click_prediction_small,binary,openfe,catboost,auc_diff,-0.0240608289700472,51.6715
 Click_prediction_small,binary,openfe,lgbm,auc_diff,-0.0226561829606201,51.6715
+Click_prediction_small,binary,skrub_tv,catboost,auc_diff,-0.0147288360616887,1.183
+Click_prediction_small,binary,skrub_tv,lgbm,auc_diff,-0.0253198421571262,1.183
 GesturePhaseSegmentationProcessed,multiclass,ag_default,catboost,logloss_rel,0.0,0.0175
 GesturePhaseSegmentationProcessed,multiclass,ag_default,lgbm,logloss_rel,0.0,0.0175
 GesturePhaseSegmentationProcessed,multiclass,ag_tabprep,catboost,logloss_rel,0.0344917254884187,0.154
@@ -79,6 +87,8 @@ GesturePhaseSegmentationProcessed,multiclass,mljar_golden,catboost,logloss_rel,-
 GesturePhaseSegmentationProcessed,multiclass,mljar_golden,lgbm,logloss_rel,-0.0021395513397765,5.0625
 GesturePhaseSegmentationProcessed,multiclass,openfe,catboost,logloss_rel,0.0314614263567974,110.61250000000001
 GesturePhaseSegmentationProcessed,multiclass,openfe,lgbm,logloss_rel,0.0644720653088777,110.61250000000001
+GesturePhaseSegmentationProcessed,multiclass,skrub_tv,catboost,logloss_rel,0.0,0.0315
+GesturePhaseSegmentationProcessed,multiclass,skrub_tv,lgbm,logloss_rel,7.567119517060865e-06,0.0315
 Moneyball,regression,ag_default,catboost,rmse_rel,-0.0034577910232566,0.011
 Moneyball,regression,ag_default,lgbm,rmse_rel,-0.0043097122356986,0.011
 Moneyball,regression,ag_tabprep,catboost,rmse_rel,-0.0101467113254161,0.1265
@@ -95,6 +105,8 @@ Moneyball,regression,mljar_golden,catboost,rmse_rel,0.0164971069256996,0.08
 Moneyball,regression,mljar_golden,lgbm,rmse_rel,0.0325432858105249,0.08
 Moneyball,regression,openfe,catboost,rmse_rel,-0.0773187605689174,8.5155
 Moneyball,regression,openfe,lgbm,rmse_rel,0.0207576163808717,8.5155
+Moneyball,regression,skrub_tv,catboost,rmse_rel,-0.0071955625079866,0.031
+Moneyball,regression,skrub_tv,lgbm,rmse_rel,-0.0028181266063118,0.031
 OnlineNewsPopularity,regression,ag_default,catboost,rmse_rel,0.0,0.05
 OnlineNewsPopularity,regression,ag_default,lgbm,rmse_rel,0.0,0.05
 OnlineNewsPopularity,regression,ag_tabprep,catboost,rmse_rel,-0.0025798700253762,0.293
@@ -111,6 +123,8 @@ OnlineNewsPopularity,regression,mljar_golden,catboost,rmse_rel,0.000844246639913
 OnlineNewsPopularity,regression,mljar_golden,lgbm,rmse_rel,-0.0012322544148737,7.058
 OnlineNewsPopularity,regression,openfe,catboost,rmse_rel,-0.0011698267015364,255.823
 OnlineNewsPopularity,regression,openfe,lgbm,rmse_rel,-0.0023199034501858,255.823
+OnlineNewsPopularity,regression,skrub_tv,catboost,rmse_rel,0.0,0.08549999999999999
+OnlineNewsPopularity,regression,skrub_tv,lgbm,rmse_rel,-0.0001346429248177,0.08549999999999999
 abalone,regression,ag_default,catboost,rmse_rel,-0.0027455637255429,0.009
 abalone,regression,ag_default,lgbm,rmse_rel,0.0,0.009
 abalone,regression,ag_tabprep,catboost,rmse_rel,0.0350471133281397,0.104
@@ -127,6 +141,8 @@ abalone,regression,mljar_golden,catboost,rmse_rel,0.0091782678891891,0.077
 abalone,regression,mljar_golden,lgbm,rmse_rel,0.01274453573282,0.077
 abalone,regression,openfe,catboost,rmse_rel,0.0498672746675125,5.875500000000001
 abalone,regression,openfe,lgbm,rmse_rel,0.0347523198803731,5.875500000000001
+abalone,regression,skrub_tv,catboost,rmse_rel,-0.0021369792355678,0.017
+abalone,regression,skrub_tv,lgbm,rmse_rel,0.0004936294986037,0.017
 ada,binary,ag_default,catboost,auc_diff,0.0,0.016
 ada,binary,ag_default,lgbm,auc_diff,0.0,0.016
 ada,binary,ag_tabprep,catboost,auc_diff,-0.0082255753216635,0.03
@@ -143,6 +159,8 @@ ada,binary,mljar_golden,catboost,auc_diff,0.001039489322656,7.7295
 ada,binary,mljar_golden,lgbm,auc_diff,0.0001589558404839,7.7295
 ada,binary,openfe,catboost,auc_diff,-0.0006138549318462,72.986
 ada,binary,openfe,lgbm,auc_diff,-0.0033428420790789,72.986
+ada,binary,skrub_tv,catboost,auc_diff,0.0,0.0385
+ada,binary,skrub_tv,lgbm,auc_diff,0.0,0.0385
 adult,binary,ag_default,catboost,auc_diff,-0.0011103136833403,0.031
 adult,binary,ag_default,lgbm,auc_diff,-1.9176592911396284e-06,0.031
 adult,binary,ag_tabprep,catboost,auc_diff,-0.0028206159315707,0.377
@@ -159,6 +177,8 @@ adult,binary,mljar_golden,catboost,auc_diff,0.0001301834019129,0.1835
 adult,binary,mljar_golden,lgbm,auc_diff,-0.0002584030633848,0.1835
 adult,binary,openfe,catboost,auc_diff,0.0007296536585412,84.4225
 adult,binary,openfe,lgbm,auc_diff,-0.0080183623385501,84.4225
+adult,binary,skrub_tv,catboost,auc_diff,-0.0010133370032626,0.314
+adult,binary,skrub_tv,lgbm,auc_diff,-0.0004044920847047,0.314
 airfoil_self_noise,regression,ag_default,catboost,rmse_rel,0.0,0.005
 airfoil_self_noise,regression,ag_default,lgbm,rmse_rel,0.0,0.005
 airfoil_self_noise,regression,ag_tabprep,catboost,rmse_rel,-0.0073608647704987,0.033
@@ -175,6 +195,8 @@ airfoil_self_noise,regression,mljar_golden,catboost,rmse_rel,-0.0026964569650751
 airfoil_self_noise,regression,mljar_golden,lgbm,rmse_rel,0.0008827668575808,0.0395
 airfoil_self_noise,regression,openfe,catboost,rmse_rel,-0.0216768861371257,5.2715
 airfoil_self_noise,regression,openfe,lgbm,rmse_rel,0.0281092086759477,5.2715
+airfoil_self_noise,regression,skrub_tv,catboost,rmse_rel,0.0,0.007
+airfoil_self_noise,regression,skrub_tv,lgbm,rmse_rel,0.0,0.007
 albert,binary,ag_default,catboost,auc_diff,-0.0012670648593071,0.0435
 albert,binary,ag_default,lgbm,auc_diff,1.150424047136056e-05,0.0435
 albert,binary,ag_tabprep,catboost,auc_diff,0.0009454551891953,0.96
@@ -191,6 +213,8 @@ albert,binary,mljar_golden,catboost,auc_diff,-0.0003080929475496,2.1079999999999
 albert,binary,mljar_golden,lgbm,auc_diff,-0.0004129615123779,2.1079999999999997
 albert,binary,openfe,catboost,auc_diff,0.0020031763854096,240.438
 albert,binary,openfe,lgbm,auc_diff,-0.0120057880915349,240.438
+albert,binary,skrub_tv,catboost,auc_diff,0.0002493441560615,0.1135
+albert,binary,skrub_tv,lgbm,auc_diff,0.0012737470780164,0.1135
 auction_verification,regression,ag_default,catboost,rmse_rel,0.493691882337856,0.009
 auction_verification,regression,ag_default,lgbm,rmse_rel,0.0,0.009
 auction_verification,regression,ag_tabprep,catboost,rmse_rel,-1.2406414043761465,0.0205
@@ -207,6 +231,8 @@ auction_verification,regression,mljar_golden,catboost,rmse_rel,-0.22717644678629
 auction_verification,regression,mljar_golden,lgbm,rmse_rel,-0.3618431866625266,0.0365
 auction_verification,regression,openfe,catboost,rmse_rel,0.3792921808326479,5.704
 auction_verification,regression,openfe,lgbm,rmse_rel,-1.151155481594852,5.704
+auction_verification,regression,skrub_tv,catboost,rmse_rel,0.511878936366594,0.018
+auction_verification,regression,skrub_tv,lgbm,rmse_rel,-0.1356897105374069,0.018
 bank-marketing,binary,ag_default,catboost,auc_diff,-0.0009445506970381,0.032
 bank-marketing,binary,ag_default,lgbm,auc_diff,0.0,0.032
 bank-marketing,binary,ag_tabprep,catboost,auc_diff,-0.0067676313404864,0.40900000000000003
@@ -223,6 +249,8 @@ bank-marketing,binary,mljar_golden,catboost,auc_diff,-0.0003290344694344,0.244
 bank-marketing,binary,mljar_golden,lgbm,auc_diff,-0.0012602000125314,0.244
 bank-marketing,binary,openfe,catboost,auc_diff,0.0021294062471947,73.04750000000001
 bank-marketing,binary,openfe,lgbm,auc_diff,-0.0014766853438784,73.04750000000001
+bank-marketing,binary,skrub_tv,catboost,auc_diff,0.0008657605647598,0.081
+bank-marketing,binary,skrub_tv,lgbm,auc_diff,0.0017779697239985,0.081
 banknote-authentication,binary,ag_default,catboost,auc_diff,0.0,0.0045000000000000005
 banknote-authentication,binary,ag_default,lgbm,auc_diff,0.0,0.0045000000000000005
 banknote-authentication,binary,ag_tabprep,catboost,auc_diff,3.760707619249182e-05,0.0175
@@ -239,6 +267,8 @@ banknote-authentication,binary,mljar_golden,catboost,auc_diff,2.1429336761968895
 banknote-authentication,binary,mljar_golden,lgbm,auc_diff,0.0002680076920039,0.052
 banknote-authentication,binary,openfe,catboost,auc_diff,3.760707619249182e-05,4.163
 banknote-authentication,binary,openfe,lgbm,auc_diff,2.932435556901591e-05,4.163
+banknote-authentication,binary,skrub_tv,catboost,auc_diff,0.0,0.006
+banknote-authentication,binary,skrub_tv,lgbm,auc_diff,0.0,0.006
 churn,binary,ag_default,catboost,auc_diff,-0.0007665953019543,0.012
 churn,binary,ag_default,lgbm,auc_diff,0.0013445691922591,0.012
 churn,binary,ag_tabprep,catboost,auc_diff,0.0021033988925912,0.181
@@ -255,6 +285,8 @@ churn,binary,mljar_golden,catboost,auc_diff,-6.056016971667244e-05,0.897
 churn,binary,mljar_golden,lgbm,auc_diff,0.0011309936488717,0.897
 churn,binary,openfe,catboost,auc_diff,0.0045332604197334,15.097999999999999
 churn,binary,openfe,lgbm,auc_diff,0.0004232990449677,15.097999999999999
+churn,binary,skrub_tv,catboost,auc_diff,-0.0027014623974034,0.0315
+churn,binary,skrub_tv,lgbm,auc_diff,-0.0051817038091466,0.0315
 cmc,multiclass,ag_default,catboost,logloss_rel,0.0069853387910493,0.011
 cmc,multiclass,ag_default,lgbm,logloss_rel,0.0,0.011
 cmc,multiclass,ag_tabprep,catboost,logloss_rel,0.001030453963157,0.032
@@ -271,6 +303,8 @@ cmc,multiclass,mljar_golden,catboost,logloss_rel,0.0122392916486317,0.017
 cmc,multiclass,mljar_golden,lgbm,logloss_rel,-0.0074158514010991,0.017
 cmc,multiclass,openfe,catboost,logloss_rel,0.0082845839543803,5.854
 cmc,multiclass,openfe,lgbm,logloss_rel,-0.016630828360812,5.854
+cmc,multiclass,skrub_tv,catboost,logloss_rel,-0.0010952209338247,0.0235
+cmc,multiclass,skrub_tv,lgbm,logloss_rel,-6.920472463177686e-06,0.0235
 colleges,regression,ag_default,catboost,rmse_rel,-0.0030886491864421,0.026
 colleges,regression,ag_default,lgbm,rmse_rel,-0.0022634673687695,0.026
 colleges,regression,ag_tabprep,catboost,rmse_rel,-0.0005221636721745,0.261
@@ -287,6 +321,8 @@ colleges,regression,mljar_golden,catboost,rmse_rel,-0.0007135110608145,1.662
 colleges,regression,mljar_golden,lgbm,rmse_rel,-0.0013143214145565,1.662
 colleges,regression,openfe,catboost,rmse_rel,-0.0330903072425357,70.847
 colleges,regression,openfe,lgbm,rmse_rel,-0.0187399491151351,70.847
+colleges,regression,skrub_tv,catboost,rmse_rel,-0.038121580683693,0.2385
+colleges,regression,skrub_tv,lgbm,rmse_rel,-0.0263861590612124,0.2385
 concrete_compressive_strength,regression,ag_default,catboost,rmse_rel,0.0,0.005
 concrete_compressive_strength,regression,ag_default,lgbm,rmse_rel,0.0,0.005
 concrete_compressive_strength,regression,ag_tabprep,catboost,rmse_rel,-0.0065626464759431,0.1115
@@ -303,6 +339,8 @@ concrete_compressive_strength,regression,mljar_golden,catboost,rmse_rel,-0.02934
 concrete_compressive_strength,regression,mljar_golden,lgbm,rmse_rel,-0.045619210085596,0.08
 concrete_compressive_strength,regression,openfe,catboost,rmse_rel,-0.0315422980058887,5.0655
 concrete_compressive_strength,regression,openfe,lgbm,rmse_rel,-0.030853523210616,5.0655
+concrete_compressive_strength,regression,skrub_tv,catboost,rmse_rel,0.0,0.009
+concrete_compressive_strength,regression,skrub_tv,lgbm,rmse_rel,-2.5781380324221937e-05,0.009
 connect-4,multiclass,ag_default,lgbm,logloss_rel,0.0,0.0845
 connect-4,multiclass,ag_tabprep,lgbm,logloss_rel,-0.045642575578612,1.516
 connect-4,multiclass,ag_tabprep_keepcat,lgbm,logloss_rel,-0.0404295823538536,1.516
@@ -311,6 +349,7 @@ connect-4,multiclass,lama_adv,lgbm,logloss_rel,-0.056662667341929,9.5435
 connect-4,multiclass,manual_baseline,lgbm,logloss_rel,0.0147851858255445,0.3225
 connect-4,multiclass,mljar_golden,lgbm,logloss_rel,,
 connect-4,multiclass,openfe,lgbm,logloss_rel,0.0820875591526514,635.4325
+connect-4,multiclass,skrub_tv,lgbm,logloss_rel,0.0462173167114418,0.2835
 credit-g,binary,ag_default,catboost,auc_diff,0.0226309523809523,0.017
 credit-g,binary,ag_default,lgbm,auc_diff,0.0006071428571428,0.017
 credit-g,binary,ag_tabprep,catboost,auc_diff,0.0202142857142857,0.1225
@@ -327,6 +366,8 @@ credit-g,binary,mljar_golden,catboost,auc_diff,0.00825,0.14100000000000001
 credit-g,binary,mljar_golden,lgbm,auc_diff,-0.0038095238095239,0.14100000000000001
 credit-g,binary,openfe,catboost,auc_diff,0.0117261904761905,9.6745
 credit-g,binary,openfe,lgbm,auc_diff,0.0026964285714285,9.6745
+credit-g,binary,skrub_tv,catboost,auc_diff,0.023,0.038
+credit-g,binary,skrub_tv,lgbm,auc_diff,0.0035119047619047,0.038
 default-of-credit-card-clients,binary,ag_default,catboost,auc_diff,-0.0008407559211266,0.0155
 default-of-credit-card-clients,binary,ag_default,lgbm,auc_diff,0.0,0.0155
 default-of-credit-card-clients,binary,ag_tabprep,catboost,auc_diff,0.0023990031665035,0.191
@@ -343,6 +384,8 @@ default-of-credit-card-clients,binary,mljar_golden,catboost,auc_diff,-0.00033063
 default-of-credit-card-clients,binary,mljar_golden,lgbm,auc_diff,0.0011813381447473,1.8815
 default-of-credit-card-clients,binary,openfe,catboost,auc_diff,0.0031918995008227,56.914
 default-of-credit-card-clients,binary,openfe,lgbm,auc_diff,-0.0038994649478454,56.914
+default-of-credit-card-clients,binary,skrub_tv,catboost,auc_diff,-0.0008407559211266,0.031
+default-of-credit-card-clients,binary,skrub_tv,lgbm,auc_diff,0.0,0.031
 diamonds,regression,ag_default,catboost,rmse_rel,-0.0039933132813392,0.024
 diamonds,regression,ag_default,lgbm,rmse_rel,1.1531185757334534e-06,0.024
 diamonds,regression,ag_tabprep,catboost,rmse_rel,-0.1582017117849234,0.1785
@@ -359,6 +402,8 @@ diamonds,regression,mljar_golden,catboost,rmse_rel,-0.0017825441124052,0.0965
 diamonds,regression,mljar_golden,lgbm,rmse_rel,-0.0045681233083155,0.0965
 diamonds,regression,openfe,catboost,rmse_rel,0.0138402147961093,18.375999999999998
 diamonds,regression,openfe,lgbm,rmse_rel,0.0259584528509994,18.375999999999998
+diamonds,regression,skrub_tv,catboost,rmse_rel,-0.0138174422436564,0.042499999999999996
+diamonds,regression,skrub_tv,lgbm,rmse_rel,-0.003850844031232,0.042499999999999996
 elevators,regression,ag_default,catboost,rmse_rel,-0.0011749260172112,0.015
 elevators,regression,ag_default,lgbm,rmse_rel,-0.0004061161004958,0.015
 elevators,regression,ag_tabprep,catboost,rmse_rel,-0.0023347685686729,0.2295
@@ -375,6 +420,8 @@ elevators,regression,mljar_golden,catboost,rmse_rel,-0.0032732336304719,0.603
 elevators,regression,mljar_golden,lgbm,rmse_rel,-0.0064308455800634,0.603
 elevators,regression,openfe,catboost,rmse_rel,0.0025194279046286,70.3885
 elevators,regression,openfe,lgbm,rmse_rel,-0.0181064520484669,70.3885
+elevators,regression,skrub_tv,catboost,rmse_rel,0.0,0.02
+elevators,regression,skrub_tv,lgbm,rmse_rel,2.0329550825983215e-05,0.02
 eye_movements,binary,ag_default,catboost,auc_diff,0.0010844265887895,0.013
 eye_movements,binary,ag_default,lgbm,auc_diff,0.0,0.013
 eye_movements,binary,ag_tabprep,catboost,auc_diff,-0.0052353921310326,0.1485
@@ -391,6 +438,8 @@ eye_movements,binary,mljar_golden,catboost,auc_diff,0.0235178969961645,1.565
 eye_movements,binary,mljar_golden,lgbm,auc_diff,0.0155180369087488,1.565
 eye_movements,binary,openfe,catboost,auc_diff,0.0794410662656717,36.562
 eye_movements,binary,openfe,lgbm,auc_diff,0.015784589240009,36.562
+eye_movements,binary,skrub_tv,catboost,auc_diff,0.0010844265887895,0.032
+eye_movements,binary,skrub_tv,lgbm,auc_diff,-3.614597767431782e-06,0.032
 fifa,regression,ag_default,catboost,rmse_rel,-0.0149869084943576,0.017
 fifa,regression,ag_default,lgbm,rmse_rel,0.0005244123328962,0.017
 fifa,regression,ag_tabprep,catboost,rmse_rel,-0.0448080850591275,0.1775
@@ -407,6 +456,8 @@ fifa,regression,mljar_golden,catboost,rmse_rel,-0.0108666401069082,1.559
 fifa,regression,mljar_golden,lgbm,rmse_rel,-0.006868714137211,1.559
 fifa,regression,openfe,catboost,rmse_rel,-0.0279584331155281,169.26
 fifa,regression,openfe,lgbm,rmse_rel,-0.0053243461074598,169.26
+fifa,regression,skrub_tv,catboost,rmse_rel,-0.0033108216945935,0.11
+fifa,regression,skrub_tv,lgbm,rmse_rel,0.0117483985772591,0.11
 fps_benchmark,regression,ag_default,catboost,rmse_rel,0.5967126554160629,0.031
 fps_benchmark,regression,ag_default,lgbm,rmse_rel,-1.693681076804821e-07,0.031
 fps_benchmark,regression,ag_tabprep,catboost,rmse_rel,-1.1258828089385493,0.3545
@@ -423,6 +474,8 @@ fps_benchmark,regression,mljar_golden,catboost,rmse_rel,0.0257824245387492,1.462
 fps_benchmark,regression,mljar_golden,lgbm,rmse_rel,-0.1698604778331701,1.4625
 fps_benchmark,regression,openfe,catboost,rmse_rel,,
 fps_benchmark,regression,openfe,lgbm,rmse_rel,,
+fps_benchmark,regression,skrub_tv,catboost,rmse_rel,0.687676764982871,0.1035
+fps_benchmark,regression,skrub_tv,lgbm,rmse_rel,0.2449831553539745,0.1035
 house_16H,regression,ag_default,catboost,rmse_rel,0.0,0.019
 house_16H,regression,ag_default,lgbm,rmse_rel,0.0,0.019
 house_16H,regression,ag_tabprep,catboost,rmse_rel,0.0183116617376022,0.221
@@ -439,6 +492,8 @@ house_16H,regression,mljar_golden,catboost,rmse_rel,-0.0048189858186223,0.5705
 house_16H,regression,mljar_golden,lgbm,rmse_rel,-0.001169295439098,0.5705
 house_16H,regression,openfe,catboost,rmse_rel,0.0206506974639918,20.5775
 house_16H,regression,openfe,lgbm,rmse_rel,0.0335517512292399,20.5775
+house_16H,regression,skrub_tv,catboost,rmse_rel,0.0,0.022
+house_16H,regression,skrub_tv,lgbm,rmse_rel,-3.374880809767983e-07,0.022
 house_prices_nominal,regression,ag_default,catboost,rmse_rel,0.0167608627069556,0.0665
 house_prices_nominal,regression,ag_default,lgbm,rmse_rel,-0.0008762012482583,0.0665
 house_prices_nominal,regression,ag_tabprep,catboost,rmse_rel,0.0322775798052873,0.21
@@ -455,6 +510,8 @@ house_prices_nominal,regression,mljar_golden,catboost,rmse_rel,0.006212617531467
 house_prices_nominal,regression,mljar_golden,lgbm,rmse_rel,0.0169787064186257,1.583
 house_prices_nominal,regression,openfe,catboost,rmse_rel,0.0520927205652952,74.97149999999999
 house_prices_nominal,regression,openfe,lgbm,rmse_rel,0.0398429624480878,74.97149999999999
+house_prices_nominal,regression,skrub_tv,catboost,rmse_rel,-0.0216449660377236,0.13
+house_prices_nominal,regression,skrub_tv,lgbm,rmse_rel,-0.0028452268781694,0.13
 house_sales,regression,ag_default,catboost,rmse_rel,-0.0070656922012797,0.019
 house_sales,regression,ag_default,lgbm,rmse_rel,-6.157182724397065e-06,0.019
 house_sales,regression,ag_tabprep,catboost,rmse_rel,-0.0504030800196368,0.2235
@@ -471,6 +528,8 @@ house_sales,regression,mljar_golden,catboost,rmse_rel,-0.0027124226042338,0.8115
 house_sales,regression,mljar_golden,lgbm,rmse_rel,-0.0045936262308837,0.8115
 house_sales,regression,openfe,catboost,rmse_rel,-0.0038082887722897,94.906
 house_sales,regression,openfe,lgbm,rmse_rel,-0.0342965523575415,94.906
+house_sales,regression,skrub_tv,catboost,rmse_rel,-0.0101880333345306,0.0915
+house_sales,regression,skrub_tv,lgbm,rmse_rel,0.0137996821772414,0.0915
 kick,binary,ag_default,catboost,auc_diff,-0.0031355012175885,0.0655
 kick,binary,ag_default,lgbm,auc_diff,0.000516783706722,0.0655
 kick,binary,ag_tabprep,catboost,auc_diff,0.0068542562587421,1.167
@@ -487,6 +546,8 @@ kick,binary,mljar_golden,catboost,auc_diff,0.0018731138502652,1.0110000000000001
 kick,binary,mljar_golden,lgbm,auc_diff,0.0014195221561056,1.0110000000000001
 kick,binary,openfe,catboost,auc_diff,0.0109743142613266,338.1395
 kick,binary,openfe,lgbm,auc_diff,-0.0209185500751019,338.1395
+kick,binary,skrub_tv,catboost,auc_diff,-0.0045971182724109,1.385
+kick,binary,skrub_tv,lgbm,auc_diff,-0.0012526923392406,1.385
 kr-vs-kp,binary,ag_default,catboost,auc_diff,-2.6506767075828996e-05,0.015
 kr-vs-kp,binary,ag_default,lgbm,auc_diff,-3.632080102100588e-05,0.015
 kr-vs-kp,binary,ag_tabprep,catboost,auc_diff,-3.630047415192905e-05,0.029
@@ -503,6 +564,8 @@ kr-vs-kp,binary,mljar_golden,catboost,auc_diff,,
 kr-vs-kp,binary,mljar_golden,lgbm,auc_diff,,
 kr-vs-kp,binary,openfe,catboost,auc_diff,-2.893062578723793e-06,19.261000000000003
 kr-vs-kp,binary,openfe,lgbm,auc_diff,-0.0009293841669831,19.261000000000003
+kr-vs-kp,binary,skrub_tv,catboost,auc_diff,-1.4738290221916197e-05,0.0665
+kr-vs-kp,binary,skrub_tv,lgbm,auc_diff,9.33204149244915e-06,0.0665
 mfeat-fourier,multiclass,ag_default,catboost,logloss_rel,0.0,0.02
 mfeat-fourier,multiclass,ag_default,lgbm,logloss_rel,0.0,0.02
 mfeat-fourier,multiclass,ag_tabprep,catboost,logloss_rel,-0.0693454895019363,0.123
@@ -519,6 +582,8 @@ mfeat-fourier,multiclass,mljar_golden,catboost,logloss_rel,0.0112776599734099,20
 mfeat-fourier,multiclass,mljar_golden,lgbm,logloss_rel,0.0107691775477177,20.1445
 mfeat-fourier,multiclass,openfe,catboost,logloss_rel,0.0837192373339651,172.48399999999998
 mfeat-fourier,multiclass,openfe,lgbm,logloss_rel,0.0826697976584532,172.48399999999998
+mfeat-fourier,multiclass,skrub_tv,catboost,logloss_rel,0.0,0.056
+mfeat-fourier,multiclass,skrub_tv,lgbm,logloss_rel,0.0,0.056
 numerai28.6,binary,ag_default,catboost,auc_diff,0.0,0.0445
 numerai28.6,binary,ag_default,lgbm,auc_diff,0.0,0.0445
 numerai28.6,binary,ag_tabprep,catboost,auc_diff,-0.0003541723299349,0.47350000000000003
@@ -535,6 +600,8 @@ numerai28.6,binary,mljar_golden,catboost,auc_diff,0.0022388238113673,2.358500000
 numerai28.6,binary,mljar_golden,lgbm,auc_diff,0.0022851688976485,2.3585000000000003
 numerai28.6,binary,openfe,catboost,auc_diff,0.0003112356641254,55.335
 numerai28.6,binary,openfe,lgbm,auc_diff,0.0013287584711432,55.335
+numerai28.6,binary,skrub_tv,catboost,auc_diff,0.0,0.05
+numerai28.6,binary,skrub_tv,lgbm,auc_diff,0.0003777707392857,0.05
 okcupid-stem,multiclass,ag_default,catboost,logloss_rel,-0.0184570087094437,0.041
 okcupid-stem,multiclass,ag_default,lgbm,logloss_rel,-0.0019017132743058,0.041
 okcupid-stem,multiclass,ag_tabprep,catboost,logloss_rel,-0.0063550413378301,0.8925000000000001
@@ -551,6 +618,8 @@ okcupid-stem,multiclass,mljar_golden,catboost,logloss_rel,-0.0004394303306983,0.
 okcupid-stem,multiclass,mljar_golden,lgbm,logloss_rel,-0.0009933364173464,0.0375
 okcupid-stem,multiclass,openfe,catboost,logloss_rel,-0.0037269037300687,230.04250000000002
 okcupid-stem,multiclass,openfe,lgbm,logloss_rel,-0.0380316239959638,230.04250000000002
+okcupid-stem,multiclass,skrub_tv,catboost,logloss_rel,-0.001384677275951,1.86
+okcupid-stem,multiclass,skrub_tv,lgbm,logloss_rel,0.0122623744388921,1.86
 ozone-level-8hr,binary,ag_default,catboost,auc_diff,0.0,0.017
 ozone-level-8hr,binary,ag_default,lgbm,auc_diff,0.0,0.017
 ozone-level-8hr,binary,ag_tabprep,catboost,auc_diff,-0.0009483538751944,0.128
@@ -567,6 +636,8 @@ ozone-level-8hr,binary,mljar_golden,catboost,auc_diff,0.0026305796135909,17.223
 ozone-level-8hr,binary,mljar_golden,lgbm,auc_diff,0.003971852098601,17.223
 ozone-level-8hr,binary,openfe,catboost,auc_diff,0.0048032145236508,123.85300000000001
 ozone-level-8hr,binary,openfe,lgbm,auc_diff,0.016865714523651,123.85300000000001
+ozone-level-8hr,binary,skrub_tv,catboost,auc_diff,0.0,0.0535
+ozone-level-8hr,binary,skrub_tv,lgbm,auc_diff,-0.0001249999999999,0.0535
 pendigits,multiclass,ag_default,catboost,logloss_rel,0.0,0.01
 pendigits,multiclass,ag_default,lgbm,logloss_rel,0.0,0.01
 pendigits,multiclass,ag_tabprep,catboost,logloss_rel,,
@@ -583,6 +654,8 @@ pendigits,multiclass,mljar_golden,catboost,logloss_rel,-0.0695994032164968,1.331
 pendigits,multiclass,mljar_golden,lgbm,logloss_rel,0.0342915628283758,1.3315000000000001
 pendigits,multiclass,openfe,catboost,logloss_rel,0.0309810916743184,101.839
 pendigits,multiclass,openfe,lgbm,logloss_rel,0.162041086260511,101.839
+pendigits,multiclass,skrub_tv,catboost,logloss_rel,0.0,0.017
+pendigits,multiclass,skrub_tv,lgbm,logloss_rel,0.0,0.017
 phoneme,binary,ag_default,catboost,auc_diff,0.0,0.006
 phoneme,binary,ag_default,lgbm,auc_diff,0.0,0.006
 phoneme,binary,ag_tabprep,catboost,auc_diff,0.0023782846736404,0.032
@@ -599,6 +672,8 @@ phoneme,binary,mljar_golden,catboost,auc_diff,0.0018414666722831,0.0905
 phoneme,binary,mljar_golden,lgbm,auc_diff,0.0024618608863962,0.0905
 phoneme,binary,openfe,catboost,auc_diff,0.0052053328484125,4.8975
 phoneme,binary,openfe,lgbm,auc_diff,0.0038797663125628,4.8975
+phoneme,binary,skrub_tv,catboost,auc_diff,0.0,0.007
+phoneme,binary,skrub_tv,lgbm,auc_diff,0.0,0.007
 pol,regression,ag_default,catboost,rmse_rel,0.0,0.018
 pol,regression,ag_default,lgbm,rmse_rel,0.0,0.018
 pol,regression,ag_tabprep,catboost,rmse_rel,0.0193721342223819,0.2145
@@ -615,6 +690,8 @@ pol,regression,mljar_golden,catboost,rmse_rel,0.002736581194076,3.29600000000000
 pol,regression,mljar_golden,lgbm,rmse_rel,-0.0666936275026239,3.2960000000000003
 pol,regression,openfe,catboost,rmse_rel,0.080061779940051,130.905
 pol,regression,openfe,lgbm,rmse_rel,-0.0152621949847208,130.905
+pol,regression,skrub_tv,catboost,rmse_rel,0.0,0.0475
+pol,regression,skrub_tv,lgbm,rmse_rel,0.0,0.0475
 qsar-biodeg,binary,ag_default,catboost,auc_diff,-6.036217303817537e-05,0.011
 qsar-biodeg,binary,ag_default,lgbm,auc_diff,0.0,0.011
 qsar-biodeg,binary,ag_tabprep,catboost,auc_diff,0.0004315018809899,0.10200000000000001
@@ -631,6 +708,8 @@ qsar-biodeg,binary,mljar_golden,catboost,auc_diff,0.0017530442446848,5.084
 qsar-biodeg,binary,mljar_golden,lgbm,auc_diff,0.000589174535623,5.084
 qsar-biodeg,binary,openfe,catboost,auc_diff,-0.0001329037373722,29.072000000000003
 qsar-biodeg,binary,openfe,lgbm,auc_diff,0.0025751230001913,29.072000000000003
+qsar-biodeg,binary,skrub_tv,catboost,auc_diff,0.0,0.031
+qsar-biodeg,binary,skrub_tv,lgbm,auc_diff,0.0001002618428396,0.031
 satimage,multiclass,ag_default,catboost,logloss_rel,0.0,0.013
 satimage,multiclass,ag_default,lgbm,logloss_rel,0.0,0.013
 satimage,multiclass,ag_tabprep,catboost,logloss_rel,-0.0483112855047257,0.123
@@ -647,6 +726,8 @@ satimage,multiclass,mljar_golden,catboost,logloss_rel,-0.0351839976586831,5.5954
 satimage,multiclass,mljar_golden,lgbm,logloss_rel,-0.0278041849564151,5.5954999999999995
 satimage,multiclass,openfe,catboost,logloss_rel,-0.0055686798001662,424.176
 satimage,multiclass,openfe,lgbm,logloss_rel,-0.0077516827503125,424.176
+satimage,multiclass,skrub_tv,catboost,logloss_rel,0.0,0.032
+satimage,multiclass,skrub_tv,lgbm,logloss_rel,5.050147983552346e-11,0.032
 sick,binary,ag_default,catboost,auc_diff,-0.0001885109992055,0.015
 sick,binary,ag_default,lgbm,auc_diff,0.0,0.015
 sick,binary,ag_tabprep,catboost,auc_diff,-6.993380180708719e-05,0.095
@@ -663,6 +744,8 @@ sick,binary,mljar_golden,catboost,auc_diff,0.0002492829704252,0.1215
 sick,binary,mljar_golden,lgbm,auc_diff,-0.0001056278994017,0.1215
 sick,binary,openfe,catboost,auc_diff,,
 sick,binary,openfe,lgbm,auc_diff,,
+sick,binary,skrub_tv,catboost,auc_diff,0.0006568446498445,0.053
+sick,binary,skrub_tv,lgbm,auc_diff,0.0003869242022138,0.053
 socmob,regression,ag_default,catboost,rmse_rel,0.010931814531487,0.009
 socmob,regression,ag_default,lgbm,rmse_rel,0.0,0.009
 socmob,regression,ag_tabprep,catboost,rmse_rel,-0.2413731862526109,0.014
@@ -679,6 +762,8 @@ socmob,regression,mljar_golden,catboost,rmse_rel,,
 socmob,regression,mljar_golden,lgbm,rmse_rel,,
 socmob,regression,openfe,catboost,rmse_rel,-0.0031047996028122,4.083
 socmob,regression,openfe,lgbm,rmse_rel,0.0093170952315726,4.083
+socmob,regression,skrub_tv,catboost,rmse_rel,0.0935369049625896,0.021
+socmob,regression,skrub_tv,lgbm,rmse_rel,-0.0417902689091373,0.021
 space_ga,regression,ag_default,catboost,rmse_rel,0.0,0.006
 space_ga,regression,ag_default,lgbm,rmse_rel,0.0,0.006
 space_ga,regression,ag_tabprep,catboost,rmse_rel,0.0898024466421071,0.063
@@ -695,6 +780,8 @@ space_ga,regression,mljar_golden,catboost,rmse_rel,-0.0107935363014634,0.053
 space_ga,regression,mljar_golden,lgbm,rmse_rel,0.0032601154300235,0.053
 space_ga,regression,openfe,catboost,rmse_rel,0.0928101570389469,4.327
 space_ga,regression,openfe,lgbm,rmse_rel,0.0624451419795345,4.327
+space_ga,regression,skrub_tv,catboost,rmse_rel,0.0,0.008
+space_ga,regression,skrub_tv,lgbm,rmse_rel,-0.0012156876354898,0.008
 sylvine,binary,ag_default,catboost,auc_diff,0.0,0.0095
 sylvine,binary,ag_default,lgbm,auc_diff,0.0,0.0095
 sylvine,binary,ag_tabprep,catboost,auc_diff,0.00101427595053,0.135
@@ -711,6 +798,8 @@ sylvine,binary,mljar_golden,catboost,auc_diff,-0.0010722407588255,1.44
 sylvine,binary,mljar_golden,lgbm,auc_diff,0.0009769015842013,1.44
 sylvine,binary,openfe,catboost,auc_diff,0.0014164669936627,13.406500000000001
 sylvine,binary,openfe,lgbm,auc_diff,0.0055638147841188,13.406500000000001
+sylvine,binary,skrub_tv,catboost,auc_diff,0.0,0.019
+sylvine,binary,skrub_tv,lgbm,auc_diff,0.0,0.019
 texture,multiclass,ag_default,catboost,logloss_rel,-0.0090125123836808,0.0175
 texture,multiclass,ag_default,lgbm,logloss_rel,0.0,0.0175
 texture,multiclass,ag_tabprep,catboost,logloss_rel,,
@@ -727,6 +816,8 @@ texture,multiclass,mljar_golden,catboost,logloss_rel,0.2546877279838696,6.959
 texture,multiclass,mljar_golden,lgbm,logloss_rel,0.2102171354809268,6.959
 texture,multiclass,openfe,catboost,logloss_rel,0.8165915038526266,192.623
 texture,multiclass,openfe,lgbm,logloss_rel,0.6459585527476629,196.0105
+texture,multiclass,skrub_tv,catboost,logloss_rel,0.0,0.035
+texture,multiclass,skrub_tv,lgbm,logloss_rel,0.0017687841968708,0.035
 visualizing_soil,regression,ag_default,catboost,rmse_rel,0.0071793466575324,0.007
 visualizing_soil,regression,ag_default,lgbm,rmse_rel,0.0,0.007
 visualizing_soil,regression,ag_tabprep,catboost,rmse_rel,-1.1498155339544625,0.017
@@ -743,6 +834,8 @@ visualizing_soil,regression,mljar_golden,catboost,rmse_rel,-0.5818088982350331,0
 visualizing_soil,regression,mljar_golden,lgbm,rmse_rel,0.0125720167770949,0.024
 visualizing_soil,regression,openfe,catboost,rmse_rel,-0.3357114204419795,4.8075
 visualizing_soil,regression,openfe,lgbm,rmse_rel,0.0393416910681225,4.8075
+visualizing_soil,regression,skrub_tv,catboost,rmse_rel,0.0071793466575324,0.014
+visualizing_soil,regression,skrub_tv,lgbm,rmse_rel,0.0006003222292733,0.014
 wall-robot-navigation,multiclass,ag_default,catboost,logloss_rel,0.0,0.011
 wall-robot-navigation,multiclass,ag_default,lgbm,logloss_rel,0.0,0.011
 wall-robot-navigation,multiclass,ag_tabprep,catboost,logloss_rel,-0.6977573942415107,0.135
@@ -759,6 +852,8 @@ wall-robot-navigation,multiclass,mljar_golden,catboost,logloss_rel,-0.0515902111
 wall-robot-navigation,multiclass,mljar_golden,lgbm,logloss_rel,-0.1042968239813956,2.2800000000000002
 wall-robot-navigation,multiclass,openfe,catboost,logloss_rel,0.4236614846492132,71.52850000000001
 wall-robot-navigation,multiclass,openfe,lgbm,logloss_rel,0.6153379582303112,71.52850000000001
+wall-robot-navigation,multiclass,skrub_tv,catboost,logloss_rel,0.0,0.0225
+wall-robot-navigation,multiclass,skrub_tv,lgbm,logloss_rel,-0.0001896576884613,0.0225
 wilt,binary,ag_default,catboost,auc_diff,0.0,0.006
 wilt,binary,ag_default,lgbm,auc_diff,0.0,0.006
 wilt,binary,ag_tabprep,catboost,auc_diff,0.0023399056737112,0.036
@@ -775,6 +870,8 @@ wilt,binary,mljar_golden,catboost,auc_diff,0.0019273108039389,0.0885
 wilt,binary,mljar_golden,lgbm,auc_diff,0.002975141380165,0.0885
 wilt,binary,openfe,catboost,auc_diff,0.0026885980734242,4.4825
 wilt,binary,openfe,lgbm,auc_diff,0.0039469094873254,4.4825
+wilt,binary,skrub_tv,catboost,auc_diff,0.0,0.0075
+wilt,binary,skrub_tv,lgbm,auc_diff,4.8275393683128165e-05,0.0075
 yeast,multiclass,ag_default,catboost,logloss_rel,0.0,0.006500000000000001
 yeast,multiclass,ag_default,lgbm,logloss_rel,0.0,0.006500000000000001
 yeast,multiclass,ag_tabprep,catboost,logloss_rel,-0.0249946085178581,0.055
@@ -791,3 +888,5 @@ yeast,multiclass,mljar_golden,catboost,logloss_rel,0.010215415675982,0.197
 yeast,multiclass,mljar_golden,lgbm,logloss_rel,0.004748384899644,0.197
 yeast,multiclass,openfe,catboost,logloss_rel,,
 yeast,multiclass,openfe,lgbm,logloss_rel,,
+yeast,multiclass,skrub_tv,catboost,logloss_rel,0.0,0.009
+yeast,multiclass,skrub_tv,lgbm,logloss_rel,-0.0002943080319806,0.009

@@ -19,7 +19,7 @@ import yaml
 from afe.data import splits as S
 from afe.machine import machine_info
 from afe.paths import CACHE, ROOT
-from afe.run import limits, store
+from afe.run import checks, limits, store
 from afe.run.cli import PYTHONHASHSEED, git_sha
 from afe.run.unit import code_hash, digest, file_hash
 
@@ -35,19 +35,26 @@ CODE = {arm: code_hash(HERE / "worker.py", *(HERE / f for f in FILES.get(arm, ()
         for arm in CFG["arms"] + CFG["hp_groups"]["arms"]}
 
 
-def plan() -> list[dict]:
+def plan(noise: bool = False) -> list[dict]:
+    """The 720 main units; with `noise`, instead the repeat runs of `CFG["noise"]` (the same units plus a `rep` key,
+    so they get their own hash and records and never enter the main tables)."""
     proto = CFG["protocol"]
     protocol_hash = digest({**proto, "pythonhashseed": PYTHONHASHSEED})
     lock = file_hash(ROOT / "envs" / "autogluon" / "uv.lock")
+    n = CFG["noise"]
+    datasets = n["datasets"] if noise else CFG["datasets"]
     units = []
-    for key in CFG["datasets"]:
-        data_hash = json.loads((CACHE / "data" / f"{key}.json").read_text())["frame_hash"]
-        splits_hash = S.splits_hash(S.load(key))
-        for arm in CFG["arms"] + (CFG["hp_groups"]["arms"] if key in CFG["hp_groups"]["datasets"] else []):
-            for fold in range(proto["n_folds"]):
-                units.append({"exp": CFG["name"], "dataset": key, "repeat": proto["repeat"], "fold": fold,
-                              "arm": arm, "protocol_hash": protocol_hash, "data_hash": data_hash,
-                              "splits_hash": splits_hash, "env_lock_hash": lock, "code_hash": CODE[arm]})
+    for rep in n["reps"] if noise else [None]:
+        for key in datasets:
+            data_hash = json.loads((CACHE / "data" / f"{key}.json").read_text())["frame_hash"]
+            splits_hash = S.splits_hash(S.load(key))
+            arms = n["arms"] if noise else CFG["arms"] + (CFG["hp_groups"]["arms"] if key in CFG["hp_groups"]["datasets"] else [])
+            for arm in arms:
+                for fold in range(proto["n_folds"]):
+                    u = {"exp": CFG["name"], "dataset": key, "repeat": proto["repeat"], "fold": fold,
+                         "arm": arm, "protocol_hash": protocol_hash, "data_hash": data_hash,
+                         "splits_hash": splits_hash, "env_lock_hash": lock, "code_hash": CODE[arm]}
+                    units.append(u | {"rep": rep} if noise else u)
     return units
 
 
@@ -56,13 +63,14 @@ def main() -> None:
     ap.add_argument("--datasets", nargs="+")
     ap.add_argument("--arms", nargs="+")
     ap.add_argument("--retry-failed", action="store_true")
+    ap.add_argument("--noise", action="store_true", help="run the repeat runs of the run-to-run noise measurement")
     a = ap.parse_args()
     retry = store.RETRY_FAILED if a.retry_failed else set()
     num_cpus = psutil.cpu_count(logical=False) - 2
     mem_gb = round(psutil.virtual_memory().total / 2**30) - 4
     lim = {**CFG["limits"], "mem_gb": mem_gb, "time_limit": CFG["protocol"]["time_limit"], "num_cpus": num_cpus}
     base = {"git_sha": git_sha(), "machine": machine_info(), "jobs": 1}
-    units = [u for u in plan() if (not a.datasets or u["dataset"] in a.datasets)
+    units = [u for u in plan(a.noise) if (not a.datasets or u["dataset"] in a.datasets)
              and (not a.arms or u["arm"] in a.arms)]
     print(f"{CFG['name']}: {len(units)} units, num_cpus={num_cpus}, mem watchdog {mem_gb} GB", flush=True)
     counts: dict[str, int] = {}
@@ -89,6 +97,8 @@ def main() -> None:
             result = json.loads(out_path.read_text()) if res.status == "ok" and out_path.exists() else None
             if res.status == "ok" and result is None:
                 res.status, res.error = "failed", "child exited 0 without writing out.json"
+            if res.status == "ok" and (err := checks.verdict(result)):
+                res.status, res.error = "failed", err
         rec = {"hash": h, "stage": "fit", "unit": u, "status": res.status, "error": res.error,
                "wall_s": res.wall_s, "peak_rss_mb": res.peak_rss_mb, "watchdog": res.kill, "limits": lim,
                "started": started, "finished": datetime.now(timezone.utc).isoformat(), "result": result, **base}
