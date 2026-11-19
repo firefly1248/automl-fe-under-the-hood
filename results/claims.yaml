@@ -5039,6 +5039,71 @@
   ci:
   - 0.523232
   - 0.656887
+- id: s4_numcast_onehot255_catboost_fps_benchmark
+  section: 4
+  text: 'by-hand probe on fps_benchmark (probe_onehot.py, the same 10 splits as exp09), CatBoost downstream: CatBoost
+    with one_hot_max_size=255 on the base input (every categorical column has at most 27 levels, so all are one-hot
+    encoded and get no target statistics; the default is 2), relative reduction of the mean test RMSE over base,
+    as a fraction (reduction of the mean over the 10 splits, not the mean of the per-split reductions), with a paired
+    bootstrap 95% CI over the splits; the 10 splits are two repeats of 5-fold CV on the same rows and are treated
+    as independent, so the CI is narrower than the real uncertainty; the one parameter is the only difference from
+    the base fit, and the unchanged fit of split (0, 0) reproduces its exp04 record'
+  source: results/tidy/exp09_onehot_probe_effects.csv
+  query: arm=='onehot255'
+  stat: effect
+  tolerance: 0.001
+  value: 0.687828
+  approved_value: 0.687828
+  approved_git_sha: 933776a-dirty
+  ci:
+  - 0.65797
+  - 0.7139
+- id: s4_numcast_onehot255_catboost_fps_benchmark_rmse_min
+  section: 4
+  text: 'by-hand probe on fps_benchmark (probe_onehot.py, the same 10 splits as exp09), CatBoost downstream: smallest
+    per-split test RMSE in FPS (the target of fps_benchmark), CatBoost with one_hot_max_size=255 on the base input'
+  source: results/tidy/exp09_onehot_probe_effects.csv
+  query: arm=='onehot255'
+  stat: rmse_min
+  tolerance: 0.001
+  value: 0.251588
+  approved_value: 0.251588
+  approved_git_sha: 933776a-dirty
+- id: s4_numcast_onehot255_catboost_fps_benchmark_rmse_max
+  section: 4
+  text: 'by-hand probe on fps_benchmark (probe_onehot.py, the same 10 splits as exp09), CatBoost downstream: largest
+    per-split test RMSE in FPS (the target of fps_benchmark), CatBoost with one_hot_max_size=255 on the base input'
+  source: results/tidy/exp09_onehot_probe_effects.csv
+  query: arm=='onehot255'
+  stat: rmse_max
+  tolerance: 0.001
+  value: 0.319279
+  approved_value: 0.319279
+  approved_git_sha: 933776a-dirty
+- id: s4_numcast_onehot255_catboost_fps_benchmark_base_rmse_min
+  section: 4
+  text: 'by-hand probe on fps_benchmark (probe_onehot.py, the same 10 splits as exp09), CatBoost downstream: smallest
+    per-split test RMSE in FPS (the target of fps_benchmark), of the base fit (exp04 base records with CatBoost''s
+    one_hot_max_size left at its default of 2; the value is stored on the one-hot probe row, same splits)'
+  source: results/tidy/exp09_onehot_probe_effects.csv
+  query: arm=='onehot255'
+  stat: base_rmse_min
+  tolerance: 0.001
+  value: 0.670924
+  approved_value: 0.670924
+  approved_git_sha: 933776a-dirty
+- id: s4_numcast_onehot255_catboost_fps_benchmark_base_rmse_max
+  section: 4
+  text: 'by-hand probe on fps_benchmark (probe_onehot.py, the same 10 splits as exp09), CatBoost downstream: largest
+    per-split test RMSE in FPS (the target of fps_benchmark), of the base fit (exp04 base records with CatBoost''s
+    one_hot_max_size left at its default of 2; the value is stored on the one-hot probe row, same splits)'
+  source: results/tidy/exp09_onehot_probe_effects.csv
+  query: arm=='onehot255'
+  stat: base_rmse_max
+  tolerance: 0.001
+  value: 1.105125
+  approved_value: 1.105125
+  approved_git_sha: 933776a-dirty
 - id: s4_numcast_ag_default_lgbm_fps_benchmark
   section: 4
   text: 'ag_default over base, lgbm downstream, fps_benchmark: effect in the primary metric (AUC difference for

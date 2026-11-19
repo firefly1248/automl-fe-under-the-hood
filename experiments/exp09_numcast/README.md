@@ -10,7 +10,7 @@ categorical columns whose levels all parse as numbers cast to float, all-missing
 `make exp09` (exp04 protocol and limits, both repeats, both models, the five datasets: 100 generator and 200 fit units, all ok),
 `afe.analysis.exp09` (effects over `base`, same definition as `exp04_effects.csv`: AUC difference or relative reduction of the
 mean loss, paired bootstrap 95% CI over the 10 splits). Outputs: `results/tidy/exp09_columns.csv`, `exp09_dtypes.csv`,
-`exp09_ordered.csv`, `exp09_effects.csv`; article tables `exp09_types_table`, `numcast_table`; claims `s2_types_*`, `s4_numcast_*`.
+`exp09_ordered.csv`, `exp09_effects.csv`, `exp09_onehot_probe_effects.csv` (from the by-hand probe csv); article tables `exp09_types_table`, `numcast_table`; claims `s2_types_*`, `s4_numcast_*`.
 
 ## Two protocol artifacts found, fixed the same day
 
@@ -67,12 +67,12 @@ LightGBM:
   Brazilian_houses the numeric-like column `floor` gives +15.4 and the other three columns the rest, with wide CIs
   (RMSE varies from about 1,800 to 22,700 between folds).
 - Why `base_codes` gains on fps_benchmark and `base_numcast` does not (probe `probe_onehot.py`, same 10 splits, no make target,
-  `results/tidy/exp09_onehot_probe.csv`): CatBoost with `one_hot_max_size=255`, which one-hot encodes all nine multi-level string
-  columns (at most 27 levels) so CatBoost builds no target statistics on them, gives +68.8% RMSE over `base` (CI [65.8, 71.4]), the
+  `results/tidy/exp09_onehot_probe.csv`): CatBoost with `one_hot_max_size=255`, which one-hot encodes the six string columns with
+  more than two levels (3 to 27; the other three of the nine are two-level and one-hot by default) so CatBoost builds no target statistics on them, gives +68.8% RMSE over `base` (CI [65.8, 71.4]), the
   same as `skrub_tv` and above `base_codes` (+60.2%, CI [52.3, 65.7]; the control fit of split (0, 0) reproduces the exp04 record
   exactly). So the gap is CatBoost's default target statistics on those columns, which `base_codes` removes by turning them into
-  numbers and `base_numcast` keeps (it casts only 4 of the 14 columns, the number-like ones); why those statistics hurt this
-  dataset so much (base RMSE 0.67 to 1.11 per split, against 0.25 to 0.32 one-hot) was not isolated.
+  numbers and `base_numcast` keeps (it casts only 5 of the 14 columns: the 4 number-like ones and the all-missing `GpuNumberOfExecutionUnits`); why those statistics hurt this
+  dataset so much (base RMSE 0.67 to 1.11 per split, against 0.25 to 0.32 one-hot) was not isolated (the best iteration of every fit, one-hot or default, is within 25 of the cap of 3,000, so slower convergence with target statistics was not ruled out). The CIs treat the 10 splits (two repeats of 5-fold CV on the same rows) as independent, so they are too narrow; the sign is not in doubt (all ten per-split reductions are between 61.7 and 74.1%).
 - LightGBM shows the opposite on fps_benchmark and socmob: with native categorical handling `base` beats integer codes by 60 and
   14%, so the same type decision that helps CatBoost hurts LightGBM. On auction_verification numbers help both models.
 - Amazon_employee_access is the contrast: all nine columns are identifiers with number-like levels (up to 6,136); numbers cost

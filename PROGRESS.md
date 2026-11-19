@@ -1,5 +1,15 @@
 # Progress
 
+## 2026-11-19 (late night): probe claims approved, final README
+
+- Five claims `s4_numcast_onehot255_*` added for the fps_benchmark one-hot probe (effect over `base` with CI, and the per-split RMSE
+  range of the one-hot fits and of `base`). Their source is `results/tidy/exp09_onehot_probe_effects.csv`, written by `afe.analysis.exp09`
+  from the by-hand probe csv; the `base_codes` effect stays the registered `s4_numcast_base_codes_catboost_fps_benchmark`. Two rounds of
+  opus, sonnet and fable: round 1 corrected the effect wording (reduction of the mean RMSE, not the mean of per-split reductions), added
+  the split-independence caveat and the FPS unit, and fixed the README column count (six string columns with more than two levels, five
+  columns cast by `base_numcast`); round 2 was unanimous OK. All five are approved; the register has 498 claims.
+- Root `README.md` rewritten as the final version.
+
 ## 2026-11-19 (night): claims register closed by three-model consensus
 
 - On the author's instruction ("close claims.yaml by the consensus of three strong models"), all 493 claims have `approved_value` (figures:
@@ -26,8 +36,8 @@
 - Probe `experiments/exp09_numcast/probe_onehot.py` (by hand, `results/tidy/exp09_onehot_probe.csv`): CatBoost with
   `one_hot_max_size=255` on `base` over the same 10 fps_benchmark splits gives +68.8% RMSE (CI [65.8, 71.4]) against `base_codes`
   +60.2% (CI [52.3, 65.7]); control fit equals the exp04 record. The gap between `base_codes` and `base_numcast` is CatBoost's
-  target statistics on the nine multi-level string columns. Not added to `claims.yaml` (register under review); numbers live in the
-  exp09 README and the csv.
+  target statistics on the six string columns with more than two levels. Added to `claims.yaml` (`s4_numcast_onehot255_*`, five claims,
+  read from `results/tidy/exp09_onehot_probe_effects.csv`, written by `afe.analysis.exp09`); numbers also in the exp09 README.
 - exp02 and exp06 READMEs now state their data paths (raw frame to the tool, only `metrics` from `downstream.py`, hashes exclude the
   edited files, no rerun or rekey). One dependency found: the exp06 LAMA diagnostic table reads the exp04 base GBM cells, so its
   LightGBM reference on socmob changed (18.29 to 16.88); the exp06 README text was updated, the claims recompute from the table.

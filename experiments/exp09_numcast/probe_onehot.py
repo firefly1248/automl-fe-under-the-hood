@@ -6,7 +6,8 @@ the exp04 CatBoost fit (`afe.models.downstream`) with one change: `one_hot_max_s
 levels here) is one-hot encoded and CatBoost builds no target statistics (CTRs) on them; its default is 2, so only the two-level
 columns are one-hot and the others get CTRs. Control: the unchanged fit of split (0, 0) must equal the exp04 `base` record.
 Writes results/tidy/exp09_onehot_probe.csv: per split the test RMSE of `base` (exp04), `onehot255` (this probe) and `base_codes`
-(exp09), then the mean effect over `base` of the two arms with the paired bootstrap CI of `afe.analysis.cat_subgroup`.
+(exp09), and prints the reduction of the mean RMSE over `base` of the two arms with the paired bootstrap CI of `afe.analysis.cat_subgroup`
+(the claims read `exp09_onehot_probe_effects.csv`, written by `afe.analysis.exp09`).
 """
 
 from concurrent.futures import ProcessPoolExecutor
