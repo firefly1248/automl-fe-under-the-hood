@@ -15,8 +15,9 @@ clearly better or clearly worse (the fold CI excludes zero) is given in brackets
 The median over 4 datasets is a secondary column, not a result. Numbers live in
 `results/tidy/exp02_contrasts_summary.csv` and `results/claims.yaml` (`s2_*`; `*_median` entries are
 `role: secondary`). The fold CI covers the variation between folds only. For `C`, `D`, `D0` and `E` (time-limited ensembles) the variation
-between repeated runs of the same unit was measured on pol and credit-g (noise section below): at most 0.4 percentage
-points. On that basis the text may say "clearly better" or "clearly worse" (the fold CI excludes zero) for these contrasts,
+between repeated runs of the same unit was measured on pol and credit-g for `D` and `E` only (noise section below): at most 0.4
+percentage points; `C` and `D0` were not repeated (the noise runs reuse the run 0 of `D0`), and credit-g finishes before the time
+limit and repeats identically, so the bound rests on pol alone. On that basis the text may say "clearly better" or "clearly worse" (the fold CI excludes zero) for these contrasts,
 with the caveat that the spread is measured on 2 datasets of 12; the sign count stays the headline and the CI count is given
 next to it (decided by the author 2026-11-19). The tables and dots colour by the fold CI.
 
@@ -129,3 +130,14 @@ nothing about other datasets. `D` and `D0` turn dynamic stacking off so that bot
 AutoGluon's default would stop earlier. Timing is one machine with all cores and no other job (the run was paused
 for other jobs; each paused unit was recomputed from scratch). The bootstrap CIs come from one random
 stream over `CONTRASTS`, so a CI depends on the contrast's position: add new contrasts at the end.
+
+## Data paths and the categorical fixes of 2026-11-19
+
+The fixes (LightGBM takes ordered pandas categoricals; `ag_default` keeps category levels as strings) do not reach this
+experiment. `worker.py` and `worker_single.py` read the raw frame with `afe.data.loaders.load`, take the rows from
+`afe.data.splits` and fit AutoGluon's `TabularPredictor` on the raw columns, so the GBMs inside it see AutoGluon's own feature
+generation and category handling; the only generator code used is `prep_config` of `afe.generators.ag_tabprep` (the `_r13`
+group, passed to AutoGluon as `ag.prep_params`). Nothing goes through `BaseView`, the `ag_default` arm or the downstream fits of
+`afe.models.downstream`; the only import from that module is `metrics`, plain scoring that did not change. The unit hashes
+(`CODE` in `run.py`: the worker files, `ag_tabprep.py`, `loaders.py`, `splits.py`) exclude the edited files, and no record of
+this experiment was rerun or rekeyed (`tests/test_records.py`). Nothing in the exp02 analysis reads exp04 results.

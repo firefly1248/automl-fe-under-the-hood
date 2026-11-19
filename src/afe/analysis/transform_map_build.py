@@ -148,7 +148,7 @@ cell("lama", "categorical_encoding", "yes", "OOF TE, ordinal, freq",
       ("lama", LP + "transformers/categorical.py", "alphas: Sequence[float] = (0.5, 1.0, 2.0, 5.0, 10.0, 50.0, 250.0, 1000.0)")],
      [T + "exp03_fit_models.csv", T + "exp03_config.yaml", T + "exp05_te_delivery.csv"], "confirmed_run")
 cell("lama", "interactions", "yes", "top-4 cats, depth 3, TE",
-     "categorical intersections of the top top_intersections=4 categories (selector importance, else cardinality) up to max_intersection_depth=3, each target-encoded out of fold (oof__inter__(a__b__c)). Planted category x category table found in 30 of 30 units",
+     "categorical intersections of at most the top top_intersections=4 categorical columns (selector importance, else cardinality) up to max_intersection_depth=3, each target-encoded out of fold (oof__inter__(a__b__c)). Planted category x category table found in 30 of 30 units",
      [("lama", LP + "pipelines/features/base.py", "def get_categorical_intersections"), ("lama", LP + "pipelines/features/base.py", "def get_top_categories"),
       ("lama", LP + "pipelines/features/lgb_pipeline.py", "intersections = self.get_categorical_intersections(train)")],
      [T + "exp03_fit_models.csv", T + "exp05_planted.csv", T + "exp03_config.yaml"], "confirmed_run")

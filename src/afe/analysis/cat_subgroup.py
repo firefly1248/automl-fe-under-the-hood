@@ -1,8 +1,8 @@
 """skrub_tv and ag_default on the primary datasets that have categorical columns (2026-11-19).
 
-The median over all 50 datasets is dominated by numeric-only datasets where both arms leave the table unchanged (68% of
-the `skrub_tv` units are exactly 0), so the headline is a count on the datasets with at least one categorical column
-(`n_categorical > 0` in datasets.csv: 28 of the 50 primary ones), per arm and downstream model.
+The median over all 50 datasets is dominated by datasets where the arm changes nothing for the fitted model (`ag_default` on
+most LightGBM fits, numeric-only datasets for both arms with CatBoost), so the headline is a count on the datasets with at least one
+categorical column (`n_categorical > 0` in datasets.csv: 28 of the 50 primary ones), per arm and downstream model.
 
 `python -m afe.analysis.cat_subgroup` reads tidy/exp04.parquet and writes
 - tidy/exp04_cat_effects.csv: per arm, model and primary dataset (all 50), over the splits where the arm and base are both ok
@@ -10,7 +10,7 @@ the `skrub_tv` units are exactly 0), so the headline is a count on the datasets 
   relative log loss or RMSE reduction of the means for multiclass and regression, positive favours the arm) with a paired
   bootstrap 95% CI over the splits;
 - tidy/exp04_cat_summary.csv: per arm and model over the datasets with categorical columns, for `task` all and each task type:
-  `n_better` (sign of the mean), `n_clear_better` and `n_clear_worse` (the CI excludes zero), and the secondary medians
+  `n_better` (mean above zero by more than 1e-9), `n_equal` (mean within 1e-9 of zero: the fitted result is identical to base), `n_clear_better` and `n_clear_worse` (the CI excludes zero), and the secondary medians
   over those datasets and over all 50 (`median_cat`, `median_all`; per task type only, the units differ between types).
 One random stream over (arm, model, dataset) in sorted order: a CI depends on the position, append new arms at the end.
 """
@@ -22,6 +22,7 @@ from afe.paths import RESULTS
 
 ARMS = ["ag_default", "skrub_tv"]
 N_BOOT = 10_000
+TOL = 1e-9  # an effect this close to 0 is a tie (identical fitted result), not a win or a loss
 
 
 METRIC = {"binary": "auc", "multiclass": "logloss", "regression": "rmse"}
@@ -60,8 +61,8 @@ def summary(eff: pd.DataFrame) -> pd.DataFrame:
         for task in ["all", "binary", "multiclass", "regression"]:
             t = g if task == "all" else g[g.task == task]
             c = t[t.has_cat]
-            row = {"arm": arm, "model": model, "task": task, "n_datasets": len(c), "n_better": int((c.effect > 0).sum()),
-                   "n_clear_better": int((c.ci_lo > 0).sum()), "n_clear_worse": int((c.ci_hi < 0).sum())}
+            row = {"arm": arm, "model": model, "task": task, "n_datasets": len(c), "n_better": int((c.effect > TOL).sum()),
+                   "n_equal": int((c.effect.abs() <= TOL).sum()), "n_clear_better": int((c.ci_lo > 0).sum()), "n_clear_worse": int((c.ci_hi < 0).sum())}
             if task != "all":  # medians within a task type only: the effect units differ between types
                 row |= {"median_cat": c.effect.median(), "n_all": len(t), "median_all": t.effect.median()}
             rows.append(row)

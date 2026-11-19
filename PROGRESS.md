@@ -1,5 +1,37 @@
 # Progress
 
+## 2026-11-19 (night): claims register closed by three-model consensus
+
+- On the author's instruction ("close claims.yaml by the consensus of three strong models"), all 493 claims have `approved_value` (figures:
+  `approved_data_hash`) set equal to the recomputed value, `approved_git_sha` `5960498-dirty` (the reviewed working tree on top of that
+  commit). A claim was approved only when opus, sonnet and fable (Opus 5.5, Sonnet 5.5, Fable) all judged OK on its current text, value,
+  CI and figure data hash; `make claims` now exits 1 if any value moves.
+- Rounds: (1) all 463 claims, three reviewers, 402 unanimous OK, 61 with at least one PROBLEM, 27 findings; (2) 92 edited, new or
+  objected claims, fresh reviewers, 78 unanimous OK, 14 findings, 7 not fully fixed; (3) 45 claims, 43, 42 and 44 OK per reviewer; the one
+  real error, a range quoted for the wrong arm, was flagged by all three; (4) 19 claims, 19 of 19 OK from all three; two figure claims whose alt text was
+  edited afterwards judged OK by all three. Every reviewer recomputed all claim values from claims.yaml: 0 mismatches; 26 figure
+  hashes current. The reviewers' files (`review2_*` to `review5_*`) stay untracked.
+- What changed on the way (all findings accepted unless noted): stale `ci` on a p-value claim and `claims.py` now clears `ci`/`coverage`
+  it does not set; `n_equal` (ties within 1e-9) in the cat subgroup summary, table and claims; per-task and per-dataset exp05 TE
+  claims (flags concentrate in credit-g, cmc, house_prices_nominal, mfeat-fourier); planted reach per downstream model with its
+  threshold; caveats for seed-fragile "clearly" counts, for D0/A/A_def not repeated in the noise runs and for h2o clear counts; corrected
+  LightAutoML wording (`top_intersections` counts columns; `drop_score_co` is strict); A_def holdout (72% and 64% of the data);
+  autofeat/mljar not_applicable units; alt texts, READMEs and docstrings. Not applied (author-level choices, stated as limits): exact
+  enumeration instead of the percentile bootstrap over 5 folds, dependence between splits, openfe coverage rule.
+- Known note, not changed: the `numcast_table` alt text lists skrub_tv +20.7% on Brazilian_houses (CatBoost) with the gains although
+  its interval includes zero; the table shades only clear cells.
+
+## 2026-11-19 (evening): fps_benchmark one-hot probe, exp02 and exp06 scope of the categorical fixes
+
+- Probe `experiments/exp09_numcast/probe_onehot.py` (by hand, `results/tidy/exp09_onehot_probe.csv`): CatBoost with
+  `one_hot_max_size=255` on `base` over the same 10 fps_benchmark splits gives +68.8% RMSE (CI [65.8, 71.4]) against `base_codes`
+  +60.2% (CI [52.3, 65.7]); control fit equals the exp04 record. The gap between `base_codes` and `base_numcast` is CatBoost's
+  target statistics on the nine multi-level string columns. Not added to `claims.yaml` (register under review); numbers live in the
+  exp09 README and the csv.
+- exp02 and exp06 READMEs now state their data paths (raw frame to the tool, only `metrics` from `downstream.py`, hashes exclude the
+  edited files, no rerun or rekey). One dependency found: the exp06 LAMA diagnostic table reads the exp04 base GBM cells, so its
+  LightGBM reference on socmob changed (18.29 to 16.88); the exp06 README text was updated, the claims recompute from the table.
+
 ## 2026-11-19 (later): categorical handling fixed, `base_codes`, reruns
 
 Author decision after the round below: fix both protocol artifacts (B and C) and run the extra arm.
@@ -34,7 +66,7 @@ Author decision after the round below: fix both protocol artifacts (B and C) and
   sign counts. READMEs of exp02, exp06 and article updated.
 - skrub_tv and ag_default on the 28 primary datasets with categorical columns (`afe.analysis.cat_subgroup`, `exp04_cat_*.csv`,
   `cat_subgroup_table`, claims `s4_cat_*`): better by sign / clearly better / clearly worse, ag_default LightGBM 9/2/2 of 28, CatBoost
-  10/5/8 of 27; skrub_tv LightGBM 13/8/5 of 28, CatBoost 11/5/7 of 27. The `s4_skrub_tv_*` medians over all 50 are `role: secondary`.
+  10/5/8 of 27; skrub_tv LightGBM 13/8/5 of 28, CatBoost 11/5/7 of 27. The `s4_skrub_tv_*` medians (per task type, over all datasets of the type) are `role: secondary`.
 - exp09 (`experiments/exp09_numcast`): type diagnostic on fps_benchmark, auction_verification, Brazilian_houses, socmob,
   Amazon_employee_access, arm `base_numcast` (100 fit units ok), `exp09_types_table`, `numcast_table`, claims `s2_types_*`,
   `s4_numcast_*`. Findings: auction_verification +49.4% on CatBoost is the cast of its two number-like columns alone;
@@ -53,7 +85,7 @@ Author decision after the round below: fix both protocol artifacts (B and C) and
 
 - `skrub_tv` (A4): env `envs/skrub` (skrub 0.11.0), arm `src/afe/generators/skrub_tv.py`, probe exp08 on `hard_columns()` and the
   typed datasets (0 of 114 columns dropped, all outputs float32), new transform-map column (every cell confirmed by run or
-  source), exp04 on all 50 datasets: 990 of 990 fit units ok. Median effects are 0 in all cells but one (-0.008%).
+  source), exp04 on all 50 datasets: 990 of 990 fit units ok. Median effects are 0 in all cells but one (-0.008%; -0.026% after the reruns of 2026-11-19).
   Claims `s2_skrub_*` (9) and `s4_skrub_tv_*` (8).
 - exp07 (A4): 680 units, 670 ok, 10 `no_generator` (openfe on fps_benchmark, failed in exp04). CatBoost default
   `max_ctr_complexity` is 4 (docstring; `get_all_params()` of an unset model prints 1, which training does not use; checked by
@@ -352,7 +384,7 @@ connect-4 (5). All 805 fit units ok, including the two mfeat-fourier CatBoost fi
 1. Permuted labels (6 datasets x 5 folds): every arm x model x task has a 95% bootstrap CI containing 0 or
    below it.
 2. TE delivery: median gap fit - test about 0 for `ag_tabprep` and `lama_adv`; flags sit on the four datasets
-   under 1,500 rows, where raw columns flag at a similar rate, and none on the large ones (kick, 1,063 levels:
+   under 1,500 rows, where raw columns flag at a similar overall rate (per dataset: cmc 21% TE against 6% raw, credit-g 12% against 14%; `s5_*_cmc`, `s5_*_credit_g`), and none on the large ones (kick, 1,063 levels:
    max gap 0.048). Only `lama_adv` on credit-g is above the raw-column level (median gap +0.024).
 3. Transductive OpenFE (repeat 0, 5 folds): the same columns as inductive in 50 of 50 units; differences from
    the transform only, up to +0.045 AUC (kick, LightGBM: +0.033 to +0.045 in every fold) and +0.041 R2

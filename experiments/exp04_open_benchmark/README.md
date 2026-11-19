@@ -27,21 +27,21 @@ numeric column (both arms skip them), socmob has one (`mljar_golden` skips it). 
   in all but 9 of the 72 (task, model, arm) cells under the base-fallback rule, all small (a few tenths of an AUC point, 1 to 2%
   in loss); `lama_adv` is worse in three of them and `manual_baseline` in one
   (`results/figures/exp04/median_effect_*.svg`).
-- The one Holm-significant across-dataset effect is negative: `lama_adv` on regression makes RMSE worse
+- The one Holm-significant across-dataset effect (Holm over the 9 arms of each task and model, not over all 72 tests) is negative: `lama_adv` on regression makes RMSE worse
   (claims `s4_lama_reg_median_lgbm`, `s4_lama_reg_wilcoxon_lgbm`).
 - `openfe` has the widest per-dataset spread: the largest single-dataset wins (multiclass log loss) next
   to the highest share of descriptive losses on binary (`exp04_summary.csv`).
 - `skrub_tv` (skrub 0.11.0 `TableVectorizer()` with all defaults, own env `envs/skrub`, fit on fit rows only, replaces the
   input; probe `experiments/exp08_skrub_probe`, defaults in `results/tidy/exp08_skrub_defaults.yaml`) ran on all 50 datasets,
-  both repeats, both models: 990 of 990 fit units ok. Its median effect is exactly 0 on every (task, model) cell but one
+  both repeats, both models: 990 of 990 fit units ok. Its median effect is 0 to within 1e-10 on every (task, model) cell but one
   (regression, LightGBM, -0.026%; `s4_skrub_tv_*`): the 40-level threshold sends most categoricals to one-hot and the
   numeric columns pass through unchanged, so on the many numeric-only datasets only the float32 cast changes anything.
 - On the 28 primary datasets that have a categorical column (`n_categorical > 0`), the headline for `skrub_tv` and `ag_default`
-  is a count, not the median over all 50 (which is exactly 0 on the numeric-only datasets; the medians stay as secondary claims).
+  is a count, not the median over all 50 (which is mostly 0; the medians stay as secondary claims).
   Better by sign / clearly better / clearly worse (bootstrap CI over the splits excludes zero), of 28 datasets (27 for CatBoost,
-  which skips connect-4): `ag_default` on LightGBM 1 / 1 / 1, on CatBoost 15 / 3 / 2; `skrub_tv` on LightGBM 12 / 6 / 10, on
+  which skips connect-4): `ag_default` on LightGBM 1 / 1 / 1 (22 of the 28 identical to `base` within 1e-9), on CatBoost 15 / 3 / 2 (4 identical); `skrub_tv` on LightGBM 12 / 6 / 10, on
   CatBoost 11 / 5 / 7 (`afe.analysis.cat_subgroup`, `s4_cat_*`, `cat_subgroup_table`). `ag_default` is close to `base` once it
-  keeps categorical columns (next bullet); `skrub_tv` turns them into numbers.
+  keeps categorical columns as categories (next bullet; it drops or retypes some); `skrub_tv` turns them into numbers.
 - Two protocol corrections of 2026-11-19, found by the exp09 diagnostic (`experiments/exp09_numcast/README.md`), applied to every
   record of this experiment: (1) every categorical column of these datasets is an ordered pandas category, which LightGBM's
   `categorical_feature="auto"` skips, so LightGBM had read all of them as integer codes in the first runs; `afe.models.downstream`
@@ -57,7 +57,8 @@ numeric column (both arms skip them), socmob has one (`mljar_golden` skips it). 
   keeps +68.8, +51.2 and +20.7. So the effect was CatBoost's categorical handling against plain numbers on these datasets, not
   generated features: `base_codes` (`base` with every categorical as integer codes) gives +60.2, +49.4 and +35.1 (`numcast_table`).
 - Coverage separates the tools more than accuracy does: `autofeat` finishes well under the 3,600 s cap on
-  62% of its units, `openfe` and `mljar_golden` on 92 to 94%, `ag_tabprep` and `ag_tabprep_keepcat` on CatBoost on 94%
+  62% of its planned units (65.5% of the 940 applicable ones: the 50 not-applicable units count as unfinished in the coverage, as
+  70 of `mljar_golden`'s do), `openfe` and `mljar_golden` on 92 to 94%, `ag_tabprep` and `ag_tabprep_keepcat` on CatBoost on 94%
   (100% on LightGBM), the rest are at 100% (coverage table in `exp04_report.md`; failures above).
 - Cost: on the jobs=1 timing pass, `ag_tabprep` and `openfe` multiply the whole pipeline time by tens
   versus fitting the same model on raw columns, mostly through wider downstream inputs

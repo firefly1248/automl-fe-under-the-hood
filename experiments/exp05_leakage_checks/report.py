@@ -169,7 +169,7 @@ def main() -> None:
     c1, c1_status = check1()
     c2, c3, c4 = check2(), check3(), check4()
     ops = pd.read_csv(TIDY / "exp05_openfe_ops.csv")
-    c2s = c2.groupby(["arm", "task", "kind"]).agg(columns=("flag", "size"), flagged_share=("flag", "mean"),
+    c2s = c2.groupby(["arm", "task", "kind"]).agg(column_fold_instances=("flag", "size"), flagged_share=("flag", "mean"),
                                                   max_gap=("gap", "max"), median_gap=("gap", "median")).reset_index()
     c4s = (c4.groupby(["kind", "arm", "model"]).agg(units=("reach", "size"), reach=("reach", "mean"),
                                                    found=("found", "mean")).reset_index())

@@ -333,12 +333,13 @@ def ctr_ablation_table() -> None:
 def cat_subgroup_table() -> None:
     """`skrub_tv` and `ag_default` over `base` on the primary datasets that have a categorical column (28 of 50; 27 for
     CatBoost, which skips connect-4): datasets better by the sign of the mean effect and clearly better or worse (the
-    fold CI of the dataset's effect excludes zero), per downstream model. The median over all 50 datasets is not shown."""
+    fold CI of the dataset's effect excludes zero), per downstream model; `identical` counts datasets whose mean effect is within 1e-9 of zero, i.e. the
+    fitted result is identical to base. The median over all 50 datasets is not shown."""
     s = pd.read_csv(RESULTS / "tidy" / "exp04_cat_summary.csv")
     s = s[s.task == "all"].sort_values(["arm", "model"])
     t = pd.DataFrame({"arm, downstream model": [f"{r.arm}, {r.model}" for r in s.itertuples()],
                       "n datasets": s.n_datasets.to_numpy(), "better (sign)": s.n_better.to_numpy(),
-                      "clearly better": s.n_clear_better.to_numpy(), "clearly worse": s.n_clear_worse.to_numpy()})
+                      "identical": s.n_equal.to_numpy(), "clearly better": s.n_clear_better.to_numpy(), "clearly worse": s.n_clear_worse.to_numpy()})
     table(t, "cat_subgroup_table", lambda v: str(v), lambda v: None, col_width=2.2, first_width=3.2)
 
 

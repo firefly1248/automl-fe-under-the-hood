@@ -4,7 +4,7 @@ Question (author, 2026-11-19): the first exp04 runs showed +40 to +60% RMSE for 
 fps_benchmark, auction_verification and Brazilian_houses. Where does it come from? Diagnostic on those three datasets and, as a
 contrast, socmob and Amazon_employee_access.
 
-Parts: `diagnose.py` (type table, `make aggregate`), arm `base_numcast` (`src/afe/generators/base_numcast.py`: `base` with the
+Parts: `diagnose.py` (type table, `make aggregate`), `probe_onehot.py` (by hand, see the fps_benchmark bullet), arm `base_numcast` (`src/afe/generators/base_numcast.py`: `base` with the
 categorical columns whose levels all parse as numbers cast to float, all-missing columns as NaN floats), arm `base_codes`
 (`base_codes.py`: `base` with every categorical column as integer codes, NaN for missing and unseen levels); both replace the input.
 `make exp09` (exp04 protocol and limits, both repeats, both models, the five datasets: 100 generator and 200 fit units, all ok),
@@ -66,6 +66,13 @@ LightGBM:
   fps_benchmark only the coding of the nine string categoricals reproduces it (`base_numcast` +2.3, `base_codes` +60.2); on
   Brazilian_houses the numeric-like column `floor` gives +15.4 and the other three columns the rest, with wide CIs
   (RMSE varies from about 1,800 to 22,700 between folds).
+- Why `base_codes` gains on fps_benchmark and `base_numcast` does not (probe `probe_onehot.py`, same 10 splits, no make target,
+  `results/tidy/exp09_onehot_probe.csv`): CatBoost with `one_hot_max_size=255`, which one-hot encodes all nine multi-level string
+  columns (at most 27 levels) so CatBoost builds no target statistics on them, gives +68.8% RMSE over `base` (CI [65.8, 71.4]), the
+  same as `skrub_tv` and above `base_codes` (+60.2%, CI [52.3, 65.7]; the control fit of split (0, 0) reproduces the exp04 record
+  exactly). So the gap is CatBoost's default target statistics on those columns, which `base_codes` removes by turning them into
+  numbers and `base_numcast` keeps (it casts only 4 of the 14 columns, the number-like ones); why those statistics hurt this
+  dataset so much (base RMSE 0.67 to 1.11 per split, against 0.25 to 0.32 one-hot) was not isolated.
 - LightGBM shows the opposite on fps_benchmark and socmob: with native categorical handling `base` beats integer codes by 60 and
   14%, so the same type decision that helps CatBoost hurts LightGBM. On auction_verification numbers help both models.
 - Amazon_employee_access is the contrast: all nine columns are identifiers with number-like levels (up to 6,136); numbers cost

@@ -4,7 +4,7 @@ Number entries name a source file (csv, parquet or a yaml flattened to one row),
 a yaml) and a stat (a column of the single matching row, or `count`). Figure entries name the figure and its rendered data table; the claim value is the table's
 sha1. The script writes the recomputed `value`/`ci`/`coverage` (or `data_hash`) back and exits 1 if any
 recomputed value differs from its `approved_value` (`approved_data_hash`) by more than `tolerance`
-(exactly, for hashes). `approved_*` fields are set only by Ilia and are never written here.
+(exactly, for hashes). `approved_*` fields are set by Ilia, or on his instruction after a unanimous check by three models (PROGRESS.md, 2026-11-19), and are never written here.
 """
 
 import hashlib
@@ -49,6 +49,8 @@ def main() -> None:
     claims = yaml.safe_load(path.read_text()) or []
     failed = []
     for c in claims:
+        for stale in ("ci", "coverage"):  # a CI or coverage the stat does not carry must not survive from an older entry
+            c.pop(stale, None)
         c.update(figure(c) if c.get("kind") == "figure" else number(c))
         if c.get("kind") == "figure":
             ok = c.get("approved_data_hash") in (None, c["data_hash"])

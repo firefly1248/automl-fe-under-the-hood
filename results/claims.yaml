@@ -5,8 +5,8 @@
   query: task=='regression' & arm=='openfe' & model=='lgbm' & effect=='rmse_rel' & rule=='base_fallback'
   stat: median_effect
   value: -0.002361
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.002361
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.013982
@@ -19,8 +19,8 @@
   query: task=='binary' & arm=='openfe' & model=='lgbm' & effect=='auc_diff' & rule=='base_fallback'
   stat: median_effect
   value: 0.000679
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.000679
+  approved_git_sha: 5960498-dirty
   tolerance: 0.0005
   ci:
   - -0.003025
@@ -28,13 +28,14 @@
   coverage: 0.95
 - id: s4_ag_tabprep_bin_auc_lgbm
   section: 4
-  text: median AUC difference of the _r13 configuration on binary, LightGBM downstream
+  text: median AUC difference of the _r13 configuration on binary, LightGBM downstream (the CI excludes zero, but
+    this is one of 72 cells and the Holm-adjusted Wilcoxon p over its 9 arms is 0.15)
   source: results/tidy/exp04_summary.csv
   query: task=='binary' & arm=='ag_tabprep' & model=='lgbm' & effect=='auc_diff' & rule=='base_fallback'
   stat: median_effect
   value: 0.002488
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.002488
+  approved_git_sha: 5960498-dirty
   tolerance: 0.0005
   ci:
   - 0.000599
@@ -47,8 +48,8 @@
   query: task=='regression' & arm=='lama_adv' & model=='lgbm' & effect=='rmse_rel' & rule=='base_fallback'
   stat: median_effect
   value: -0.02092
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.02092
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.106965
@@ -56,17 +57,15 @@
   coverage: 1.0
 - id: s4_lama_reg_wilcoxon_lgbm
   section: 4
-  text: Holm-adjusted Wilcoxon p for lama_adv on regression, LightGBM downstream
+  text: Holm-adjusted Wilcoxon p for lama_adv on regression, LightGBM downstream (Holm over the 9 arms of this task
+    and model, not over all 72 tests)
   source: results/tidy/exp04_summary.csv
   query: task=='regression' & arm=='lama_adv' & model=='lgbm' & effect=='rmse_rel' & rule=='base_fallback'
   stat: wilcoxon_p_holm
   value: 0.012892
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.012892
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
-  ci:
-  - -0.053674
-  - -0.000717
   coverage: 1.0
 - id: s4_autofeat_ok_units
   section: 4
@@ -75,18 +74,29 @@
   query: arm=='autofeat' & status=='ok'
   stat: count
   value: 616
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 616
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_autofeat_planned_units
   section: 4
-  text: autofeat fit units planned, both repeats and models
+  text: autofeat fit units planned, both repeats and models (50 of them not_applicable by design, no numeric column)
   source: results/tidy/exp04.parquet
   query: arm=='autofeat'
   stat: count
   value: 990
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 990
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s4_autofeat_not_applicable_units
+  section: 4
+  text: autofeat fit units that are not_applicable by design (the dataset has no numeric column), counted in the
+    planned units
+  source: results/tidy/exp04.parquet
+  query: arm=='autofeat' & status=='not_applicable'
+  stat: count
+  value: 50
+  approved_value: 50
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s5_permuted_failures
   section: 5
@@ -95,69 +105,336 @@
   query: '`pass` == False'
   stat: count
   value: 0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s5_te_flagged
   section: 5
-  text: TE columns flagged by the fit-vs-test delivery gap (compare with the raw-column control)
+  text: TE column-fold instances flagged by the fit-vs-test delivery gap (compare with the raw-column control);
+    pooled over task types and arms, so not a like-for-like comparison with the raw control (see the per-task-type
+    and per-dataset claims)
   source: results/tidy/exp05_te_delivery.csv
   query: kind=='te' & flag
   stat: count
   value: 145
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 145
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s5_te_columns
   section: 5
-  text: TE columns checked
+  text: 'TE column-fold instances checked (exp04 pilot: 10 datasets, 2 arms, 5 folds; 8 of the 10 datasets have
+    TE columns)'
   source: results/tidy/exp05_te_delivery.csv
   query: kind=='te'
   stat: count
   value: 5040
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 5040
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s5_raw_flagged
   section: 5
-  text: untouched numeric control columns flagged by the same thresholds (sampling noise alone)
+  text: untouched numeric control column-fold instances flagged by the same thresholds (sampling noise alone); pooled
+    over task types, see the per-task-type and per-dataset claims
   source: results/tidy/exp05_te_delivery.csv
   query: kind=='raw' & flag
   stat: count
   value: 78
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 78
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s5_raw_columns
   section: 5
-  text: untouched numeric control columns checked
+  text: untouched numeric control column-fold instances checked (exp04 pilot)
   source: results/tidy/exp05_te_delivery.csv
   query: kind=='raw'
   stat: count
   value: 2115
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2115
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s5_te_columns_binary
+  section: 5
+  text: TE column-fold instances on binary datasets checked (exp04 pilot)
+  source: results/tidy/exp05_te_delivery.csv
+  query: kind=='te' & task=='binary'
+  stat: count
+  value: 1845
+  approved_value: 1845
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s5_te_flagged_binary
+  section: 5
+  text: TE column-fold instances on binary datasets flagged by the fit-vs-test delivery gap (exp04 pilot) (all flags
+    of this task type come from credit-g; see the dataset claims)
+  source: results/tidy/exp05_te_delivery.csv
+  query: kind=='te' & task=='binary' & flag
+  stat: count
+  value: 72
+  approved_value: 72
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s5_raw_columns_binary
+  section: 5
+  text: raw control column-fold instances on binary datasets checked (exp04 pilot)
+  source: results/tidy/exp05_te_delivery.csv
+  query: kind=='raw' & task=='binary'
+  stat: count
+  value: 674
+  approved_value: 674
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s5_raw_flagged_binary
+  section: 5
+  text: raw control column-fold instances on binary datasets flagged by the fit-vs-test delivery gap (exp04 pilot)
+    (all flags of this task type come from credit-g; see the dataset claims)
+  source: results/tidy/exp05_te_delivery.csv
+  query: kind=='raw' & task=='binary' & flag
+  stat: count
+  value: 10
+  approved_value: 10
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s5_te_columns_multiclass
+  section: 5
+  text: TE column-fold instances on multiclass datasets checked (exp04 pilot)
+  source: results/tidy/exp05_te_delivery.csv
+  query: kind=='te' & task=='multiclass'
+  stat: count
+  value: 2340
+  approved_value: 2340
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s5_te_flagged_multiclass
+  section: 5
+  text: TE column-fold instances on multiclass datasets flagged by the fit-vs-test delivery gap (exp04 pilot) (all
+    TE flags come from cmc and most raw flags from mfeat-fourier, which has no TE column; see the dataset claims)
+  source: results/tidy/exp05_te_delivery.csv
+  query: kind=='te' & task=='multiclass' & flag
+  stat: count
+  value: 44
+  approved_value: 44
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s5_raw_columns_multiclass
+  section: 5
+  text: raw control column-fold instances on multiclass datasets checked (exp04 pilot)
+  source: results/tidy/exp05_te_delivery.csv
+  query: kind=='raw' & task=='multiclass'
+  stat: count
+  value: 973
+  approved_value: 973
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s5_raw_flagged_multiclass
+  section: 5
+  text: raw control column-fold instances on multiclass datasets flagged by the fit-vs-test delivery gap (exp04
+    pilot) (all TE flags come from cmc and most raw flags from mfeat-fourier, which has no TE column; see the dataset
+    claims)
+  source: results/tidy/exp05_te_delivery.csv
+  query: kind=='raw' & task=='multiclass' & flag
+  stat: count
+  value: 32
+  approved_value: 32
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s5_te_columns_regression
+  section: 5
+  text: TE column-fold instances on regression datasets checked (exp04 pilot)
+  source: results/tidy/exp05_te_delivery.csv
+  query: kind=='te' & task=='regression'
+  stat: count
+  value: 855
+  approved_value: 855
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s5_te_flagged_regression
+  section: 5
+  text: TE column-fold instances on regression datasets flagged by the fit-vs-test delivery gap (exp04 pilot; most
+    flags come from house_prices_nominal)
+  source: results/tidy/exp05_te_delivery.csv
+  query: kind=='te' & task=='regression' & flag
+  stat: count
+  value: 29
+  approved_value: 29
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s5_raw_columns_regression
+  section: 5
+  text: raw control column-fold instances on regression datasets checked (exp04 pilot)
+  source: results/tidy/exp05_te_delivery.csv
+  query: kind=='raw' & task=='regression'
+  stat: count
+  value: 468
+  approved_value: 468
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s5_raw_flagged_regression
+  section: 5
+  text: raw control column-fold instances on regression datasets flagged by the fit-vs-test delivery gap (exp04
+    pilot; most flags come from house_prices_nominal)
+  source: results/tidy/exp05_te_delivery.csv
+  query: kind=='raw' & task=='regression' & flag
+  stat: count
+  value: 36
+  approved_value: 36
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s5_te_columns_credit_g
+  section: 5
+  text: TE column-fold instances on credit-g checked (exp04 pilot)
+  source: results/tidy/exp05_te_delivery.csv
+  query: kind=='te' & dataset=='credit-g'
+  stat: count
+  value: 605
+  approved_value: 605
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s5_te_flagged_credit_g
+  section: 5
+  text: TE column-fold instances on credit-g flagged by the fit-vs-test delivery gap (exp04 pilot)
+  source: results/tidy/exp05_te_delivery.csv
+  query: kind=='te' & dataset=='credit-g' & flag
+  stat: count
+  value: 72
+  approved_value: 72
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s5_raw_columns_credit_g
+  section: 5
+  text: raw control column-fold instances on credit-g checked (exp04 pilot)
+  source: results/tidy/exp05_te_delivery.csv
+  query: kind=='raw' & dataset=='credit-g'
+  stat: count
+  value: 74
+  approved_value: 74
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s5_raw_flagged_credit_g
+  section: 5
+  text: raw control column-fold instances on credit-g flagged by the fit-vs-test delivery gap (exp04 pilot)
+  source: results/tidy/exp05_te_delivery.csv
+  query: kind=='raw' & dataset=='credit-g' & flag
+  stat: count
+  value: 10
+  approved_value: 10
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s5_te_columns_cmc
+  section: 5
+  text: TE column-fold instances on cmc checked (exp04 pilot)
+  source: results/tidy/exp05_te_delivery.csv
+  query: kind=='te' & dataset=='cmc'
+  stat: count
+  value: 210
+  approved_value: 210
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s5_te_flagged_cmc
+  section: 5
+  text: TE column-fold instances on cmc flagged by the fit-vs-test delivery gap (exp04 pilot)
+  source: results/tidy/exp05_te_delivery.csv
+  query: kind=='te' & dataset=='cmc' & flag
+  stat: count
+  value: 44
+  approved_value: 44
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s5_raw_columns_cmc
+  section: 5
+  text: raw control column-fold instances on cmc checked (exp04 pilot)
+  source: results/tidy/exp05_te_delivery.csv
+  query: kind=='raw' & dataset=='cmc'
+  stat: count
+  value: 65
+  approved_value: 65
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s5_raw_flagged_cmc
+  section: 5
+  text: raw control column-fold instances on cmc flagged by the fit-vs-test delivery gap (exp04 pilot)
+  source: results/tidy/exp05_te_delivery.csv
+  query: kind=='raw' & dataset=='cmc' & flag
+  stat: count
+  value: 4
+  approved_value: 4
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s5_raw_columns_mfeat_fourier
+  section: 5
+  text: raw control column-fold instances on mfeat-fourier checked (exp04 pilot)
+  source: results/tidy/exp05_te_delivery.csv
+  query: kind=='raw' & dataset=='mfeat-fourier'
+  stat: count
+  value: 760
+  approved_value: 760
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s5_raw_flagged_mfeat_fourier
+  section: 5
+  text: raw control column-fold instances on mfeat-fourier flagged by the fit-vs-test delivery gap (exp04 pilot)
+  source: results/tidy/exp05_te_delivery.csv
+  query: kind=='raw' & dataset=='mfeat-fourier' & flag
+  stat: count
+  value: 28
+  approved_value: 28
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s5_planted_openfe_product_reach
   section: 5
-  text: share of planted-product units where OpenFE reaches the oracle R2
+  text: share of planted-product units where OpenFE reaches the oracle R2 (pooled over LightGBM and CatBoost) (reach
+    = test R2 within 1% of the oracle R2, ratio at least 0.99)
   source: results/figures/exp05/planted.csv
   query: arm=='openfe' & kind=='product'
   stat: reach
   value: 1.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s5_planted_base_product_reach
   section: 5
-  text: share of planted-product units where the raw columns alone reach the oracle R2
+  text: 'share of planted-product units where the raw columns alone reach the oracle R2 (pooled over LightGBM and
+    CatBoost: see the per-model claims) (reach = test R2 within 1% of the oracle R2, ratio at least 0.99; the CatBoost
+    ratios run from 0.980 to 0.995, so that count sits on the threshold)'
   source: results/figures/exp05/planted.csv
   query: arm=='base' & kind=='product'
   stat: reach
   value: 0.266667
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.266667
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
+- id: s5_planted_base_product_reach_lgbm
+  section: 5
+  text: 'planted-product units where the raw columns alone reach the oracle R2, lgbm downstream (units: see s5_planted_base_product_units)
+    (reach = test R2 within 1% of the oracle R2, ratio at least 0.99)'
+  source: results/tidy/exp05_planted.csv
+  query: arm=='base' & kind=='product' & model=='lgbm' & reach
+  stat: count
+  value: 0
+  approved_value: 0
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s5_planted_base_product_reach_catboost
+  section: 5
+  text: 'planted-product units where the raw columns alone reach the oracle R2, catboost downstream (units: see
+    s5_planted_base_product_units) (reach = test R2 within 1% of the oracle R2, ratio at least 0.99; the CatBoost
+    ratios run from 0.980 to 0.995, so that count sits on the threshold)'
+  source: results/tidy/exp05_planted.csv
+  query: arm=='base' & kind=='product' & model=='catboost' & reach
+  stat: count
+  value: 8
+  approved_value: 8
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s5_planted_base_product_units
+  section: 5
+  text: planted-product units per downstream model (base arm; the same for LightGBM and CatBoost)
+  source: results/tidy/exp05_planted.csv
+  query: arm=='base' & kind=='product' & model=='lgbm'
+  stat: count
+  value: 15
+  approved_value: 15
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
 - id: s2_gbm_prep_cpu_configs
   section: 2
   text: GBM_PREP configs in the zeroshot_2025_12_18_cpu portfolio
@@ -165,8 +442,8 @@
   query: portfolio=='zeroshot_2025_12_18_cpu'
   stat: count
   value: 14
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 14
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_arithmetic_recovers_ratio
   section: 2
@@ -175,8 +452,8 @@
   query: dataset=='hard_columns' & arm=='arithmetic'
   stat: max_abs_rho_with_a_over_b
   value: 1.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0.0001
 - id: s2_b_a_binary
   section: 2
@@ -187,8 +464,8 @@
   query: contrast=='B-A' & task=='binary'
   stat: n_better
   value: 2.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_b_a_binary_median
   section: 2
@@ -199,8 +476,8 @@
   query: contrast=='B-A' & task=='binary'
   stat: median
   value: 0.005695
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.005695
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s2_b_a_multiclass
   section: 2
@@ -211,8 +488,8 @@
   query: contrast=='B-A' & task=='multiclass'
   stat: n_better
   value: 3.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 3.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_b_a_multiclass_median
   section: 2
@@ -223,8 +500,8 @@
   query: contrast=='B-A' & task=='multiclass'
   stat: median
   value: 0.01278
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.01278
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s2_b_a_regression
   section: 2
@@ -235,8 +512,8 @@
   query: contrast=='B-A' & task=='regression'
   stat: n_better
   value: 4.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_b_a_regression_median
   section: 2
@@ -247,8 +524,8 @@
   query: contrast=='B-A' & task=='regression'
   stat: median
   value: 0.124944
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.124944
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s2_d_a_binary
   section: 2
@@ -259,8 +536,8 @@
   query: contrast=='D-A' & task=='binary'
   stat: n_better
   value: 4.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_d_a_binary_median
   section: 2
@@ -271,8 +548,8 @@
   query: contrast=='D-A' & task=='binary'
   stat: median
   value: 0.310364
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.310364
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s2_d_a_multiclass
   section: 2
@@ -283,8 +560,8 @@
   query: contrast=='D-A' & task=='multiclass'
   stat: n_better
   value: 4.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_d_a_multiclass_median
   section: 2
@@ -295,8 +572,8 @@
   query: contrast=='D-A' & task=='multiclass'
   stat: median
   value: 0.108606
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.108606
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s2_d_a_regression
   section: 2
@@ -307,8 +584,8 @@
   query: contrast=='D-A' & task=='regression'
   stat: n_better
   value: 4.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_d_a_regression_median
   section: 2
@@ -319,8 +596,8 @@
   query: contrast=='D-A' & task=='regression'
   stat: median
   value: 0.471457
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.471457
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s2_d_d0_binary
   section: 2
@@ -331,8 +608,8 @@
   query: contrast=='D-D0' & task=='binary'
   stat: n_better
   value: 1.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_d_d0_binary_median
   section: 2
@@ -344,8 +621,8 @@
   query: contrast=='D-D0' & task=='binary'
   stat: median
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s2_d_d0_multiclass
   section: 2
@@ -355,8 +632,8 @@
   query: contrast=='D-D0' & task=='multiclass'
   stat: n_better
   value: 2.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_d_d0_multiclass_median
   section: 2
@@ -367,8 +644,8 @@
   query: contrast=='D-D0' & task=='multiclass'
   stat: median
   value: 0.026512
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.026512
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s2_d_d0_regression
   section: 2
@@ -378,8 +655,8 @@
   query: contrast=='D-D0' & task=='regression'
   stat: n_better
   value: 3.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 3.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_d_d0_regression_median
   section: 2
@@ -390,8 +667,8 @@
   query: contrast=='D-D0' & task=='regression'
   stat: median
   value: 0.024956
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.024956
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s2_e_d0_binary
   section: 2
@@ -401,8 +678,8 @@
   query: contrast=='E-D0' & task=='binary'
   stat: n_better
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_e_d0_binary_median
   section: 2
@@ -413,8 +690,8 @@
   query: contrast=='E-D0' & task=='binary'
   stat: median
   value: -0.039739
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.039739
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s2_e_d0_multiclass
   section: 2
@@ -424,8 +701,8 @@
   query: contrast=='E-D0' & task=='multiclass'
   stat: n_better
   value: 2.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_e_d0_multiclass_median
   section: 2
@@ -436,8 +713,8 @@
   query: contrast=='E-D0' & task=='multiclass'
   stat: median
   value: 8.1e-05
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 8.1e-05
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s2_e_d0_regression
   section: 2
@@ -447,8 +724,8 @@
   query: contrast=='E-D0' & task=='regression'
   stat: n_better
   value: 1.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_e_d0_regression_median
   section: 2
@@ -459,8 +736,8 @@
   query: contrast=='E-D0' & task=='regression'
   stat: median
   value: -0.011773
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.011773
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s2_b_b2_binary
   section: 2
@@ -470,8 +747,8 @@
   query: contrast=='B-B2' & task=='binary'
   stat: n_better
   value: 1.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_b_b2_binary_median
   section: 2
@@ -482,8 +759,8 @@
   query: contrast=='B-B2' & task=='binary'
   stat: median
   value: -0.051995
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.051995
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s2_b_b2_multiclass
   section: 2
@@ -493,8 +770,8 @@
   query: contrast=='B-B2' & task=='multiclass'
   stat: n_better
   value: 4.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_b_b2_multiclass_median
   section: 2
@@ -505,8 +782,8 @@
   query: contrast=='B-B2' & task=='multiclass'
   stat: median
   value: 0.026292
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.026292
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s2_b_b2_regression
   section: 2
@@ -516,8 +793,8 @@
   query: contrast=='B-B2' & task=='regression'
   stat: n_better
   value: 4.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_b_b2_regression_median
   section: 2
@@ -528,8 +805,8 @@
   query: contrast=='B-B2' & task=='regression'
   stat: median
   value: 0.094384
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.094384
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s6_lama_ag_binary
   section: 6
@@ -539,8 +816,8 @@
   query: contrast=='lama-ag' & task=='binary'
   stat: n_better
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s6_lama_ag_binary_median
   section: 6
@@ -551,8 +828,8 @@
   query: contrast=='lama-ag' & task=='binary'
   stat: median
   value: -0.395566
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.395566
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s6_lama_ag_multiclass
   section: 6
@@ -562,8 +839,8 @@
   query: contrast=='lama-ag' & task=='multiclass'
   stat: n_better
   value: 1.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s6_lama_ag_multiclass_median
   section: 6
@@ -574,8 +851,8 @@
   query: contrast=='lama-ag' & task=='multiclass'
   stat: median
   value: 0.000409
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.000409
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s6_lama_ag_regression
   section: 6
@@ -585,8 +862,8 @@
   query: contrast=='lama-ag' & task=='regression'
   stat: n_better
   value: 1.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s6_lama_ag_regression_median
   section: 6
@@ -597,8 +874,8 @@
   query: contrast=='lama-ag' & task=='regression'
   stat: median
   value: -0.460448
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.460448
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s6_h2o_ag_binary
   section: 6
@@ -608,8 +885,8 @@
   query: contrast=='h2o-ag' & task=='binary'
   stat: n_better
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s6_h2o_ag_binary_median
   section: 6
@@ -620,8 +897,8 @@
   query: contrast=='h2o-ag' & task=='binary'
   stat: median
   value: -0.143573
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.143573
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s6_h2o_ag_multiclass
   section: 6
@@ -631,8 +908,8 @@
   query: contrast=='h2o-ag' & task=='multiclass'
   stat: n_better
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s6_h2o_ag_multiclass_median
   section: 6
@@ -643,8 +920,8 @@
   query: contrast=='h2o-ag' & task=='multiclass'
   stat: median
   value: -0.006603
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.006603
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s6_h2o_ag_regression
   section: 6
@@ -654,8 +931,8 @@
   query: contrast=='h2o-ag' & task=='regression'
   stat: n_better
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s6_h2o_ag_regression_median
   section: 6
@@ -666,20 +943,21 @@
   query: contrast=='h2o-ag' & task=='regression'
   stat: median
   value: -0.075167
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.075167
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s6_h2o_te_h2o_binary
   section: 6
   text: number of binary datasets where H2O with target encoding over H2O has a positive mean effect (sign only,
     the fold CI may include zero) on log loss; M is the n_datasets claim of the section (all datasets of the task,
-    including those where nothing is encoded)
+    including those where nothing is encoded) (no binary dataset has a column H2O encodes, so this count is run-to-run
+    noise, not an encoding effect)
   source: results/tidy/exp06_contrasts_summary.csv
   query: contrast=='h2o_te-h2o' & task=='binary'
   stat: n_better
   value: 2.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s6_h2o_te_h2o_binary_median
   section: 6
@@ -690,8 +968,8 @@
   query: contrast=='h2o_te-h2o' & task=='binary'
   stat: median
   value: 0.000944
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.000944
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s6_h2o_te_h2o_multiclass
   section: 6
@@ -702,8 +980,8 @@
   query: contrast=='h2o_te-h2o' & task=='multiclass'
   stat: n_better
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s6_h2o_te_h2o_multiclass_median
   section: 6
@@ -714,8 +992,8 @@
   query: contrast=='h2o_te-h2o' & task=='multiclass'
   stat: median
   value: -0.010404
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.010404
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s6_h2o_te_h2o_regression
   section: 6
@@ -726,8 +1004,8 @@
   query: contrast=='h2o_te-h2o' & task=='regression'
   stat: n_better
   value: 1.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s6_h2o_te_h2o_regression_median
   section: 6
@@ -738,28 +1016,29 @@
   query: contrast=='h2o_te-h2o' & task=='regression'
   stat: median
   value: -0.071283
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.071283
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s3_gbm_top_intersections
   section: 3
-  text: LightAutoML default (binary), GBM feature pipeline, categorical intersections kept (top_intersections)
+  text: LightAutoML default (binary), GBM feature pipeline, categorical intersections are built from at most this
+    many top categorical columns, to the maximum depth (top_intersections)
   source: results/tidy/exp03_config.yaml
   query: ''
   stat: tasks.binary.gbm_pipeline_params.top_intersections
   value: 4.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s3_gbm_max_intersection_depth
   section: 3
-  text: LightAutoML default (binary), GBM feature pipeline, maximum number of categories in one intersection
+  text: LightAutoML default (binary), GBM feature pipeline, maximum number of categorical columns in one intersection
   source: results/tidy/exp03_config.yaml
   query: ''
   stat: tasks.binary.gbm_pipeline_params.max_intersection_depth
   value: 3.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 3.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s3_gbm_use_groupby
   section: 3
@@ -768,18 +1047,19 @@
   query: ''
   stat: tasks.binary.gbm_pipeline_params.use_groupby
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s3_gbm_auto_unique_co
   section: 3
-  text: LightAutoML default (binary), GBM pipeline, a category with more unique values than this gets a target encoding
+  text: LightAutoML default (binary), GBM pipeline, a categorical column with more unique values than this gets
+    a target encoding
   source: results/tidy/exp03_config.yaml
   query: ''
   stat: tasks.binary.gbm_pipeline_params.auto_unique_co
   value: 10.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 10.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s3_selection_mode
   section: 3
@@ -788,8 +1068,8 @@
   query: ''
   stat: tasks.binary.selection_params.mode
   value: 1.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s3_selection_cutoff
   section: 3
@@ -798,18 +1078,18 @@
   query: ''
   stat: tasks.binary.selection_params.cutoff
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s3_reader_drop_score_co
   section: 3
-  text: LightAutoML default (binary), the reader drops a column whose best encoding score is at or below this
+  text: LightAutoML default (binary), the reader drops a column whose best encoding score is strictly below this
   source: results/tidy/exp03_config.yaml
   query: ''
   stat: tasks.binary.reader_params.drop_score_co
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s3_roles_numeric_to_category
   section: 3
@@ -819,8 +1099,8 @@
   query: change=='Numeric -> Category' & dataset!='hard_columns' & dataset!='Amazon_employee_access_int'
   stat: count
   value: 20
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 20
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s3_roles_dropped
   section: 3
@@ -829,8 +1109,8 @@
   query: lama_role=='Drop'
   stat: count
   value: 2
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s3_adult_input_columns
   section: 3
@@ -839,8 +1119,8 @@
   query: dataset=='adult'
   stat: cols
   value: 14.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 14.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s3_adult_lgbm_features
   section: 3
@@ -849,8 +1129,8 @@
   query: dataset=='adult' & model=='Lvl_0_Pipe_1_Mod_0_LightGBM'
   stat: n_features
   value: 25.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 25.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s3_amazon_input_columns
   section: 3
@@ -859,8 +1139,8 @@
   query: dataset=='Amazon_employee_access'
   stat: cols
   value: 9.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 9.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s3_amazon_lgbm_features
   section: 3
@@ -869,8 +1149,8 @@
   query: dataset=='Amazon_employee_access' & model=='Lvl_0_Pipe_1_Mod_0_LightGBM'
   stat: n_features
   value: 25.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 25.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s3_diamonds_input_columns
   section: 3
@@ -879,8 +1159,8 @@
   query: dataset=='diamonds'
   stat: cols
   value: 9.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 9.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s3_diamonds_lgbm_features
   section: 3
@@ -889,8 +1169,8 @@
   query: dataset=='diamonds' & model=='Lvl_0_Pipe_1_Mod_0_LightGBM'
   stat: n_features
   value: 13.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 13.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_map_cells
   section: 2
@@ -899,8 +1179,8 @@
   query: family==family
   stat: count
   value: 81
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 81
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_map_confirmed_source
   section: 2
@@ -909,8 +1189,8 @@
   query: status=='confirmed_source'
   stat: count
   value: 22
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 22
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_map_confirmed_run
   section: 2
@@ -919,8 +1199,8 @@
   query: status=='confirmed_run'
   stat: count
   value: 59
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 59
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_map_not_confirmed
   section: 2
@@ -929,8 +1209,8 @@
   query: status=='not_confirmed'
   stat: count
   value: 0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_lama_date_columns_with_seasonality
   section: 2
@@ -939,8 +1219,8 @@
   query: probe=='reader_roles' & item.str.startswith('dt_') & value.str.contains("'y', 'm', 'wd'")
   stat: count
   value: 2
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_lama_text_read_as_category
   section: 2
@@ -949,8 +1229,8 @@
   query: probe=='reader_roles' & item=='text_long' & value.str.startswith('Category')
   stat: count
   value: 1
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_lama_text_dropped_by_selector
   section: 2
@@ -959,8 +1239,8 @@
   query: probe=='fit_default' & item=='selector_dropped' & value.str.contains('text_long')
   stat: count
   value: 1
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_lama_nlp_import_fails
   section: 2
@@ -969,8 +1249,8 @@
   query: probe=='nlp_extras' & item=='import TabularNLPAutoML' & value.str.contains('PackageNotFoundError')
   stat: count
   value: 1
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_lama_basediff_default
   section: 2
@@ -979,8 +1259,8 @@
   query: probe=='fit_default' & item.str.endswith('from_date_text_columns') & value.str.contains('basediff')
   stat: count
   value: 0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_lama_basediff_manual_role
   section: 2
@@ -989,8 +1269,8 @@
   query: probe=='fit_manual_roles' & item.str.endswith('from_date_text_columns') & value.str.contains('basediff')
   stat: count
   value: 2
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_h2o_default_trees_not_enum
   section: 2
@@ -1000,8 +1280,8 @@
     & ~value.str.contains('actual=Enum')
   stat: count
   value: 0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_h2o_default_dl_not_onehot
   section: 2
@@ -1011,8 +1291,8 @@
   query: probe=='default' & item.str.endswith('categorical_encoding') & value.str.startswith('deeplearning') & ~value.str.contains('actual=OneHotInternal')
   stat: count
   value: 0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_h2o_date_type_time
   section: 2
@@ -1021,8 +1301,8 @@
   query: probe=='frame_types' & item=='dt' & value=='time'
   stat: count
   value: 1
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_h2o_text_in_default_models
   section: 2
@@ -1031,8 +1311,8 @@
   query: probe=='default' & item.str.endswith('predictors') & value.str.contains('text_free')
   stat: count
   value: 0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_h2o_te_columns_encoded
   section: 2
@@ -1042,8 +1322,8 @@
   query: probe=='target_encoding.te_model' & item=='columns_encoded' & value=='cat_25; cat_60'
   stat: count
   value: 1
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_h2o_te_blending
   section: 2
@@ -1052,8 +1332,8 @@
   query: probe=='target_encoding.te_model' & item=='blending' & value.str.startswith('True')
   stat: count
   value: 1
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_h2o_te_inflection_point_5
   section: 2
@@ -1062,8 +1342,8 @@
   query: probe=='target_encoding.te_model' & item=='inflection_point' & value.str.startswith('5.0')
   stat: count
   value: 1
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_h2o_te_smoothing_10
   section: 2
@@ -1072,8 +1352,8 @@
   query: probe=='target_encoding.te_model' & item=='smoothing' & value.str.startswith('10.0')
   stat: count
   value: 1
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_n_datasets_binary
   section: 2
@@ -1082,8 +1362,8 @@
   query: contrast=='B-A' & task=='binary'
   stat: n_datasets
   value: 4.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_n_datasets_multiclass
   section: 2
@@ -1092,8 +1372,8 @@
   query: contrast=='B-A' & task=='multiclass'
   stat: n_datasets
   value: 4.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_n_datasets_regression
   section: 2
@@ -1102,8 +1382,8 @@
   query: contrast=='B-A' & task=='regression'
   stat: n_datasets
   value: 4.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s6_n_datasets_binary
   section: 6
@@ -1112,8 +1392,8 @@
   query: contrast=='lama-ag' & task=='binary'
   stat: n_datasets
   value: 4.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s6_n_datasets_multiclass
   section: 6
@@ -1122,8 +1402,8 @@
   query: contrast=='lama-ag' & task=='multiclass'
   stat: n_datasets
   value: 2.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s6_n_datasets_regression
   section: 6
@@ -1132,8 +1412,8 @@
   query: contrast=='lama-ag' & task=='regression'
   stat: n_datasets
   value: 4.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_single_a_a_def_binary
   section: 2
@@ -1144,8 +1424,8 @@
   query: contrast=='A-A_def' & task=='binary'
   stat: n_better
   value: 1.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_single_a_a_def_multiclass
   section: 2
@@ -1156,8 +1436,8 @@
   query: contrast=='A-A_def' & task=='multiclass'
   stat: n_better
   value: 3.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 3.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_single_a_a_def_regression
   section: 2
@@ -1168,8 +1448,8 @@
   query: contrast=='A-A_def' & task=='regression'
   stat: n_better
   value: 1.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_single_a_et0_a_binary
   section: 2
@@ -1179,8 +1459,8 @@
   query: contrast=='A_et0-A' & task=='binary'
   stat: n_better
   value: 3.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 3.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_single_a_et0_a_multiclass
   section: 2
@@ -1190,8 +1470,8 @@
   query: contrast=='A_et0-A' & task=='multiclass'
   stat: n_better
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_single_a_et0_a_regression
   section: 2
@@ -1201,8 +1481,8 @@
   query: contrast=='A_et0-A' & task=='regression'
   stat: n_better
   value: 3.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 3.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_single_b_def_a_def_binary
   section: 2
@@ -1213,8 +1493,8 @@
   query: contrast=='B_def-A_def' & task=='binary'
   stat: n_better
   value: 1.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_single_b_def_a_def_multiclass
   section: 2
@@ -1225,8 +1505,8 @@
   query: contrast=='B_def-A_def' & task=='multiclass'
   stat: n_better
   value: 2.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_single_b_def_a_def_regression
   section: 2
@@ -1237,8 +1517,8 @@
   query: contrast=='B_def-A_def' & task=='regression'
   stat: n_better
   value: 2.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_single_a_vs_def_pol
   section: 2
@@ -1247,8 +1527,8 @@
   query: contrast=='A-A_def' & dataset=='pol'
   stat: effect
   value: -0.648263
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.648263
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.710256
@@ -1260,8 +1540,8 @@
   query: contrast=='A-A_def' & dataset=='sick'
   stat: effect
   value: -0.679919
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.679919
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -1.031552
@@ -1273,8 +1553,8 @@
   query: contrast=='A-A_def' & dataset=='elevators'
   stat: effect
   value: -0.682098
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.682098
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.756276
@@ -1286,8 +1566,8 @@
   query: contrast=='A-A_def' & dataset=='kr-vs-kp'
   stat: effect
   value: -0.618113
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.618113
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.996271
@@ -1299,8 +1579,8 @@
   query: contrast=='A_et0-A' & dataset=='pol'
   stat: effect
   value: 0.350591
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.350591
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.339485
@@ -1312,8 +1592,8 @@
   query: contrast=='A_et0-A' & dataset=='sick'
   stat: effect
   value: 0.373773
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.373773
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.274247
@@ -1326,8 +1606,8 @@
   query: contrast=='A_et0_noreg-A_et0' & dataset=='elevators'
   stat: effect
   value: 0.369357
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.369357
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.355518
@@ -1340,8 +1620,8 @@
   query: contrast=='A_et0_noreg-A_et0' & dataset=='kr-vs-kp'
   stat: effect
   value: 0.314877
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.314877
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.198024
@@ -1354,8 +1634,8 @@
   query: contrast=='A_et0_noreg-A_def' & dataset=='elevators'
   stat: effect
   value: -0.009134
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.009134
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.030554
@@ -1368,8 +1648,8 @@
   query: contrast=='A_et0_noreg-A_def' & dataset=='kr-vs-kp'
   stat: effect
   value: -0.002565
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.002565
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.097778
@@ -1382,8 +1662,8 @@
   query: contrast=='lama_num-lama' & dataset=='pol'
   stat: effect
   value: 0.171942
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.171942
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.147184
@@ -1391,13 +1671,14 @@
 - id: s6_lama_diag_lama_full_pol
   section: 6
   text: relative RMSE improvement of LightAutoML with TabularUtilizedAutoML (full budget) over default LightAutoML
-    on pol, fold-bootstrap 95% CI
+    on pol, fold-bootstrap 95% CI (on pol the full-budget arm stopped after one config at 346 of 600 s and returned
+    the same predictions as the default, so the budget was not used)
   source: results/tidy/exp06_contrasts.csv
   query: contrast=='lama_full-lama' & dataset=='pol'
   stat: effect
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.0
@@ -1405,13 +1686,14 @@
 - id: s6_lama_diag_lama_num_full_pol
   section: 6
   text: relative RMSE improvement of LightAutoML with numeric roles and full budget over default LightAutoML on
-    pol, fold-bootstrap 95% CI
+    pol, fold-bootstrap 95% CI (on pol the full-budget part stopped after one config at 344 of 600 s, so the budget
+    was not used)
   source: results/tidy/exp06_contrasts.csv
   query: contrast=='lama_num_full-lama' & dataset=='pol'
   stat: effect
   value: 0.171942
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.171942
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.147184
@@ -1423,8 +1705,8 @@
   query: dataset=='pol' & arm=='lama'
   stat: rmse
   value: 4.9146
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.9146
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s6_lama_diag_rmse_lama_num_pol
   section: 6
@@ -1433,28 +1715,30 @@
   query: dataset=='pol' & arm=='lama_num'
   stat: rmse
   value: 4.0705
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0705
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s6_lama_diag_rmse_lama_full_pol
   section: 6
-  text: mean RMSE over 5 folds on pol, lama_full
+  text: mean RMSE over 5 folds on pol, lama_full (on pol the full-budget arm used one config and about 346 of 600
+    s, so the budget was not used)
   source: results/tidy/exp06_lama_diag.csv
   query: dataset=='pol' & arm=='lama_full'
   stat: rmse
   value: 4.9146
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.9146
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s6_lama_diag_rmse_lama_num_full_pol
   section: 6
-  text: mean RMSE over 5 folds on pol, lama_num_full
+  text: mean RMSE over 5 folds on pol, lama_num_full (on pol the full-budget arm used one config and about 344 of
+    600 s, so the budget was not used)
   source: results/tidy/exp06_lama_diag.csv
   query: dataset=='pol' & arm=='lama_num_full'
   stat: rmse
   value: 4.0705
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0705
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s6_lama_diag_rmse_exp04_base_lgbm_68pct_pol
   section: 6
@@ -1463,8 +1747,8 @@
   query: dataset=='pol' & arm=='exp04_base_lgbm_68pct'
   stat: rmse
   value: 4.4879
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.4879
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s6_lama_diag_rmse_exp04_base_catboost_68pct_pol
   section: 6
@@ -1473,8 +1757,8 @@
   query: dataset=='pol' & arm=='exp04_base_catboost_68pct'
   stat: rmse
   value: 4.4767
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.4767
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s6_lama_diag_wall_lama_pol
   section: 6
@@ -1483,8 +1767,8 @@
   query: dataset=='pol' & arm=='lama'
   stat: wall_s
   value: 359.78
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 359.78
+  approved_git_sha: 5960498-dirty
   tolerance: 1
 - id: s6_lama_diag_wall_lama_full_pol
   section: 6
@@ -1493,8 +1777,8 @@
   query: dataset=='pol' & arm=='lama_full'
   stat: wall_s
   value: 345.528
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 345.528
+  approved_git_sha: 5960498-dirty
   tolerance: 1
 - id: s6_lama_diag_lama_num_socmob
   section: 6
@@ -1504,8 +1788,8 @@
   query: contrast=='lama_num-lama' & dataset=='socmob'
   stat: effect
   value: 0.120176
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.120176
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.021901
@@ -1518,8 +1802,8 @@
   query: contrast=='lama_full-lama' & dataset=='socmob'
   stat: effect
   value: 0.026177
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.026177
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.003751
@@ -1532,8 +1816,8 @@
   query: contrast=='lama_num_full-lama' & dataset=='socmob'
   stat: effect
   value: 0.163373
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.163373
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.068873
@@ -1545,8 +1829,8 @@
   query: dataset=='socmob' & arm=='lama'
   stat: rmse
   value: 20.5887
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 20.5887
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s6_lama_diag_rmse_lama_num_socmob
   section: 6
@@ -1555,8 +1839,8 @@
   query: dataset=='socmob' & arm=='lama_num'
   stat: rmse
   value: 17.9837
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 17.9837
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s6_lama_diag_rmse_lama_full_socmob
   section: 6
@@ -1565,8 +1849,8 @@
   query: dataset=='socmob' & arm=='lama_full'
   stat: rmse
   value: 20.1583
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 20.1583
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s6_lama_diag_rmse_lama_num_full_socmob
   section: 6
@@ -1575,8 +1859,8 @@
   query: dataset=='socmob' & arm=='lama_num_full'
   stat: rmse
   value: 17.1253
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 17.1253
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s6_lama_diag_rmse_exp04_base_lgbm_68pct_socmob
   section: 6
@@ -1585,8 +1869,8 @@
   query: dataset=='socmob' & arm=='exp04_base_lgbm_68pct'
   stat: rmse
   value: 16.8761
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 16.8761
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s6_lama_diag_rmse_exp04_base_catboost_68pct_socmob
   section: 6
@@ -1595,8 +1879,8 @@
   query: dataset=='socmob' & arm=='exp04_base_catboost_68pct'
   stat: rmse
   value: 15.8108
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 15.8108
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s6_lama_diag_wall_lama_socmob
   section: 6
@@ -1605,8 +1889,8 @@
   query: dataset=='socmob' & arm=='lama'
   stat: wall_s
   value: 64.938
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 64.938
+  approved_git_sha: 5960498-dirty
   tolerance: 1
 - id: s6_lama_diag_wall_lama_full_socmob
   section: 6
@@ -1615,8 +1899,8 @@
   query: dataset=='socmob' & arm=='lama_full'
   stat: wall_s
   value: 560.326
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 560.326
+  approved_git_sha: 5960498-dirty
   tolerance: 1
 - id: s4_fig_median_effect_lgbm
   section: 4
@@ -1625,8 +1909,8 @@
   output: results/figures/article/median_effect_lgbm.png
   data: results/figures/article/median_effect_lgbm.csv
   data_hash: accf9f77b9f282dc
-  approved_data_hash: null
-  approved_git_sha: null
+  approved_data_hash: accf9f77b9f282dc
+  approved_git_sha: 5960498-dirty
 - id: s4_fig_win_tie_loss_lgbm
   section: 4
   kind: figure
@@ -1634,8 +1918,8 @@
   output: results/figures/article/win_tie_loss_lgbm.png
   data: results/figures/article/win_tie_loss_lgbm.csv
   data_hash: c1e0018f9ab82e68
-  approved_data_hash: null
-  approved_git_sha: null
+  approved_data_hash: c1e0018f9ab82e68
+  approved_git_sha: 5960498-dirty
 - id: s4_fig_median_effect_catboost
   section: 4
   kind: figure
@@ -1644,8 +1928,8 @@
   output: results/figures/article/median_effect_catboost.png
   data: results/figures/article/median_effect_catboost.csv
   data_hash: 387e24e339fb3670
-  approved_data_hash: null
-  approved_git_sha: null
+  approved_data_hash: 387e24e339fb3670
+  approved_git_sha: 5960498-dirty
 - id: s4_fig_win_tie_loss_catboost
   section: 4
   kind: figure
@@ -1653,8 +1937,8 @@
   output: results/figures/article/win_tie_loss_catboost.png
   data: results/figures/article/win_tie_loss_catboost.csv
   data_hash: f40ac54ff1a9985e
-  approved_data_hash: null
-  approved_git_sha: null
+  approved_data_hash: f40ac54ff1a9985e
+  approved_git_sha: 5960498-dirty
 - id: s4_fig_preview
   section: 4
   kind: figure
@@ -1662,26 +1946,28 @@
   output: results/figures/article/preview.png
   data: results/figures/article/preview.csv
   data_hash: accf9f77b9f282dc
-  approved_data_hash: null
-  approved_git_sha: null
+  approved_data_hash: accf9f77b9f282dc
+  approved_git_sha: 5960498-dirty
 - id: s4_fig_effect_vs_gen_time
   section: 4
   kind: figure
-  text: effect against generator fit time
+  text: 'effect against generator fit time (complete-cases rule: a dataset enters with its finished splits; AUC
+    differences and relative loss reductions share one axis, so the units differ by task type)'
   output: results/figures/article/effect_vs_gen_time.png
   data: results/figures/article/effect_vs_gen_time.csv
   data_hash: '8969985336027791'
-  approved_data_hash: null
-  approved_git_sha: null
+  approved_data_hash: '8969985336027791'
+  approved_git_sha: 5960498-dirty
 - id: s4_fig_effect_vs_n_features
   section: 4
   kind: figure
-  text: effect against number of new features
+  text: 'effect against number of new features (complete-cases rule: a dataset enters with its finished splits;
+    AUC differences and relative loss reductions share one axis, so the units differ by task type)'
   output: results/figures/article/effect_vs_n_features.png
   data: results/figures/article/effect_vs_n_features.csv
   data_hash: 88ba2672474e8177
-  approved_data_hash: null
-  approved_git_sha: null
+  approved_data_hash: 88ba2672474e8177
+  approved_git_sha: 5960498-dirty
 - id: s4_fig_coverage_table
   section: 4
   kind: figure
@@ -1689,8 +1975,8 @@
   output: results/figures/article/coverage_table.png
   data: results/figures/article/coverage_table.csv
   data_hash: 7974dceb16f8f213
-  approved_data_hash: null
-  approved_git_sha: null
+  approved_data_hash: 7974dceb16f8f213
+  approved_git_sha: 5960498-dirty
 - id: s5_fig_permuted_labels
   section: 5
   kind: figure
@@ -1698,8 +1984,8 @@
   output: results/figures/article/permuted_labels.png
   data: results/figures/article/permuted_labels.csv
   data_hash: e3dc726665322e35
-  approved_data_hash: null
-  approved_git_sha: null
+  approved_data_hash: e3dc726665322e35
+  approved_git_sha: 5960498-dirty
 - id: s5_fig_planted_signals
   section: 5
   kind: figure
@@ -1707,8 +1993,8 @@
   output: results/figures/article/planted_signals.png
   data: results/figures/article/planted_signals.csv
   data_hash: 6de408685b2305f0
-  approved_data_hash: null
-  approved_git_sha: null
+  approved_data_hash: 6de408685b2305f0
+  approved_git_sha: 5960498-dirty
 - id: s2_fig_transform_map_automl
   section: 2
   kind: figure
@@ -1717,17 +2003,18 @@
   output: results/figures/article/transform_map_automl.png
   data: results/figures/article/transform_map_automl.csv
   data_hash: dd03c65347fa2022
-  approved_data_hash: null
-  approved_git_sha: null
+  approved_data_hash: dd03c65347fa2022
+  approved_git_sha: 5960498-dirty
 - id: s2_fig_transform_map_generators
   section: 2
   kind: figure
-  text: the transformation map for the feature generators (OpenFE, autofeat, MLJAR golden features, manual baseline)
+  text: the transformation map for the feature generators (OpenFE, autofeat, MLJAR golden features, skrub_tv, manual
+    baseline)
   output: results/figures/article/transform_map_generators.png
   data: results/figures/article/transform_map_generators.csv
   data_hash: d450c95f2b93cb86
-  approved_data_hash: null
-  approved_git_sha: null
+  approved_data_hash: d450c95f2b93cb86
+  approved_git_sha: 5960498-dirty
 - id: s2_fig_contrasts
   section: 2
   kind: figure
@@ -1736,8 +2023,8 @@
   output: results/figures/article/exp02_contrasts.png
   data: results/figures/article/exp02_contrasts.csv
   data_hash: 980d5e1608fa23c2
-  approved_data_hash: null
-  approved_git_sha: null
+  approved_data_hash: 980d5e1608fa23c2
+  approved_git_sha: 5960498-dirty
 - id: s2_fig_contrasts_table
   section: 2
   kind: figure
@@ -1745,8 +2032,8 @@
   output: results/figures/article/exp02_contrasts_table.png
   data: results/figures/article/exp02_contrasts_table.csv
   data_hash: a72ec1803b56335e
-  approved_data_hash: null
-  approved_git_sha: null
+  approved_data_hash: a72ec1803b56335e
+  approved_git_sha: 5960498-dirty
 - id: s2_fig_single_model
   section: 2
   kind: figure
@@ -1755,8 +2042,8 @@
   output: results/figures/article/exp02_single_model.png
   data: results/figures/article/exp02_single_model.csv
   data_hash: 5de8c3f94258abe7
-  approved_data_hash: null
-  approved_git_sha: null
+  approved_data_hash: 5de8c3f94258abe7
+  approved_git_sha: 5960498-dirty
 - id: s2_fig_single_model_table
   section: 2
   kind: figure
@@ -1764,8 +2051,8 @@
   output: results/figures/article/exp02_single_model_table.png
   data: results/figures/article/exp02_single_model_table.csv
   data_hash: 49c0e38c3bc19f66
-  approved_data_hash: null
-  approved_git_sha: null
+  approved_data_hash: 49c0e38c3bc19f66
+  approved_git_sha: 5960498-dirty
 - id: s2_fig_hp_groups_table
   section: 2
   kind: figure
@@ -1773,8 +2060,8 @@
   output: results/figures/article/exp02_hp_groups_table.png
   data: results/figures/article/exp02_hp_groups_table.csv
   data_hash: 08377edcb27bcea1
-  approved_data_hash: null
-  approved_git_sha: null
+  approved_data_hash: 08377edcb27bcea1
+  approved_git_sha: 5960498-dirty
 - id: s6_fig_contrasts
   section: 6
   kind: figure
@@ -1782,8 +2069,8 @@
   output: results/figures/article/exp06_contrasts.png
   data: results/figures/article/exp06_contrasts.csv
   data_hash: 64acece50193f0bb
-  approved_data_hash: null
-  approved_git_sha: null
+  approved_data_hash: 64acece50193f0bb
+  approved_git_sha: 5960498-dirty
 - id: s6_fig_contrasts_table
   section: 6
   kind: figure
@@ -1791,8 +2078,8 @@
   output: results/figures/article/exp06_contrasts_table.png
   data: results/figures/article/exp06_contrasts_table.csv
   data_hash: bf3944fed9b972de
-  approved_data_hash: null
-  approved_git_sha: null
+  approved_data_hash: bf3944fed9b972de
+  approved_git_sha: 5960498-dirty
 - id: s6_fig_lama_diag_table
   section: 6
   kind: figure
@@ -1801,8 +2088,8 @@
   output: results/figures/article/exp06_lama_diag_table.png
   data: results/figures/article/exp06_lama_diag_table.csv
   data_hash: 5af0befa8693b67b
-  approved_data_hash: null
-  approved_git_sha: null
+  approved_data_hash: 5af0befa8693b67b
+  approved_git_sha: 5960498-dirty
 - id: s2_single_features_pol_def
   section: 2
   text: relative RMSE improvement on pol from the `_r13` feature group (GBM_PREP over GBM), model with default hyperparameters,
@@ -1811,8 +2098,8 @@
   query: contrast=='B_def-A_def' & dataset=='pol'
   stat: effect
   value: -0.092778
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.092778
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.119021
@@ -1820,13 +2107,14 @@
 - id: s2_single_features_pol_et0
   section: 2
   text: relative RMSE improvement on pol from the `_r13` feature group (GBM_PREP over GBM), model with `_r13` hyperparameters
-    with extra_trees=False, fold-bootstrap 95% CI
+    with extra_trees=False, fold-bootstrap 95% CI (the reference A_et0 runs to the 10,000-round cap while the feature-group
+    model stops earlier, so the gain mixes features and cap)
   source: results/tidy/exp02_contrasts.csv
   query: contrast=='B_et0-A_et0' & dataset=='pol'
   stat: effect
   value: 0.120285
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.120285
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.109588
@@ -1834,13 +2122,14 @@
 - id: s2_single_features_pol_r13
   section: 2
   text: relative RMSE improvement on pol from the `_r13` feature group (GBM_PREP over GBM), model with `_r13` hyperparameters,
-    fold-bootstrap 95% CI
+    fold-bootstrap 95% CI (the reference A runs to the 10,000-round cap while the feature-group model stops earlier,
+    so the gain mixes features and cap)
   source: results/tidy/exp02_contrasts.csv
   query: contrast=='B-A' & dataset=='pol'
   stat: effect
   value: 0.420741
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.420741
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.411749
@@ -1853,8 +2142,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='B-A' & task=='binary'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 2.0
 - id: s2_b_a_binary_clear_worse
@@ -1865,20 +2154,20 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='B-A' & task=='binary'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 2.0
 - id: s2_b_a_multiclass_clear_better
   section: 2
-  text: number of multiclass datasets where B (GBM_PREP, `_r13` feature group and hyperparameters) over A (GBM,
+  text: 'number of multiclass datasets where B (GBM_PREP, `_r13` feature group and hyperparameters) over A (GBM,
     `_r13` hyperparameters, no feature group) is clearly better (fold CI above zero) on log loss; M is the n_datasets
-    claim of the section
+    claim of the section (borderline: cmc''s CI bound is 0.0001 from zero, 2 under other bootstrap seeds)'
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='B-A' & task=='multiclass'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 3.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 3.0
 - id: s2_b_a_multiclass_clear_worse
@@ -1889,8 +2178,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='B-A' & task=='multiclass'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 0.0
 - id: s2_b_a_regression_clear_better
@@ -1901,8 +2190,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='B-A' & task=='regression'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 2.0
 - id: s2_b_a_regression_clear_worse
@@ -1913,8 +2202,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='B-A' & task=='regression'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 0.0
 - id: s2_d_a_binary_clear_better
@@ -1924,8 +2213,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='D-A' & task=='binary'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 4.0
 - id: s2_d_a_binary_clear_worse
@@ -1935,8 +2224,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='D-A' & task=='binary'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 0.0
 - id: s2_d_a_multiclass_clear_better
@@ -1946,8 +2235,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='D-A' & task=='multiclass'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 3.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 3.0
 - id: s2_d_a_multiclass_clear_worse
@@ -1957,8 +2246,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='D-A' & task=='multiclass'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 0.0
 - id: s2_d_a_regression_clear_better
@@ -1968,8 +2257,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='D-A' & task=='regression'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 4.0
 - id: s2_d_a_regression_clear_worse
@@ -1979,8 +2268,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='D-A' & task=='regression'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 0.0
 - id: s2_d_d0_binary_clear_better
@@ -1991,8 +2280,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='D-D0' & task=='binary'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 0.0
 - id: s2_d_d0_binary_clear_worse
@@ -2003,8 +2292,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='D-D0' & task=='binary'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 0.0
 - id: s2_d_d0_multiclass_clear_better
@@ -2014,8 +2303,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='D-D0' & task=='multiclass'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 2.0
 - id: s2_d_d0_multiclass_clear_worse
@@ -2025,8 +2314,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='D-D0' & task=='multiclass'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 1.0
 - id: s2_d_d0_regression_clear_better
@@ -2036,8 +2325,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='D-D0' & task=='regression'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 2.0
 - id: s2_d_d0_regression_clear_worse
@@ -2047,8 +2336,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='D-D0' & task=='regression'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 0.0
 - id: s2_e_d0_binary_clear_better
@@ -2058,19 +2347,20 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='E-D0' & task=='binary'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 0.0
 - id: s2_e_d0_binary_clear_worse
   section: 2
   text: number of binary datasets where E (best_quality_v150) over D0 is clearly worse (fold CI below zero) on log
-    loss; M is the n_datasets claim of the section
+    loss; M is the n_datasets claim of the section (percentile bootstrap over 5 folds; a t-interval over the folds
+    counts fewer)
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='E-D0' & task=='binary'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 4.0
 - id: s2_e_d0_multiclass_clear_better
@@ -2080,8 +2370,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='E-D0' & task=='multiclass'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 1.0
 - id: s2_e_d0_multiclass_clear_worse
@@ -2091,8 +2381,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='E-D0' & task=='multiclass'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 1.0
 - id: s2_e_d0_regression_clear_better
@@ -2102,8 +2392,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='E-D0' & task=='regression'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 0.0
 - id: s2_e_d0_regression_clear_worse
@@ -2113,8 +2403,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='E-D0' & task=='regression'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 2.0
 - id: s2_b_b2_binary_clear_better
@@ -2124,8 +2414,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='B-B2' & task=='binary'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 0.0
 - id: s2_b_b2_binary_clear_worse
@@ -2135,8 +2425,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='B-B2' & task=='binary'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 2.0
 - id: s2_b_b2_multiclass_clear_better
@@ -2146,8 +2436,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='B-B2' & task=='multiclass'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 4.0
 - id: s2_b_b2_multiclass_clear_worse
@@ -2157,19 +2447,21 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='B-B2' & task=='multiclass'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 0.0
 - id: s2_b_b2_regression_clear_better
   section: 2
   text: number of regression datasets where B over B2 (GBM_PREP `_r21`, no feature group) is clearly better (fold
-    CI above zero) on RMSE; M is the n_datasets claim of the section
+    CI above zero) on RMSE; M is the n_datasets claim of the section (percentile bootstrap over 5 folds; a t-interval
+    over the folds counts fewer) (on pol B2 runs to 9,999 rounds, at the 10,000 cap, against 4,322 for B, so that
+    dataset mixes features and the round cap)
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='B-B2' & task=='regression'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 4.0
 - id: s2_b_b2_regression_clear_worse
@@ -2179,8 +2471,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='B-B2' & task=='regression'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 0.0
 - id: s6_lama_ag_binary_clear_better
@@ -2190,8 +2482,8 @@
   source: results/tidy/exp06_contrasts_summary.csv
   query: contrast=='lama-ag' & task=='binary'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 0.0
 - id: s6_lama_ag_binary_clear_worse
@@ -2201,8 +2493,8 @@
   source: results/tidy/exp06_contrasts_summary.csv
   query: contrast=='lama-ag' & task=='binary'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 4.0
 - id: s6_lama_ag_multiclass_clear_better
@@ -2212,8 +2504,8 @@
   source: results/tidy/exp06_contrasts_summary.csv
   query: contrast=='lama-ag' & task=='multiclass'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 0.0
 - id: s6_lama_ag_multiclass_clear_worse
@@ -2223,8 +2515,8 @@
   source: results/tidy/exp06_contrasts_summary.csv
   query: contrast=='lama-ag' & task=='multiclass'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 1.0
 - id: s6_lama_ag_regression_clear_better
@@ -2234,8 +2526,8 @@
   source: results/tidy/exp06_contrasts_summary.csv
   query: contrast=='lama-ag' & task=='regression'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 0.0
 - id: s6_lama_ag_regression_clear_worse
@@ -2245,146 +2537,152 @@
   source: results/tidy/exp06_contrasts_summary.csv
   query: contrast=='lama-ag' & task=='regression'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 3.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 3.0
 - id: s6_h2o_ag_binary_clear_better
   section: 6
   text: number of binary datasets where H2O over AutoGluon best_quality is clearly better (fold CI above zero) on
-    log loss; M is the n_datasets claim of the section
+    log loss; M is the n_datasets claim of the section (for the table only; the text uses sign counts for h2o, whose
+    run-to-run spread is 5 to 10 points)
   source: results/tidy/exp06_contrasts_summary.csv
   query: contrast=='h2o-ag' & task=='binary'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 0.0
 - id: s6_h2o_ag_binary_clear_worse
   section: 6
   text: number of binary datasets where H2O over AutoGluon best_quality is clearly worse (fold CI below zero) on
-    log loss; M is the n_datasets claim of the section
+    log loss; M is the n_datasets claim of the section (for the table only; the text uses sign counts for h2o, whose
+    run-to-run spread is 5 to 10 points)
   source: results/tidy/exp06_contrasts_summary.csv
   query: contrast=='h2o-ag' & task=='binary'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 3.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 3.0
 - id: s6_h2o_ag_multiclass_clear_better
   section: 6
   text: number of multiclass datasets where H2O over AutoGluon best_quality is clearly better (fold CI above zero)
-    on log loss; M is the n_datasets claim of the section
+    on log loss; M is the n_datasets claim of the section (for the table only; the text uses sign counts for h2o,
+    whose run-to-run spread is 5 to 10 points)
   source: results/tidy/exp06_contrasts_summary.csv
   query: contrast=='h2o-ag' & task=='multiclass'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 0.0
 - id: s6_h2o_ag_multiclass_clear_worse
   section: 6
   text: number of multiclass datasets where H2O over AutoGluon best_quality is clearly worse (fold CI below zero)
-    on log loss; M is the n_datasets claim of the section
+    on log loss; M is the n_datasets claim of the section (for the table only; the text uses sign counts for h2o,
+    whose run-to-run spread is 5 to 10 points)
   source: results/tidy/exp06_contrasts_summary.csv
   query: contrast=='h2o-ag' & task=='multiclass'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 1.0
 - id: s6_h2o_ag_regression_clear_better
   section: 6
   text: number of regression datasets where H2O over AutoGluon best_quality is clearly better (fold CI above zero)
-    on RMSE; M is the n_datasets claim of the section
+    on RMSE; M is the n_datasets claim of the section (for the table only; the text uses sign counts for h2o, whose
+    run-to-run spread is 5 to 10 points)
   source: results/tidy/exp06_contrasts_summary.csv
   query: contrast=='h2o-ag' & task=='regression'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 0.0
 - id: s6_h2o_ag_regression_clear_worse
   section: 6
   text: number of regression datasets where H2O over AutoGluon best_quality is clearly worse (fold CI below zero)
-    on RMSE; M is the n_datasets claim of the section
+    on RMSE; M is the n_datasets claim of the section (for the table only; the text uses sign counts for h2o, whose
+    run-to-run spread is 5 to 10 points)
   source: results/tidy/exp06_contrasts_summary.csv
   query: contrast=='h2o-ag' & task=='regression'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 3.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 3.0
 - id: s6_h2o_te_h2o_binary_clear_better
   section: 6
   text: number of binary datasets where H2O with target encoding over H2O is clearly better (fold CI above zero)
     on log loss; M is the n_datasets claim of the section (all datasets of the task, including those where nothing
-    is encoded)
+    is encoded) (for the table only; the text uses sign counts for h2o, whose run-to-run spread is 5 to 10 points)
   source: results/tidy/exp06_contrasts_summary.csv
   query: contrast=='h2o_te-h2o' & task=='binary'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 0.0
 - id: s6_h2o_te_h2o_binary_clear_worse
   section: 6
   text: number of binary datasets where H2O with target encoding over H2O is clearly worse (fold CI below zero)
     on log loss; M is the n_datasets claim of the section (all datasets of the task, including those where nothing
-    is encoded)
+    is encoded) (for the table only; the text uses sign counts for h2o, whose run-to-run spread is 5 to 10 points)
   source: results/tidy/exp06_contrasts_summary.csv
   query: contrast=='h2o_te-h2o' & task=='binary'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 1.0
 - id: s6_h2o_te_h2o_multiclass_clear_better
   section: 6
   text: number of multiclass datasets where H2O with target encoding over H2O is clearly better (fold CI above zero)
     on log loss; M is the n_datasets claim of the section (all datasets of the task, including those where nothing
-    is encoded)
+    is encoded) (for the table only; the text uses sign counts for h2o, whose run-to-run spread is 5 to 10 points)
   source: results/tidy/exp06_contrasts_summary.csv
   query: contrast=='h2o_te-h2o' & task=='multiclass'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 0.0
 - id: s6_h2o_te_h2o_multiclass_clear_worse
   section: 6
   text: number of multiclass datasets where H2O with target encoding over H2O is clearly worse (fold CI below zero)
     on log loss; M is the n_datasets claim of the section (all datasets of the task, including those where nothing
-    is encoded)
+    is encoded) (for the table only; the text uses sign counts for h2o, whose run-to-run spread is 5 to 10 points)
   source: results/tidy/exp06_contrasts_summary.csv
   query: contrast=='h2o_te-h2o' & task=='multiclass'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 1.0
 - id: s6_h2o_te_h2o_regression_clear_better
   section: 6
   text: number of regression datasets where H2O with target encoding over H2O is clearly better (fold CI above zero)
     on RMSE; M is the n_datasets claim of the section (all datasets of the task, including those where nothing is
-    encoded)
+    encoded) (for the table only; the text uses sign counts for h2o, whose run-to-run spread is 5 to 10 points)
   source: results/tidy/exp06_contrasts_summary.csv
   query: contrast=='h2o_te-h2o' & task=='regression'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 0.0
 - id: s6_h2o_te_h2o_regression_clear_worse
   section: 6
   text: number of regression datasets where H2O with target encoding over H2O is clearly worse (fold CI below zero)
     on RMSE; M is the n_datasets claim of the section (all datasets of the task, including those where nothing is
-    encoded)
+    encoded) (for the table only; the text uses sign counts for h2o, whose run-to-run spread is 5 to 10 points)
   source: results/tidy/exp06_contrasts_summary.csv
   query: contrast=='h2o_te-h2o' & task=='regression'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 2.0
 - id: s2_single_a_a_def_binary_clear_better
@@ -2394,30 +2692,32 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='A-A_def' & task=='binary'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 1.0
 - id: s2_single_a_a_def_binary_clear_worse
   section: 2
-  text: number of binary datasets where A (`_r13` hyperparameters, GBM) over A_def (AutoGluon default hyperparameters,
+  text: 'number of binary datasets where A (`_r13` hyperparameters, GBM) over A_def (AutoGluon default hyperparameters,
     GBM) is clearly worse (fold CI below zero), single model, no bagging; M is the n_datasets claim of the section
+    (borderline: bank-marketing''s CI bound is within Monte Carlo error of zero, 2 under other bootstrap seeds)'
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='A-A_def' & task=='binary'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 3.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 3.0
 - id: s2_single_a_a_def_multiclass_clear_better
   section: 2
-  text: number of multiclass datasets where A (`_r13` hyperparameters, GBM) over A_def (AutoGluon default hyperparameters,
+  text: 'number of multiclass datasets where A (`_r13` hyperparameters, GBM) over A_def (AutoGluon default hyperparameters,
     GBM) is clearly better (fold CI above zero), single model, no bagging; M is the n_datasets claim of the section
+    (borderline: pendigits'' CI bound, 1 or 2 under other bootstrap seeds)'
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='A-A_def' & task=='multiclass'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 1.0
 - id: s2_single_a_a_def_multiclass_clear_worse
@@ -2427,8 +2727,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='A-A_def' & task=='multiclass'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 0.0
 - id: s2_single_a_a_def_regression_clear_better
@@ -2438,8 +2738,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='A-A_def' & task=='regression'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 1.0
 - id: s2_single_a_a_def_regression_clear_worse
@@ -2449,8 +2749,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='A-A_def' & task=='regression'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 2.0
 - id: s2_single_a_et0_a_binary_clear_better
@@ -2460,8 +2760,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='A_et0-A' & task=='binary'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 3.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 3.0
 - id: s2_single_a_et0_a_binary_clear_worse
@@ -2471,8 +2771,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='A_et0-A' & task=='binary'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 1.0
 - id: s2_single_a_et0_a_multiclass_clear_better
@@ -2482,8 +2782,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='A_et0-A' & task=='multiclass'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 0.0
 - id: s2_single_a_et0_a_multiclass_clear_worse
@@ -2493,8 +2793,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='A_et0-A' & task=='multiclass'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 3.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 3.0
 - id: s2_single_a_et0_a_regression_clear_better
@@ -2504,8 +2804,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='A_et0-A' & task=='regression'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 2.0
 - id: s2_single_a_et0_a_regression_clear_worse
@@ -2515,8 +2815,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='A_et0-A' & task=='regression'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 1.0
 - id: s2_single_b_def_a_def_binary_clear_better
@@ -2526,8 +2826,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='B_def-A_def' & task=='binary'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 0.0
 - id: s2_single_b_def_a_def_binary_clear_worse
@@ -2537,8 +2837,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='B_def-A_def' & task=='binary'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 1.0
 - id: s2_single_b_def_a_def_multiclass_clear_better
@@ -2548,8 +2848,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='B_def-A_def' & task=='multiclass'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 2.0
 - id: s2_single_b_def_a_def_multiclass_clear_worse
@@ -2559,8 +2859,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='B_def-A_def' & task=='multiclass'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 1.0
 - id: s2_single_b_def_a_def_regression_clear_better
@@ -2570,8 +2870,8 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='B_def-A_def' & task=='regression'
   stat: n_clear_better
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 2.0
 - id: s2_single_b_def_a_def_regression_clear_worse
@@ -2581,31 +2881,31 @@
   source: results/tidy/exp02_contrasts_summary.csv
   query: contrast=='B_def-A_def' & task=='regression'
   stat: n_clear_worse
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
   value: 2.0
 - id: s6_lama_diag_rmse_exp02_A_def_pol
   section: 6
-  text: mean RMSE over 5 folds on pol, exp02 A_def (default LightGBM through AutoGluon, same folds, 80% of the rows
-    like the LightAutoML arms)
+  text: mean RMSE over 5 folds on pol, exp02 A_def (default LightGBM through AutoGluon, same folds, the same outer
+    training rows less AutoGluon's early-stopping holdout, about 72% of the data)
   source: results/tidy/exp06_lama_diag.csv
   query: dataset=='pol' & arm=='exp02_A_def'
   stat: rmse
   value: 4.2955
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.2955
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s6_lama_diag_rmse_exp02_A_def_socmob
   section: 6
-  text: mean RMSE over 5 folds on socmob, exp02 A_def (default LightGBM through AutoGluon, same folds, 80% of the
-    rows like the LightAutoML arms)
+  text: mean RMSE over 5 folds on socmob, exp02 A_def (default LightGBM through AutoGluon, same folds, the same
+    outer training rows less AutoGluon's early-stopping holdout, about 64% of the data)
   source: results/tidy/exp06_lama_diag.csv
   query: dataset=='socmob' & arm=='exp02_A_def'
   stat: rmse
   value: 18.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 18.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s2_mean_loss_pol_A
   section: 2
@@ -2614,8 +2914,8 @@
   query: dataset=='pol' & arm=='A'
   stat: loss_mean
   value: 7.062335
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 7.062335
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s2_mean_loss_pol_A_et0
   section: 2
@@ -2624,8 +2924,8 @@
   query: dataset=='pol' & arm=='A_et0'
   stat: loss_mean
   value: 4.586464
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.586464
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s2_mean_loss_pol_A_def
   section: 2
@@ -2634,8 +2934,8 @@
   query: dataset=='pol' & arm=='A_def'
   stat: loss_mean
   value: 4.295535
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.295535
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s2_mean_loss_sick_A
   section: 2
@@ -2644,8 +2944,8 @@
   query: dataset=='sick' & arm=='A'
   stat: loss_mean
   value: 0.054798
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.054798
+  approved_git_sha: 5960498-dirty
   tolerance: 1.0e-05
 - id: s2_mean_loss_sick_A_et0
   section: 2
@@ -2654,8 +2954,8 @@
   query: dataset=='sick' & arm=='A_et0'
   stat: loss_mean
   value: 0.035073
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.035073
+  approved_git_sha: 5960498-dirty
   tolerance: 1.0e-05
 - id: s2_mean_loss_sick_A_def
   section: 2
@@ -2664,8 +2964,8 @@
   query: dataset=='sick' & arm=='A_def'
   stat: loss_mean
   value: 0.035158
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.035158
+  approved_git_sha: 5960498-dirty
   tolerance: 1.0e-05
 - id: s2_mean_loss_elevators_A
   section: 2
@@ -2674,8 +2974,8 @@
   query: dataset=='elevators' & arm=='A'
   stat: loss_mean
   value: 0.003559
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.003559
+  approved_git_sha: 5960498-dirty
   tolerance: 1.0e-05
 - id: s2_mean_loss_elevators_A_et0
   section: 2
@@ -2684,8 +2984,8 @@
   query: dataset=='elevators' & arm=='A_et0'
   stat: loss_mean
   value: 0.00339
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.00339
+  approved_git_sha: 5960498-dirty
   tolerance: 1.0e-05
 - id: s2_mean_loss_elevators_A_et0_noreg
   section: 2
@@ -2694,8 +2994,8 @@
   query: dataset=='elevators' & arm=='A_et0_noreg'
   stat: loss_mean
   value: 0.002135
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.002135
+  approved_git_sha: 5960498-dirty
   tolerance: 1.0e-05
 - id: s2_mean_loss_elevators_A_def
   section: 2
@@ -2704,8 +3004,8 @@
   query: dataset=='elevators' & arm=='A_def'
   stat: loss_mean
   value: 0.002116
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.002116
+  approved_git_sha: 5960498-dirty
   tolerance: 1.0e-05
 - id: s2_mean_loss_kr_vs_kp_A
   section: 2
@@ -2714,8 +3014,8 @@
   query: dataset=='kr-vs-kp' & arm=='A'
   stat: loss_mean
   value: 0.036821
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.036821
+  approved_git_sha: 5960498-dirty
   tolerance: 1.0e-05
 - id: s2_mean_loss_kr_vs_kp_A_et0
   section: 2
@@ -2724,8 +3024,8 @@
   query: dataset=='kr-vs-kp' & arm=='A_et0'
   stat: loss_mean
   value: 0.035021
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.035021
+  approved_git_sha: 5960498-dirty
   tolerance: 1.0e-05
 - id: s2_mean_loss_kr_vs_kp_A_et0_noreg
   section: 2
@@ -2734,8 +3034,8 @@
   query: dataset=='kr-vs-kp' & arm=='A_et0_noreg'
   stat: loss_mean
   value: 0.024232
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.024232
+  approved_git_sha: 5960498-dirty
   tolerance: 1.0e-05
 - id: s2_mean_loss_kr_vs_kp_A_def
   section: 2
@@ -2744,8 +3044,8 @@
   query: dataset=='kr-vs-kp' & arm=='A_def'
   stat: loss_mean
   value: 0.024792
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.024792
+  approved_git_sha: 5960498-dirty
   tolerance: 1.0e-05
 - id: s2_mean_loss_socmob_A
   section: 2
@@ -2754,8 +3054,8 @@
   query: dataset=='socmob' & arm=='A'
   stat: loss_mean
   value: 22.033114
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 22.033114
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s2_mean_loss_socmob_A_et0
   section: 2
@@ -2764,8 +3064,8 @@
   query: dataset=='socmob' & arm=='A_et0'
   stat: loss_mean
   value: 19.832203
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 19.832203
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s2_mean_loss_socmob_A_et0_nocat
   section: 2
@@ -2774,8 +3074,8 @@
   query: dataset=='socmob' & arm=='A_et0_nocat'
   stat: loss_mean
   value: 17.033824
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 17.033824
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s2_mean_loss_socmob_A_def
   section: 2
@@ -2784,8 +3084,8 @@
   query: dataset=='socmob' & arm=='A_def'
   stat: loss_mean
   value: 17.999961
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 17.999961
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s2_sd_loss_socmob_A_et0_nocat
   section: 2
@@ -2794,8 +3094,8 @@
   query: dataset=='socmob' & arm=='A_et0_nocat'
   stat: loss_sd
   value: 4.908618
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.908618
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s2_hp_nosamp_elevators
   section: 2
@@ -2805,8 +3105,8 @@
   query: contrast=='A_et0_nosamp-A_et0' & dataset=='elevators'
   stat: effect
   value: 0.018526
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.018526
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.01604
@@ -2819,8 +3119,8 @@
   query: contrast=='A_et0_nosamp-A_et0' & dataset=='kr-vs-kp'
   stat: effect
   value: 0.025332
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.025332
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.056928
@@ -2833,8 +3133,8 @@
   query: contrast=='A_et0_nocap-A_et0' & dataset=='elevators'
   stat: effect
   value: 0.003315
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.003315
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.001696
@@ -2847,8 +3147,8 @@
   query: contrast=='A_et0_nocap-A_et0' & dataset=='kr-vs-kp'
   stat: effect
   value: 0.066229
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.066229
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.051383
@@ -2860,8 +3160,8 @@
   query: contrast=='A_et0_nocat-A_et0' & dataset=='socmob'
   stat: effect
   value: 0.143661
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.143661
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.011581
@@ -2874,8 +3174,8 @@
   query: contrast=='A_et0_nocat-A_et0' & dataset=='elevators'
   stat: effect
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.0
@@ -2888,8 +3188,8 @@
   query: contrast=='A_et0_nocat-A_et0' & dataset=='kr-vs-kp'
   stat: effect
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.0
@@ -2902,8 +3202,8 @@
   query: contrast=='D-A_def' & task=='binary'
   stat: n_better
   value: 4.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_d_a_def_multiclass
   section: 2
@@ -2913,8 +3213,8 @@
   query: contrast=='D-A_def' & task=='multiclass'
   stat: n_better
   value: 4.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_d_a_def_regression
   section: 2
@@ -2924,8 +3224,8 @@
   query: contrast=='D-A_def' & task=='regression'
   stat: n_better
   value: 4.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_wall_A
   section: 2
@@ -2934,8 +3234,8 @@
   query: arm=='A'
   stat: wall_s_mean
   value: 22.566
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 22.566
+  approved_git_sha: 5960498-dirty
   tolerance: 1
 - id: s2_wall_B
   section: 2
@@ -2944,8 +3244,8 @@
   query: arm=='B'
   stat: wall_s_mean
   value: 40.26
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 40.26
+  approved_git_sha: 5960498-dirty
   tolerance: 1
 - id: s2_wall_B2
   section: 2
@@ -2954,8 +3254,8 @@
   query: arm=='B2'
   stat: wall_s_mean
   value: 21.4
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 21.4
+  approved_git_sha: 5960498-dirty
   tolerance: 1
 - id: s2_wall_C
   section: 2
@@ -2964,8 +3264,8 @@
   query: arm=='C'
   stat: wall_s_mean
   value: 82.681
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 82.681
+  approved_git_sha: 5960498-dirty
   tolerance: 1
 - id: s2_wall_E
   section: 2
@@ -2974,8 +3274,8 @@
   query: arm=='E'
   stat: wall_s_mean
   value: 346.297
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 346.297
+  approved_git_sha: 5960498-dirty
   tolerance: 1
 - id: s2_wall_D0
   section: 2
@@ -2984,8 +3284,8 @@
   query: arm=='D0'
   stat: wall_s_mean
   value: 558.851
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 558.851
+  approved_git_sha: 5960498-dirty
   tolerance: 1
 - id: s2_wall_D
   section: 2
@@ -2994,8 +3294,8 @@
   query: arm=='D'
   stat: wall_s_mean
   value: 610.707
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 610.707
+  approved_git_sha: 5960498-dirty
   tolerance: 1
 - id: s6_wall_ag_best
   section: 6
@@ -3004,8 +3304,8 @@
   query: arm=='ag_best'
   stat: wall_s_mean
   value: 587.991
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 587.991
+  approved_git_sha: 5960498-dirty
   tolerance: 1
 - id: s6_wall_h2o
   section: 6
@@ -3014,8 +3314,8 @@
   query: arm=='h2o'
   stat: wall_s_mean
   value: 610.566
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 610.566
+  approved_git_sha: 5960498-dirty
   tolerance: 1
 - id: s6_wall_h2o_te
   section: 6
@@ -3024,8 +3324,8 @@
   query: arm=='h2o_te'
   stat: wall_s_mean
   value: 609.337
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 609.337
+  approved_git_sha: 5960498-dirty
   tolerance: 1
 - id: s6_wall_lama
   section: 6
@@ -3034,8 +3334,8 @@
   query: arm=='lama'
   stat: wall_s_mean
   value: 212.827
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 212.827
+  approved_git_sha: 5960498-dirty
   tolerance: 1
 - id: s6_wall_lama_min
   section: 6
@@ -3044,8 +3344,8 @@
   query: arm=='lama'
   stat: wall_s_min
   value: 52.09
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 52.09
+  approved_git_sha: 5960498-dirty
   tolerance: 1
 - id: s6_wall_lama_max
   section: 6
@@ -3054,8 +3354,8 @@
   query: arm=='lama'
   stat: wall_s_max
   value: 449.65
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 449.65
+  approved_git_sha: 5960498-dirty
   tolerance: 1
 - id: s6_lama_num_columns_used_pol
   section: 6
@@ -3064,18 +3364,18 @@
   query: dataset=='pol' & arm=='lama_num'
   stat: n_columns_used_max
   value: 26.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 26.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s6_lama_num_columns_used_pol_min
   section: 6
-  text: the same, smallest over folds
+  text: columns used by LightAutoML with numeric roles on pol, smallest over the folds (of 48 columns in)
   source: results/tidy/exp06_arm_means.csv
   query: dataset=='pol' & arm=='lama_num'
   stat: n_columns_used_min
   value: 26.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 26.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_rounds_elevators_A
   section: 2
@@ -3084,8 +3384,8 @@
   query: dataset=='elevators' & arm=='A'
   stat: median_rounds
   value: 9997.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 9997.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_rounds_elevators_A_et0
   section: 2
@@ -3094,8 +3394,8 @@
   query: dataset=='elevators' & arm=='A_et0'
   stat: median_rounds
   value: 9990.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 9990.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_rounds_elevators_A_et0_noreg
   section: 2
@@ -3104,8 +3404,8 @@
   query: dataset=='elevators' & arm=='A_et0_noreg'
   stat: median_rounds
   value: 2397.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2397.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_rounds_elevators_A_def
   section: 2
@@ -3114,8 +3414,8 @@
   query: dataset=='elevators' & arm=='A_def'
   stat: median_rounds
   value: 1082.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1082.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_rounds_kr_vs_kp_A
   section: 2
@@ -3124,8 +3424,8 @@
   query: dataset=='kr-vs-kp' & arm=='A'
   stat: median_rounds
   value: 9967.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 9967.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_rounds_kr_vs_kp_A_et0
   section: 2
@@ -3134,8 +3434,8 @@
   query: dataset=='kr-vs-kp' & arm=='A_et0'
   stat: median_rounds
   value: 9967.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 9967.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_rounds_kr_vs_kp_A_et0_noreg
   section: 2
@@ -3144,8 +3444,8 @@
   query: dataset=='kr-vs-kp' & arm=='A_et0_noreg'
   stat: median_rounds
   value: 902.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 902.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_rounds_kr_vs_kp_A_def
   section: 2
@@ -3154,8 +3454,8 @@
   query: dataset=='kr-vs-kp' & arm=='A_def'
   stat: median_rounds
   value: 154.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 154.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_rounds_pol_A
   section: 2
@@ -3164,8 +3464,8 @@
   query: dataset=='pol' & arm=='A'
   stat: median_rounds
   value: 10000.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 10000.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_rounds_pol_A_et0
   section: 2
@@ -3174,8 +3474,8 @@
   query: dataset=='pol' & arm=='A_et0'
   stat: median_rounds
   value: 10000.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 10000.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_rounds_pol_A_def
   section: 2
@@ -3184,8 +3484,8 @@
   query: dataset=='pol' & arm=='A_def'
   stat: median_rounds
   value: 4261.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4261.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_rounds_sick_A
   section: 2
@@ -3194,8 +3494,8 @@
   query: dataset=='sick' & arm=='A'
   stat: median_rounds
   value: 9966.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 9966.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_rounds_sick_A_et0
   section: 2
@@ -3204,8 +3504,8 @@
   query: dataset=='sick' & arm=='A_et0'
   stat: median_rounds
   value: 2613.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2613.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_rounds_sick_A_def
   section: 2
@@ -3214,8 +3514,8 @@
   query: dataset=='sick' & arm=='A_def'
   stat: median_rounds
   value: 122.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 122.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_rounds_pendigits_A
   section: 2
@@ -3224,8 +3524,8 @@
   query: dataset=='pendigits' & arm=='A'
   stat: median_rounds
   value: 9976.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 9976.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_rounds_okcupid_stem_A
   section: 2
@@ -3234,19 +3534,19 @@
   query: dataset=='okcupid-stem' & arm=='A'
   stat: median_rounds
   value: 639.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 639.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s6_h2o_te_h2o_okcupid_stem
   section: 6
   text: relative log loss improvement of H2O with target encoding over H2O on okcupid-stem (a column of 7,019 levels
-    is encoded)
+    is encoded) (comparable to h2o's run-to-run spread of 5 to 10 points, so not separable from it)
   source: results/tidy/exp06_contrasts.csv
   query: contrast=='h2o_te-h2o' & dataset=='okcupid-stem'
   stat: effect
   value: -0.020808
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.020808
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.033905
@@ -3254,12 +3554,13 @@
 - id: s6_h2o_te_h2o_moneyball
   section: 6
   text: relative RMSE improvement of H2O with target encoding over H2O on Moneyball (a column of 39 levels is encoded)
+    (comparable to h2o's run-to-run spread of 5 to 10 points, so not separable from it)
   source: results/tidy/exp06_contrasts.csv
   query: contrast=='h2o_te-h2o' & dataset=='Moneyball'
   stat: effect
   value: -0.053116
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.053116
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.098975
@@ -3272,8 +3573,8 @@
   query: contrast=='h2o_te-h2o' & dataset=='pol'
   stat: effect
   value: -0.101569
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.101569
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.250772
@@ -3286,8 +3587,8 @@
   query: contrast=='h2o_te-h2o' & dataset=='credit-g'
   stat: effect
   value: -0.235033
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.235033
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.372594
@@ -3299,8 +3600,8 @@
   query: contrast=='D-A' & dataset=='cmc'
   stat: effect
   value: 0.006933
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.006933
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.002118
@@ -3312,8 +3613,8 @@
   query: contrast=='D-D0' & dataset=='pol'
   stat: effect
   value: 0.175493
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.175493
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.167745
@@ -3325,8 +3626,8 @@
   query: contrast=='D-D0' & dataset=='pendigits'
   stat: effect
   value: 0.103218
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.103218
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.0313
@@ -3338,8 +3639,8 @@
   query: contrast=='D-D0' & dataset=='cmc'
   stat: effect
   value: -0.015581
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.015581
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.019573
@@ -3351,8 +3652,8 @@
   query: contrast=='A-A_def' & dataset=='credit-g'
   stat: effect
   value: 0.04858
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.04858
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.0354
@@ -3364,8 +3665,8 @@
   query: contrast=='A-A_def' & dataset=='mfeat-fourier'
   stat: effect
   value: 0.101271
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.101271
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.07844
@@ -3377,8 +3678,8 @@
   query: contrast=='A-A_def' & dataset=='Moneyball'
   stat: effect
   value: 0.058019
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.058019
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.046185
@@ -3390,8 +3691,8 @@
   query: contrast=='A-A_def' & dataset=='bank-marketing'
   stat: effect
   value: -0.008341
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.008341
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.020275
@@ -3403,8 +3704,8 @@
   query: contrast=='A-A_def' & dataset=='pendigits'
   stat: effect
   value: 0.179836
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.179836
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.004382
@@ -3416,8 +3717,8 @@
   query: contrast=='A-A_def' & dataset=='socmob'
   stat: effect
   value: -0.332427
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.332427
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.764405
@@ -3430,8 +3731,8 @@
   query: contrast=='D-A_def' & task=='binary'
   stat: n_clear_better
   value: 3.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 3.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_d_a_def_binary_clear_worse
   section: 2
@@ -3441,8 +3742,8 @@
   query: contrast=='D-A_def' & task=='binary'
   stat: n_clear_worse
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_d_a_def_multiclass_clear_better
   section: 2
@@ -3452,8 +3753,8 @@
   query: contrast=='D-A_def' & task=='multiclass'
   stat: n_clear_better
   value: 4.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_d_a_def_multiclass_clear_worse
   section: 2
@@ -3463,8 +3764,8 @@
   query: contrast=='D-A_def' & task=='multiclass'
   stat: n_clear_worse
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_d_a_def_regression_clear_better
   section: 2
@@ -3474,8 +3775,8 @@
   query: contrast=='D-A_def' & task=='regression'
   stat: n_clear_better
   value: 4.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_d_a_def_regression_clear_worse
   section: 2
@@ -3485,8 +3786,8 @@
   query: contrast=='D-A_def' & task=='regression'
   stat: n_clear_worse
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_rounds_pol_B
   section: 2
@@ -3495,8 +3796,8 @@
   query: dataset=='pol' & arm=='B'
   stat: median_rounds
   value: 4322.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4322.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_rounds_pol_B2
   section: 2
@@ -3505,8 +3806,8 @@
   query: dataset=='pol' & arm=='B2'
   stat: median_rounds
   value: 9999.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 9999.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_rounds_pol_B_et0
   section: 2
@@ -3515,8 +3816,8 @@
   query: dataset=='pol' & arm=='B_et0'
   stat: median_rounds
   value: 1826.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1826.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_rounds_elevators_B
   section: 2
@@ -3525,8 +3826,8 @@
   query: dataset=='elevators' & arm=='B'
   stat: median_rounds
   value: 9995.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 9995.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_rounds_elevators_B2
   section: 2
@@ -3535,8 +3836,8 @@
   query: dataset=='elevators' & arm=='B2'
   stat: median_rounds
   value: 10000.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 10000.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_rounds_kr_vs_kp_B
   section: 2
@@ -3545,8 +3846,8 @@
   query: dataset=='kr-vs-kp' & arm=='B'
   stat: median_rounds
   value: 9967.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 9967.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_rounds_kr_vs_kp_B2
   section: 2
@@ -3555,88 +3856,100 @@
   query: dataset=='kr-vs-kp' & arm=='B2'
   stat: median_rounds
   value: 9998.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 9998.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_noise_d_a_def_pol
   section: 2
   text: spread in percentage points between the effects of D-A_def in the original run and two repeat runs on pol
+    (the reference was not repeated, so this is the spread of D alone)
   source: results/tidy/noise_contrasts.csv
   query: contrast=='D-A_def' & dataset=='pol'
   stat: spread_pp
   value: 0.290203
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.290203
+  approved_git_sha: 5960498-dirty
   tolerance: 0.05
 - id: s2_noise_d_a_def_credit_g
   section: 2
   text: spread in percentage points between the effects of D-A_def in the original run and two repeat runs on credit-g
+    (the reference was not repeated, so this is the spread of D alone; credit-g finishes before the time limit and
+    repeats identically)
   source: results/tidy/noise_contrasts.csv
   query: contrast=='D-A_def' & dataset=='credit-g'
   stat: spread_pp
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0.05
 - id: s2_noise_d_a_pol
   section: 2
-  text: spread in percentage points between the effects of D-A in the original run and two repeat runs on pol
+  text: spread in percentage points between the effects of D-A in the original run and two repeat runs on pol (the
+    reference was not repeated, so this is the spread of D alone)
   source: results/tidy/noise_contrasts.csv
   query: contrast=='D-A' & dataset=='pol'
   stat: spread_pp
   value: 0.165843
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.165843
+  approved_git_sha: 5960498-dirty
   tolerance: 0.05
 - id: s2_noise_d_a_credit_g
   section: 2
   text: spread in percentage points between the effects of D-A in the original run and two repeat runs on credit-g
+    (the reference was not repeated, so this is the spread of D alone; credit-g finishes before the time limit and
+    repeats identically)
   source: results/tidy/noise_contrasts.csv
   query: contrast=='D-A' & dataset=='credit-g'
   stat: spread_pp
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0.05
 - id: s2_noise_d_d0_pol
   section: 2
-  text: spread in percentage points between the effects of D-D0 in the original run and two repeat runs on pol
+  text: spread in percentage points between the effects of D-D0 in the original run and two repeat runs on pol (D0
+    was not repeated, so this is the spread of D alone)
   source: results/tidy/noise_contrasts.csv
   query: contrast=='D-D0' & dataset=='pol'
   stat: spread_pp
   value: 0.386018
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.386018
+  approved_git_sha: 5960498-dirty
   tolerance: 0.05
 - id: s2_noise_d_d0_credit_g
   section: 2
   text: spread in percentage points between the effects of D-D0 in the original run and two repeat runs on credit-g
+    (D0 was not repeated, so this is the spread of D alone; credit-g finishes before the time limit and repeats
+    identically)
   source: results/tidy/noise_contrasts.csv
   query: contrast=='D-D0' & dataset=='credit-g'
   stat: spread_pp
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0.05
 - id: s2_noise_e_d0_pol
   section: 2
-  text: spread in percentage points between the effects of E-D0 in the original run and two repeat runs on pol
+  text: spread in percentage points between the effects of E-D0 in the original run and two repeat runs on pol (D0
+    was not repeated, so this is the spread of E alone)
   source: results/tidy/noise_contrasts.csv
   query: contrast=='E-D0' & dataset=='pol'
   stat: spread_pp
   value: 0.052513
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.052513
+  approved_git_sha: 5960498-dirty
   tolerance: 0.05
 - id: s2_noise_e_d0_credit_g
   section: 2
   text: spread in percentage points between the effects of E-D0 in the original run and two repeat runs on credit-g
+    (D0 was not repeated, so this is the spread of E alone; credit-g finishes before the time limit and repeats
+    identically)
   source: results/tidy/noise_contrasts.csv
   query: contrast=='E-D0' & dataset=='credit-g'
   stat: spread_pp
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0.05
 - id: s6_noise_lama_ag_pol
   section: 6
@@ -3645,8 +3958,8 @@
   query: contrast=='lama-ag' & dataset=='pol'
   stat: spread_pp
   value: 0.228038
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.228038
+  approved_git_sha: 5960498-dirty
   tolerance: 0.05
 - id: s6_noise_lama_ag_credit_g
   section: 6
@@ -3655,8 +3968,8 @@
   query: contrast=='lama-ag' & dataset=='credit-g'
   stat: spread_pp
   value: 0.025868
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.025868
+  approved_git_sha: 5960498-dirty
   tolerance: 0.05
 - id: s6_noise_h2o_ag_pol
   section: 6
@@ -3665,8 +3978,8 @@
   query: contrast=='h2o-ag' & dataset=='pol'
   stat: spread_pp
   value: 4.959877
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.959877
+  approved_git_sha: 5960498-dirty
   tolerance: 0.05
 - id: s6_noise_h2o_ag_credit_g
   section: 6
@@ -3675,8 +3988,8 @@
   query: contrast=='h2o-ag' & dataset=='credit-g'
   stat: spread_pp
   value: 9.744987
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 9.744987
+  approved_git_sha: 5960498-dirty
   tolerance: 0.05
 - id: s6_noise_h2o_loss_pol
   section: 6
@@ -3685,8 +3998,8 @@
   query: arm=='h2o' & dataset=='pol'
   stat: spread_rel
   value: 0.046785
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.046785
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s6_noise_h2o_loss_credit_g
   section: 6
@@ -3695,18 +4008,19 @@
   query: arm=='h2o' & dataset=='credit-g'
   stat: spread_rel
   value: 0.085428
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.085428
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
 - id: s2_fig_exp02_noise_table
   section: 2
   kind: figure
-  text: run-to-run noise table of the exp02 contrasts, effect per run, spread and fold CI
+  text: run-to-run noise table of the exp02 contrasts, effect per run, spread and fold CI (only D and E were repeated;
+    D0, A and A_def use their run 0 in every run; credit-g repeats identically)
   output: results/figures/article/exp02_noise_table.png
   data: results/figures/article/exp02_noise_table.csv
   data_hash: 80556ca00a3c65c0
-  approved_data_hash: null
-  approved_git_sha: null
+  approved_data_hash: 80556ca00a3c65c0
+  approved_git_sha: 5960498-dirty
 - id: s6_fig_exp06_noise_table
   section: 6
   kind: figure
@@ -3714,8 +4028,8 @@
   output: results/figures/article/exp06_noise_table.png
   data: results/figures/article/exp06_noise_table.csv
   data_hash: 9da70c372309e735
-  approved_data_hash: null
-  approved_git_sha: null
+  approved_data_hash: 9da70c372309e735
+  approved_git_sha: 5960498-dirty
 - id: s2_skrub_numeric_strings
   section: 2
   text: 'skrub TableVectorizer: numbers stored as strings (num_as_str, mixed with n/a) read as numeric columns on
@@ -3724,8 +4038,8 @@
   query: dataset=='hard_columns' & input_col in ['num_as_str', 'mixed'] & skrub_kind=='numeric'
   stat: count
   value: 2
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_skrub_date_str_outputs
   section: 2
@@ -3735,8 +4049,8 @@
   query: dataset=='hard_columns' & input_col=='date_str'
   stat: n_outputs
   value: 4.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_skrub_text_long_outputs
   section: 2
@@ -3746,8 +4060,8 @@
   query: dataset=='hard_columns' & input_col=='text_long'
   stat: n_outputs
   value: 30.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 30.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_skrub_uid_outputs
   section: 2
@@ -3756,8 +4070,8 @@
   query: dataset=='hard_columns' & input_col=='uid'
   stat: n_outputs
   value: 30.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 30.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_skrub_cat_low_outputs
   section: 2
@@ -3766,8 +4080,8 @@
   query: dataset=='hard_columns' & input_col=='cat_low'
   stat: n_outputs
   value: 3.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 3.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_skrub_cat_binary_outputs
   section: 2
@@ -3776,8 +4090,8 @@
   query: dataset=='hard_columns' & input_col=='cat_binary'
   stat: n_outputs
   value: 1.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_skrub_const_kept
   section: 2
@@ -3786,8 +4100,8 @@
   query: dataset=='hard_columns' & input_col=='const'
   stat: n_outputs
   value: 1.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_skrub_dropped_columns
   section: 2
@@ -3796,8 +4110,8 @@
   query: action=='dropped'
   stat: count
   value: 0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_skrub_non_float32_columns
   section: 2
@@ -3806,8 +4120,8 @@
   query: output_dtypes!='float32'
   stat: count
   value: 0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_skrub_tv_ok_units
   section: 4
@@ -3816,8 +4130,8 @@
   query: arm=='skrub_tv' & status=='ok'
   stat: count
   value: 990
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 990
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_skrub_tv_planned_units
   section: 4
@@ -3826,235 +4140,253 @@
   query: arm=='skrub_tv'
   stat: count
   value: 990
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 990
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_skrub_tv_bin_auc_lgbm
   section: 4
-  text: 'median auc_diff of skrub_tv on binary, lgbm downstream (secondary: over all 50 datasets, mostly numeric-only
-    ones with exactly 0)'
+  text: 'median auc_diff of skrub_tv on binary, lgbm downstream (secondary: median over the 20 binary primary datasets,
+    8 of them without categorical columns; the headline is the count on datasets with categories)'
   source: results/tidy/exp04_summary.csv
   query: task=='binary' & arm=='skrub_tv' & model=='lgbm' & effect=='auc_diff' & rule=='base_fallback'
   stat: median_effect
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0.0005
+  role: secondary
   ci:
   - -2.0e-06
   - 0.000252
   coverage: 1.0
-  role: secondary
 - id: s4_skrub_tv_bin_auc_catboost
   section: 4
-  text: 'median auc_diff of skrub_tv on binary, catboost downstream (secondary: over all 50 datasets, mostly numeric-only
-    ones with exactly 0)'
+  text: 'median auc_diff of skrub_tv on binary, catboost downstream (secondary: median over the 20 binary primary
+    datasets, 8 of them without categorical columns; the headline is the count on datasets with categories)'
   source: results/tidy/exp04_summary.csv
   query: task=='binary' & arm=='skrub_tv' & model=='catboost' & effect=='auc_diff' & rule=='base_fallback'
   stat: median_effect
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0.0005
+  role: secondary
   ci:
   - -0.000428
   - 0.0
   coverage: 1.0
-  role: secondary
 - id: s4_skrub_tv_multi_logloss_lgbm
   section: 4
-  text: 'median logloss_rel of skrub_tv on multiclass, lgbm downstream (secondary: over all 50 datasets, mostly
-    numeric-only ones with exactly 0)'
+  text: 'median logloss_rel of skrub_tv on multiclass, lgbm downstream (secondary: median over the 10 multiclass
+    primary datasets, 7 of them without categorical columns; the headline is the count on datasets with categories)'
   source: results/tidy/exp04_summary.csv
   query: task=='multiclass' & arm=='skrub_tv' & model=='lgbm' & effect=='logloss_rel' & rule=='base_fallback'
   stat: median_effect
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
+  role: secondary
   ci:
   - -0.00019
   - 0.000884
   coverage: 1.0
-  role: secondary
 - id: s4_skrub_tv_multi_logloss_catboost
   section: 4
-  text: 'median logloss_rel of skrub_tv on multiclass, catboost downstream (secondary: over all 50 datasets, mostly
-    numeric-only ones with exactly 0)'
+  text: 'median logloss_rel of skrub_tv on multiclass, catboost downstream (secondary: median over the 9 multiclass
+    primary datasets, 7 of them without categorical columns; the headline is the count on datasets with categories)'
   source: results/tidy/exp04_summary.csv
   query: task=='multiclass' & arm=='skrub_tv' & model=='catboost' & effect=='logloss_rel' & rule=='base_fallback'
   stat: median_effect
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
+  role: secondary
   ci:
   - -0.001095
   - 0.0
   coverage: 1.0
-  role: secondary
 - id: s4_skrub_tv_reg_rmse_lgbm
   section: 4
-  text: 'median rmse_rel of skrub_tv on regression, lgbm downstream (secondary: over all 50 datasets, mostly numeric-only
-    ones with exactly 0)'
+  text: 'median rmse_rel of skrub_tv on regression, lgbm downstream (secondary: median over the 20 regression primary
+    datasets, 7 of them without categorical columns; the headline is the count on datasets with categories)'
   source: results/tidy/exp04_summary.csv
   query: task=='regression' & arm=='skrub_tv' & model=='lgbm' & effect=='rmse_rel' & rule=='base_fallback'
   stat: median_effect
   value: -0.000255
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.000255
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
+  role: secondary
   ci:
   - -0.004169
   - 0.0
   coverage: 1.0
-  role: secondary
 - id: s4_skrub_tv_reg_rmse_catboost
   section: 4
-  text: 'median rmse_rel of skrub_tv on regression, catboost downstream (secondary: over all 50 datasets, mostly
-    numeric-only ones with exactly 0)'
+  text: 'median rmse_rel of skrub_tv on regression, catboost downstream (secondary: median over the 20 regression
+    primary datasets, 7 of them without categorical columns; the headline is the count on datasets with categories)'
   source: results/tidy/exp04_summary.csv
   query: task=='regression' & arm=='skrub_tv' & model=='catboost' & effect=='rmse_rel' & rule=='base_fallback'
   stat: median_effect
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
+  role: secondary
   ci:
   - -0.002724
   - 0.001056
   coverage: 1.0
-  role: secondary
 - id: s4_ctr_ag_tabprep_keepcat_n_datasets
   section: 4
-  text: 'ag_tabprep_keepcat: datasets with fits for both CatBoost settings'
+  text: 'ag_tabprep_keepcat: datasets with fits for both CatBoost settings (of the 17 primary datasets with a categorical
+    column of 10 or more levels)'
   source: results/tidy/exp07_summary.csv
   query: arm=='ag_tabprep_keepcat'
   stat: n_datasets
   value: 17.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 17.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_ctr_ag_tabprep_keepcat_n_better
   section: 4
-  text: 'ag_tabprep_keepcat: datasets where the arm helps more with ctr=1 than with default CatBoost (sign of the
-    paired difference)'
+  text: 'ag_tabprep_keepcat: datasets where the paired difference is positive (the arm''s effect over base with
+    CatBoost ctr=1 minus its effect over base with default CatBoost, per dataset in the task''s primary metric)'
   source: results/tidy/exp07_summary.csv
   query: arm=='ag_tabprep_keepcat'
   stat: n_better
   value: 11.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 11.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_ctr_ag_tabprep_keepcat_n_clear_better
   section: 4
-  text: 'ag_tabprep_keepcat: datasets where the paired difference is clearly positive (fold CI excludes zero)'
+  text: 'ag_tabprep_keepcat: datasets where the paired difference is positive and its fold CI excludes zero (the
+    arm''s effect over base with CatBoost ctr=1 minus its effect over base with default CatBoost, per dataset in
+    the task''s primary metric)'
   source: results/tidy/exp07_summary.csv
   query: arm=='ag_tabprep_keepcat'
   stat: n_clear_better
   value: 5.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 5.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_ctr_ag_tabprep_keepcat_n_clear_worse
   section: 4
-  text: 'ag_tabprep_keepcat: datasets where the paired difference is clearly negative (fold CI excludes zero)'
+  text: 'ag_tabprep_keepcat: datasets where the paired difference is negative and its fold CI excludes zero (the
+    arm''s effect over base with CatBoost ctr=1 minus its effect over base with default CatBoost, per dataset in
+    the task''s primary metric)'
   source: results/tidy/exp07_summary.csv
   query: arm=='ag_tabprep_keepcat'
   stat: n_clear_worse
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_ctr_lama_adv_n_datasets
   section: 4
-  text: 'lama_adv: datasets with fits for both CatBoost settings'
+  text: 'lama_adv: datasets with fits for both CatBoost settings (of the 17 primary datasets with a categorical
+    column of 10 or more levels)'
   source: results/tidy/exp07_summary.csv
   query: arm=='lama_adv'
   stat: n_datasets
   value: 17.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 17.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_ctr_lama_adv_n_better
   section: 4
-  text: 'lama_adv: datasets where the arm helps more with ctr=1 than with default CatBoost (sign of the paired difference)'
+  text: 'lama_adv: datasets where the paired difference is positive (the arm''s effect over base with CatBoost ctr=1
+    minus its effect over base with default CatBoost, per dataset in the task''s primary metric)'
   source: results/tidy/exp07_summary.csv
   query: arm=='lama_adv'
   stat: n_better
   value: 12.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 12.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_ctr_lama_adv_n_clear_better
   section: 4
-  text: 'lama_adv: datasets where the paired difference is clearly positive (fold CI excludes zero)'
+  text: 'lama_adv: datasets where the paired difference is positive and its fold CI excludes zero (the arm''s effect
+    over base with CatBoost ctr=1 minus its effect over base with default CatBoost, per dataset in the task''s primary
+    metric)'
   source: results/tidy/exp07_summary.csv
   query: arm=='lama_adv'
   stat: n_clear_better
   value: 7.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 7.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_ctr_lama_adv_n_clear_worse
   section: 4
-  text: 'lama_adv: datasets where the paired difference is clearly negative (fold CI excludes zero)'
+  text: 'lama_adv: datasets where the paired difference is negative and its fold CI excludes zero (the arm''s effect
+    over base with CatBoost ctr=1 minus its effect over base with default CatBoost, per dataset in the task''s primary
+    metric)'
   source: results/tidy/exp07_summary.csv
   query: arm=='lama_adv'
   stat: n_clear_worse
   value: 1.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_ctr_openfe_n_datasets
   section: 4
-  text: 'openfe: datasets with fits for both CatBoost settings'
+  text: 'openfe: datasets with fits for both CatBoost settings (of the 17 primary datasets with a categorical column
+    of 10 or more levels)'
   source: results/tidy/exp07_summary.csv
   query: arm=='openfe'
   stat: n_datasets
   value: 16.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 16.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_ctr_openfe_n_better
   section: 4
-  text: 'openfe: datasets where the arm helps more with ctr=1 than with default CatBoost (sign of the paired difference)'
+  text: 'openfe: datasets where the paired difference is positive (the arm''s effect over base with CatBoost ctr=1
+    minus its effect over base with default CatBoost, per dataset in the task''s primary metric)'
   source: results/tidy/exp07_summary.csv
   query: arm=='openfe'
   stat: n_better
   value: 12.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 12.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_ctr_openfe_n_clear_better
   section: 4
-  text: 'openfe: datasets where the paired difference is clearly positive (fold CI excludes zero)'
+  text: 'openfe: datasets where the paired difference is positive and its fold CI excludes zero (the arm''s effect
+    over base with CatBoost ctr=1 minus its effect over base with default CatBoost, per dataset in the task''s primary
+    metric)'
   source: results/tidy/exp07_summary.csv
   query: arm=='openfe'
   stat: n_clear_better
   value: 6.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 6.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_ctr_openfe_n_clear_worse
   section: 4
-  text: 'openfe: datasets where the paired difference is clearly negative (fold CI excludes zero)'
+  text: 'openfe: datasets where the paired difference is negative and its fold CI excludes zero (the arm''s effect
+    over base with CatBoost ctr=1 minus its effect over base with default CatBoost, per dataset in the task''s primary
+    metric)'
   source: results/tidy/exp07_summary.csv
   query: arm=='openfe'
   stat: n_clear_worse
   value: 1.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_ctr_base_n_datasets
   section: 4
-  text: 'base, CatBoost ctr=1 against default: datasets'
+  text: 'base, CatBoost ctr=1 against default: datasets (of the 17 primary datasets with a categorical column of
+    10 or more levels)'
   source: results/tidy/exp07_summary.csv
   query: arm=='base'
   stat: n_datasets
   value: 17.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 17.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_ctr_base_n_better
   section: 4
@@ -4063,8 +4395,8 @@
   query: arm=='base'
   stat: n_better
   value: 4.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_ctr_base_n_clear_worse
   section: 4
@@ -4074,8 +4406,8 @@
   query: arm=='base'
   stat: n_clear_worse
   value: 7.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 7.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_ctr_base_n_clear_better
   section: 4
@@ -4085,8 +4417,8 @@
   query: arm=='base'
   stat: n_clear_better
   value: 1.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_fig_ctr_ablation_table
   section: 4
@@ -4096,8 +4428,8 @@
   output: results/figures/article/ctr_ablation_table.png
   data: results/figures/article/ctr_ablation_table.csv
   data_hash: d797100e43ab7b4a
-  approved_data_hash: null
-  approved_git_sha: null
+  approved_data_hash: d797100e43ab7b4a
+  approved_git_sha: 5960498-dirty
 - id: s4_cat_ag_default_lgbm_n_datasets
   section: 4
   text: 'ag_default over base, lgbm downstream, primary datasets with categorical columns: datasets with categorical
@@ -4106,19 +4438,30 @@
   query: arm=='ag_default' & model=='lgbm' & task=='all'
   stat: n_datasets
   value: 28.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 28.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_cat_ag_default_lgbm_n_better
   section: 4
   text: 'ag_default over base, lgbm downstream, primary datasets with categorical columns: datasets better by the
-    sign of the mean per-split effect'
+    sign of the mean per-split effect (a dataset whose mean effect is within 1e-9 of 0 is not counted as better)'
   source: results/tidy/exp04_cat_summary.csv
   query: arm=='ag_default' & model=='lgbm' & task=='all'
   stat: n_better
   value: 1.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s4_cat_ag_default_lgbm_n_equal
+  section: 4
+  text: 'ag_default over base, lgbm downstream, primary datasets with categorical columns: datasets whose mean per-split
+    effect is within 1e-9 of 0, so the fitted model''s test result is identical to base'
+  source: results/tidy/exp04_cat_summary.csv
+  query: arm=='ag_default' & model=='lgbm' & task=='all'
+  stat: n_equal
+  value: 22.0
+  approved_value: 22.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_cat_ag_default_lgbm_n_clear_better
   section: 4
@@ -4128,19 +4471,20 @@
   query: arm=='ag_default' & model=='lgbm' & task=='all'
   stat: n_clear_better
   value: 1.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_cat_ag_default_lgbm_n_clear_worse
   section: 4
   text: 'ag_default over base, lgbm downstream, primary datasets with categorical columns: datasets clearly worse
-    (fold CI of the effect excludes zero)'
+    (fold CI of the effect excludes zero) (borderline: one dataset''s CI bound is within Monte Carlo error of zero,
+    so the count moves by one under other bootstrap seeds)'
   source: results/tidy/exp04_cat_summary.csv
   query: arm=='ag_default' & model=='lgbm' & task=='all'
   stat: n_clear_worse
   value: 1.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_cat_ag_default_catboost_n_datasets
   section: 4
@@ -4150,30 +4494,42 @@
   query: arm=='ag_default' & model=='catboost' & task=='all'
   stat: n_datasets
   value: 27.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 27.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_cat_ag_default_catboost_n_better
   section: 4
   text: 'ag_default over base, catboost downstream, primary datasets with categorical columns: datasets better by
-    the sign of the mean per-split effect'
+    the sign of the mean per-split effect (a dataset whose mean effect is within 1e-9 of 0 is not counted as better)'
   source: results/tidy/exp04_cat_summary.csv
   query: arm=='ag_default' & model=='catboost' & task=='all'
   stat: n_better
   value: 15.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 15.0
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s4_cat_ag_default_catboost_n_equal
+  section: 4
+  text: 'ag_default over base, catboost downstream, primary datasets with categorical columns: datasets whose mean
+    per-split effect is within 1e-9 of 0, so the fitted model''s test result is identical to base'
+  source: results/tidy/exp04_cat_summary.csv
+  query: arm=='ag_default' & model=='catboost' & task=='all'
+  stat: n_equal
+  value: 4.0
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_cat_ag_default_catboost_n_clear_better
   section: 4
   text: 'ag_default over base, catboost downstream, primary datasets with categorical columns: datasets clearly
-    better (fold CI of the effect excludes zero)'
+    better (fold CI of the effect excludes zero) (borderline: two datasets, socmob and colleges, sit at the edge
+    of zero; the count is 2 to 4 under other bootstrap seeds)'
   source: results/tidy/exp04_cat_summary.csv
   query: arm=='ag_default' & model=='catboost' & task=='all'
   stat: n_clear_better
   value: 3.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 3.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_cat_ag_default_catboost_n_clear_worse
   section: 4
@@ -4183,8 +4539,8 @@
   query: arm=='ag_default' & model=='catboost' & task=='all'
   stat: n_clear_worse
   value: 2.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_cat_skrub_tv_lgbm_n_datasets
   section: 4
@@ -4194,19 +4550,30 @@
   query: arm=='skrub_tv' & model=='lgbm' & task=='all'
   stat: n_datasets
   value: 28.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 28.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_cat_skrub_tv_lgbm_n_better
   section: 4
   text: 'skrub_tv over base, lgbm downstream, primary datasets with categorical columns: datasets better by the
-    sign of the mean per-split effect'
+    sign of the mean per-split effect (a dataset whose mean effect is within 1e-9 of 0 is not counted as better)'
   source: results/tidy/exp04_cat_summary.csv
   query: arm=='skrub_tv' & model=='lgbm' & task=='all'
   stat: n_better
   value: 12.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 12.0
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s4_cat_skrub_tv_lgbm_n_equal
+  section: 4
+  text: 'skrub_tv over base, lgbm downstream, primary datasets with categorical columns: datasets whose mean per-split
+    effect is within 1e-9 of 0, so the fitted model''s test result is identical to base'
+  source: results/tidy/exp04_cat_summary.csv
+  query: arm=='skrub_tv' & model=='lgbm' & task=='all'
+  stat: n_equal
+  value: 1.0
+  approved_value: 1.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_cat_skrub_tv_lgbm_n_clear_better
   section: 4
@@ -4216,8 +4583,8 @@
   query: arm=='skrub_tv' & model=='lgbm' & task=='all'
   stat: n_clear_better
   value: 6.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 6.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_cat_skrub_tv_lgbm_n_clear_worse
   section: 4
@@ -4227,8 +4594,8 @@
   query: arm=='skrub_tv' & model=='lgbm' & task=='all'
   stat: n_clear_worse
   value: 10.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 10.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_cat_skrub_tv_catboost_n_datasets
   section: 4
@@ -4238,19 +4605,30 @@
   query: arm=='skrub_tv' & model=='catboost' & task=='all'
   stat: n_datasets
   value: 27.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 27.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_cat_skrub_tv_catboost_n_better
   section: 4
   text: 'skrub_tv over base, catboost downstream, primary datasets with categorical columns: datasets better by
-    the sign of the mean per-split effect'
+    the sign of the mean per-split effect (a dataset whose mean effect is within 1e-9 of 0 is not counted as better)'
   source: results/tidy/exp04_cat_summary.csv
   query: arm=='skrub_tv' & model=='catboost' & task=='all'
   stat: n_better
   value: 11.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 11.0
+  approved_git_sha: 5960498-dirty
+  tolerance: 0
+- id: s4_cat_skrub_tv_catboost_n_equal
+  section: 4
+  text: 'skrub_tv over base, catboost downstream, primary datasets with categorical columns: datasets whose mean
+    per-split effect is within 1e-9 of 0, so the fitted model''s test result is identical to base'
+  source: results/tidy/exp04_cat_summary.csv
+  query: arm=='skrub_tv' & model=='catboost' & task=='all'
+  stat: n_equal
+  value: 0.0
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_cat_skrub_tv_catboost_n_clear_better
   section: 4
@@ -4260,19 +4638,20 @@
   query: arm=='skrub_tv' & model=='catboost' & task=='all'
   stat: n_clear_better
   value: 5.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 5.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_cat_skrub_tv_catboost_n_clear_worse
   section: 4
   text: 'skrub_tv over base, catboost downstream, primary datasets with categorical columns: datasets clearly worse
-    (fold CI of the effect excludes zero)'
+    (fold CI of the effect excludes zero) (borderline: one dataset''s CI bound is within Monte Carlo error of zero,
+    so the count moves by one under other bootstrap seeds)'
   source: results/tidy/exp04_cat_summary.csv
   query: arm=='skrub_tv' & model=='catboost' & task=='all'
   stat: n_clear_worse
   value: 7.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 7.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_fig_cat_subgroup_table
   section: 4
@@ -4280,9 +4659,9 @@
   text: skrub_tv and ag_default over base on the datasets with categorical columns, counts by sign and by fold CI
   output: results/figures/article/cat_subgroup_table.png
   data: results/figures/article/cat_subgroup_table.csv
-  data_hash: 164af2117217a732
-  approved_data_hash: null
-  approved_git_sha: null
+  data_hash: cf5d32f08dedbb87
+  approved_data_hash: cf5d32f08dedbb87
+  approved_git_sha: 5960498-dirty
 - id: s2_types_cat_columns_fps_benchmark
   section: 2
   text: 'fps_benchmark: categorical columns in the raw frame (non-numeric dtype)'
@@ -4290,8 +4669,8 @@
   query: dataset=='fps_benchmark'
   stat: count
   value: 14
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 14
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_numeric_like_fps_benchmark
   section: 2
@@ -4300,8 +4679,8 @@
   query: dataset=='fps_benchmark' & numeric_like
   stat: count
   value: 4
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_catboost_cat_features_base_fps_benchmark
   section: 2
@@ -4310,8 +4689,8 @@
   query: dataset=='fps_benchmark' & arm=='base'
   stat: n_categorical
   value: 14.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 14.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_catboost_cat_features_ag_default_fps_benchmark
   section: 2
@@ -4320,8 +4699,8 @@
   query: dataset=='fps_benchmark' & arm=='ag_default'
   stat: n_categorical
   value: 6.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 6.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_catboost_cat_features_skrub_tv_fps_benchmark
   section: 2
@@ -4330,8 +4709,8 @@
   query: dataset=='fps_benchmark' & arm=='skrub_tv'
   stat: n_categorical
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_catboost_cat_features_base_numcast_fps_benchmark
   section: 2
@@ -4340,8 +4719,8 @@
   query: dataset=='fps_benchmark' & arm=='base_numcast'
   stat: n_categorical
   value: 9.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 9.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_cat_columns_auction_verification
   section: 2
@@ -4350,8 +4729,8 @@
   query: dataset=='auction_verification'
   stat: count
   value: 2
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_numeric_like_auction_verification
   section: 2
@@ -4360,8 +4739,8 @@
   query: dataset=='auction_verification' & numeric_like
   stat: count
   value: 2
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_catboost_cat_features_base_auction_verification
   section: 2
@@ -4370,8 +4749,8 @@
   query: dataset=='auction_verification' & arm=='base'
   stat: n_categorical
   value: 2.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_catboost_cat_features_ag_default_auction_verification
   section: 2
@@ -4380,8 +4759,8 @@
   query: dataset=='auction_verification' & arm=='ag_default'
   stat: n_categorical
   value: 2.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_catboost_cat_features_skrub_tv_auction_verification
   section: 2
@@ -4390,8 +4769,8 @@
   query: dataset=='auction_verification' & arm=='skrub_tv'
   stat: n_categorical
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_catboost_cat_features_base_numcast_auction_verification
   section: 2
@@ -4400,8 +4779,8 @@
   query: dataset=='auction_verification' & arm=='base_numcast'
   stat: n_categorical
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_cat_columns_brazilian_houses
   section: 2
@@ -4410,8 +4789,8 @@
   query: dataset=='Brazilian_houses'
   stat: count
   value: 4
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_numeric_like_brazilian_houses
   section: 2
@@ -4420,8 +4799,8 @@
   query: dataset=='Brazilian_houses' & numeric_like
   stat: count
   value: 1
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 1
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_catboost_cat_features_base_brazilian_houses
   section: 2
@@ -4430,8 +4809,8 @@
   query: dataset=='Brazilian_houses' & arm=='base'
   stat: n_categorical
   value: 4.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_catboost_cat_features_ag_default_brazilian_houses
   section: 2
@@ -4440,8 +4819,8 @@
   query: dataset=='Brazilian_houses' & arm=='ag_default'
   stat: n_categorical
   value: 2.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_catboost_cat_features_skrub_tv_brazilian_houses
   section: 2
@@ -4450,8 +4829,8 @@
   query: dataset=='Brazilian_houses' & arm=='skrub_tv'
   stat: n_categorical
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_catboost_cat_features_base_numcast_brazilian_houses
   section: 2
@@ -4460,8 +4839,8 @@
   query: dataset=='Brazilian_houses' & arm=='base_numcast'
   stat: n_categorical
   value: 3.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 3.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_cat_columns_socmob
   section: 2
@@ -4470,8 +4849,8 @@
   query: dataset=='socmob'
   stat: count
   value: 4
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_numeric_like_socmob
   section: 2
@@ -4480,8 +4859,8 @@
   query: dataset=='socmob' & numeric_like
   stat: count
   value: 0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_catboost_cat_features_base_socmob
   section: 2
@@ -4490,8 +4869,8 @@
   query: dataset=='socmob' & arm=='base'
   stat: n_categorical
   value: 4.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_catboost_cat_features_ag_default_socmob
   section: 2
@@ -4500,8 +4879,8 @@
   query: dataset=='socmob' & arm=='ag_default'
   stat: n_categorical
   value: 2.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 2.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_catboost_cat_features_skrub_tv_socmob
   section: 2
@@ -4510,8 +4889,8 @@
   query: dataset=='socmob' & arm=='skrub_tv'
   stat: n_categorical
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_catboost_cat_features_base_numcast_socmob
   section: 2
@@ -4520,8 +4899,8 @@
   query: dataset=='socmob' & arm=='base_numcast'
   stat: n_categorical
   value: 4.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 4.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_cat_columns_amazon_employee_access
   section: 2
@@ -4530,8 +4909,8 @@
   query: dataset=='Amazon_employee_access'
   stat: count
   value: 9
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 9
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_numeric_like_amazon_employee_access
   section: 2
@@ -4540,8 +4919,8 @@
   query: dataset=='Amazon_employee_access' & numeric_like
   stat: count
   value: 9
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 9
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_catboost_cat_features_base_amazon_employee_access
   section: 2
@@ -4550,8 +4929,8 @@
   query: dataset=='Amazon_employee_access' & arm=='base'
   stat: n_categorical
   value: 9.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 9.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_catboost_cat_features_ag_default_amazon_employee_access
   section: 2
@@ -4560,8 +4939,8 @@
   query: dataset=='Amazon_employee_access' & arm=='ag_default'
   stat: n_categorical
   value: 8.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 8.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_catboost_cat_features_skrub_tv_amazon_employee_access
   section: 2
@@ -4570,8 +4949,8 @@
   query: dataset=='Amazon_employee_access' & arm=='skrub_tv'
   stat: n_categorical
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_catboost_cat_features_base_numcast_amazon_employee_access
   section: 2
@@ -4580,8 +4959,8 @@
   query: dataset=='Amazon_employee_access' & arm=='base_numcast'
   stat: n_categorical
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_ordered_datasets
   section: 2
@@ -4591,8 +4970,8 @@
   query: n_ordered == n_category_columns
   stat: count
   value: 28
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 28
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s2_types_unordered_datasets
   section: 2
@@ -4601,8 +4980,8 @@
   query: n_ordered < n_category_columns
   stat: count
   value: 0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0
+  approved_git_sha: 5960498-dirty
   tolerance: 0
 - id: s4_numcast_ag_default_catboost_fps_benchmark
   section: 4
@@ -4612,8 +4991,8 @@
   query: dataset=='fps_benchmark' & model=='catboost' & arm=='ag_default'
   stat: effect
   value: 0.009551
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.009551
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.036364
@@ -4626,8 +5005,8 @@
   query: dataset=='fps_benchmark' & model=='catboost' & arm=='skrub_tv'
   stat: effect
   value: 0.687677
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.687677
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.649918
@@ -4640,8 +5019,8 @@
   query: dataset=='fps_benchmark' & model=='catboost' & arm=='base_numcast'
   stat: effect
   value: 0.0229
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0229
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.016877
@@ -4654,8 +5033,8 @@
   query: dataset=='fps_benchmark' & model=='catboost' & arm=='base_codes'
   stat: effect
   value: 0.601856
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.601856
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.523232
@@ -4668,8 +5047,8 @@
   query: dataset=='fps_benchmark' & model=='lgbm' & arm=='ag_default'
   stat: effect
   value: -0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.0
@@ -4682,8 +5061,8 @@
   query: dataset=='fps_benchmark' & model=='lgbm' & arm=='skrub_tv'
   stat: effect
   value: -0.205669
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.205669
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.263192
@@ -4696,8 +5075,8 @@
   query: dataset=='fps_benchmark' & model=='lgbm' & arm=='base_numcast'
   stat: effect
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.0
@@ -4710,8 +5089,8 @@
   query: dataset=='fps_benchmark' & model=='lgbm' & arm=='base_codes'
   stat: effect
   value: -0.596876
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.596876
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.681696
@@ -4724,8 +5103,8 @@
   query: dataset=='auction_verification' & model=='catboost' & arm=='ag_default'
   stat: effect
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.0
@@ -4738,8 +5117,8 @@
   query: dataset=='auction_verification' & model=='catboost' & arm=='skrub_tv'
   stat: effect
   value: 0.511879
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.511879
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.442641
@@ -4752,8 +5131,8 @@
   query: dataset=='auction_verification' & model=='catboost' & arm=='base_numcast'
   stat: effect
   value: 0.493692
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.493692
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.441588
@@ -4766,8 +5145,8 @@
   query: dataset=='auction_verification' & model=='catboost' & arm=='base_codes'
   stat: effect
   value: 0.493692
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.493692
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.441806
@@ -4780,8 +5159,8 @@
   query: dataset=='auction_verification' & model=='lgbm' & arm=='ag_default'
   stat: effect
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.0
@@ -4794,8 +5173,8 @@
   query: dataset=='auction_verification' & model=='lgbm' & arm=='skrub_tv'
   stat: effect
   value: 0.090835
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.090835
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.009066
@@ -4808,8 +5187,8 @@
   query: dataset=='auction_verification' & model=='lgbm' & arm=='base_numcast'
   stat: effect
   value: 0.19946
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.19946
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.131095
@@ -4822,8 +5201,8 @@
   query: dataset=='auction_verification' & model=='lgbm' & arm=='base_codes'
   stat: effect
   value: 0.19946
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.19946
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.130713
@@ -4836,8 +5215,8 @@
   query: dataset=='Brazilian_houses' & model=='catboost' & arm=='ag_default'
   stat: effect
   value: 0.033818
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.033818
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.000142
@@ -4850,8 +5229,8 @@
   query: dataset=='Brazilian_houses' & model=='catboost' & arm=='skrub_tv'
   stat: effect
   value: 0.206675
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.206675
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.372623
@@ -4864,8 +5243,8 @@
   query: dataset=='Brazilian_houses' & model=='catboost' & arm=='base_numcast'
   stat: effect
   value: 0.15354
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.15354
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.037493
@@ -4878,8 +5257,8 @@
   query: dataset=='Brazilian_houses' & model=='catboost' & arm=='base_codes'
   stat: effect
   value: 0.351414
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.351414
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.101787
@@ -4892,8 +5271,8 @@
   query: dataset=='Brazilian_houses' & model=='lgbm' & arm=='ag_default'
   stat: effect
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.0
@@ -4906,8 +5285,8 @@
   query: dataset=='Brazilian_houses' & model=='lgbm' & arm=='skrub_tv'
   stat: effect
   value: 0.00191
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.00191
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.005929
@@ -4920,8 +5299,8 @@
   query: dataset=='Brazilian_houses' & model=='lgbm' & arm=='base_numcast'
   stat: effect
   value: 0.064962
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.064962
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -8.4e-05
@@ -4934,8 +5313,8 @@
   query: dataset=='Brazilian_houses' & model=='lgbm' & arm=='base_codes'
   stat: effect
   value: 0.05646
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.05646
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.003529
@@ -4948,8 +5327,8 @@
   query: dataset=='socmob' & model=='catboost' & arm=='ag_default'
   stat: effect
   value: 0.019701
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.019701
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 5.1e-05
@@ -4962,8 +5341,8 @@
   query: dataset=='socmob' & model=='catboost' & arm=='skrub_tv'
   stat: effect
   value: 0.093537
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.093537
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.021227
@@ -4976,8 +5355,8 @@
   query: dataset=='socmob' & model=='catboost' & arm=='base_numcast'
   stat: effect
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.0
@@ -4990,8 +5369,8 @@
   query: dataset=='socmob' & model=='catboost' & arm=='base_codes'
   stat: effect
   value: 0.016319
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.016319
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.038701
@@ -5004,8 +5383,8 @@
   query: dataset=='socmob' & model=='lgbm' & arm=='ag_default'
   stat: effect
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.0
@@ -5018,8 +5397,8 @@
   query: dataset=='socmob' & model=='lgbm' & arm=='skrub_tv'
   stat: effect
   value: -0.188053
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.188053
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.321081
@@ -5032,8 +5411,8 @@
   query: dataset=='socmob' & model=='lgbm' & arm=='base_numcast'
   stat: effect
   value: 0.0
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.0
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.0
@@ -5046,8 +5425,8 @@
   query: dataset=='socmob' & model=='lgbm' & arm=='base_codes'
   stat: effect
   value: -0.140396
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.140396
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.23435
@@ -5060,8 +5439,8 @@
   query: dataset=='Amazon_employee_access' & model=='catboost' & arm=='ag_default'
   stat: effect
   value: -0.005321
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.005321
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.008411
@@ -5074,8 +5453,8 @@
   query: dataset=='Amazon_employee_access' & model=='catboost' & arm=='skrub_tv'
   stat: effect
   value: -0.0298
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.0298
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.036859
@@ -5088,8 +5467,8 @@
   query: dataset=='Amazon_employee_access' & model=='catboost' & arm=='base_numcast'
   stat: effect
   value: -0.053
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.053
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.059902
@@ -5102,8 +5481,8 @@
   query: dataset=='Amazon_employee_access' & model=='catboost' & arm=='base_codes'
   stat: effect
   value: -0.052992
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.052992
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.060135
@@ -5116,8 +5495,8 @@
   query: dataset=='Amazon_employee_access' & model=='lgbm' & arm=='ag_default'
   stat: effect
   value: 0.000645
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.000645
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.00011
@@ -5130,8 +5509,8 @@
   query: dataset=='Amazon_employee_access' & model=='lgbm' & arm=='skrub_tv'
   stat: effect
   value: 0.015918
-  approved_value: null
-  approved_git_sha: null
+  approved_value: 0.015918
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - 0.011052
@@ -5144,8 +5523,8 @@
   query: dataset=='Amazon_employee_access' & model=='lgbm' & arm=='base_numcast'
   stat: effect
   value: -0.00095
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.00095
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.004643
@@ -5158,8 +5537,8 @@
   query: dataset=='Amazon_employee_access' & model=='lgbm' & arm=='base_codes'
   stat: effect
   value: -0.001682
-  approved_value: null
-  approved_git_sha: null
+  approved_value: -0.001682
+  approved_git_sha: 5960498-dirty
   tolerance: 0.001
   ci:
   - -0.006505
@@ -5167,12 +5546,13 @@
 - id: s4_fig_numcast_table
   section: 4
   kind: figure
-  text: effect over base of ag_default, skrub_tv and base_numcast on the five diagnostic datasets
+  text: effect over base of ag_default, skrub_tv and base_numcast on the five diagnostic datasets; the table also
+    has base_codes (base with every categorical as integer codes), which carries the conclusion
   output: results/figures/article/numcast_table.png
   data: results/figures/article/numcast_table.csv
   data_hash: c10acc0351825cc2
-  approved_data_hash: null
-  approved_git_sha: null
+  approved_data_hash: c10acc0351825cc2
+  approved_git_sha: 5960498-dirty
 - id: s2_fig_exp09_types_table
   section: 2
   kind: figure
@@ -5181,5 +5561,5 @@
   output: results/figures/article/exp09_types_table.png
   data: results/figures/article/exp09_types_table.csv
   data_hash: ddd1b2fc13bdf1b8
-  approved_data_hash: null
-  approved_git_sha: null
+  approved_data_hash: ddd1b2fc13bdf1b8
+  approved_git_sha: 5960498-dirty

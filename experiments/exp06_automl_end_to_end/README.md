@@ -48,7 +48,7 @@ fix its place between `lama` and `ag_best` on these datasets. Two datasets of te
 ## LAMA diagnostics: pol and socmob
 
 `lama` trailed the exp04 base GBM on pol (RMSE 4.91 against 4.49 for LightGBM and 4.48 for CatBoost) and on
-socmob (20.59 against 18.29 LightGBM, 15.81 CatBoost; same folds, repeat 0). Those base models fit on 68% of the
+socmob (20.59 against 16.88 LightGBM, 15.81 CatBoost; same folds, repeat 0). Those base models fit on 68% of the
 rows, the LAMA arms on 80%. The closer reference is exp02 `A_def` (default LightGBM through AutoGluon, same
 folds, the same 80% outer training rows): pol 4.30, socmob 18.00. Against it `lama` trails (4.91 against 4.30 on pol, 20.59 against 18.00 on socmob).
 `A_def` does not fit on all of those rows: without bagging AutoGluon holds part of them out for early stopping, by its
@@ -68,11 +68,23 @@ category codes as numbers), `lama_full` (`TabularUtilizedAutoML`) and `lama_num_
   both) after 346 s of the 600 s with a single config (`conf_0`); why no further config started was not
   investigated, so the full-budget question is open on pol. On socmob it ran 560 s against 65 s and gains +2.6%
   (CI [0.4%, 4.6%]).
-- Both together on socmob: 17.13 (+16.3% over `lama`, CI [6.9%, 25.8%]), below `A_def` (18.00) and the base LightGBM
-  (18.29), above the base CatBoost (15.81) and `ag_best` (11.90). On pol the same arm equals `lama_num`.
+- Both together on socmob: 17.13 (+16.3% over `lama`, CI [6.9%, 25.8%]), better than `A_def` (18.00), slightly behind the base
+  LightGBM (16.88) and behind the base CatBoost (15.81) and `ag_best` (11.90). On pol the same arm equals `lama_num`.
 - Summary: forced numeric roles bring `lama` from behind the `A_def` LightGBM to about level or slightly
   better on both datasets; full budget adds a little on socmob only. `lama` as a tool stays behind `ag_best`, `h2o`
   and the base CatBoost on socmob.
+
+## Data paths and the categorical fixes of 2026-11-19
+
+The fixes (LightGBM takes ordered pandas categoricals; `ag_default` keeps category levels as strings) do not reach this
+experiment. Its workers (`worker_ag.py`, `worker_lama.py`, `worker_h2o.py`, `worker_lama_diag.py`) read the raw frame with
+`afe.data.loaders.load`, take the rows from `afe.data.splits`, and hand the raw columns to the tool (AutoGluon, LightAutoML,
+H2O), which does its own typing and models; nothing goes through `afe.generators` (no `BaseView`, no `ag_default`) or through
+the downstream fits of `afe.models.downstream`. The only import from that module is `metrics`, plain scoring that did not change.
+The unit hashes (`CODE` in `run.py`: the worker, `loaders.py`, `splits.py`) exclude the edited files, and no record of this
+experiment was rerun or rekeyed (`tests/test_records.py`). The one dependency is the LAMA diagnostic table above, which reads
+the exp04 base GBM cells: those were rerun, so the LightGBM reference row changed (socmob RMSE 18.29 to 16.88; pol RMSE 4.49
+unchanged, no categorical columns; the CatBoost rows are identical), and the text above carries the new values.
 
 The docstring of `worker_lama_diag.py` says forced numeric roles bypass the reader's column drops, and that `lama_full`
 keeps training until the budget is spent; the records above show neither (26 of 48 columns used on pol, 346 of 600 s).

@@ -23,7 +23,7 @@ every cell (text, short label, status, evidence), resolves the cited source line
 (`make env` first) and writes `results/tidy/transform_map.csv` and `transform_map_evidence.csv`; a correction goes into that
 script. Evidence is exp01, exp03 and exp05 outputs, the probe tables `exp03_dates_text.csv` and `exp06_h2o_probe.csv`
 (run by hand, no make target) and source lines. `afe.analysis.transform_map` then draws two PNGs, `transform_map_automl`
-(ag_default, ag_tabprep, lama, h2o) and `transform_map_generators` (openfe, autofeat, mljar_golden, manual_baseline),
+(ag_default, ag_tabprep, lama, h2o) and `transform_map_generators` (openfe, autofeat, mljar_golden, skrub_tv, manual_baseline),
 each with a CSV of the rendered cells. Only the cell colour carries a status (green done, amber partial, grey not
 done); whether a cell rests on a run output or on source code is the `status` column of the evidence table (two values,
 plus not confirmed), which the `s2_map_*` claims count; unverified parts of a cell are in its `note` column. The `h2o`
@@ -37,6 +37,12 @@ and `lama` over `ag_best` (exp06) the text may say "clearly better" or "clearly 
 measurement (pol and credit-g) shows AutoGluon and LAMA repeating to within 0.4 points, a caveat to state because it covers two
 datasets. For `h2o` (5 to 10 points between runs, `exp02_noise_table`, `exp06_noise_table`) the text uses sign counts only. The
 tables and dots colour by the fold CI, which covers folds only.
+
+The noise measurement behind "clearly" repeated D and E (exp02) and `ag_best`, `lama`, `h2o` (exp06) on pol and credit-g; D0
+and C were not repeated (the noise runs reuse the run 0 of D0), and credit-g finishes before the time limit and repeats
+identically, so the 0.4-point bound rests on pol alone. The fold CI is a percentile bootstrap over 5 folds, narrower than a
+t-interval: a few "clearly" counts sit at the edge and move by one under other bootstrap seeds (the claim texts mark them), and
+for H2O the claim register keeps the clear counts for the tables only.
 
 In the contrast tables `better (sign)` counts datasets whose mean effect is above zero; `clearly better` and
 `clearly worse` count datasets whose fold CI excludes zero. Dots in the contrast figures use the same colours.

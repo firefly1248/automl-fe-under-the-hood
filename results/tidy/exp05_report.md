@@ -67,19 +67,19 @@ Unit statuses: {'ok': 518, 'timeout': 12, 'not_applicable': 10}. Statistic per u
 
 Gap = association with y on fit rows (as delivered) - on test rows; flag above 0.05 (AUC) or 0.1 (|corr|). kind raw: the arm's untouched numeric input columns, the gap from sampling noise alone.
 
-| arm        | task       | kind   |   columns |   flagged_share |   max_gap |   median_gap |
-|:-----------|:-----------|:-------|----------:|----------------:|----------:|-------------:|
-| ag_tabprep | binary     | raw    |       330 |          0.0152 |    0.0688 |      -0.0007 |
-| ag_tabprep | binary     | te     |      1680 |          0.0345 |    0.1068 |      -0.0018 |
-| ag_tabprep | multiclass | raw    |       405 |          0.0346 |    0.1305 |      -0.0035 |
-| ag_tabprep | multiclass | te     |      2340 |          0.0188 |    0.1188 |      -0.0016 |
-| ag_tabprep | regression | raw    |       262 |          0.0802 |    0.1467 |      -0.0024 |
-| ag_tabprep | regression | te     |       735 |          0.0313 |    0.1575 |      -0.0085 |
-| lama_adv   | binary     | raw    |       344 |          0.0145 |    0.0688 |      -0.0005 |
-| lama_adv   | binary     | te     |       165 |          0.0848 |    0.1146 |       0      |
-| lama_adv   | multiclass | raw    |       568 |          0.0317 |    0.1305 |      -0.0009 |
-| lama_adv   | regression | raw    |       206 |          0.0728 |    0.1467 |      -0.0023 |
-| lama_adv   | regression | te     |       120 |          0.05   |    0.1352 |      -0.0073 |
+| arm        | task       | kind   |   column_fold_instances |   flagged_share |   max_gap |   median_gap |
+|:-----------|:-----------|:-------|------------------------:|----------------:|----------:|-------------:|
+| ag_tabprep | binary     | raw    |                     330 |          0.0152 |    0.0688 |      -0.0007 |
+| ag_tabprep | binary     | te     |                    1680 |          0.0345 |    0.1068 |      -0.0018 |
+| ag_tabprep | multiclass | raw    |                     405 |          0.0346 |    0.1305 |      -0.0035 |
+| ag_tabprep | multiclass | te     |                    2340 |          0.0188 |    0.1188 |      -0.0016 |
+| ag_tabprep | regression | raw    |                     262 |          0.0802 |    0.1467 |      -0.0024 |
+| ag_tabprep | regression | te     |                     735 |          0.0313 |    0.1575 |      -0.0085 |
+| lama_adv   | binary     | raw    |                     344 |          0.0145 |    0.0688 |      -0.0005 |
+| lama_adv   | binary     | te     |                     165 |          0.0848 |    0.1146 |       0      |
+| lama_adv   | multiclass | raw    |                     568 |          0.0317 |    0.1305 |      -0.0009 |
+| lama_adv   | regression | raw    |                     206 |          0.0728 |    0.1467 |      -0.0023 |
+| lama_adv   | regression | te     |                     120 |          0.05   |    0.1352 |      -0.0073 |
 
 ## 3. openfe_transductive - openfe (exp04 pilot, repeat 0)
 
