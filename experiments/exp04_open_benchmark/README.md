@@ -43,7 +43,7 @@ numeric column (both arms skip them), socmob has one (`mljar_golden` skips it). 
   CatBoost 11 / 5 / 7 (`afe.analysis.cat_subgroup`, `s4_cat_*`, `cat_subgroup_table`). `ag_default` is close to `base` once it
   keeps categorical columns as categories (next bullet; it drops or retypes some); `skrub_tv` turns them into numbers.
 - Two protocol corrections of 2026-11-19, found by the exp09 diagnostic (`experiments/exp09_numcast/README.md`), applied to every
-  record of this experiment: (1) every categorical column of these datasets is an ordered pandas category, which LightGBM's
+  record of this experiment: (1) every category-dtype column of these datasets is an ordered pandas category, which LightGBM's
   `categorical_feature="auto"` skips, so LightGBM had read all of them as integer codes in the first runs; `afe.models.downstream`
   now makes them unordered before the fit, so LightGBM uses its native categorical handling for `base` and every arm that keeps the
   columns; (2) the `ag_default` output (a category with integer categories) came back from the parquet cache as `int64`, so neither
@@ -52,6 +52,13 @@ numeric column (both arms skip them), socmob has one (`mljar_golden` skips it). 
   code path did not change, were moved to the new code hash (`rekey.py`, `rekeyed_from` in the record), and 36 of them (nine arms)
   recomputed afterwards matched to the last digit. Effects of the arms over `base` on LightGBM and all `ag_default` effects on
   CatBoost changed; every other CatBoost effect is identical to the first run.
+- Where LightGBM skips ordered categoricals (version 4.7.0, the one in `envs/core`; checked by calling `_data_from_pandas` on an ordered
+  and an unordered column: the first gives no categorical feature, the second one): [`python-package/lightgbm/basic.py` lines 773 and
+  787](https://github.com/microsoft/LightGBM/blob/v4.7.0/python-package/lightgbm/basic.py#L773-L787) keep only `not data[col].cat.ordered`
+  columns when `categorical_feature="auto"`, and the [`Dataset` docs](https://lightgbm.readthedocs.io/en/v4.7.0/pythonapi/lightgbm.Dataset.html)
+  say "If 'auto' and data is pandas DataFrame, pandas unordered categorical columns are used". All 301 category-dtype columns of the 28 primary
+  datasets that have one were ordered (`s4_lgbm_ordered_cat_columns`, `s4_lgbm_ordered_cat_datasets`; two more all-missing object columns, in
+  sick and fps_benchmark, are not category dtype).
 - What that did to the large CatBoost effects on fps_benchmark, auction_verification and Brazilian_houses: `ag_default` was +59.7,
   +49.4 and +39.6% RMSE with its categoricals lost, and is +1.0, 0.0 and +3.4 now; `skrub_tv` (all categoricals become numbers)
   keeps +68.8, +51.2 and +20.7. So the effect was CatBoost's categorical handling against plain numbers on these datasets, not

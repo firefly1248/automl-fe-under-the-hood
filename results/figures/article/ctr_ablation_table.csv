@@ -1,4 +1,4 @@
-dataset (unit); arm cells: default | ctr=1 | diff,base: ctr=1 vs default,ag_tabprep_keepcat,lama_adv,openfe
+dataset (unit); arm cells: default | ctr=1 | diff,base: ctr=1 vs default,AutoGluon TabPrep (raw categoricals kept),LightAutoML pipeline,OpenFE
 Amazon_employee_access (pp AUC),-2.8,-0.4 | +2.6 | +3.0,-3.8 | -1.0 | +2.8,-0.4 | +1.5 | +2.0
 Brazilian_houses (% RMSE),-0.5,+63.2 | +54.1 | -9.1,-1.7 | -44.3 | -42.5,-32.5 | -90.1 | -57.6
 Click_prediction_small (pp AUC),+0.0,-0.4 | -0.4 | +0.1,+1.6 | +1.5 | +0.0,-2.4 | -2.4 | +0.0
@@ -18,3 +18,4 @@ socmob (% RMSE),-25.8,-3.2 | +7.9 | +11.2,-15.0 | +7.7 | +22.6,-0.1 | +19.6 | +1
 better (sign),,11 of 17,12 of 17,12 of 16
 clearly better,,5 of 17,7 of 17,6 of 16
 clearly worse,,0 of 17,1 of 17,1 of 16
+"Outlier not shown: fps_benchmark (% RMSE): base -537.3, AutoGluon TabPrep (raw categoricals kept) diff +190.2, LightAutoML pipeline diff +84.7; counted in the summary rows.",,,,

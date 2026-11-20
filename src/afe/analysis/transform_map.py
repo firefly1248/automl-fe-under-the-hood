@@ -2,7 +2,7 @@
 
 Reads results/tidy/transform_map.csv (the `<tool>_short` columns) and transform_map_evidence.csv (does_it) and writes
 two PNGs in results/figures/article: `transform_map_automl.png` (ag_default, ag_tabprep, lama, h2o) and
-`transform_map_generators.png` (openfe, autofeat, mljar_golden, manual_baseline), each with a CSV of the rendered
+`transform_map_generators.png` (openfe, autofeat, mljar_golden, manual_baseline, skrub_tv), each with a CSV of the rendered
 cells. Only the cell colour carries a status (done, partial, not done); how a cell was confirmed (run output or
 source code) and the references are in transform_map_evidence.csv, not in the picture. Size rule: the PNG is 1800 px
 wide and the font is 14 * 1800 / 700 = 36 px (1 pt = 1 px at 72 dpi), so the text is 14 px tall after downscaling to
@@ -13,9 +13,12 @@ a 700 px column. Cell text must be short: a word wider than a column is an error
 import matplotlib
 
 matplotlib.use("Agg")
+import textwrap
+
 import matplotlib.pyplot as plt
 import pandas as pd
 
+from afe.analysis.figures import label
 from afe.paths import RESULTS
 
 WIDTH, COLUMN_PX, MIN_PT = 1800, 700, 14
@@ -26,12 +29,11 @@ GROUPS = {
     "transform_map_automl": (["ag_default", "ag_tabprep", "lama", "h2o"],
                              ["green: done   amber: partial   grey: not done",
                               "h2o: default and target encoding in one column",
-                              "lama: some cells come from the lama_adv arm"]),
+                              f"lama: some cells come from the {label('lama_adv')} arm"]),
     "transform_map_generators": (["openfe", "autofeat", "mljar_golden", "manual_baseline", "skrub_tv"],
                                  ["green: done   amber: partial   grey: not done"]),
 }
-HEAD = {"ag_default": "ag_\ndefault", "ag_tabprep": "ag_\ntabprep", "mljar_golden": "mljar_\ngolden",
-        "manual_baseline": "manual_\nbaseline", "skrub_tv": "skrub_\ntv"}
+
 FAMILY = {"categorical_encoding": "categorical\nencoding"}
 FILL = {"yes": "#cfe8d5", "partial": "#f6e3b4", "no": "#e4e4e4"}
 
@@ -90,7 +92,7 @@ def render(name: str, tools: list[str], legend: list[str]) -> None:
     for i, tool in enumerate(tools):
         x = FAMILY_W + i * tool_w
         box(x, 0, tool_w, head_h, "#2b3a4a")
-        ax.text(x + tool_w / 2, head_h / 2, HEAD.get(tool, tool), ha="center", linespacing=1.1, **{**kw, "color": "white", "weight": "bold"})
+        ax.text(x + tool_w / 2, head_h / 2, "\n".join(textwrap.wrap(label(tool), 14, break_long_words=False)), ha="center", linespacing=1.1, **{**kw, "color": "white"})  # regular weight: bold "TableVectorizer" is wider than its column
     y = head_h
     for fam in short.index:
         h = row_h[fam]

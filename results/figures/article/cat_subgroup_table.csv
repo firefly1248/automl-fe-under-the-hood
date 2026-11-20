@@ -1,5 +1,5 @@
 "arm, downstream model",n datasets,better (sign),identical,clearly better,clearly worse
-"ag_default, catboost",27,15,4,3,2
-"ag_default, lgbm",28,1,22,1,1
-"skrub_tv, catboost",27,11,0,5,7
-"skrub_tv, lgbm",28,12,1,6,10
+"AutoGluon default, catboost",27,15,4,3,2
+"AutoGluon default, lgbm",28,1,22,1,1
+"skrub TableVectorizer, catboost",27,11,0,5,7
+"skrub TableVectorizer, lgbm",28,12,1,6,10

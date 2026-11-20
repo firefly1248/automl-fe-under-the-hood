@@ -16,6 +16,17 @@ from afe.paths import RESULTS
 ARMS = ["base", "ag_default", "ag_tabprep", "ag_tabprep_keepcat", "lama_adv", "openfe", "autofeat",
         "mljar_golden", "manual_baseline", "skrub_tv"]
 COLOR = dict(zip(ARMS, plt.get_cmap("tab10").colors))
+# What the article images call an arm: the only mapping, used by every picture in results/figures/article (CSVs, claims and
+# tidy tables keep the arm names).
+ARM_LABEL = {"ag_default": "AutoGluon default", "ag_tabprep": "AutoGluon TabPrep",
+             "ag_tabprep_keepcat": "AutoGluon TabPrep (raw categoricals kept)", "lama_adv": "LightAutoML pipeline",
+             "openfe": "OpenFE", "autofeat": "autofeat", "mljar_golden": "MLJAR golden features",
+             "skrub_tv": "skrub TableVectorizer", "manual_baseline": "manual baseline", "base_numcast": "numbers where possible",
+             "base_codes": "integer codes"}
+
+
+def label(arm: str) -> str:
+    return ARM_LABEL.get(arm, arm)
 EFFECT_LABEL = {"auc_diff": "AUC difference vs base", "logloss_rel": "relative log loss improvement vs base",
                 "rmse_rel": "relative RMSE improvement vs base"}
 PRIMARY_EFFECT = {"binary": "auc_diff", "multiclass": "logloss_rel", "regression": "rmse_rel"}

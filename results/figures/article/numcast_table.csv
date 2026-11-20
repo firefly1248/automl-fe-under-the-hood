@@ -1,4 +1,4 @@
-"dataset (unit), downstream model",ag_default,skrub_tv,base_numcast,base_codes
+"dataset (unit), downstream model",AutoGluon default,skrub TableVectorizer,numbers where possible,integer codes
 "fps_benchmark (% RMSE), catboost",+1.0,+68.8,+2.3,+60.2
 "fps_benchmark (% RMSE), lgbm",+0.0,-20.6,+0.0,-59.7
 "auction_verification (% RMSE), catboost",+0.0,+51.2,+49.4,+49.4

@@ -1,4 +1,4 @@
-column,levels,levels are numbers,base,ag_default,skrub_tv,base_numcast,base_codes
+column,levels,levels are numbers,base,AutoGluon default,skrub TableVectorizer,numbers where possible,integer codes
 fps_benchmark: CpuName,19,no,cat,cat,19 num,cat,num
 fps_benchmark: CpuMultiplierUnlocked,2,yes,cat,num,1 num,num,num
 fps_benchmark: GpuName,27,no,cat,cat,27 num,cat,num

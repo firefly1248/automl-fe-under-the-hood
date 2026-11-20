@@ -9,7 +9,7 @@ ARMS = {
     "ag_tabprep": ("afe.generators.ag_tabprep", "AgTabPrep", "autogluon"),
     "lama_adv": ("afe.generators.lama_pipeline", "LamaAdv", "lama"),
     "openfe": ("afe.generators.openfe_gen", "OpenFEInductive", "openfe"),
-    "openfe_transductive": ("afe.generators.openfe_gen", "OpenFETransductive", "openfe"),  # exp05 only
+    "openfe_transductive": ("afe.generators.openfe_transductive", "OpenFETransductive", "openfe"),  # exp05 only
     "autofeat": ("afe.generators.autofeat_gen", "AutoFeat", "autofeat"),
     "mljar_golden": ("afe.generators.mljar_golden", "MljarGolden", "mljar"),
     "skrub_tv": ("afe.generators.skrub_tv", "SkrubTV", "skrub"),

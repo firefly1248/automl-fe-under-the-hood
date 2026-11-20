@@ -48,7 +48,7 @@ groupby,ag_default,no,confirmed_run,autogluon.features|autogluon.features,1.6.3|
 groupby,ag_tabprep,no,confirmed_run,autogluon.features,1.6.3,autogluon/features/generators/groupby.py,115,results/tidy/exp01_prep_configs.csv|results/tidy/exp05_planted.csv,
 groupby,lama,no,confirmed_run,lightautoml|lightautoml|lightautoml,0.4.2|0.4.2|0.4.2,lightautoml/pipelines/features/lgb_pipeline.py|lightautoml/pipelines/features/base.py|lightautoml/transformers/groupby.py,611|622|20,results/tidy/exp03_config.yaml|results/tidy/exp05_planted.csv,"exp05 rows are the lama_adv arm (LAMA reader plus LGBAdvancedPipeline, not the full TabularAutoML)"
 groupby,h2o,no,confirmed_run,h2o,3.46.0.8,h2o/automl/_estimator.py,150,results/tidy/exp06_h2o_probe.csv,inputs read from each model's output names
-groupby,openfe,yes,confirmed_run,openfe|openfe|openfe,0.0.12|0.0.12|0.0.12,openfe/FeatureGenerator.py|openfe/FeatureGenerator.py|openfe/utils.py,8|103|118,results/tidy/exp05_openfe_ops.csv|results/tidy/exp05_transductive.csv|results/tidy/exp05_planted.csv,
+groupby,openfe,yes,confirmed_run,openfe|openfe|openfe,0.0.12|0.0.12|0.0.12,openfe/FeatureGenerator.py|openfe/FeatureGenerator.py|openfe/utils.py,8|103|118,results/tidy/exp05_openfe_ops.csv|results/tidy/exp05_planted.csv,
 groupby,autofeat,no,confirmed_run,autofeat,2.1.3,autofeat/feateng.py,284,results/tidy/exp05_planted.csv,
 groupby,mljar_golden,no,confirmed_run,mljar-supervised,1.3.2,supervised/preprocessing/preprocessing.py,189,results/tidy/exp05_planted.csv,
 groupby,manual_baseline,yes,confirmed_run,afe|afe|afe,0.1.0|0.1.0|0.1.0,src/afe/generators/manual_baseline.py|src/afe/generators/manual_baseline.py|src/afe/generators/manual_baseline.py,20|80|53,results/tidy/exp05_planted.csv,one key column only

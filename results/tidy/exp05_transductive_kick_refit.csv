@@ -1,0 +1,2 @@
+dataset,model,metric,n_folds,effect,ci_lo,ci_hi,effect_as_recorded,ci_lo_as_recorded,ci_hi_as_recorded
+kick,lgbm,auc,5,-0.000528,-0.001645,0.000439,-0.003242,-0.005587,-0.000897

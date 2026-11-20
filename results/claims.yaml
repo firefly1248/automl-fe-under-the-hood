@@ -1974,9 +1974,9 @@
   text: coverage per arm, task and downstream model; below 80% shaded
   output: results/figures/article/coverage_table.png
   data: results/figures/article/coverage_table.csv
-  data_hash: 7974dceb16f8f213
-  approved_data_hash: 7974dceb16f8f213
-  approved_git_sha: eeb7d06
+  data_hash: 92ab850ada54c525
+  approved_data_hash: 92ab850ada54c525
+  approved_git_sha: f9d926f-dirty
 - id: s5_fig_permuted_labels
   section: 5
   kind: figure
@@ -4427,9 +4427,9 @@
     CatBoost and their difference
   output: results/figures/article/ctr_ablation_table.png
   data: results/figures/article/ctr_ablation_table.csv
-  data_hash: d797100e43ab7b4a
-  approved_data_hash: d797100e43ab7b4a
-  approved_git_sha: eeb7d06
+  data_hash: ea88b9383f06e0a7
+  approved_data_hash: ea88b9383f06e0a7
+  approved_git_sha: f9d926f-dirty
 - id: s4_cat_ag_default_lgbm_n_datasets
   section: 4
   text: 'ag_default over base, lgbm downstream, primary datasets with categorical columns: datasets with categorical
@@ -4659,9 +4659,9 @@
   text: skrub_tv and ag_default over base on the datasets with categorical columns, counts by sign and by fold CI
   output: results/figures/article/cat_subgroup_table.png
   data: results/figures/article/cat_subgroup_table.csv
-  data_hash: cf5d32f08dedbb87
-  approved_data_hash: cf5d32f08dedbb87
-  approved_git_sha: eeb7d06
+  data_hash: 4c01e5500346b67a
+  approved_data_hash: 4c01e5500346b67a
+  approved_git_sha: f9d926f-dirty
 - id: s2_types_cat_columns_fps_benchmark
   section: 2
   text: 'fps_benchmark: categorical columns in the raw frame (non-numeric dtype)'
@@ -5615,9 +5615,9 @@
     has base_codes (base with every categorical as integer codes), which carries the conclusion
   output: results/figures/article/numcast_table.png
   data: results/figures/article/numcast_table.csv
-  data_hash: c10acc0351825cc2
-  approved_data_hash: c10acc0351825cc2
-  approved_git_sha: eeb7d06
+  data_hash: e42cb8d00afaa88c
+  approved_data_hash: e42cb8d00afaa88c
+  approved_git_sha: f9d926f-dirty
 - id: s2_fig_exp09_types_table
   section: 2
   kind: figure
@@ -5625,6 +5625,355 @@
     each arm
   output: results/figures/article/exp09_types_table.png
   data: results/figures/article/exp09_types_table.csv
-  data_hash: ddd1b2fc13bdf1b8
-  approved_data_hash: ddd1b2fc13bdf1b8
-  approved_git_sha: eeb7d06
+  data_hash: f1f8f1198c21f8e6
+  approved_data_hash: f1f8f1198c21f8e6
+  approved_git_sha: f9d926f-dirty
+- id: s4_holm_cells
+  section: 4
+  text: 'number of exp04 cells (task, effect, downstream model, arm) in the Holm family (the 72 primary-effect cells
+    of the exp04 summary under the base-fallback rule: 8 task, effect and downstream-model groups of 9 arms; Holm
+    correction over the 9 arms of each group)'
+  source: results/tidy/exp04_summary.csv
+  query: rule=='base_fallback' & in_family
+  stat: count
+  tolerance: 0
+  value: 72
+  approved_value: 72
+  approved_git_sha: f9d926f-dirty
+- id: s4_holm_positive_cells
+  section: 4
+  text: 'number of exp04 cells with a median effect above zero over base and a Wilcoxon p below 0.05 after Holm
+    (the 72 primary-effect cells of the exp04 summary under the base-fallback rule: 8 task, effect and downstream-model
+    groups of 9 arms; Holm correction over the 9 arms of each group); none of the arms has a significant gain'
+  source: results/tidy/exp04_summary.csv
+  query: rule=='base_fallback' & in_family & median_effect>0 & wilcoxon_p_holm<0.05
+  stat: count
+  tolerance: 0
+  value: 0
+  approved_value: 0
+  approved_git_sha: f9d926f-dirty
+- id: s4_holm_negative_cells
+  section: 4
+  text: 'number of exp04 cells with a median effect below zero over base and a Wilcoxon p below 0.05 after Holm
+    (the 72 primary-effect cells of the exp04 summary under the base-fallback rule: 8 task, effect and downstream-model
+    groups of 9 arms; Holm correction over the 9 arms of each group); the one cell is lama_adv on regression with
+    LightGBM'
+  source: results/tidy/exp04_summary.csv
+  query: rule=='base_fallback' & in_family & median_effect<0 & wilcoxon_p_holm<0.05
+  stat: count
+  tolerance: 0
+  value: 1
+  approved_value: 1
+  approved_git_sha: f9d926f-dirty
+- id: s2_ag_default_runs
+  section: 2
+  text: number of runs of the AutoMLPipelineFeatureGenerator probe on the hard_columns frame (three seeds of the
+    base frame and two variants); each column of the frame is described once per run, so the counts of the next
+    claims are out of this number
+  source: results/tidy/exp01_types.csv
+  query: input_col=='date_int'
+  stat: count
+  tolerance: 0
+  value: 5
+  approved_value: 5
+  approved_git_sha: f9d926f-dirty
+- id: s2_ag_default_date_int_kept_int
+  section: 2
+  text: 'AutoGluon 1.6.3 AutoMLPipelineFeatureGenerator on the synthetic hard_columns frame (5,000 rows; seeds 0,
+    1, 2, plus the two seed-0 variants with singleton rare categories and with 500 rows, five runs in all): runs
+    in which the integer column date_int (dates written as YYYYMMDD) leaves the generator as the same single int64
+    column, with no date or categorical type attached, so it is not treated as a date'
+  source: results/tidy/exp01_types.csv
+  query: input_col=='date_int' & action=='kept' & n_outputs==1 & input_dtype=='int64' & output_dtypes=='int64' &
+    ag_special_out.isna()
+  stat: count
+  tolerance: 0
+  value: 5
+  approved_value: 5
+  approved_git_sha: f9d926f-dirty
+- id: s2_ag_default_city_code_kept_int
+  section: 2
+  text: 'AutoGluon 1.6.3 AutoMLPipelineFeatureGenerator on the synthetic hard_columns frame (5,000 rows; seeds 0,
+    1, 2, plus the two seed-0 variants with singleton rare categories and with 500 rows, five runs in all): runs
+    in which the integer column city_code (a category by meaning) leaves the generator as the same single int64
+    column, with no categorical type attached'
+  source: results/tidy/exp01_types.csv
+  query: input_col=='city_code' & action=='kept' & n_outputs==1 & input_dtype=='int64' & output_dtypes=='int64'
+    & ag_special_out.isna()
+  stat: count
+  tolerance: 0
+  value: 5
+  approved_value: 5
+  approved_git_sha: f9d926f-dirty
+- id: s2_ag_default_uid_dropped
+  section: 2
+  text: 'AutoGluon 1.6.3 AutoMLPipelineFeatureGenerator on the synthetic hard_columns frame (5,000 rows; seeds 0,
+    1, 2, plus the two seed-0 variants with singleton rare categories and with 500 rows, five runs in all): runs
+    in which the column uid, whose values are all unique, is dropped (no output column; AutoGluon''s reason is ''unused'')'
+  source: results/tidy/exp01_types.csv
+  query: input_col=='uid' & action=='dropped' & n_outputs==0 & ag_drop_reason=='unused'
+  stat: count
+  tolerance: 0
+  value: 5
+  approved_value: 5
+  approved_git_sha: f9d926f-dirty
+- id: s2_ag_default_dup_num_dropped
+  section: 2
+  text: 'AutoGluon 1.6.3 AutoMLPipelineFeatureGenerator on the synthetic hard_columns frame (5,000 rows; seeds 0,
+    1, 2, plus the two seed-0 variants with singleton rare categories and with 500 rows, five runs in all): runs
+    in which dup_num, an exact copy of the numeric column num, is dropped (no output column; AutoGluon''s reason
+    is ''unused'')'
+  source: results/tidy/exp01_types.csv
+  query: input_col=='dup_num' & action=='dropped' & n_outputs==0 & ag_drop_reason=='unused'
+  stat: count
+  tolerance: 0
+  value: 5
+  approved_value: 5
+  approved_git_sha: f9d926f-dirty
+- id: s2_ag_default_date_str_outputs
+  section: 2
+  text: 'AutoGluon 1.6.3 AutoMLPipelineFeatureGenerator on the synthetic hard_columns frame (5,000 rows; seeds 0,
+    1, 2, plus the two seed-0 variants with singleton rare categories and with 500 rows, five runs in all): runs
+    in which the ISO date string column date_str becomes five int64 columns: the date itself as an integer timestamp
+    (date_str) and the parts date_str.year, date_str.month, date_str.day and date_str.dayofweek'
+  source: results/tidy/exp01_types.csv
+  query: input_col=='date_str' & action=='expanded' & n_outputs==5 & output_dtypes=='int64' & output_cols.str.contains('(?:^|;
+    )date_str(?:;|$)', regex=True) & output_cols.str.contains('date_str[.]year', regex=True) & output_cols.str.contains('date_str[.]month',
+    regex=True) & output_cols.str.contains('date_str[.]day(?:;|$)', regex=True) & output_cols.str.contains('date_str[.]dayofweek',
+    regex=True)
+  stat: count
+  tolerance: 0
+  value: 5
+  approved_value: 5
+  approved_git_sha: f9d926f-dirty
+- id: s2_gbm_prep_presets
+  section: 2
+  text: 'number of AutoGluon 1.6.3 preset names, aliases included, whose hyperparameter portfolio contains GBM_PREP,
+    the only model that reaches the TabPrep generators: best_quality_v150, high_quality_v150, extreme_quality_v150
+    and the aliases best_v150, high_v150 and extreme_v150 (three presets, each under two names; two portfolios:
+    zeroshot_2025_12_18_cpu for best and high, zeroshot_2025_12_18_gpu for extreme)'
+  source: results/tidy/exp01_presets.csv
+  query: has_GBM_PREP
+  stat: count
+  tolerance: 0
+  value: 6
+  approved_value: 6
+  approved_git_sha: f9d926f-dirty
+- id: s2_gbm_prep_default_presets
+  section: 2
+  text: number of AutoGluon 1.6.3 preset names without the _v150 suffix, aliases included (among them medium, high,
+    best and extreme and their _quality names), whose portfolio contains GBM_PREP; GBM_PREP is not in any default
+    preset; the _v140 presets without a static portfolio take it at fit time (zeroshot variants), and none of those
+    contains GBM_PREP either
+  source: results/tidy/exp01_presets.csv
+  query: has_GBM_PREP & ~preset.str.endswith('_v150')
+  stat: count
+  tolerance: 0
+  value: 0
+  approved_value: 0
+  approved_git_sha: f9d926f-dirty
+- id: s2_types_max_levels_amazon_employee_access
+  section: 2
+  text: 'most levels of any categorical column of Amazon_employee_access over the whole frame (32,769 rows): the
+    column RESOURCE, 7,518 distinct values; the type table counts levels in the fit rows of one split, hence 6,136
+    there'
+  source: results/datasets.csv
+  query: key=='Amazon_employee_access'
+  stat: max_cat_levels
+  tolerance: 0
+  value: 7518.0
+  approved_value: 7518.0
+  approved_git_sha: f9d926f-dirty
+- id: s4_lgbm_ordered_cat_columns
+  section: 4
+  text: categorical columns that were ordered pandas categories, summed over the raw frames of the 28 primary datasets
+    that have a categorical column; LightGBM's categorical_feature='auto' skips ordered ones, so before the 2026-11-19
+    downstream fix it saw these columns as integer codes; datasets.csv counts 303 non-numeric columns for the same
+    datasets, the two extra are all-missing object columns (one each in sick and fps_benchmark), which are not category
+    dtype
+  source: results/tidy/exp09_ordered.csv
+  stat: sum
+  column: n_ordered
+  tolerance: 0
+  value: 301.0
+  approved_value: 301.0
+  approved_git_sha: f9d926f-dirty
+- id: s4_lgbm_ordered_cat_datasets
+  section: 4
+  text: primary datasets with at least one ordered categorical column in the raw frame (out of the 28 with a categorical
+    column; every category-dtype column of them is ordered)
+  source: results/tidy/exp09_ordered.csv
+  query: n_ordered>0
+  stat: count
+  tolerance: 0
+  value: 28
+  approved_value: 28
+  approved_git_sha: f9d926f-dirty
+- id: s5_transductive_lgbm_n_datasets
+  section: 5
+  text: 'exp05 pilot, repeat 0, 5 folds: OpenFE fitted with its own transform as shipped (statistics over the fit,
+    inner and test rows together; a missing Combine pair gets the level -1.0, where the inductive arm leaves it
+    missing) against the repo''s inductive OpenFE, LightGBM downstream; per dataset the mean over folds of the difference
+    in the primary metric signed so that positive is better (AUC and R2 higher, log loss lower), with an uncorrected
+    fold bootstrap 95% CI over 5 folds; number of pilot datasets (connect-4 is included for LightGBM only, base
+    CatBoost timed out on it)'
+  source: results/tidy/exp05_transductive.csv
+  query: model=='lgbm'
+  stat: count
+  tolerance: 0
+  value: 10
+  approved_value: 10
+  approved_git_sha: f9d926f-dirty
+- id: s5_transductive_lgbm_n_better
+  section: 5
+  text: 'exp05 pilot, repeat 0, 5 folds: OpenFE fitted with its own transform as shipped (statistics over the fit,
+    inner and test rows together; a missing Combine pair gets the level -1.0, where the inductive arm leaves it
+    missing) against the repo''s inductive OpenFE, LightGBM downstream; per dataset the mean over folds of the difference
+    in the primary metric signed so that positive is better (AUC and R2 higher, log loss lower), with an uncorrected
+    fold bootstrap 95% CI over 5 folds; datasets where the transductive mean is better by sign (strictly above zero;
+    ties counted separately)'
+  source: results/tidy/exp05_transductive.csv
+  query: model=='lgbm' & gain>0
+  stat: count
+  tolerance: 0
+  value: 3
+  approved_value: 3
+  approved_git_sha: f9d926f-dirty
+- id: s5_transductive_lgbm_n_equal
+  section: 5
+  text: 'exp05 pilot, repeat 0, 5 folds: OpenFE fitted with its own transform as shipped (statistics over the fit,
+    inner and test rows together; a missing Combine pair gets the level -1.0, where the inductive arm leaves it
+    missing) against the repo''s inductive OpenFE, LightGBM downstream; per dataset the mean over folds of the difference
+    in the primary metric signed so that positive is better (AUC and R2 higher, log loss lower), with an uncorrected
+    fold bootstrap 95% CI over 5 folds; datasets where the two runs are identical (difference exactly zero: mfeat-fourier,
+    whose operators work row by row)'
+  source: results/tidy/exp05_transductive.csv
+  query: model=='lgbm' & gain.abs()<1e-9
+  stat: count
+  tolerance: 0
+  value: 1
+  approved_value: 1
+  approved_git_sha: f9d926f-dirty
+- id: s5_transductive_lgbm_n_clear_better
+  section: 5
+  text: 'exp05 pilot, repeat 0, 5 folds: OpenFE fitted with its own transform as shipped (statistics over the fit,
+    inner and test rows together; a missing Combine pair gets the level -1.0, where the inductive arm leaves it
+    missing) against the repo''s inductive OpenFE, LightGBM downstream; per dataset the mean over folds of the difference
+    in the primary metric signed so that positive is better (AUC and R2 higher, log loss lower), with an uncorrected
+    fold bootstrap 95% CI over 5 folds; datasets where the transductive run is clearly better (the fold CI is above
+    zero); the effects are small (+0.0007 on connect-4, log loss lower by that much, and +0.00015 R2 on diamonds
+    whose lower bound is 7e-6)'
+  source: results/tidy/exp05_transductive.csv
+  query: model=='lgbm' & ci_lo>0
+  stat: count
+  tolerance: 0
+  value: 2
+  approved_value: 2
+  approved_git_sha: f9d926f-dirty
+- id: s5_transductive_lgbm_n_clear_worse
+  section: 5
+  text: 'exp05 pilot, repeat 0, 5 folds: OpenFE fitted with its own transform as shipped (statistics over the fit,
+    inner and test rows together; a missing Combine pair gets the level -1.0, where the inductive arm leaves it
+    missing) against the repo''s inductive OpenFE, LightGBM downstream; per dataset the mean over folds of the difference
+    in the primary metric signed so that positive is better (AUC and R2 higher, log loss lower), with an uncorrected
+    fold bootstrap 95% CI over 5 folds; datasets where the transductive run is clearly worse (the fold CI is below
+    zero); the one dataset is kick, -0.003 AUC, most of which comes from the -1.0 level (without it -0.0005, CI
+    containing zero; see s5_transductive_lgbm_kick_missing_level)'
+  source: results/tidy/exp05_transductive.csv
+  query: model=='lgbm' & ci_hi<0
+  stat: count
+  tolerance: 0
+  value: 1
+  approved_value: 1
+  approved_git_sha: f9d926f-dirty
+- id: s5_transductive_catboost_n_datasets
+  section: 5
+  text: 'exp05 pilot, repeat 0, 5 folds: OpenFE fitted with its own transform as shipped (statistics over the fit,
+    inner and test rows together; a missing Combine pair gets the level -1.0, where the inductive arm leaves it
+    missing) against the repo''s inductive OpenFE, CatBoost downstream; per dataset the mean over folds of the difference
+    in the primary metric signed so that positive is better (AUC and R2 higher, log loss lower), with an uncorrected
+    fold bootstrap 95% CI over 5 folds; number of pilot datasets'
+  source: results/tidy/exp05_transductive.csv
+  query: model=='catboost'
+  stat: count
+  tolerance: 0
+  value: 9
+  approved_value: 9
+  approved_git_sha: f9d926f-dirty
+- id: s5_transductive_catboost_n_better
+  section: 5
+  text: 'exp05 pilot, repeat 0, 5 folds: OpenFE fitted with its own transform as shipped (statistics over the fit,
+    inner and test rows together; a missing Combine pair gets the level -1.0, where the inductive arm leaves it
+    missing) against the repo''s inductive OpenFE, CatBoost downstream; per dataset the mean over folds of the difference
+    in the primary metric signed so that positive is better (AUC and R2 higher, log loss lower), with an uncorrected
+    fold bootstrap 95% CI over 5 folds; datasets where the transductive mean is better by sign (strictly above zero;
+    ties counted separately)'
+  source: results/tidy/exp05_transductive.csv
+  query: model=='catboost' & gain>0
+  stat: count
+  tolerance: 0
+  value: 3
+  approved_value: 3
+  approved_git_sha: f9d926f-dirty
+- id: s5_transductive_catboost_n_equal
+  section: 5
+  text: 'exp05 pilot, repeat 0, 5 folds: OpenFE fitted with its own transform as shipped (statistics over the fit,
+    inner and test rows together; a missing Combine pair gets the level -1.0, where the inductive arm leaves it
+    missing) against the repo''s inductive OpenFE, CatBoost downstream; per dataset the mean over folds of the difference
+    in the primary metric signed so that positive is better (AUC and R2 higher, log loss lower), with an uncorrected
+    fold bootstrap 95% CI over 5 folds; datasets where the two runs are identical (difference exactly zero: mfeat-fourier,
+    whose operators work row by row)'
+  source: results/tidy/exp05_transductive.csv
+  query: model=='catboost' & gain.abs()<1e-9
+  stat: count
+  tolerance: 0
+  value: 1
+  approved_value: 1
+  approved_git_sha: f9d926f-dirty
+- id: s5_transductive_catboost_n_clear_better
+  section: 5
+  text: 'exp05 pilot, repeat 0, 5 folds: OpenFE fitted with its own transform as shipped (statistics over the fit,
+    inner and test rows together; a missing Combine pair gets the level -1.0, where the inductive arm leaves it
+    missing) against the repo''s inductive OpenFE, CatBoost downstream; per dataset the mean over folds of the difference
+    in the primary metric signed so that positive is better (AUC and R2 higher, log loss lower), with an uncorrected
+    fold bootstrap 95% CI over 5 folds; datasets where the transductive run is clearly better (the fold CI is above
+    zero); the one dataset is albert, +0.0010 AUC'
+  source: results/tidy/exp05_transductive.csv
+  query: model=='catboost' & ci_lo>0
+  stat: count
+  tolerance: 0
+  value: 1
+  approved_value: 1
+  approved_git_sha: f9d926f-dirty
+- id: s5_transductive_catboost_n_clear_worse
+  section: 5
+  text: 'exp05 pilot, repeat 0, 5 folds: OpenFE fitted with its own transform as shipped (statistics over the fit,
+    inner and test rows together; a missing Combine pair gets the level -1.0, where the inductive arm leaves it
+    missing) against the repo''s inductive OpenFE, CatBoost downstream; per dataset the mean over folds of the difference
+    in the primary metric signed so that positive is better (AUC and R2 higher, log loss lower), with an uncorrected
+    fold bootstrap 95% CI over 5 folds; datasets where the transductive run is clearly worse (the fold CI is below
+    zero); none'
+  source: results/tidy/exp05_transductive.csv
+  query: model=='catboost' & ci_hi<0
+  stat: count
+  tolerance: 0
+  value: 0
+  approved_value: 0
+  approved_git_sha: f9d926f-dirty
+- id: s5_transductive_lgbm_kick_missing_level
+  section: 5
+  text: 'exp05 pilot, repeat 0, 5 folds, kick, LightGBM: mean AUC gain of OpenFE''s own transform over the inductive
+    OpenFE with the level -1.0 that the transform gives a missing Combine pair set back to missing (the inductive
+    arm leaves such pairs missing), by refitting the five units from the stored caches (experiments/exp05_leakage_checks/kick_missing_level.py;
+    the refit as recorded reproduces the records), with an uncorrected fold bootstrap 95% CI over 5 folds; as recorded,
+    with the level, the gain is -0.0032 (CI [-0.0056, -0.0009])'
+  source: results/tidy/exp05_transductive_kick_refit.csv
+  query: model=='lgbm'
+  stat: effect
+  tolerance: 0.0001
+  value: -0.000528
+  approved_value: -0.000528
+  approved_git_sha: f9d926f-dirty
+  ci:
+  - -0.001645
+  - 0.000439

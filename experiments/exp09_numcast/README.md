@@ -17,7 +17,7 @@ mean loss, paired bootstrap 95% CI over the 10 splits). Outputs: `results/tidy/e
 The first exp09 run (only `base_numcast`) showed that the model inputs were not what the protocol described:
 
 - LightGBM's `categorical_feature="auto"` takes unordered pandas categoricals only (`lightgbm/basic.py`, `cat_cols_not_ordered`).
-  Every categorical column of the 28 primary datasets with categoricals (301 of 301 columns) is an ordered category in the cached
+  Every category-dtype column of the 28 primary datasets with categoricals (301 of 301 columns) is an ordered category in the cached
   frames (`s2_types_ordered_datasets`), so LightGBM had read them as integer codes (checked on socmob: identical test score and best
   iteration with the categorical and with its codes). Fix: `afe.models.downstream` makes ordered categoricals unordered before the
   LightGBM fit.

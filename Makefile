@@ -21,7 +21,7 @@ splits:
 
 test:
 	$(call RUN,core) pytest -q tests
-	for e in $(filter-out core,$(ENVS)); do AFE_ENV=$$e uv run --frozen --project envs/$$e pytest -q tests/test_generators_contract.py tests/test_openfe_equivalence.py || exit 1; done
+	for e in $(filter-out core,$(ENVS)); do AFE_ENV=$$e uv run --frozen --project envs/$$e pytest -q tests/test_generators_contract.py tests/test_openfe_equivalence.py tests/test_openfe_transductive.py || exit 1; done
 
 # run records: per-unit JSON <-> committed results/raw/<exp>/{gen,fit}.jsonl.gz
 pack:

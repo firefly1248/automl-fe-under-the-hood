@@ -236,7 +236,7 @@ cell("openfe", "groupby", "yes", "mean std rank by cat",
      "GroupByThenMin, Max, Mean, Median, Std and Rank (numeric column by a categorical or ordinal key) and GroupByThenNUnique (categorical by categorical). The statistics are column-wide: OpenFE's own transform computes them on train and test together, the repo's wrapper refits them on fit rows. Planted group deviation found in 30 of 30 units",
      [("openfe", OF + "FeatureGenerator.py", 'cat_num_operators = ["GroupByThenMin"'), ("openfe", OF + "FeatureGenerator.py", "elif self.name == 'GroupByThenRank':"),
       ("openfe", OF + "utils.py", "def transform(X_train, X_test, new_features_list, n_jobs, name=\"\"):")],
-     [T + "exp05_openfe_ops.csv", T + "exp05_transductive.csv", T + "exp05_planted.csv"], "confirmed_run")
+     [T + "exp05_openfe_ops.csv", T + "exp05_planted.csv"], "confirmed_run")
 cell("openfe", "dates", "no", "not done",
      "not done: no calendar features. A datetime64 column is non-numeric, so the library treats it as a categorical (freq, Combine and group key on exact timestamps), the repo wrapper casts it to int64 ns so numeric operators apply to the raw timestamp",
      [("openfe", OF + "openfe.py", "return list(self.data.select_dtypes(exclude=np.number))"), ("afe", "src/afe/generators/openfe_gen.py", "elif pd.api.types.is_datetime64_any_dtype(s):")],

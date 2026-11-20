@@ -1,7 +1,7 @@
 """`make claims` (plan section 9): recompute every value in results/claims.yaml from the tidy tables.
 
 Number entries name a source file (csv, parquet or a yaml flattened to one row), a pandas query (optional for
-a yaml) and a stat (a column of the single matching row, or `count`). Figure entries name the figure and its rendered data table; the claim value is the table's
+a yaml) and a stat (a column of the single matching row, `count`, or `sum` of the column named in `column`). Figure entries name the figure and its rendered data table; the claim value is the table's
 sha1. The script writes the recomputed `value`/`ci`/`coverage` (or `data_hash`) back and exits 1 if any
 recomputed value differs from its `approved_value` (`approved_data_hash`) by more than `tolerance`
 (exactly, for hashes). `approved_*` fields are set by Ilia, or on his instruction after a unanimous check by three models (PROGRESS.md, 2026-11-19), and are never written here.
@@ -29,6 +29,8 @@ def number(c: dict) -> dict:
     df = df.query(c["query"], engine="python") if c.get("query") else df  # python: allows .str methods
     if c["stat"] == "count":
         return {"value": int(len(df))}
+    if c["stat"] == "sum":  # sum of the column named in `column` over the matching rows
+        return {"value": round(float(df[c["column"]].sum()), 6)}
     if len(df) != 1:
         raise ValueError(f"{c['id']}: query matched {len(df)} rows, need exactly 1")
     row = df.iloc[0]

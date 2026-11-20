@@ -46,3 +46,5 @@ for H2O the claim register keeps the clear counts for the tables only.
 
 In the contrast tables `better (sign)` counts datasets whose mean effect is above zero; `clearly better` and
 `clearly worse` count datasets whose fold CI excludes zero. Dots in the contrast figures use the same colours.
+
+Arm names on the images are the readable labels of `ARM_LABEL` in `src/afe/analysis/figures.py` (one mapping for every image); the CSVs behind the images, the tidy tables and the claims keep the arm names, except that the CSV of a table image is the text of its cells and so carries the labels.

@@ -15,7 +15,7 @@ import numpy as np
 import pandas as pd
 
 from afe.analysis import exp02, exp06, exp07, exp09
-from afe.analysis.figures import ARMS, COLOR, EFFECT_LABEL, LOW_COVERAGE, PRIMARY_EFFECT
+from afe.analysis.figures import ARMS, COLOR, EFFECT_LABEL, LOW_COVERAGE, PRIMARY_EFFECT, label
 from afe.paths import RESULTS
 
 OUT = RESULTS / "figures" / "article"
@@ -53,16 +53,16 @@ def _median_panels(summ: pd.DataFrame, model: str, rule: str, fig, axes) -> pd.D
             ax.annotate(f"{r.coverage:.0%} ok", (r.ci_hi, yi), xytext=(4, 0), textcoords="offset points",
                         va="center", fontsize=10)
         ax.axvline(0, color="grey", lw=1)
-        ax.set_yticks(y, arms)
+        ax.set_yticks(y, [label(a) for a in arms])
         ax.invert_yaxis()
         ax.set_title(f"{task}, {int(g.n_datasets.max())} datasets")
         ax.set_xlabel(EFFECT_LABEL[PRIMARY_EFFECT[task]].replace(" vs base", "").replace("relative ", "rel. "))
-        ax.xaxis.set_major_locator(plt.MaxNLocator(4))
+        ax.xaxis.set_major_locator(plt.MaxNLocator(3))
     return s[["task", "model", "arm", "n_datasets", "median_effect", "ci_lo", "ci_hi", "coverage"]]
 
 
 def median_effect(summ: pd.DataFrame, model: str, rule: str = "base_fallback") -> None:
-    fig, axes = plt.subplots(1, 3, figsize=(11, 5.4), sharey=True)
+    fig, axes = plt.subplots(1, 3, figsize=(13, 5.4), sharey=True)
     data = _median_panels(summ, model, rule, fig, axes)
     fig.tight_layout()
     save(fig, f"median_effect_{model}", data)
@@ -72,7 +72,7 @@ def preview(summ: pd.DataFrame) -> None:
     """1500 x 680 px, white margins, no tight cropping: the figure that stands in the text of section 4."""
     fig, axes = plt.subplots(1, 3, figsize=(15, 6.8), sharey=True)
     data = _median_panels(summ, "lgbm", "base_fallback", fig, axes)
-    fig.subplots_adjust(left=0.15, right=0.97, top=0.9, bottom=0.17, wspace=0.08)
+    fig.subplots_adjust(left=0.29, right=0.98, top=0.9, bottom=0.17, wspace=0.08)
     with plt.rc_context({"savefig.bbox": "standard"}):  # no cropping: the size is exactly 1500 x 680
         save(fig, "preview", data, dpi=100)
     assert plt.imread(OUT / "preview.png").shape[:2] == (680, 1500)
@@ -98,7 +98,7 @@ def win_tie_loss(eff: pd.DataFrame, model: str, rule: str = "base_fallback") -> 
             if c < LOW_COVERAGE:
                 ax.annotate(f"{c:.0%} ok", (x, yi), xytext=(4, 0), textcoords="offset points", va="center",
                             fontsize=10)
-        ax.set_yticks(y, arms)
+        ax.set_yticks(y, [label(a) for a in arms])
         ax.invert_yaxis()
         ax.set_title(task)
         ax.set_xlabel("datasets")
@@ -120,7 +120,7 @@ def effect_scatter(df: pd.DataFrame, eff: pd.DataFrame, xcol: str, xlabel: str, 
         for arm in [a for a in ARMS if a != "base"]:
             ga = g[g.arm == arm]
             ax.scatter(ga.x.clip(lower=0.5 if xcol == "n_new_features" else None), ga.value, s=22, color=COLOR[arm],
-                       label=arm, alpha=0.75)
+                       label=label(arm), alpha=0.75)
         ax.set_xscale("log")
         ax.axhline(0, color="grey", lw=1)
         ax.set_title(model)
@@ -144,7 +144,7 @@ def exp05_permuted() -> None:
             ax.errorbar(gm["mean"], y, xerr=[gm["mean"] - gm.ci_lo, gm.ci_hi - gm["mean"]], fmt="o", ms=5,
                         color="#1f77b4" if model == "lgbm" else "#ff7f0e", label=model, elinewidth=2, capsize=2)
         ax.axvline(0, color="grey", lw=1)
-        ax.set_yticks(np.arange(len(arms)), arms)
+        ax.set_yticks(np.arange(len(arms)), [label(a) for a in arms])
         ax.invert_yaxis()
         ax.set_title(task)
         ax.set_xlabel(stat[task])
@@ -162,7 +162,7 @@ def exp05_planted() -> None:
         share = p.groupby(["arm", "kind"], observed=True)[col].mean().unstack().reindex(arms)[kinds]
         im = ax.imshow(share.to_numpy(), vmin=0, vmax=1, cmap="RdYlGn", aspect="auto")
         ax.set_xticks(range(len(kinds)), kinds, rotation=25, ha="right")
-        ax.set_yticks(range(len(arms)), arms)
+        ax.set_yticks(range(len(arms)), [label(a) for a in arms])
         ax.set_title(title)
         ax.grid(False)
         for i in range(len(arms)):
@@ -226,6 +226,8 @@ def table(df: pd.DataFrame, name: str, cell, shade, col_labels=None, col_width=1
             cl.set_text_props(ha="left")
     shown = df.astype(object)  # the CSV is the text of the cells, what the figure claim hashes
     shown.iloc[:, 1:] = [[cell(v) for v in row] for row in df.iloc[:, 1:].to_numpy()]
+    for line in lines:  # the note under the table is part of what the figure claim hashes
+        shown.loc[len(shown)] = [line] + [""] * m
     with plt.rc_context({"savefig.bbox": "standard"}):  # keep the full 11 in width, no cropping
         save(fig, name, shown)
 
@@ -243,9 +245,9 @@ def contrast_table(per: pd.DataFrame, summ: pd.DataFrame, pairs, name: str) -> N
     for task in TASKS:
         s = summ[summ.task == task].set_index("contrast")
         if len(s):
-            for label, col in (("better (sign)", "n_better"), ("clearly better", "n_clear_better"),
-                               ("clearly worse", "n_clear_worse")):
-                rows.append([f"{task}: {label}"] + [(None, int(s[col].get(c, 0)), int(s.n_datasets.get(c, 0)))
+            for text, col in (("better (sign)", "n_better"), ("clearly better", "n_clear_better"),
+                              ("clearly worse", "n_clear_worse")):
+                rows.append([f"{task}: {text}"] + [(None, int(s[col].get(c, 0)), int(s.n_datasets.get(c, 0)))
                                                   for c in names])
     df = pd.DataFrame(rows, columns=["dataset"] + names)
 
@@ -270,9 +272,10 @@ def coverage_table(summ: pd.DataFrame) -> None:
     s = s[[e == PRIMARY_EFFECT[t] for e, t in zip(s.effect, s.task)]]
     s = s.assign(col=s.task.str[:3] + " " + s.model).pivot_table(index="arm", columns="col", values="coverage")
     s = s.reindex([a for a in ARMS if a != "base"])[[f"{t[:3]} {m}" for t in TASKS for m in ("lgbm", "catboost")]]
-    df = s.reset_index().rename(columns={"arm": "arm"})
+    df = s.reset_index()
+    df["arm"] = df["arm"].map(label)
     table(df, "coverage_table", lambda v: f"{v:.0%}", lambda v: "#f3cccc" if v < LOW_COVERAGE else None,
-          col_width=1.3, first_width=2.8)
+          col_width=1.3, first_width=4.6)
 
 
 def noise_table(exp: str, name: str) -> None:
@@ -317,17 +320,17 @@ def ctr_ablation_table() -> None:
             row.append(("arm", f"{pct(r.effect_default)} | {pct(r.effect_ctr1)} | {pct(r.effect_diff)}", r.ci_lo_diff, r.ci_hi_diff)
                        if r is not None else ("text", ""))
         rows.append(row)
-    for label, col in (("better (sign)", "n_better"), ("clearly better", "n_clear_better"), ("clearly worse", "n_clear_worse")):
-        rows.append([label, ("text", "")] + [("count", f"{int(summ.loc[a, col])} of {int(summ.loc[a, 'n_datasets'])}") if a in summ.index
+    for text, col in (("better (sign)", "n_better"), ("clearly better", "n_clear_better"), ("clearly worse", "n_clear_worse")):
+        rows.append([text, ("text", "")] + [("count", f"{int(summ.loc[a, col])} of {int(summ.loc[a, 'n_datasets'])}") if a in summ.index
                                              else ("text", "") for a in arms])
-    df = pd.DataFrame(rows, columns=["dataset (unit); arm cells: default | ctr=1 | diff", "base: ctr=1 vs default"] + arms)
+    df = pd.DataFrame(rows, columns=["dataset (unit); arm cells: default | ctr=1 | diff", "base: ctr=1 vs default"] + [label(a) for a in arms])
     shade = lambda v: ("#cfe9d3" if v[2] > 0 else "#f3cccc" if v[3] < 0 else None) if v[0] == "arm" else "#f3f3f3" if v[0] == "count" else None
     notes = []
     for d in CTR_OUTLIERS:
         parts = [f"base {pct(e.loc[(d, 'base')].effect_diff)}"]
-        parts += [f"{a} diff {pct(e.loc[(d, a)].effect_diff)}" for a in arms if (d, a) in e.index]
+        parts += [f"{label(a)} diff {pct(e.loc[(d, a)].effect_diff)}" for a in arms if (d, a) in e.index]
         notes.append(f"Outlier not shown: {d} ({CTR_UNIT[task[d]]}): " + ", ".join(parts) + "; counted in the summary rows.")
-    table(df, "ctr_ablation_table", lambda v: v[1], shade, col_width=2.6, first_width=4.9, header_size=10.5, note="\n".join(notes))
+    table(df, "ctr_ablation_table", lambda v: v[1], shade, col_width=3.8, first_width=4.9, header_size=10.5, note="\n".join(notes))
 
 
 def cat_subgroup_table() -> None:
@@ -337,7 +340,7 @@ def cat_subgroup_table() -> None:
     fitted result is identical to base. The median over all 50 datasets is not shown."""
     s = pd.read_csv(RESULTS / "tidy" / "exp04_cat_summary.csv")
     s = s[s.task == "all"].sort_values(["arm", "model"])
-    t = pd.DataFrame({"arm, downstream model": [f"{r.arm}, {r.model}" for r in s.itertuples()],
+    t = pd.DataFrame({"arm, downstream model": [f"{label(r.arm)}, {r.model}" for r in s.itertuples()],
                       "n datasets": s.n_datasets.to_numpy(), "better (sign)": s.n_better.to_numpy(),
                       "identical": s.n_equal.to_numpy(), "clearly better": s.n_clear_better.to_numpy(), "clearly worse": s.n_clear_worse.to_numpy()})
     table(t, "cat_subgroup_table", lambda v: str(v), lambda v: None, col_width=2.2, first_width=3.2)
@@ -355,10 +358,10 @@ def numcast_table() -> None:
             task = e.loc[(dataset, model, exp09.ARMS[0]), "task"]
             rows.append([f"{dataset} ({CTR_UNIT[task]}), {model}"] + [tuple(e.loc[(dataset, model, a), ["effect", "ci_lo", "ci_hi"]])
                                                                      for a in exp09.ARMS])
-    df = pd.DataFrame(rows, columns=["dataset (unit), downstream model", *exp09.ARMS])
+    df = pd.DataFrame(rows, columns=["dataset (unit), downstream model", *map(label, exp09.ARMS)])
     pct = lambda v: f"{round(v[0] * 100, 1) + 0.0:+.1f}"
     shade = lambda v: "#cfe9d3" if v[1] > 0 else "#f3cccc" if v[2] < 0 else None
-    table(df, "numcast_table", pct, shade, col_width=2.2, first_width=5.2)
+    table(df, "numcast_table", pct, shade, col_width=2.2, first_width=5.2, header_size=11)
 
 
 def types_table() -> None:
@@ -371,10 +374,10 @@ def types_table() -> None:
         ag = "dropped" if r.ag_default == "dropped" else ("num" if r.ag_default.startswith("numeric") else "cat")
         sk = "dropped" if r.skrub_n_outputs == 0 else f"{r.skrub_n_outputs} num"
         rows.append([f"{r.dataset}: {r.column}", f"{r.n_levels}", "yes" if r.numeric_like else "no", "cat", ag, sk, nc, "num"])
-    df = pd.DataFrame(rows, columns=["column", "levels", "levels are numbers", "base", "ag_default", "skrub_tv", "base_numcast",
-                                     "base_codes"])
-    table(df, "exp09_types_table", lambda v: v, lambda v: "#fff2c2" if v == "yes" else None, col_width=1.9, first_width=5.4,
-          header_size=11)
+    df = pd.DataFrame(rows, columns=["column", "levels", "levels are numbers", "base", *map(label, ["ag_default", "skrub_tv", "base_numcast",
+                                                                                                        "base_codes"])])
+    table(df, "exp09_types_table", lambda v: v, lambda v: "#fff2c2" if v == "yes" else None, col_width=2.1, first_width=5.4,
+          header_size=10)
 
 
 def hp_groups_table() -> None:

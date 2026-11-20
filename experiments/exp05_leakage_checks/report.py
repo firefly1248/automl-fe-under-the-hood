@@ -2,8 +2,8 @@
 
     uv run --project envs/core python experiments/exp05_leakage_checks/report.py
 
-Writes results/tidy/exp05_permuted.csv, exp05_te_delivery.csv, exp05_transductive.csv, exp05_planted.csv and
-exp05_report.md. Check 5 is `openfe_ops.py` (openfe env); the planted oracle is `planted_oracle.py`.
+Writes results/tidy/exp05_permuted.csv, exp05_te_delivery.csv, exp05_transductive_folds.csv (per fold), exp05_transductive.csv
+(per dataset and model), exp05_planted.csv and exp05_report.md. Check 5 is `openfe_ops.py` (openfe env); the planted oracle is `planted_oracle.py`.
 """
 
 from functools import cache
@@ -112,7 +112,12 @@ def check2() -> pd.DataFrame:
 
 
 def check3() -> pd.DataFrame:
-    """openfe_transductive vs openfe (exp04 pilot), same dataset, fold and model."""
+    """openfe_transductive vs openfe (exp04 pilot), same dataset, fold and model.
+
+    Per fold the difference transductive - inductive in the task's primary metric; `gain` is that difference signed so that
+    positive is better (AUC and R2 higher, log loss lower). Per dataset and model: the mean gain over the folds where both units
+    are ok, with a fold bootstrap 95% CI (percentile, 10,000 draws, one random stream seeded 0, sorted order).
+    """
     t = fit_table(HERE / "transductive.yaml", "run")
     i = fit_table(EXP04, "pilot")
     i = i[i.arm == "openfe"]
@@ -123,9 +128,20 @@ def check3() -> pd.DataFrame:
         rows.append({"dataset": r.dataset, "task": r.task, "fold": r.fold, "model": r.model, "metric": m,
                      "status_transductive": r.status, "status_inductive": ind.status,
                      "transductive": getattr(r, m, np.nan), "inductive": ind.get(m, np.nan)})
-    out = pd.DataFrame(rows)
-    out["diff"] = out.transductive - out.inductive
-    out.to_csv(TIDY / "exp05_transductive.csv", index=False)
+    folds = pd.DataFrame(rows)
+    folds["diff"] = folds.transductive - folds.inductive
+    folds.to_csv(TIDY / "exp05_transductive_folds.csv", index=False)
+    ok = folds[(folds.status_transductive == "ok") & (folds.status_inductive == "ok")].copy()
+    ok["gain"] = np.where(ok.metric == "logloss", -ok["diff"], ok["diff"])
+    rng = np.random.default_rng(0)
+    out = []
+    for (dataset, model), g in ok.sort_values(["dataset", "model", "fold"]).groupby(["dataset", "model"], sort=False):
+        boot = rng.choice(g.gain.to_numpy(), size=(10_000, len(g)), replace=True).mean(axis=1)
+        out.append({"dataset": dataset, "task": g.task.iloc[0], "model": model, "metric": g.metric.iloc[0], "n_folds": len(g),
+                    "transductive": g.transductive.mean(), "inductive": g.inductive.mean(), "gain": g.gain.mean(),
+                    "ci_lo": np.quantile(boot, 0.025), "ci_hi": np.quantile(boot, 0.975)})
+    out = pd.DataFrame(out)
+    out.round(6).to_csv(TIDY / "exp05_transductive.csv", index=False)
     return out
 
 
@@ -185,6 +201,10 @@ def main() -> None:
         "kind raw: the arm's untouched numeric input columns, the gap from sampling noise alone.", "",
         c2s.round(4).to_markdown(index=False), "",
         "## 3. openfe_transductive - openfe (exp04 pilot, repeat 0)", "",
+        "Mean over the 5 folds of transductive - inductive in the primary metric, as `gain` (positive is better: AUC and R2 higher, "
+        "log loss lower), with an uncorrected fold bootstrap 95% CI; per-fold values in `exp05_transductive_folds.csv`. "
+        "Most of the one clear loss (kick, LightGBM) comes from the level -1.0 that OpenFE's transform gives a missing Combine pair "
+        "(exp05 README, Check 3).", "",
         c3.round(4).to_markdown(index=False), "",
         "## 4. Planted signals", "",
         "Share of units that reach the oracle R2 within 1% relative, and share of generator units where a created "

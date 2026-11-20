@@ -1,5 +1,20 @@
 # Progress
 
+## 2026-11-20: v1.1 round, seven gaps of the article frame closed
+
+- Added 25 claims, 523 in the register, all approved by unanimous three-model check (reviews 8 to 11): `s4_holm_cells`, `_positive_cells`
+  (0) and `_negative_cells` (1) over the 72 primary-effect cells; six facts of the AutoGluon default generator on the `hard_columns` frame
+  (`s2_ag_default_*`, five runs); `s2_gbm_prep_presets` (6 names) and `s2_gbm_prep_default_presets` (0); `s2_types_max_levels_amazon_employee_access`
+  (7,518, RESOURCE); `s4_lgbm_ordered_cat_columns` (301) and `_datasets` (28); eleven `s5_transductive_*`. New claims stat `sum` in `claims.py`.
+- Article images use one label mapping, `ARM_LABEL` in `afe.analysis.figures`; alt texts follow; five table claims got new hashes and were
+  re-approved. The exp04 README now links the LightGBM source lines (v4.7.0) that skip ordered categoricals.
+- Did not confirm, then fixed: the first transductive OpenFE comparison. In 26 of 50 units the `Combine` columns lost their category type
+  in the parquet cache (kick on LightGBM read +0.0215 AUC); `afe.generators.openfe_transductive` now renames the levels to strings and all 50
+  units were rerun (145 records). The rerun has only small differences (kick -0.0032, most of it from the level -1.0 that OpenFE's transform
+  gives a missing Combine pair, -0.0005 without it; `kick_missing_level.py`). The `n_clear_*` counts are descriptive (5 folds).
+- Noted, not changed: 301 ordered category columns against 303 non-numeric ones in `datasets.csv` (two all-missing object columns);
+  `s2_types_ordered_datasets` still says "every categorical column"; the ctr and types tables are wider than 2,000 px.
+
 ## 2026-11-19 (late night): probe claims approved, final README
 
 - Five claims `s4_numcast_onehot255_*` added for the fps_benchmark one-hot probe (effect over `base` with CI, and the per-split RMSE
@@ -47,7 +62,7 @@
 Author decision after the round below: fix both protocol artifacts (B and C) and run the extra arm.
 
 - C: `afe.models.downstream._lgbm` makes ordered pandas categoricals unordered before the fit, so LightGBM's
-  `categorical_feature="auto"` takes them (all 301 categorical columns of the 28 datasets are ordered; they were integer codes
+  `categorical_feature="auto"` takes them (all 301 category-dtype columns of the 28 datasets are ordered; they were integer codes
   before). Done in the downstream, not in `BaseView`, so no generator hash changed. Test `test_lgbm_ordered_categorical_is_used_as_categorical`.
 - B: `ag_default` renames the levels of its category columns to strings, so they survive the parquet cache as categories instead of
   becoming `int64`; contract test 1 now rejects numeric levels in any arm output (it fails on the old `ag_default`).
@@ -81,7 +96,7 @@ Author decision after the round below: fix both protocol artifacts (B and C) and
   Amazon_employee_access, arm `base_numcast` (100 fit units ok), `exp09_types_table`, `numcast_table`, claims `s2_types_*`,
   `s4_numcast_*`. Findings: auction_verification +49.4% on CatBoost is the cast of its two number-like columns alone;
   Brazilian_houses partly (+15.4 of +39.6); fps_benchmark not (+2.3 of +59.7); Amazon_employee_access loses 5.3 AUC points either way.
-- Two things found on the way (both fixed in the entry above; the counts of this entry are the values before the fixes): (1) every categorical column of the 28 datasets is an
+- Two things found on the way (both fixed in the entry above; the counts of this entry are the values before the fixes): (1) every category-dtype column of the 28 datasets is an
   ordered pandas category, which LightGBM's `categorical_feature="auto"` skips, so downstream LightGBM saw integer codes in exp04
   and exp07, for every arm that keeps categoricals; (2) the `ag_default` output (a category with integer categories) comes back
   from the parquet cache as `int64`, so neither model sees a categorical column under that arm.
@@ -396,16 +411,19 @@ connect-4 (5). All 805 fit units ok, including the two mfeat-fourier CatBoost fi
 2. TE delivery: median gap fit - test about 0 for `ag_tabprep` and `lama_adv`; flags sit on the four datasets
    under 1,500 rows, where raw columns flag at a similar overall rate (per dataset: cmc 21% TE against 6% raw, credit-g 12% against 14%; `s5_*_cmc`, `s5_*_credit_g`), and none on the large ones (kick, 1,063 levels:
    max gap 0.048). Only `lama_adv` on credit-g is above the raw-column level (median gap +0.024).
-3. Transductive OpenFE (repeat 0, 5 folds): the same columns as inductive in 50 of 50 units; differences from
-   the transform only, up to +0.045 AUC (kick, LightGBM: +0.033 to +0.045 in every fold) and +0.041 R2
-   (house_prices, CatBoost); 0 on mfeat-fourier (row-wise operators).
+3. Transductive OpenFE (repeat 0, 5 folds): the same columns as inductive in 50 of 50 units; 0 difference on
+   mfeat-fourier (row-wise operators). The first run had a typing artifact and was repeated on 2026-11-20; the result is in the exp05
+   README Check 3 and claims `s5_transductive_*`. One coding difference remains: OpenFE's own transform gives a missing Combine pair the
+   level -1.0 where the inductive arm keeps it missing, which explains the one clear loss (kick, LightGBM; refit in
+   `kick_missing_level.py`).
 4. Planted signals (4 kinds x 3 seeds x 5 folds, oracle R2 0.76-0.80). The true feature is created on ratio
    and product by every arm except `ag_default` and `lama_adv`; on cat_interaction by `ag_tabprep`, `lama_adv`
    and `openfe` (2 of 3 units); on group_dev by `openfe` always and `manual_baseline` in 47%. Base CatBoost
    reaches the oracle R2 (within 1%) on ratio in 73% of folds, so reaching it is a weak signal there; on
    group_dev only `openfe` with LightGBM (73%) and `manual_baseline` (47-53%) reach it often; `openfe` with
    CatBoost reaches it in 20%, with the feature created in every unit.
-5. OpenFE operators: 23 of 23 equal to the reference on fit rows.
+5. OpenFE operators: 23 of 23 equal to the reference on fit rows (compared as category codes, where a missing pair is -1 in both; the
+   transductive transform's -1.0 level against the inductive arm's missing is not seen by this check).
 
 **Estimate** (`results/tidy/exp04_estimate.md`): per-dataset interpolation of pilot times in rows x columns;
 about 20 unit-hours per fold, 3 jobs: 34 h for 5 splits, 68 h for 10 (24 h / 58 h left after the pilot).
