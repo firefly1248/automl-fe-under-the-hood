@@ -1976,7 +1976,7 @@
   data: results/figures/article/coverage_table.csv
   data_hash: 92ab850ada54c525
   approved_data_hash: 92ab850ada54c525
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s5_fig_permuted_labels
   section: 5
   kind: figure
@@ -4429,7 +4429,7 @@
   data: results/figures/article/ctr_ablation_table.csv
   data_hash: ea88b9383f06e0a7
   approved_data_hash: ea88b9383f06e0a7
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s4_cat_ag_default_lgbm_n_datasets
   section: 4
   text: 'ag_default over base, lgbm downstream, primary datasets with categorical columns: datasets with categorical
@@ -4661,7 +4661,7 @@
   data: results/figures/article/cat_subgroup_table.csv
   data_hash: 4c01e5500346b67a
   approved_data_hash: 4c01e5500346b67a
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s2_types_cat_columns_fps_benchmark
   section: 2
   text: 'fps_benchmark: categorical columns in the raw frame (non-numeric dtype)'
@@ -5617,7 +5617,7 @@
   data: results/figures/article/numcast_table.csv
   data_hash: e42cb8d00afaa88c
   approved_data_hash: e42cb8d00afaa88c
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s2_fig_exp09_types_table
   section: 2
   kind: figure
@@ -5627,7 +5627,7 @@
   data: results/figures/article/exp09_types_table.csv
   data_hash: f1f8f1198c21f8e6
   approved_data_hash: f1f8f1198c21f8e6
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s4_holm_cells
   section: 4
   text: 'number of exp04 cells (task, effect, downstream model, arm) in the Holm family (the 72 primary-effect cells
@@ -5639,7 +5639,7 @@
   tolerance: 0
   value: 72
   approved_value: 72
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s4_holm_positive_cells
   section: 4
   text: 'number of exp04 cells with a median effect above zero over base and a Wilcoxon p below 0.05 after Holm
@@ -5651,7 +5651,7 @@
   tolerance: 0
   value: 0
   approved_value: 0
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s4_holm_negative_cells
   section: 4
   text: 'number of exp04 cells with a median effect below zero over base and a Wilcoxon p below 0.05 after Holm
@@ -5664,7 +5664,7 @@
   tolerance: 0
   value: 1
   approved_value: 1
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s2_ag_default_runs
   section: 2
   text: number of runs of the AutoMLPipelineFeatureGenerator probe on the hard_columns frame (three seeds of the
@@ -5676,7 +5676,7 @@
   tolerance: 0
   value: 5
   approved_value: 5
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s2_ag_default_date_int_kept_int
   section: 2
   text: 'AutoGluon 1.6.3 AutoMLPipelineFeatureGenerator on the synthetic hard_columns frame (5,000 rows; seeds 0,
@@ -5690,7 +5690,7 @@
   tolerance: 0
   value: 5
   approved_value: 5
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s2_ag_default_city_code_kept_int
   section: 2
   text: 'AutoGluon 1.6.3 AutoMLPipelineFeatureGenerator on the synthetic hard_columns frame (5,000 rows; seeds 0,
@@ -5704,7 +5704,7 @@
   tolerance: 0
   value: 5
   approved_value: 5
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s2_ag_default_uid_dropped
   section: 2
   text: 'AutoGluon 1.6.3 AutoMLPipelineFeatureGenerator on the synthetic hard_columns frame (5,000 rows; seeds 0,
@@ -5716,7 +5716,7 @@
   tolerance: 0
   value: 5
   approved_value: 5
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s2_ag_default_dup_num_dropped
   section: 2
   text: 'AutoGluon 1.6.3 AutoMLPipelineFeatureGenerator on the synthetic hard_columns frame (5,000 rows; seeds 0,
@@ -5729,7 +5729,7 @@
   tolerance: 0
   value: 5
   approved_value: 5
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s2_ag_default_date_str_outputs
   section: 2
   text: 'AutoGluon 1.6.3 AutoMLPipelineFeatureGenerator on the synthetic hard_columns frame (5,000 rows; seeds 0,
@@ -5745,7 +5745,7 @@
   tolerance: 0
   value: 5
   approved_value: 5
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s2_gbm_prep_presets
   section: 2
   text: 'number of AutoGluon 1.6.3 preset names, aliases included, whose hyperparameter portfolio contains GBM_PREP,
@@ -5758,7 +5758,7 @@
   tolerance: 0
   value: 6
   approved_value: 6
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s2_gbm_prep_default_presets
   section: 2
   text: number of AutoGluon 1.6.3 preset names without the _v150 suffix, aliases included (among them medium, high,
@@ -5771,7 +5771,7 @@
   tolerance: 0
   value: 0
   approved_value: 0
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s2_types_max_levels_amazon_employee_access
   section: 2
   text: 'most levels of any categorical column of Amazon_employee_access over the whole frame (32,769 rows): the
@@ -5783,7 +5783,7 @@
   tolerance: 0
   value: 7518.0
   approved_value: 7518.0
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s4_lgbm_ordered_cat_columns
   section: 4
   text: categorical columns that were ordered pandas categories, summed over the raw frames of the 28 primary datasets
@@ -5797,7 +5797,7 @@
   tolerance: 0
   value: 301.0
   approved_value: 301.0
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s4_lgbm_ordered_cat_datasets
   section: 4
   text: primary datasets with at least one ordered categorical column in the raw frame (out of the 28 with a categorical
@@ -5808,7 +5808,7 @@
   tolerance: 0
   value: 28
   approved_value: 28
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s5_transductive_lgbm_n_datasets
   section: 5
   text: 'exp05 pilot, repeat 0, 5 folds: OpenFE fitted with its own transform as shipped (statistics over the fit,
@@ -5823,7 +5823,7 @@
   tolerance: 0
   value: 10
   approved_value: 10
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s5_transductive_lgbm_n_better
   section: 5
   text: 'exp05 pilot, repeat 0, 5 folds: OpenFE fitted with its own transform as shipped (statistics over the fit,
@@ -5838,7 +5838,7 @@
   tolerance: 0
   value: 3
   approved_value: 3
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s5_transductive_lgbm_n_equal
   section: 5
   text: 'exp05 pilot, repeat 0, 5 folds: OpenFE fitted with its own transform as shipped (statistics over the fit,
@@ -5853,7 +5853,7 @@
   tolerance: 0
   value: 1
   approved_value: 1
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s5_transductive_lgbm_n_clear_better
   section: 5
   text: 'exp05 pilot, repeat 0, 5 folds: OpenFE fitted with its own transform as shipped (statistics over the fit,
@@ -5869,7 +5869,7 @@
   tolerance: 0
   value: 2
   approved_value: 2
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s5_transductive_lgbm_n_clear_worse
   section: 5
   text: 'exp05 pilot, repeat 0, 5 folds: OpenFE fitted with its own transform as shipped (statistics over the fit,
@@ -5885,7 +5885,7 @@
   tolerance: 0
   value: 1
   approved_value: 1
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s5_transductive_catboost_n_datasets
   section: 5
   text: 'exp05 pilot, repeat 0, 5 folds: OpenFE fitted with its own transform as shipped (statistics over the fit,
@@ -5899,7 +5899,7 @@
   tolerance: 0
   value: 9
   approved_value: 9
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s5_transductive_catboost_n_better
   section: 5
   text: 'exp05 pilot, repeat 0, 5 folds: OpenFE fitted with its own transform as shipped (statistics over the fit,
@@ -5914,7 +5914,7 @@
   tolerance: 0
   value: 3
   approved_value: 3
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s5_transductive_catboost_n_equal
   section: 5
   text: 'exp05 pilot, repeat 0, 5 folds: OpenFE fitted with its own transform as shipped (statistics over the fit,
@@ -5929,7 +5929,7 @@
   tolerance: 0
   value: 1
   approved_value: 1
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s5_transductive_catboost_n_clear_better
   section: 5
   text: 'exp05 pilot, repeat 0, 5 folds: OpenFE fitted with its own transform as shipped (statistics over the fit,
@@ -5944,7 +5944,7 @@
   tolerance: 0
   value: 1
   approved_value: 1
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s5_transductive_catboost_n_clear_worse
   section: 5
   text: 'exp05 pilot, repeat 0, 5 folds: OpenFE fitted with its own transform as shipped (statistics over the fit,
@@ -5959,7 +5959,7 @@
   tolerance: 0
   value: 0
   approved_value: 0
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
 - id: s5_transductive_lgbm_kick_missing_level
   section: 5
   text: 'exp05 pilot, repeat 0, 5 folds, kick, LightGBM: mean AUC gain of OpenFE''s own transform over the inductive
@@ -5973,7 +5973,7 @@
   tolerance: 0.0001
   value: -0.000528
   approved_value: -0.000528
-  approved_git_sha: f9d926f-dirty
+  approved_git_sha: b3d3e05
   ci:
   - -0.001645
   - 0.000439
